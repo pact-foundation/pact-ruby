@@ -1,6 +1,6 @@
 # Pact
 
-TODO: Write a gem description
+Define a pact between service consumers and providers
 
 ## Installation
 

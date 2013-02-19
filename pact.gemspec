@@ -8,9 +8,9 @@ Gem::Specification.new do |gem|
   gem.version       = Pact::VERSION
   gem.authors       = ["James Fraser"]
   gem.email         = ["jfraser80@gmail.com"]
-  gem.description   = %q{TODO: Write a gem description}
-  gem.summary       = %q{TODO: Write a gem summary}
-  gem.homepage      = ""
+  gem.description   = %q{Define a pact between service consumers and providers}
+  gem.summary       = %q{Define a pact between service consumers and providers}
+  gem.homepage      = "https://git.realestate.com.au/business-systems/pact"
 
   gem.files         = `git ls-files`.split($/)
   gem.executables   = gem.files.grep(%r{^bin/}).map{ |f| File.basename(f) }

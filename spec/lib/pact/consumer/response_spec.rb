@@ -1,4 +1,4 @@
-require 'pact/consumer/response'
+require 'spec_helper'
 
 module Pact
   module Consumer

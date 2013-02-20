@@ -1,7 +1,7 @@
 require 'spec_helper'
 
 module Pact
-  module Consumer
+  module Consumption
     describe Response do
 
       subject { Response.new({ woot: /x/, britney: 'britney', nested: { foo: /bar/, baz: 'qux' }, array: ['first', /second/]} ) }

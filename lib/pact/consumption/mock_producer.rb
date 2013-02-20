@@ -1,5 +1,5 @@
 module Pact
-  module Consumer
+  module Consumption
     class MockProducer
       def initialize url
         @url = url

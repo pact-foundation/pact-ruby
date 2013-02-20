@@ -1,7 +1,7 @@
 require_relative 'response'
 
 module Pact
-  module Consumer
+  module Consumption
     class Interaction
 
       def initialize request

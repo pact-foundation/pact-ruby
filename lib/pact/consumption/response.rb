@@ -1,7 +1,7 @@
 require 'randexp'
 
 module Pact
-  module Consumer
+  module Consumption
     class Response
 
       def initialize spec

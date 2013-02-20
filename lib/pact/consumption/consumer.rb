@@ -1,5 +1,5 @@
 module Pact
-  module Consumer
+  module Consumption
     class Consumer
 
       def initialize name

@@ -5,7 +5,7 @@ require 'hashie'
 
 require 'singleton'
 module Pact
-  module Consumer
+  module Consumption
 
     class MockService
 

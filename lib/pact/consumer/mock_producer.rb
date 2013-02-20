@@ -1,6 +1,6 @@
 module Pact
   module Consumer
-    class ProducerMock
+    class MockProducer
       def initialize url
         @url = url
         @interactions = []

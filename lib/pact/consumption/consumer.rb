@@ -1,3 +1,6 @@
+require_relative 'assumption'
+require_relative 'mock_producer'
+
 module Pact
   module Consumption
     class Consumer
@@ -9,7 +12,7 @@ module Pact
 
       def assumes &block
         assumption = Assumption.new(
-          :contract_service => ProducerMock.new(MOCK_CONTRACT_SERVICE_URL)
+          :contract_service => MockProducer.new(MOCK_CONTRACT_SERVICE_URL)
         )
         assumption.assume(&block)
         @assumptions << assumption

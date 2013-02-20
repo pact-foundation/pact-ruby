@@ -21,7 +21,7 @@ module Pact
         when specification.is_a?(Hash)
           specification.inject({}) do |mem, (key,value)|
             mem[key] = reify_specification(value)
-          mem
+            mem
           end
         when specification.is_a?(Array)
           specification.inject([]) do |mem, value|

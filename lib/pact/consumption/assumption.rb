@@ -12,11 +12,7 @@ module Pact
 
       def assume
         yield self
-        stub!
-      end
-
-      def stub!
-        @services.each {|name, service| service.stub! }
+        @services.each { |name, service| service.stub! }
       end
 
     end

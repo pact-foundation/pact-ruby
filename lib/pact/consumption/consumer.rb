@@ -15,10 +15,6 @@ module Pact
         @assumptions << assumption
       end
 
-      def stub!
-        @services.each {|name, service| service.stub! }
-      end
-
     end
   end
 end

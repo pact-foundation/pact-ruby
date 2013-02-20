@@ -1,4 +1,4 @@
-require 'pact/consumption/interaction'
+require 'spec_helper'
 
 module Pact
   module Consumption

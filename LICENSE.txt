@@ -1,4 +1,4 @@
-Copyright (c) 2013 James Fraser
+Copyright (c) 2013 James Fraser, Sergei Matheson, Brent Snook
 
 MIT License
 

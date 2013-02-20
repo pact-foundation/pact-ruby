@@ -6,8 +6,8 @@ require 'pact/version'
 Gem::Specification.new do |gem|
   gem.name          = "pact"
   gem.version       = Pact::VERSION
-  gem.authors       = ["James Fraser"]
-  gem.email         = ["jfraser80@gmail.com"]
+  gem.authors       = ["James Fraser", "Sergei Matheson", "Brent Snook"]
+  gem.email         = ["james.fraser@alumni.swinburne.edu", "sergei.matheson@gmail.com", "brent@fuglylogic.com"]
   gem.description   = %q{Define a pact between service consumers and providers}
   gem.summary       = %q{Define a pact between service consumers and providers}
   gem.homepage      = "https://git.realestate.com.au/business-systems/pact"

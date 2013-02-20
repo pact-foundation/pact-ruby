@@ -12,13 +12,15 @@ module Pact
 
       include Singleton
 
+      attr_accessor :mock_port
+
       def initialize
         @spawned_app_pids = []
         @registered_apps = {}
         @max_wait = 10
       end
 
-      def register_app(app, port = FindAPort.available_port)
+      def register(app, port = FindAPort.available_port)
         @registered_apps ||= {}
         existing = @registered_apps[port]
         raise "Port #{port} is already being used by #{existing}" if existing and not existing == app

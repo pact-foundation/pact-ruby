@@ -4,30 +4,32 @@ module Pact
   module Consumption
     class Response
 
-      def initialize spec
-        @spec = spec
+      attr_reader :specification
+
+      def initialize specification
+        @specification = specification
       end
 
       def reify
-        reify_spec(@spec)
+        reify_specification(@specification)
       end
 
       private
 
-      def reify_spec(spec)
+      def reify_specification(specification)
         case
-        when spec.is_a?(Hash)
-          spec.inject({}) do |mem, (key,value)|
-            mem[key] = reify_spec(value)
+        when specification.is_a?(Hash)
+          specification.inject({}) do |mem, (key,value)|
+            mem[key] = reify_specification(value)
           mem
           end
-        when spec.is_a?(Array)
-          spec.inject([]) do |mem, value|
-            mem << reify_spec(value)
+        when specification.is_a?(Array)
+          specification.inject([]) do |mem, value|
+            mem << reify_specification(value)
             mem
           end
         else
-          template(spec)
+          template(specification)
         end
       end
 

@@ -4,11 +4,13 @@ module Pact
   module Consumption
     class Interaction
 
+      attr_reader :request, :response
+
       def initialize request
         @request = request
       end
 
-      def will_respond_with response = nil
+      def will_respond_with(response)
         @response = Response.new(response)
       end
 

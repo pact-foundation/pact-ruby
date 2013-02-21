@@ -15,7 +15,7 @@ module Pact
         self
       end
 
-      def when_requested_with(request)
+      def upon_receiving(request)
         Interaction.new(self, request)
       end
 

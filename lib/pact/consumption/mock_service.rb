@@ -116,7 +116,7 @@ module Pact
           [404, {}, ['No interaction found']]
         end
         def response_from response
-          [response.status, response.headers.to_hash || {}, [render_body(response.body)]]
+          [response.status, (response.headers || {}).to_hash, [render_body(response.body)]]
         end
 
         def render_body body

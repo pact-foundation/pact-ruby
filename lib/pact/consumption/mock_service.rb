@@ -2,8 +2,8 @@ require 'net/http'
 require 'uri'
 require 'json'
 require 'hashie'
-
 require 'singleton'
+
 module Pact
   module Consumption
 
@@ -19,7 +19,7 @@ module Pact
         end
 
         def add interactions
-          @interactions += interactions
+          @interactions << interactions
         end
 
         def clear
@@ -51,15 +51,15 @@ module Pact
         end
       end
 
-      class InteractionPut
+      class InteractionPost
 
         def match? env
           env['REQUEST_PATH'] == '/interactions' &&
-            env['REQUEST_METHOD'] == 'PUT'
+            env['REQUEST_METHOD'] == 'POST'
         end
 
         def respond env
-          interactions = Hashie::Mash.new(JSON.parse(env['rack.input'].string))[:interactions]
+          interactions = Hashie::Mash.new(JSON.parse(env['rack.input'].string))
           InteractionList.instance.add interactions
           [200, {}, ['Added interactions']]
         end
@@ -86,8 +86,8 @@ module Pact
         def request_from env
           request = env.inject({}) do |memo, (k, v)|
             request_key = REQUEST_KEYS[k]
-          memo[request_key] = v if request_key
-          memo
+            memo[request_key] = v if request_key
+            memo
           end
 
           mashed_request = Hashie::Mash.new request
@@ -106,7 +106,7 @@ module Pact
             filtered_request = interaction.request.select {|key, value| request.has_key?(key)}
             Hashie::Mash.new(filtered_request) == Hashie::Mash.new(request)
           end
-          raise 'Multiple interactions found!' unless matching_interactions.size < 2
+          raise 'Multiple interactions found!' if matching_interactions.size > 1
           matching_interactions.empty? ? handle_unrecognised_request(request) : response_from(matching_interactions.first.response)
         end
 
@@ -129,7 +129,7 @@ module Pact
       def initialize
         @handlers = [
           StartupPoll.new,
-          InteractionPut.new,
+          InteractionPost.new,
           InteractionDelete.new,
           InteractionReplay.new
         ]

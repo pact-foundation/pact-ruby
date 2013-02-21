@@ -1,33 +1,22 @@
+require 'uri'
+
 module Pact
   module Consumption
     class MockProducer
-      def initialize url
-        @url = url
-        @interactions = []
+
+      attr_reader :uri
+
+      def initialize(name)
+        @name = name
       end
 
-      def when_requested_with request
-        interaction = Interaction.new(request)
-        @interactions << interaction
-        interaction
+      def at(url)
+        @uri = URI(url)
+        self
       end
 
-      def stub!
-        uri = URI.parse @url
-        http = Net::HTTP.new(uri.host, uri.port)
-        http.request_put('/interactions', to_reified_hash.to_json)
-      end
-
-      def to_reified_hash
-        {
-          :interactions => @interactions.map(&:to_reified_hash)
-        }
-      end
-
-      def to_hash
-        {
-          :interactions => @interactions.map(&:to_hash)
-        }
+      def when_requested_with(request)
+        Interaction.new(self, request)
       end
 
     end

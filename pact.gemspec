@@ -23,4 +23,5 @@ Gem::Specification.new do |gem|
   gem.add_runtime_dependency 'find_a_port', '~> 1.0.1'
   gem.add_development_dependency 'capybara', '~> 2.0.0'
   gem.add_development_dependency 'rake', '~> 10.0.3'
+  gem.add_development_dependency 'webmock', '~> 1.9.3'
 end

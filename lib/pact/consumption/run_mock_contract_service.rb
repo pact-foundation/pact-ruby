@@ -1,9 +1,8 @@
+require 'net/http'
 require_relative 'spawn_app'
-require_relative 'mock_contract_service'
+require_relative 'mock_service'
 
-MOCK_CONTRACT_SERVICE_URL = "http://localhost:1234"
-
-spawn_app MockContractService.new, 1234
+spawn_app MockService.new, 1234
 
 RSpec.configure do |c|
   c.before(:each, :type => :feature) do

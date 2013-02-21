@@ -1,32 +1,33 @@
+require 'net/http'
 require_relative 'response'
 
 module Pact
   module Consumption
     class Interaction
 
-      attr_reader :request, :response
+      # TODO: should not need to expose this, but a test uses it atm
+      attr_reader :response
 
-      def initialize request
+      def initialize(producer, request)
+        @producer = producer
         @request = request
       end
 
       def will_respond_with(response)
         @response = Response.new(response)
+        http = Net::HTTP.new(@producer.uri.host, @producer.uri.port)
+        http.request_post('/interactions', reify.to_json)
       end
 
-      def to_hash
-        {
-          :request => @request,
-          :response => @response
-        }
-      end
+      private
 
-      def to_reified_hash
+      def reify
         {
           :request => @request,
           :response => @response.reify
         }
       end
+
     end
   end
 end

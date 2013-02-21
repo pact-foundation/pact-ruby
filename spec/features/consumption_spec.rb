@@ -1,5 +1,6 @@
 require 'net/http'
 require 'pact/consumption'
+require 'pact/consumption/rspec'
 
 module Pact::Consumption
   describe "A consumption scenario" do
@@ -17,9 +18,7 @@ module Pact::Consumption
     end
 
     it "goes a little something like this" do
-      consumer = Consumer.new('Alice')
-
-      consumer.assumes_a_service('Bob')
+      assuming_a_service('Alice')
       .at('http://localhost:1234').
         upon_receiving({
         method: :get,
@@ -31,7 +30,7 @@ module Pact::Consumption
         body: 'That is some good Mallory.'
       })
 
-      consumer.assumes_a_service('Charlie')
+      assuming_a_service('Bob')
       .at('http://localhost:4321').
         upon_receiving({
         method: :post,
@@ -42,16 +41,16 @@ module Pact::Consumption
         body: 'Donut created.'
       })
 
-      bob_response = Net::HTTP.get_response(URI('http://localhost:1234/mallory'))
+      alice_response = Net::HTTP.get_response(URI('http://localhost:1234/mallory'))
 
-      expect(bob_response.code).to eql '200'
-      expect(bob_response['Content-Type']).to eql 'text/html'
-      expect(bob_response.body).to eql 'That is some good Mallory.'
+      expect(alice_response.code).to eql '200'
+      expect(alice_response['Content-Type']).to eql 'text/html'
+      expect(alice_response.body).to eql 'That is some good Mallory.'
 
-      charlie_response = Net::HTTP.post_form(URI('http://localhost:4321/donuts'), {})
+      bob_response = Net::HTTP.post_form(URI('http://localhost:4321/donuts'), {})
 
-      expect(charlie_response.code).to eql '201'
-      expect(charlie_response.body).to eql 'Donut created.'
+      expect(bob_response.code).to eql '201'
+      expect(bob_response.body).to eql 'Donut created.'
     end
 
   end

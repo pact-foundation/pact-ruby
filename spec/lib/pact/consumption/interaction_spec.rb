@@ -6,10 +6,13 @@ module Pact
 
       subject { Interaction.new(mock_producer, request) }
 
-      let(:mock_producer) { double(uri: URI('http://example.com:2222')) }
+      let(:pact_path) { File.expand_path('../../../../pacts/mock', __FILE__) }
+      let(:mock_producer) { double(uri: URI('http://example.com:2222'), pact_path: pact_path) }
       let(:request) { { foo: 'bar' } }
 
       before do
+        FileUtils.rm_rf pact_path
+        FileUtils.mkdir_p pact_path
         stub_request(:post, 'example.com:2222/interactions')
       end
 
@@ -38,6 +41,30 @@ module Pact
           WebMock.should have_requested(:post, 'example.com:2222/interactions').with(body: interaction_json)
         end
 
+      end
+
+      describe "pact file" do
+
+        before do
+          subject.will_respond_with baz: /qux/
+        end
+
+        it "contains a JSON serialization of the interaction" do
+          subject.write_pact
+          pact_file = Dir["#{pact_path}/*.json"].first
+          serialization = JSON.parse(File.open(pact_file).read)
+
+          expect(serialization).to eql(
+            {
+              'request' => {
+                'foo' => 'bar'
+              },
+              'response' => {
+                'baz' => '(?-mix:qux)'
+              }
+            }
+          )
+        end
       end
 
     end

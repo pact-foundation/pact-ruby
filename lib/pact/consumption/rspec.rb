@@ -2,7 +2,9 @@ module Pact
   module Consumption
     module RSpec
       def assuming_a_service(name)
-        MockProducer.new(name)
+        path = File.join(PACTS_PATH, name.downcase)
+        FileUtils.mkdir_p path
+        MockProducer.new(name, path)
       end
     end
   end

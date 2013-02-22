@@ -4,10 +4,12 @@ module Pact
   module Consumption
     class MockProducer
 
-      attr_reader :uri
+      attr_reader :uri, :pact_path
 
-      def initialize(name)
+      def initialize(name, pact_path)
         @name = name
+        @pact_path = pact_path
+        @interactions = []
       end
 
       def at(url)
@@ -16,7 +18,7 @@ module Pact
       end
 
       def upon_receiving(request)
-        Interaction.new(self, request)
+        Interaction.new(self, request).tap { |int| @interactions << int }
       end
 
     end

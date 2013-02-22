@@ -14,6 +14,10 @@ module Pact
         reify_specification(@specification)
       end
 
+      def to_json
+        @specification
+      end
+
       private
 
       def reify_specification(specification)

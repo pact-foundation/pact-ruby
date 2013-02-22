@@ -19,3 +19,4 @@ tmp
 .bin
 tags
 .rbenv-version
+spec/pacts

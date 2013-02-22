@@ -1,5 +1,5 @@
 require 'net/http'
-require_relative 'response'
+require_relative 'generate_response'
 
 module Pact
   module Consumption
@@ -11,9 +11,9 @@ module Pact
         @http = Net::HTTP.new(@producer.uri.host, @producer.uri.port)
       end
 
-      def will_respond_with(response)
-        @response = Response.new(response)
-        @http.request_post('/interactions', reify.to_json)
+      def will_respond_with(response_spec)
+        @response_spec = response_spec
+        @http.request_post('/interactions', with_generated_response.to_json)
         @producer.update_pactfile
         @producer
       end
@@ -21,16 +21,16 @@ module Pact
       def to_json
         {
           :request => @request,
-          :response => @response.to_json
+          :response => @response_spec
         }
       end
 
       private
 
-      def reify
+      def with_generated_response
         {
           :request => @request,
-          :response => @response.reify
+          :response => GenerateResponse.from_specification(@response_spec)
         }
       end
 

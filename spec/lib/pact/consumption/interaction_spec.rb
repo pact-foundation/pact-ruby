@@ -22,7 +22,7 @@ module Pact
 
       describe "setting up responses" do
 
-        it "posts the reified interaction to the mock service" do
+        it "posts the interaction with generated response to the mock service" do
           interaction_json = {
             request: {
               foo: 'bar'

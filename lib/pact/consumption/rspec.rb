@@ -2,9 +2,9 @@ module Pact
   module Consumption
     module RSpec
       def assuming_a_service(name)
-        path = File.join(PACTS_PATH, name.downcase)
-        FileUtils.mkdir_p path
-        MockProducer.new(name, path)
+        FileUtils.mkdir_p PACTS_PATH
+        pactfile_path = File.join(PACTS_PATH, "#{name.downcase}.json")
+        MockProducer.new(name, pactfile_path)
       end
     end
   end

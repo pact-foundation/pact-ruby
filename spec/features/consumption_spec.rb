@@ -48,8 +48,8 @@ module Pact::Consumption
         path: '/charlie'
       }).
         will_respond_with({
-        status: 204,
-        body: 'No content'
+        status: 200,
+        body: /deleted/
       })
 
       alice_response = Net::HTTP.get_response(URI('http://localhost:1234/mallory'))

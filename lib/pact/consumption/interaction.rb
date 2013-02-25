@@ -5,9 +5,9 @@ module Pact
   module Consumption
     class Interaction
 
-      def initialize(producer, request)
+      def initialize(producer, description)
         @producer = producer
-        @request = request
+        @description = description
         @http = Net::HTTP.new(@producer.uri.host, @producer.uri.port)
       end
 
@@ -18,8 +18,15 @@ module Pact
         @producer
       end
 
+      def with(request)
+        @request = request
+        @request[:method] = @request[:method].to_s if @request[:method]
+        self
+      end
+
       def to_json
         {
+          :description => @description,
           :request => @request,
           :response => @response_spec
         }
@@ -29,6 +36,7 @@ module Pact
 
       def with_generated_response
         {
+          :description => @description,
           :request => @request,
           :response => GenerateResponse.from_specification(@response_spec)
         }

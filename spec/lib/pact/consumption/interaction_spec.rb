@@ -4,7 +4,7 @@ module Pact
   module Consumption
     describe Interaction do
 
-      subject { Interaction.new(producer, request) }
+      subject { Interaction.new(producer, 'Test request').with(request) }
 
       let(:pact_path) { File.expand_path('../../../../pacts/mock', __FILE__) }
       let(:request) { { foo: 'bar' } }
@@ -24,6 +24,7 @@ module Pact
 
         it "posts the interaction with generated response to the mock service" do
           interaction_json = {
+            description: 'Test request',
             request: {
               foo: 'bar'
             },

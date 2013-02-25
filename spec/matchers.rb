@@ -3,4 +3,3 @@ RSpec::Matchers.define :have_specification do |expected|
     actual.specification == expected
   end
 end
-

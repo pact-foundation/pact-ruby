@@ -6,7 +6,7 @@ module Pact::Consumption
 
   PACTS_PATH = File.expand_path('../../pacts', __FILE__)
 
-  describe "A consumption scenario" do
+  describe "A service consumption side of a pact" do
 
     let(:app_manager) { AppManager.instance }
 
@@ -21,9 +21,9 @@ module Pact::Consumption
     end
 
     it "goes a little something like this" do
-      alice_service = assuming_a_service('Alice')
-      .at('http://localhost:1234').
-        upon_receiving({
+      alice_service = assuming_a_service('Alice').
+      at('http://localhost:1234').
+        upon_receiving("a retrieve Mallory request").with({
         method: :get,
         path: '/mallory'
       }).
@@ -33,9 +33,9 @@ module Pact::Consumption
         body: 'That is some good Mallory.'
       })
 
-      bob_service = assuming_a_service('Bob')
-      .at('http://localhost:4321').
-        upon_receiving({
+      bob_service = assuming_a_service('Bob').
+      at('http://localhost:4321').
+        upon_receiving('a create donut request').with({
         method: :post,
         path: '/donuts'
       }).
@@ -43,7 +43,7 @@ module Pact::Consumption
         status: 201,
         body: 'Donut created.'
       }).
-        upon_receiving({
+        upon_receiving('a delete charlie request').with({
         method: :delete,
         path: '/charlie'
       }).

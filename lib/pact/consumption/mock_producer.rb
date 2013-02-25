@@ -1,4 +1,5 @@
 require 'uri'
+require 'json/add/core'
 
 module Pact
   module Consumption
@@ -17,8 +18,8 @@ module Pact
         self
       end
 
-      def upon_receiving(request)
-        Interaction.new(self, request).tap { |int| @interactions << int }
+      def upon_receiving(description)
+        Interaction.new(self, description).tap { |int| @interactions << int }
       end
 
       def update_pactfile

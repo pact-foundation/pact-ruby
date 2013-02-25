@@ -1,7 +1,7 @@
 require 'spec_helper'
 
 module Pact
-  module Consumption
+  module Consumer
     describe GenerateResponse do
 
       let(:response_spec) do

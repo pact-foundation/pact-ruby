@@ -6,7 +6,7 @@ require 'uri'
 require 'find_a_port'
 
 module Pact
-  module Consumption
+  module Consumer
 
     class AppManager
 

@@ -2,7 +2,7 @@ require 'net/http'
 require_relative 'generate_response'
 
 module Pact
-  module Consumption
+  module Consumer
     class Interaction
 
       def initialize(producer, description)

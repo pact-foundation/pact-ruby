@@ -1,7 +1,7 @@
 require 'spec_helper'
 
 module Pact
-  module Consumption
+  module Consumer
     describe Interaction do
 
       subject { Interaction.new(producer, 'Test request').with(request) }

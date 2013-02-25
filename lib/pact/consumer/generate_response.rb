@@ -1,7 +1,7 @@
 require 'randexp'
 
 module Pact
-  module Consumption
+  module Consumer
     module GenerateResponse
 
       def self.from_specification(value)

@@ -2,12 +2,6 @@ require 'json'
 require 'json/add/core'
 require 'rack/test'
 
-class Producer < Struct.new(:name, :uri)
-  def honours? pact
-    true
-  end
-end
-
 class ServiceUnderTest
 
   def call(env)
@@ -21,7 +15,7 @@ class ServiceUnderTest
 
 end
 
-module Pact::Production
+module Pact::Producer
   describe "A service production side of a pact" do
     include Rack::Test::Methods
 
@@ -30,8 +24,6 @@ module Pact::Production
     end
 
     PACTS_PATH = File.expand_path('../../pacts', __FILE__)
-
-    let(:producer) { Producer.new('Alice', URI('http://localhost:1234')) }
 
     pact = JSON.parse <<-EOS
 [

@@ -1,12 +1,12 @@
 require 'net/http'
-require 'pact/consumption'
-require 'pact/consumption/rspec'
+require 'pact/consumer'
+require 'pact/consumer/rspec'
 
-module Pact::Consumption
+module Pact::Consumer
 
   PACTS_PATH = File.expand_path('../../pacts', __FILE__)
 
-  describe "A service consumption side of a pact" do
+  describe "A service consumer side of a pact" do
 
     let(:app_manager) { AppManager.instance }
 

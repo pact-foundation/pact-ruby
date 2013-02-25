@@ -2,7 +2,7 @@ require 'uri'
 require 'json/add/core'
 
 module Pact
-  module Consumption
+  module Consumer
     class MockProducer
 
       attr_reader :uri, :pactfile_path

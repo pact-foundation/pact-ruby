@@ -4,6 +4,8 @@ require 'pact/consumer/rspec'
 
 module Pact::Consumer
 
+  # TODO: hurl this into the sun - this should be configured
+  # as part of RSpec config
   PACTS_PATH = File.expand_path('../../pacts', __FILE__)
 
   describe "A service consumer side of a pact" do

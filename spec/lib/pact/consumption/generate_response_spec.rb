@@ -9,16 +9,21 @@ module Pact
           woot: /x/,
           britney: 'britney',
           nested: { foo: /bar/, baz: 'qux' },
+          my_term: Term.new(generate: 'wiffle', match: /^wif/),
           array: ['first', /second/]
         }
       end
 
-      describe "from response specification" do
+      describe "from response term" do
 
-        subject { GenerateResponse.from_specification(response_spec) }
+        subject { GenerateResponse.from_term(response_spec) }
 
         it "converts regexes into real data" do
           expect(subject[:woot]).to eql 'x'
+        end
+
+        it "converts terms into real data" do
+          expect(subject[:my_term]).to eql 'wiffle'
         end
 
         it "passes strings through" do

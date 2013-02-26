@@ -11,8 +11,8 @@ module Pact
         @http = Net::HTTP.new(@producer.uri.host, @producer.uri.port)
       end
 
-      def will_respond_with(response_spec)
-        @response_spec = response_spec
+      def will_respond_with(response_terms)
+        @response_terms = response_terms
         @http.request_post('/interactions', with_generated_response.to_json)
         @producer.update_pactfile
         @producer
@@ -28,7 +28,7 @@ module Pact
         {
           :description => @description,
           :request => @request,
-          :response => @response_spec
+          :response => @response_terms
         }
       end
 
@@ -38,7 +38,7 @@ module Pact
         {
           :description => @description,
           :request => @request,
-          :response => GenerateResponse.from_specification(@response_spec)
+          :response => GenerateResponse.from_term(@response_terms)
         }
       end
 

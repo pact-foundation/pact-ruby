@@ -4,20 +4,22 @@ module Pact
   module Consumer
     module GenerateResponse
 
-      def self.from_specification(value)
+      def self.from_term(term)
         case
-        when value.is_a?(Hash)
-          value.inject({}) do |mem, (key,value)|
-            mem[key] = from_specification(value)
+        when term.respond_to?(:generate)
+          term.generate
+        when term.is_a?(Hash)
+          term.inject({}) do |mem, (key,term)|
+            mem[key] = from_term(term)
             mem
           end
-        when value.is_a?(Array)
-          value.inject([]) do |mem, value|
-            mem << from_specification(value)
+        when term.is_a?(Array)
+          term.inject([]) do |mem, term|
+            mem << from_term(term)
             mem
           end
         else
-          value.is_a?(Regexp) ? value.generate : value
+          term
         end
       end
 

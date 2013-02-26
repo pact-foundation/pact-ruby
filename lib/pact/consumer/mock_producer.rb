@@ -10,7 +10,7 @@ module Pact
       def initialize(name, pactfile_path)
         @name = name
         @pactfile_path = pactfile_path
-        @interactions = []
+        @interactions = {}
       end
 
       def at(url)
@@ -19,12 +19,12 @@ module Pact
       end
 
       def upon_receiving(description)
-        Interaction.new(self, description).tap { |int| @interactions << int }
+        @interactions[description] ||= Interaction.new(self, description)
       end
 
       def update_pactfile
         File.open(pactfile_path, 'w') do |f|
-          f.write JSON.dump(@interactions.map(&:to_json))
+          f.write JSON.dump(@interactions.values.map(&:to_json))
         end
       end
 

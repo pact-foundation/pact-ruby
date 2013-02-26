@@ -28,6 +28,7 @@ module Pact::Producer
     pact = JSON.parse <<-EOS
 [
     {
+        "description": "donut creation request",
         "request": {
             "method": {
                 "json_class": "Symbol", 
@@ -41,6 +42,7 @@ module Pact::Producer
         }
     }, 
     {
+        "description": "charlie deletion request",
         "request": {
             "method": {
                 "json_class": "Symbol", 
@@ -64,7 +66,7 @@ EOS
       request, response = interaction['request'], interaction['response']
       response = interaction['response']
 
-      describe "matching response" do
+      describe interaction['description'] do
         before do
           self.send(request['method'], request['path'])
         end

@@ -31,31 +31,31 @@ module Pact::Producer
         "description": "donut creation request",
         "request": {
             "method": {
-                "json_class": "Symbol", 
+                "json_class": "Symbol",
                 "s": "post"
-            }, 
+            },
             "path": "/donuts"
-        }, 
+        },
         "response": {
-            "body": "Donut created.", 
+            "body": "Donut created.",
             "status": 201
         }
-    }, 
+    },
     {
         "description": "charlie deletion request",
         "request": {
             "method": {
-                "json_class": "Symbol", 
+                "json_class": "Symbol",
                 "s": "delete"
-            }, 
+            },
             "path": "/charlie"
-        }, 
+        },
         "response": {
             "body": {
-                "json_class": "Regexp", 
-                "o": 0, 
+                "json_class": "Regexp",
+                "o": 0,
                 "s": "deleted"
-            }, 
+            },
             "status": 204
         }
     }

@@ -8,7 +8,9 @@ module Pact
 
       let(:pact_path) { File.expand_path('../../../../pacts/mock', __FILE__) }
       let(:request) { { foo: 'bar' } }
-      let(:response_spec) { { baz: /qux/ } }
+      let(:response) do
+        { baz: /qux/, wiffle: Term.new(generate: 'wiffle', match: /iff/) }
+      end
 
       let(:producer) do
         double(uri: URI('http://example.com:2222'),
@@ -23,43 +25,59 @@ module Pact
       describe "setting up responses" do
 
         it "posts the interaction with generated response to the mock service" do
-          interaction_json = {
+          interaction_json = JSON.dump({
             description: 'Test request',
             request: {
               foo: 'bar'
             },
             response: {
-              baz: 'qux'
+              baz: 'qux',
+              wiffle: 'wiffle'
             }
-          }.to_json
+          })
 
-          subject.will_respond_with response_spec
+          subject.will_respond_with response
           WebMock.should have_requested(:post, 'example.com:2222/interactions').with(body: interaction_json)
         end
 
         it "updates the Producer's Pactfile" do
           producer.should_receive(:update_pactfile)
-          subject.will_respond_with response_spec
+          subject.will_respond_with response
         end
 
         it "returns the producer (for fluent API goodness)" do
-          expect(subject.will_respond_with response_spec).to eql producer
+          expect(subject.will_respond_with response).to eql producer
         end
 
       end
 
       describe "to JSON" do
 
+        let(:parsed_result) do
+          JSON.load(JSON.dump(subject))
+        end
+
         before do
-          subject.will_respond_with response_spec
+          subject.will_respond_with response
         end
 
         it "contains the request" do
-          expect(subject.to_json[:request]).to eql({foo: 'bar'})
+          expect(parsed_result['request']).to eql({'foo' => 'bar'})
         end
 
-        it "contains the response spec" do
-          expect(subject.to_json[:response]).to eql({baz: /qux/})
+        describe "response" do
+
+          it "serialises regexes" do
+            expect(parsed_result['response']['baz']).to eql /qux/
+          end
+
+          it "serialises terms" do
+            term = Pact::Term.new(generate:'wiffle', match: /iff/)
+            parsed_term = parsed_result['response']['wiffle']
+            expect(term.match).to eql parsed_term.match
+            expect(term.generate).to eql parsed_term.generate
+          end
+
         end
 
       end

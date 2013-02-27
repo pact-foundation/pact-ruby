@@ -24,7 +24,7 @@ module Pact
 
       def update_pactfile
         File.open(pactfile_path, 'w') do |f|
-          f.write JSON.dump(@interactions.values.map(&:to_json))
+          f.write JSON.dump(@interactions.values)
         end
       end
 

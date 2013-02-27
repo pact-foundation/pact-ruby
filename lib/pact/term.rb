@@ -8,5 +8,14 @@ module Pact
       @match = options[:match]
     end
 
+    def self.json_create(obj)
+      new(generate: obj['data']['generate'], match: obj['data']['match'])
+    end
+
+    def to_json(options = {})
+      { json_class: self.class.name, data: { generate: generate, match: match} }.to_json(options)
+    end
+
+
   end
 end

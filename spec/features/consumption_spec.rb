@@ -32,7 +32,7 @@ module Pact::Consumer
         will_respond_with({
         status: 200,
         headers: { 'Content-Type' => 'text/html' },
-        body: 'That is some good Mallory.'
+        body: Pact::Term.new(match: /Mallory/, generate: 'That is some good Mallory.')
       })
 
       bob_service = assuming_a_service('Bob').

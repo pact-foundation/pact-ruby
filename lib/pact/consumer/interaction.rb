@@ -24,12 +24,12 @@ module Pact
         self
       end
 
-      def to_json
+      def to_json(options = {})
         {
           :description => @description,
           :request => @request,
           :response => @response_terms
-        }
+        }.to_json(options)
       end
 
       private

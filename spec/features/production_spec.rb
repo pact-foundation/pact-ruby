@@ -1,6 +1,4 @@
-require 'json'
-require 'json/add/core'
-require 'rack/test'
+require 'pact/producer/rspec'
 
 class ServiceUnderTest
 
@@ -16,77 +14,51 @@ class ServiceUnderTest
 end
 
 module Pact::Producer
+
   describe "A service production side of a pact" do
-    include Rack::Test::Methods
 
     def app
       ServiceUnderTest.new
     end
 
-    PACTS_PATH = File.expand_path('../../pacts', __FILE__)
-
     pact = JSON.parse <<-EOS
-[
-    {
-        "description": "donut creation request",
-        "request": {
-            "method": {
-                "json_class": "Symbol",
-                "s": "post"
+    [
+        {
+            "description": "donut creation request",
+            "request": {
+                "method": {
+                    "json_class": "Symbol",
+                    "s": "post"
+                },
+                "path": "/donuts"
             },
-            "path": "/donuts"
+            "response": {
+                "body": "Donut created.",
+                "status": 201
+            }
         },
-        "response": {
-            "body": "Donut created.",
-            "status": 201
-        }
-    },
-    {
-        "description": "charlie deletion request",
-        "request": {
-            "method": {
-                "json_class": "Symbol",
-                "s": "delete"
+        {
+            "description": "charlie deletion request",
+            "request": {
+                "method": {
+                    "json_class": "Symbol",
+                    "s": "delete"
+                },
+                "path": "/charlie"
             },
-            "path": "/charlie"
-        },
-        "response": {
-            "body": {
-                "json_class": "Regexp",
-                "o": 0,
-                "s": "deleted"
-            },
-            "status": 204
+            "response": {
+                "body": {
+                    "json_class": "Regexp",
+                    "o": 0,
+                    "s": "deleted"
+                },
+                "status": 204
+            }
         }
-    }
-]
-EOS
+    ]
+    EOS
 
-    pact.each do |interaction|
-      request, response = interaction['request'], interaction['response']
-      response = interaction['response']
+    honour_pact pact
 
-      describe interaction['description'] do
-        before do
-          self.send(request['method'], request['path'])
-        end
-        it "has status code #{response['status']}" do
-          expect(last_response.status).to eql response['status']
-        end
-        if response['headers']
-          describe "headers" do
-            response['headers'].each do |name, value|
-              it "#{name} is #{value}" do
-                expect(last_response.headers[name]).to match value
-              end
-            end
-          end
-        end
-        it "body" do
-          expect(last_response.body).to match response['body']
-        end
-      end
-
-    end
   end
 end

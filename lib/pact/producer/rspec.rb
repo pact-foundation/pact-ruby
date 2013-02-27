@@ -1,14 +1,11 @@
 require 'json' 
 require 'json/add/core'
 require 'rack/test'
+require 'pact/producer'
 
 module Pact
   module Producer
     module RSpec
-
-      def self.included(base)
-        puts 'included'
-      end
 
       def honour_pactfile pactfile
         honour_pact JSON.load(File.read(pactfile))
@@ -19,9 +16,11 @@ module Pact
           request, response = interaction['request'], interaction['response']
           response = interaction['response']
 
-          describe interaction['description'] do
+          describe "#{interaction['description']} to '#{request['path']}'" do
             before do
-              self.send(request['method'], request['path'])
+              args = [ request['path'] ]
+              args << JSON.dump(request['body']) if request['body']
+              self.send(request['method'], *args)
             end
             if response['status']
               it "has status code #{response['status']}" do
@@ -29,17 +28,17 @@ module Pact
               end
             end
             if response['headers']
-              describe "headers" do
+              describe "includes headers" do
                 response['headers'].each do |name, value|
                   it "#{name} is #{value}" do
-                    expect(last_response.headers[name]).to match value
+                    expect(last_response.headers[name]).to match_term value
                   end
                 end
               end
             end
             if response['body']
-              it "body" do
-                expect(last_response.body).to match response['body']
+              it "has matching body" do
+                expect(JSON.load(last_response.body)).to match_term response['body']
               end
             end
           end
@@ -47,6 +46,25 @@ module Pact
         end
       end
 
+    end
+  end
+end
+
+RSpec::Matchers.define :match_term do |expected|
+  match do |actual|
+    case 
+      when expected.is_a?(Hash)
+        actual
+        expected.each do |key, value|
+          expect(actual[key]).to match_term expected[key]
+        end
+        true
+      when expected.is_a?(Regexp)
+        actual =~ expected
+      when expected.is_a?(Pact::Term)
+        expect(actual).to match_term expected.match
+      else
+        actual == expected
     end
   end
 end

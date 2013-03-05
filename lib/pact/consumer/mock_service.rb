@@ -3,6 +3,7 @@ require 'uri'
 require 'json'
 require 'hashie'
 require 'singleton'
+require 'awesome_print'
 
 module Pact
   module Consumer
@@ -111,8 +112,8 @@ module Pact
         end
 
         def handle_unrecognised_request request
-          puts "No interaction found for request: "
-          puts request.to_hash.inspect
+          puts 'No interaction found for request: '
+          ap request.to_hash
           [404, {}, ['No interaction found']]
         end
         def response_from response
@@ -141,8 +142,9 @@ module Pact
           relevant_handler = @handlers.detect { |handler| handler.match? env }
           response = relevant_handler.respond env
         rescue Exception => e
-          puts e.message
-          puts e.backtrace
+          puts 'Error ocurred in mock service:'
+          ap e
+          ap e.backtrace
           raise e
         end
         response

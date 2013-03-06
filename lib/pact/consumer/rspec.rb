@@ -1,11 +1,12 @@
 module Pact
   module Consumer
     module RSpec
-      def assuming_a_service(name)
+
+      def consumer(name)
         FileUtils.mkdir_p PACTS_PATH
-        pactfile_path = File.join(PACTS_PATH, "#{name.downcase.gsub(/\s/, '_')}.json")
-        MockProducer.new(name, pactfile_path)
+        MockProducer.new(PACTS_PATH).consumer(name)
       end
+
     end
   end
 end

@@ -20,3 +20,5 @@ tmp
 tags
 .rbenv-version
 spec/pacts
+.rvmrc
+*.iml

@@ -23,7 +23,7 @@ module Pact::Consumer
     end
 
     it "goes a little something like this" do
-      alice_service = assuming_a_service('Alice').
+      alice_service = consumer('consumer').assuming_a_service('Alice').
       at('http://localhost:1234').
         upon_receiving("a retrieve Mallory request").with({
         method: :get,
@@ -35,7 +35,7 @@ module Pact::Consumer
         body: Pact::Term.new(match: /Mallory/, generate: 'That is some good Mallory.')
       })
 
-      bob_service = assuming_a_service('Bob').
+      bob_service = consumer('consumer').assuming_a_service('Bob').
       at('http://localhost:4321').
         upon_receiving('a create donut request').with({
         method: :post,

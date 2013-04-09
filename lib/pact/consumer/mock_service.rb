@@ -60,7 +60,7 @@ module Pact
         end
 
         def respond env
-          interactions = Hashie::Mash.new(JSON.parse(env['rack.input'].string))
+          interactions = Hashie::Mash.new(JSON.load(env['rack.input'].string))
           InteractionList.instance.add interactions
           [200, {}, ['Added interactions']]
         end
@@ -87,8 +87,8 @@ module Pact
         def request_from env
           request = env.inject({}) do |memo, (k, v)|
             request_key = REQUEST_KEYS[k]
-            memo[request_key] = v if request_key
-            memo
+          memo[request_key] = v if request_key
+          memo
           end
 
           mashed_request = Hashie::Mash.new request
@@ -102,20 +102,22 @@ module Pact
           mashed_request
         end
 
-        def find_response request
+        def find_response raw_request
+          actual_request = Request::Actual.from_hash(raw_request)
           matching_interactions = InteractionList.instance.interactions.select do |interaction|
-            filtered_request = interaction.request.select {|key, value| request.has_key?(key)}
-            Hashie::Mash.new(filtered_request) == Hashie::Mash.new(request)
+            expected_request = Request::Expected.from_hash(interaction.request)
+            expected_request.matches? actual_request
           end
           raise 'Multiple interactions found!' if matching_interactions.size > 1
-          matching_interactions.empty? ? handle_unrecognised_request(request) : response_from(matching_interactions.first.response)
+          matching_interactions.empty? ? handle_unrecognised_request(actual_request) : response_from(matching_interactions.first.response)
         end
 
         def handle_unrecognised_request request
           puts 'No interaction found for request: '
-          ap request.to_hash
+          ap request.as_json
           [404, {}, ['No interaction found']]
         end
+
         def response_from response
           [response.status, (response.headers || {}).to_hash, [render_body(response.body)]]
         end
@@ -125,7 +127,6 @@ module Pact
           body.respond_to?(:to_hash) ? body.to_json : body.force_encoding('utf-8')
         end
       end
-
 
       def initialize
         @handlers = [

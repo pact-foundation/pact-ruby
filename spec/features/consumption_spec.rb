@@ -39,7 +39,10 @@ module Pact::Consumer
       at('http://localhost:4321').
         upon_receiving('a create donut request').with({
         method: :post,
-        path: '/donuts'
+        path: '/donuts',
+        body: {
+          "name" => Pact::Term.new(match: /Bob/)
+        }
       }).
         will_respond_with({
         status: 201,
@@ -60,16 +63,15 @@ module Pact::Consumer
       expect(alice_response['Content-Type']).to eql 'text/html'
       expect(alice_response.body).to eql 'That is some good Mallory.'
 
-      bob_post_response = Net::HTTP.post_form(URI('http://localhost:4321/donuts'), {})
+      uri = URI('http://localhost:4321/donuts')
+      post_req = Net::HTTP::Post.new(uri.path)
+      post_req.body = {"name" => "Bobby"}.to_json
+      bob_post_response = Net::HTTP.start(uri.hostname, uri.port) do |http|
+        http.request post_req
+      end
 
       expect(bob_post_response.code).to eql '201'
       expect(bob_post_response.body).to eql 'Donut created.'
-
-      bob_delete_response = Net::HTTP.post_form(URI('http://localhost:4321/donuts'), {})
-
-      expect(bob_delete_response.code).to eql '201'
-      expect(bob_delete_response.body).to eql 'Donut created.'
-
     end
 
   end

@@ -1,5 +1,6 @@
 require 'net/http'
 require_relative 'generate_response'
+require_relative 'request'
 
 module Pact
   module Consumer
@@ -18,9 +19,8 @@ module Pact
         @producer
       end
 
-      def with(request)
-        @request = request
-        @request[:method] = @request[:method].to_s if @request[:method]
+      def with(request_details)
+        @request = Request::Expected.from_hash(request_details)
         self
       end
 

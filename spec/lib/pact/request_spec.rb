@@ -132,6 +132,46 @@ module Pact
         end
       end
 
+      context "when the expected body contains matching regexes" do
+        let(:expected_body) do
+          {
+            name: 'Bob',
+            customer_id: /CN.*/
+          }
+        end
+
+        let(:actual_body) do
+          {
+            name: 'Bob',
+            customer_id: 'CN1234'
+          }
+        end
+
+        it "matches" do
+          expect(subject.matches? actual_request).to be_true
+        end
+      end
+
+      context "when the expected body contains non-matching regexes" do
+        let(:expected_body) do
+          {
+            name: 'Bob',
+            customer_id: /foo/
+          }
+        end
+
+        let(:actual_body) do
+          {
+            name: 'Bob',
+            customer_id: 'CN1234'
+          }
+        end
+
+        it "does not match" do
+          expect(subject.matches? actual_request).to be_false
+        end
+      end
+
       context "when the expected body contains matching terms" do
         let(:expected_body) do
           {

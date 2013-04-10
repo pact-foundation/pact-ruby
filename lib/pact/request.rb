@@ -58,6 +58,10 @@ module Pact
 
       private
 
+      #TODO: All kinds of polymorphism fail in here
+      # we can treat terms and regexps the same if
+      # we rename the pact match attr and rename 
+      # matches? to match
       def recursively_matches?(expected, actual)
         if expected.respond_to? :all?
           expected.all? do |key, value|
@@ -65,6 +69,8 @@ module Pact
           end
         elsif expected.respond_to? :matches?
           expected.matches? actual
+        elsif expected.respond_to? :match
+          expected.match actual
         else
           expected == actual
         end

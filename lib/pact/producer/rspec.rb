@@ -13,7 +13,7 @@ module Pact
 
       def honour_pact pact
         pact.each do |interaction|
-          request, response = interaction['request'], interaction['response']
+          request = interaction['request']
           response = interaction['response']
 
           describe "#{interaction['description']} to '#{request['path']}'" do

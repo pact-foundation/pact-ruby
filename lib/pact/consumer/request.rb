@@ -57,7 +57,8 @@ module Request
     private
 
     def recursively_matches?(expected, actual)
-      return expected == actual unless expected.is_a? Hash
+      return expected == actual if expected.is_a? String
+      return expected.matches? actual if expected.is_a? Pact::Term
       expected.all? do |key, value|
         recursively_matches?(value, actual[key])
       end

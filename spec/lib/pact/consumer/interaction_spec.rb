@@ -34,8 +34,8 @@ module Pact
             request: {
               method: 'post',
               path: '/foo',
-              headers: { 'Content-Type' => 'application/json' },
-              body: Term.new(generate: 'waffle', match: /ffl/)
+              body: Term.new(generate: 'waffle', match: /ffl/),
+              headers: { 'Content-Type' => 'application/json' }
             },
             response: {
               baz: 'qux',

@@ -7,7 +7,11 @@ module Pact
       subject { Interaction.new(producer, 'Test request').with(request) }
 
       let(:pact_path) { File.expand_path('../../../../pacts/mock', __FILE__) }
-      let(:request) { { method: 'get', path: '/foo' } }
+
+      let(:request) do
+        { method: 'post', path: '/foo', body: Term.new(generate: 'waffle', match: /ffl/) }
+      end
+
       let(:response) do
         { baz: /qux/, wiffle: Term.new(generate: 'wiffle', match: /iff/) }
       end
@@ -28,8 +32,9 @@ module Pact
           interaction_json = JSON.dump({
             description: 'Test request',
             request: {
-              method: 'get',
-              path: '/foo'
+              method: 'post',
+              path: '/foo',
+              body: Term.new(generate: 'waffle', match: /ffl/)
             },
             response: {
               baz: 'qux',
@@ -63,7 +68,7 @@ module Pact
         end
 
         it "contains the request" do
-          expect(parsed_result['request']).to eql({'method' => 'get', 'path' => '/foo'})
+          expect(parsed_result['request']).to eq({'method' => 'post', 'path' => '/foo', 'body' => Pact::Term.new(generate: 'waffle', match: /ffl/) })
         end
 
         describe "response" do

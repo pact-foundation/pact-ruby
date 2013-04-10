@@ -50,18 +50,20 @@ module Pact
         return false if path != actual_request.path
         return true if empty_body? && actual_request.empty_body?
         return false if actual_request.empty_body?
-        return true if body == actual_request.body
-        return false unless body.is_a? Hash
         recursively_matches?(body, actual_request.body)
       end
 
       private
 
       def recursively_matches?(expected, actual)
-        return expected == actual if expected.is_a? String
-        return expected.matches? actual if expected.is_a? Term
-        expected.all? do |key, value|
-          recursively_matches?(value, actual[key])
+        if expected.respond_to? :all?
+          expected.all? do |key, value|
+            recursively_matches?(value, actual[key])
+          end
+        elsif expected.respond_to? :matches?
+          expected.matches? actual
+        else
+          expected == actual
         end
       end
 

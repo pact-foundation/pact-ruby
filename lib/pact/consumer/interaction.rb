@@ -1,6 +1,6 @@
 require 'net/http'
 require_relative 'generate_response'
-require_relative 'request'
+require 'pact/request'
 
 module Pact
   module Consumer

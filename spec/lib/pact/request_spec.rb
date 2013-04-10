@@ -10,6 +10,9 @@ module Pact
         {
           'method' => 'get',
           'path' => '/mallory',
+          'headers' => {
+            'Content-Type' => 'application/json'
+          },
           'body' => 'hello mallory'
         }
       end
@@ -43,16 +46,18 @@ module Pact
 
     describe "matching to actual requests" do
 
-      subject { Request::Expected.new(expected_method, expected_path, expected_body) }
+      subject { Request::Expected.new(expected_method, expected_path, expected_headers, expected_body) }
 
       let(:expected_method) { 'get' }
       let(:expected_path) { '/foo' }
+      let(:expected_headers) { nil }
       let(:expected_body) { nil }
 
-      let(:actual_request) { Request::Actual.new(actual_method, actual_path, actual_body) }
+      let(:actual_request) { Request::Actual.new(actual_method, actual_path, actual_headers, actual_body) }
 
       let(:actual_method) { 'get' }
       let(:actual_path) { '/foo' }
+      let(:actual_headers) { nil }
       let(:actual_body) { nil }
 
       it "matches identical requests" do

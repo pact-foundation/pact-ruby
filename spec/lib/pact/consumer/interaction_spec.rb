@@ -9,7 +9,7 @@ module Pact
       let(:pact_path) { File.expand_path('../../../../pacts/mock', __FILE__) }
 
       let(:request) do
-        { method: 'post', path: '/foo', body: Term.new(generate: 'waffle', match: /ffl/) }
+        { method: 'post', path: '/foo', body: Term.new(generate: 'waffle', match: /ffl/), headers: { 'Content-Type' => 'application/json' } }
       end
 
       let(:response) do
@@ -34,6 +34,7 @@ module Pact
             request: {
               method: 'post',
               path: '/foo',
+              headers: { 'Content-Type' => 'application/json' },
               body: Term.new(generate: 'waffle', match: /ffl/)
             },
             response: {
@@ -68,7 +69,14 @@ module Pact
         end
 
         it "contains the request" do
-          expect(parsed_result['request']).to eq({'method' => 'post', 'path' => '/foo', 'body' => Pact::Term.new(generate: 'waffle', match: /ffl/) })
+          expect(parsed_result['request']).to eq({
+              'method' => 'post',
+              'path' => '/foo',
+              'headers' => {
+                'Content-Type' => 'application/json'
+              },
+              'body' => Pact::Term.new(generate: 'waffle', match: /ffl/)
+            })
         end
 
         describe "response" do

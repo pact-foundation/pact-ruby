@@ -3,19 +3,21 @@ module Pact
 
     class Base
 
-      attr_reader :method, :path, :body
+      attr_reader :method, :path, :headers, :body
 
       def self.from_hash(hash)
         sym_hash = hash.inject({}) { |memo, (k,v)| memo[k.to_sym] = v; memo }
         method = sym_hash.fetch(:method)
         path = sym_hash.fetch(:path)
+        headers = sym_hash.fetch(:headers, nil)
         body = sym_hash.fetch(:body, nil)
-        new(method, path, body)
+        new(method, path, headers, body)
       end
 
-      def initialize(method, path, body)
+      def initialize(method, path, headers, body)
         @method = method.to_s
         @path = path.chomp('/')
+        @headers = headers
         @body = body
       end
 
@@ -38,6 +40,7 @@ module Pact
         }
 
         base_json.merge!(body: body) if body
+        base_json.merge!(headers: headers) if headers
         base_json
       end
 

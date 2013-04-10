@@ -1,7 +1,8 @@
-require 'json' 
+require 'json'
 require 'json/add/core'
 require 'rack/test'
 require 'pact/producer'
+require 'pact/consumer/generate_response'
 
 module Pact
   module Producer
@@ -18,8 +19,17 @@ module Pact
 
           describe "#{interaction['description']} to '#{request['path']}'" do
             before do
-              args = [ request['path'] ]
-              args << (request['body'] ? JSON.dump(request['body']) : "")
+              args = [request['path']]
+
+              body = request['body']
+              if body
+                body = JSON.dump(Pact::Consumer::GenerateResponse.from_term(body))
+              else
+                body = ""
+              end
+
+              args << body
+
               if request['headers']
                 request_headers = {}
                 request['headers'].each do |key, value|

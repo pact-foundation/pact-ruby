@@ -106,7 +106,7 @@ module Pact
           actual_request = Request::Actual.from_hash(raw_request)
           matching_interactions = InteractionList.instance.interactions.select do |interaction|
             expected_request = Request::Expected.from_hash(interaction.request)
-            expected_request.matches? actual_request
+            expected_request.match actual_request
           end
           raise 'Multiple interactions found!' if matching_interactions.size > 1
           matching_interactions.empty? ? handle_unrecognised_request(actual_request) : response_from(matching_interactions.first.response)

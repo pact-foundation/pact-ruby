@@ -16,8 +16,8 @@ module Pact
       { json_class: self.class.name, data: { generate: generate, matcher: matcher} }.to_json(options)
     end
 
-    def matches?(literal)
-      !!(matcher =~ literal)
+    def match(literal)
+      matcher.match literal
     end
 
     def ==(other)

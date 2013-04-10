@@ -61,7 +61,7 @@ module Pact
       let(:actual_body) { nil }
 
       it "matches identical requests" do
-        expect(subject.matches? actual_request).to be_true
+        expect(subject.match actual_request).to be_true
       end
 
       context "when the methods are the same but one is symbolized" do
@@ -69,7 +69,7 @@ module Pact
         let(:actual_method) { 'get' }
 
         it "matches" do
-          expect(subject.matches? actual_request).to be_true
+          expect(subject.match actual_request).to be_true
         end
       end
 
@@ -78,7 +78,7 @@ module Pact
         let(:actual_method) { 'post' }
 
         it "does not match" do
-          expect(subject.matches? actual_request).to be_false
+          expect(subject.match actual_request).to be_false
         end
       end
 
@@ -87,7 +87,7 @@ module Pact
         let(:actual_path) { '/bar' }
 
         it "does not match" do
-          expect(subject.matches? actual_request).to be_false
+          expect(subject.match actual_request).to be_false
         end
       end
 
@@ -96,7 +96,7 @@ module Pact
         let(:actual_path) { '/foo/' }
 
         it "matches" do
-          expect(subject.matches? actual_request).to be_true
+          expect(subject.match actual_request).to be_true
         end
       end
 
@@ -105,7 +105,7 @@ module Pact
         let(:actual_body) { '' }
 
         it "matches" do
-          expect(subject.matches? actual_request).to be_true
+          expect(subject.match actual_request).to be_true
         end
       end
 
@@ -119,7 +119,7 @@ module Pact
         let(:actual_body) { nil }
 
         it "does not match" do
-          expect(subject.matches? actual_request).to be_false
+          expect(subject.match actual_request).to be_false
         end
       end
 
@@ -128,7 +128,7 @@ module Pact
         let(:actual_body) { 'bar' }
 
         it "does not match" do
-          expect(subject.matches? actual_request).to be_false
+          expect(subject.match actual_request).to be_false
         end
       end
 
@@ -148,7 +148,7 @@ module Pact
         end
 
         it "matches" do
-          expect(subject.matches? actual_request).to be_true
+          expect(subject.match actual_request).to be_true
         end
       end
 
@@ -168,7 +168,7 @@ module Pact
         end
 
         it "does not match" do
-          expect(subject.matches? actual_request).to be_false
+          expect(subject.match actual_request).to be_false
         end
       end
 
@@ -176,7 +176,7 @@ module Pact
         let(:expected_body) do
           {
             name: 'Bob',
-            customer_id: Term.new({matcher: /CN.*/})
+            customer_id: Term.new(matcher: /CN.*/)
           }
         end
 
@@ -188,7 +188,7 @@ module Pact
         end
 
         it "matches" do
-          expect(subject.matches? actual_request).to be_true
+          expect(subject.match actual_request).to be_true
         end
       end
 
@@ -196,7 +196,7 @@ module Pact
         let(:expected_body) do
           {
             name: 'Bob',
-            customer_id: Term.new({matcher: /foo/})
+            customer_id: Term.new(matcher: /foo/)
           }
         end
 
@@ -208,7 +208,7 @@ module Pact
         end
 
         it "does not match" do
-          expect(subject.matches? actual_request).to be_false
+          expect(subject.match actual_request).to be_false
         end
       end
 

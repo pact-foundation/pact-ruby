@@ -48,7 +48,7 @@ module Pact
 
     class Expected < Base
 
-      def matches?(actual_request)
+      def match(actual_request)
         return false if method != actual_request.method
         return false if path != actual_request.path
         return true if empty_body? && actual_request.empty_body?
@@ -58,17 +58,11 @@ module Pact
 
       private
 
-      #TODO: All kinds of polymorphism fail in here
-      # we can treat terms and regexps the same if
-      # we rename the pact match attr and rename 
-      # matches? to match
       def recursively_matches?(expected, actual)
         if expected.respond_to? :all?
           expected.all? do |key, value|
             recursively_matches?(value, actual[key])
           end
-        elsif expected.respond_to? :matches?
-          expected.matches? actual
         elsif expected.respond_to? :match
           expected.match actual
         else

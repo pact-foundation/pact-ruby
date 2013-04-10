@@ -1,5 +1,5 @@
 require 'net/http'
-require_relative 'generate_response'
+require 'pact/reification'
 require 'pact/request'
 
 module Pact
@@ -38,7 +38,7 @@ module Pact
         {
           :description => @description,
           :request => @request,
-          :response => GenerateResponse.from_term(@response_terms)
+          :response => Reification.from_term(@response_terms)
         }
       end
 

@@ -1,4 +1,3 @@
-require_relative 'consumer/generate_response'
 require_relative 'consumer/interaction'
 require_relative 'consumer/mock_producer'
 require_relative 'consumer/mock_service'

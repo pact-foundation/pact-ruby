@@ -2,7 +2,7 @@ require 'json'
 require 'json/add/core'
 require 'rack/test'
 require 'pact/producer'
-require 'pact/consumer/generate_response'
+require 'pact/reification'
 
 module Pact
   module Producer
@@ -23,7 +23,7 @@ module Pact
 
               body = request['body']
               if body
-                body = JSON.dump(Pact::Consumer::GenerateResponse.from_term(body))
+                body = JSON.dump(Pact::Reification.from_term(body))
               else
                 body = ""
               end

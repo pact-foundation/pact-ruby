@@ -78,7 +78,7 @@ RSpec::Matchers.define :match_term do |expected|
       when expected.is_a?(Regexp)
         actual =~ expected
       when expected.is_a?(Pact::Term)
-        expect(actual).to match_term expected.match
+        expect(actual).to match_term expected.matcher
       when expected.is_a?(Array)
         if actual.is_a?(Array)
           expected.each_with_index do |value, index|

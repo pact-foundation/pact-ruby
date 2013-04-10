@@ -32,7 +32,7 @@ module Pact::Consumer
         will_respond_with({
         status: 200,
         headers: { 'Content-Type' => 'text/html' },
-        body: Pact::Term.new(match: /Mallory/, generate: 'That is some good Mallory.')
+        body: Pact::Term.new(matcher: /Mallory/, generate: 'That is some good Mallory.')
       })
 
       bob_service = consumer('consumer').assuming_a_service('Bob').
@@ -41,7 +41,7 @@ module Pact::Consumer
         method: :post,
         path: '/donuts',
         body: {
-          "name" => Pact::Term.new(match: /Bob/)
+          "name" => Pact::Term.new(matcher: /Bob/)
         }
       }).
         will_respond_with({

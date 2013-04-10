@@ -9,11 +9,11 @@ module Pact
       let(:pact_path) { File.expand_path('../../../../pacts/mock', __FILE__) }
 
       let(:request) do
-        { method: 'post', path: '/foo', body: Term.new(generate: 'waffle', match: /ffl/), headers: { 'Content-Type' => 'application/json' } }
+        { method: 'post', path: '/foo', body: Term.new(generate: 'waffle', matcher: /ffl/), headers: { 'Content-Type' => 'application/json' } }
       end
 
       let(:response) do
-        { baz: /qux/, wiffle: Term.new(generate: 'wiffle', match: /iff/) }
+        { baz: /qux/, wiffle: Term.new(generate: 'wiffle', matcher: /iff/) }
       end
 
       let(:producer) do
@@ -34,7 +34,7 @@ module Pact
             request: {
               method: 'post',
               path: '/foo',
-              body: Term.new(generate: 'waffle', match: /ffl/),
+              body: Term.new(generate: 'waffle', matcher: /ffl/),
               headers: { 'Content-Type' => 'application/json' }
             },
             response: {
@@ -75,7 +75,7 @@ module Pact
               'headers' => {
                 'Content-Type' => 'application/json'
               },
-              'body' => Pact::Term.new(generate: 'waffle', match: /ffl/)
+              'body' => Pact::Term.new(generate: 'waffle', matcher: /ffl/)
             })
         end
 
@@ -86,9 +86,9 @@ module Pact
           end
 
           it "serialises terms" do
-            term = Pact::Term.new(generate:'wiffle', match: /iff/)
+            term = Pact::Term.new(generate:'wiffle', matcher: /iff/)
             parsed_term = parsed_result['response']['wiffle']
-            expect(term.match).to eql parsed_term.match
+            expect(term.matcher).to eql parsed_term.matcher
             expect(term.generate).to eql parsed_term.generate
           end
 

@@ -4,9 +4,9 @@ module Pact
   describe Term do
 
     describe "equality" do
-      context "when the match and generate attrs are the same" do
-        let(:this) { Term.new(generate: 'A', match: /A/) }
-        let(:that) { Term.new(generate: 'A', match: /A/) }
+      context "when the matcher and generate attrs are the same" do
+        let(:this) { Term.new(generate: 'A', matcher: /A/) }
+        let(:that) { Term.new(generate: 'A', matcher: /A/) }
 
         it "is equal" do
           expect(this).to eq that
@@ -22,9 +22,9 @@ module Pact
         end
       end
 
-      context "when the match attrs are different" do
-        let(:this) { Term.new(match: 'A') }
-        let(:that) { Term.new(match: 'B') }
+      context "when the matcher attrs are different" do
+        let(:this) { Term.new(matcher: 'A') }
+        let(:that) { Term.new(matcher: 'B') }
 
         it "is not equal" do
           expect(this).to_not eq that

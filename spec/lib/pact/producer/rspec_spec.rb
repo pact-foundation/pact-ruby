@@ -15,15 +15,15 @@ describe "the match_term matcher" do
   end
 
   it 'matches pact terms' do
-    expect('wootle').to match_term Pact::Term.new(generate:'wootle', match:/woot../)
+    expect('wootle').to match_term Pact::Term.new(generate:'wootle', matcher:/woot../)
   end
 
   it 'matches all elements of arrays' do
-    expect(['one', 'two', ['three']]).to match_term [/one/, 'two', [Pact::Term.new(generate:'three', match:/thr../)]]
+    expect(['one', 'two', ['three']]).to match_term [/one/, 'two', [Pact::Term.new(generate:'three', matcher:/thr../)]]
   end
 
   it 'matches all values of hashes' do
-    expect({1 => 'one', 2 => 2, 3 => 'three'}).to match_term({1 => /one/, 2 => 2, 3 => Pact::Term.new(generate:'three', match:/thr../)})
+    expect({1 => 'one', 2 => 2, 3 => 'three'}).to match_term({1 => /one/, 2 => 2, 3 => Pact::Term.new(generate:'three', matcher:/thr../)})
   end
 
   it 'matches all other objects using ==' do

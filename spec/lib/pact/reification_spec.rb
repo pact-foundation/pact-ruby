@@ -8,7 +8,7 @@ module Pact
         woot: /x/,
         britney: 'britney',
         nested: { foo: /bar/, baz: 'qux' },
-        my_term: Term.new(generate: 'wiffle', match: /^wif/),
+        my_term: Term.new(generate: 'wiffle', matcher: /^wif/),
         array: ['first', /second/]
       }
     end

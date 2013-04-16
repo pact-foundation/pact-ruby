@@ -18,6 +18,7 @@ module Pact
         @spawned_app_pids = []
         @registered_apps = {}
         @max_wait = 10
+        @apps_spawned = false
       end
 
       def register(app, port = FindAPort.available_port)
@@ -25,6 +26,7 @@ module Pact
         existing = @registered_apps[port]
         raise "Port #{port} is already being used by #{existing}" if existing and not existing == app
         @registered_apps[port] = app
+        spawn(app, port) if @apps_spawned
         port
       end
 
@@ -33,6 +35,7 @@ module Pact
           Process.kill(9, pid) 
           Process.wait(pid)
         end
+        @apps_spawned = false
       end
 
       def clear_all
@@ -44,6 +47,7 @@ module Pact
         @registered_apps.each do |port, app|
           spawn(app, port)
         end
+        @apps_spawned = true
       end
 
       def wait_until

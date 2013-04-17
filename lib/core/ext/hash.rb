@@ -1,14 +1,16 @@
 class Hash
-  def diff_with_actual(expected)
-    actual = self
-    (actual.keys | expected.keys).inject({}) do |diff, key|
-      if actual[key] != expected[key]
-        if actual[key].respond_to?(:diff_with_actual) && expected[key].respond_to?(:diff_with_actual)
-          diff[key] = actual[key].diff_with_actual(expected[key])
+  def diff_with_actual(actual)
+    expected = self
+    expected.keys.inject({}) do |diff, key|
+      # Handle 'expected' being a Pact::Term that may _match_ a string 'actual', without _equaling_ it.
+      if expected[key] != actual[key] && !(expected[key].respond_to?(:match) && expected[key].match(actual))
+        if expected[key].respond_to?(:diff_with_actual) && actual[key].respond_to?(:diff_with_actual)
+          key_diff = expected[key].diff_with_actual(actual[key])
+          diff[key] = key_diff unless key_diff.empty?
         else
           diff[key] = {
-            expected: actual[key],
-            actual: expected[key]
+            expected: expected[key],
+            actual: actual[key]
           }
         end
       end

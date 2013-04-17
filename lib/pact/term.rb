@@ -17,12 +17,19 @@ module Pact
     end
 
     def match(literal)
-      matcher.match literal
+      literal.respond_to?(:to_s) ? matcher.match(literal.to_s) : nil
     end
 
     def ==(other)
       return false unless other.respond_to?(:generate) && other.respond_to?(:matcher)
       generate == other.generate && matcher == other.matcher
+    end
+
+    def diff_with_actual(actual)
+      match(actual) ? nil : {
+        expected: self,
+        actual: actual
+      }
     end
 
   end

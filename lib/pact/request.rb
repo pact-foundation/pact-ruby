@@ -49,14 +49,20 @@ module Pact
     class Expected < Base
 
       def match(actual_request)
-        return false if method != actual_request.method
-        return false if path != actual_request.path
+        matches_route?(actual_request) && matches_body?(actual_request)
+      end
+
+      def matches_route?(actual_request)
+        (method == actual_request.method) && (path == actual_request.path)
+      end
+
+      private
+
+      def matches_body?(actual_request)
         return true if empty_body? && actual_request.empty_body?
         return false if actual_request.empty_body?
         recursively_matches?(body, actual_request.body)
       end
-
-      private
 
       def recursively_matches?(expected, actual)
         if expected.respond_to? :all?

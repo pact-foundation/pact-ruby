@@ -4,6 +4,7 @@ require 'json'
 require 'hashie'
 require 'singleton'
 require 'awesome_print'
+require 'core/ext/hash'
 
 module Pact
   module Consumer
@@ -104,17 +105,24 @@ module Pact
 
         def find_response raw_request
           actual_request = Request::Actual.from_hash(raw_request)
+          candidates = []
           matching_interactions = InteractionList.instance.interactions.select do |interaction|
             expected_request = Request::Expected.from_hash(interaction.request)
+            candidates << expected_request if expected_request.matches_route? actual_request
             expected_request.match actual_request
           end
           raise 'Multiple interactions found!' if matching_interactions.size > 1
-          matching_interactions.empty? ? handle_unrecognised_request(actual_request) : response_from(matching_interactions.first.response)
+          matching_interactions.empty? ? handle_unrecognised_request(actual_request, candidates) : response_from(matching_interactions.first.response)
         end
 
-        def handle_unrecognised_request request
+        def handle_unrecognised_request request, candidates
           puts 'No interaction found for request: '
-          ap request.as_json
+          request_json = request.as_json
+          ap request_json
+          puts 'Interaction diffs for that route:'
+          candidates.map(&:as_json).each do |candidate|
+            ap candidate.diff_with_actual request_json
+          end
           [404, {}, ['No interaction found']]
         end
 

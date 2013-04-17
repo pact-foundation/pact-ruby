@@ -21,6 +21,7 @@ module Pact
     end
 
     def ==(other)
+      return false unless other.respond_to?(:generate) && other.respond_to?(:matcher)
       generate == other.generate && matcher == other.matcher
     end
 

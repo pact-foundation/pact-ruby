@@ -60,13 +60,26 @@ module Pact
             end
             if response['body']
               it "has matching body" do
-                expect(JSON.load(last_response.body)).to match_term response['body']
+                expect(parse_entity_from_response(last_response)).to match_term response['body']
               end
             end
           end
 
         end
+
       end
+
+      module TestMethods
+        def parse_entity_from_response response
+          case response.headers['Content-Type']
+          when 'application/json'
+            JSON.load(response.body)
+          else
+            response.body
+          end
+        end
+      end
+
 
     end
   end
@@ -75,35 +88,36 @@ end
 RSpec::Matchers.define :match_term do |expected|
   match do |actual|
     case
-      when expected.is_a?(Regexp)
-        actual =~ expected
-      when expected.is_a?(Pact::Term)
-        expect(actual).to match_term expected.matcher
-      when expected.is_a?(Array)
-        if actual.is_a?(Array)
-          expected.each_with_index do |value, index|
-            expect(actual[index]).to match_term value
-          end
-          true
-        else
-          false
+    when expected.is_a?(Regexp)
+      actual =~ expected
+    when expected.is_a?(Pact::Term)
+      expect(actual).to match_term expected.matcher
+    when expected.is_a?(Array)
+      if actual.is_a?(Array)
+        expected.each_with_index do |value, index|
+          expect(actual[index]).to match_term value
         end
-      when expected.is_a?(Hash)
-        if actual.is_a?(Hash)
-          expected.each do |key, value|
-            expect(actual[key]).to match_term value
-          end
-          true
-        else
-          false
-        end
+        true
       else
-        actual == expected
+        false
+      end
+    when expected.is_a?(Hash)
+      if actual.is_a?(Hash)
+        expected.each do |key, value|
+          expect(actual[key]).to match_term value
+        end
+        true
+      else
+        false
+      end
+    else
+      actual == expected
     end
   end
 end
 
 RSpec.configure do |config|
   config.include Rack::Test::Methods
+  config.include Pact::Producer::RSpec::TestMethods
   config.extend Pact::Producer::RSpec
 end

@@ -65,10 +65,16 @@ module Pact
       end
 
       def recursively_matches?(expected, actual)
-        if expected.respond_to? :all?
-          expected.all? do |key, value|
+        if expected.respond_to? :to_hash
+          (expected.to_hash.count == actual.to_hash.count) && expected.to_hash.all? do |key, value|
             recursively_matches?(value, actual[key])
           end
+        elsif expected.respond_to? :to_a
+          ok = expected.to_a.count == actual.to_a.count
+          expected.to_a.each_with_index do |value, key|
+            ok = false unless recursively_matches?(value, actual[key])
+          end
+          ok
         elsif expected.respond_to? :match
           expected.match actual
         else

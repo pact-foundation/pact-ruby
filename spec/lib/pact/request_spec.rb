@@ -212,6 +212,46 @@ module Pact
         end
       end
 
+      context "when the expected body contains non-matching arrays" do
+        let(:expected_body) do
+          {
+            name: 'Robert',
+            nicknames: ['Bob', 'Bobert']
+          }
+        end
+
+        let(:actual_body) do
+          {
+            name: 'Bob',
+            nicknames: ['Bob']
+          }
+        end
+
+        it "does not match" do
+          expect(subject.match actual_request).to be_false
+        end
+      end
+
+      context "when the expected body contains matching arrays" do
+        let(:expected_body) do
+          {
+            name: 'Robert',
+            nicknames: ['Bob', 'Bobert']
+          }
+        end
+
+        let(:actual_body) do
+          {
+            name: 'Robert',
+            nicknames: ['Bob', 'Bobert']
+          }
+        end
+
+        it "does not match" do
+          expect(subject.match actual_request).to be_true
+        end
+      end
+
     end
 
   end

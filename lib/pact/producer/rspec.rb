@@ -34,7 +34,7 @@ module Pact
                 request_headers = {}
                 request['headers'].each do |key, value|
                   key = key.upcase
-                  if key.match /CONTENT.TYPE/
+                  if key.match(/CONTENT.TYPE/)
                     request_headers['CONTENT_TYPE'] = value
                   else
                     request_headers['HTTP_' + key.to_s] = value

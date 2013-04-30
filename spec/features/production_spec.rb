@@ -5,9 +5,9 @@ class ServiceUnderTest
   def call(env)
     case env['PATH_INFO']
     when '/donuts'
-      [201, {'Content-Type' => 'text/html'}, { message: "Donut created." }.to_json]
+      [201, {'Content-Type' => 'application/json'}, { message: "Donut created." }.to_json]
     when '/charlie'
-      [204, {'Content-Type' => 'text/html'}, { message: "Your charlie has been deleted" }.to_json]
+      [200, {'Content-Type' => 'application/json'}, { message: "Your charlie has been deleted" }.to_json]
     end
   end
 
@@ -54,7 +54,7 @@ module Pact::Producer
                     "s": "deleted"
                   }
                 },
-                "status": 204
+                "status": 200
             }
         }
     ]

@@ -33,7 +33,7 @@ module Pact
 
       def update_pactfile
         File.open(pactfile_path, 'w') do |f|
-          f.write JSON.dump(@interactions.values)
+          f.write JSON.pretty_generate(@interactions.values)
         end
       end
 

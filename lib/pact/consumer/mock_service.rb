@@ -72,6 +72,7 @@ module Pact
         REQUEST_KEYS = Hashie::Mash.new({
           'REQUEST_METHOD' => :method,
           'REQUEST_PATH' => :path,
+          'QUERY_STRING' => :query,
           'rack.input' => :body
         })
 

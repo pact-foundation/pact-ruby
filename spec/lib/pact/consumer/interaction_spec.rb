@@ -9,7 +9,13 @@ module Pact
       let(:pact_path) { File.expand_path('../../../../pacts/mock', __FILE__) }
 
       let(:request) do
-        { method: 'post', path: '/foo', body: Term.new(generate: 'waffle', matcher: /ffl/), headers: { 'Content-Type' => 'application/json' } }
+        {
+          method: 'post',
+          path: '/foo',
+          body: Term.new(generate: 'waffle', matcher: /ffl/),
+          headers: { 'Content-Type' => 'application/json' },
+          query: '',
+        }
       end
 
       let(:response) do
@@ -35,7 +41,8 @@ module Pact
               method: 'post',
               path: '/foo',
               body: Term.new(generate: 'waffle', matcher: /ffl/),
-              headers: { 'Content-Type' => 'application/json' }
+              headers: { 'Content-Type' => 'application/json' },
+              query: "",
             },
             response: {
               baz: 'qux',
@@ -75,7 +82,8 @@ module Pact
               'headers' => {
                 'Content-Type' => 'application/json'
               },
-              'body' => Pact::Term.new(generate: 'waffle', matcher: /ffl/)
+              'body' => Pact::Term.new(generate: 'waffle', matcher: /ffl/),
+              'query' => ''
             })
         end
 

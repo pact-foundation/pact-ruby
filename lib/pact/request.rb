@@ -3,22 +3,24 @@ module Pact
 
     class Base
 
-      attr_reader :method, :path, :headers, :body
+      attr_reader :method, :path, :headers, :body, :query
 
       def self.from_hash(hash)
         sym_hash = hash.inject({}) { |memo, (k,v)| memo[k.to_sym] = v; memo }
         method = sym_hash.fetch(:method)
         path = sym_hash.fetch(:path)
+        query = sym_hash.fetch(:query, "")
         headers = sym_hash.fetch(:headers, nil)
         body = sym_hash.fetch(:body, nil)
-        new(method, path, headers, body)
+        new(method, path, headers, body, query)
       end
 
-      def initialize(method, path, headers, body)
+      def initialize(method, path, headers, body, query)
         @method = method.to_s
         @path = path.chomp('/')
         @headers = headers
         @body = body
+        @query = query
       end
 
       def empty_body?
@@ -41,6 +43,7 @@ module Pact
 
         base_json.merge!(body: body) if body
         base_json.merge!(headers: headers) if headers
+        base_json.merge!(query: query) if query
         base_json
       end
 
@@ -49,11 +52,15 @@ module Pact
     class Expected < Base
 
       def match(actual_request)
-        matches_route?(actual_request) && matches_body?(actual_request)
+        matches_route?(actual_request) && matches_query?(actual_request) && matches_body?(actual_request)
       end
 
       def matches_route?(actual_request)
         (method == actual_request.method) && (path == actual_request.path)
+      end
+
+      def matches_query?(actual_request)
+        query == actual_request.query
       end
 
       private

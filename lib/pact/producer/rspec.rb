@@ -19,7 +19,13 @@ module Pact
 
           describe "#{interaction['description']} to '#{request['path']}'" do
             before do
-              args = [request['path']]
+              path = request['path']
+              query = request['query']
+              if query && !query.empty?
+                path += "?" + request['query']
+              end
+
+              args = [path]
 
               body = request['body']
               if body

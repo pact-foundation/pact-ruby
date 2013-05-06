@@ -43,7 +43,7 @@ module Pact
 
         base_json.merge!(body: body) if body
         base_json.merge!(headers: headers) if headers
-        base_json.merge!(query: query) if query
+        base_json.merge!(query: query)
         base_json
       end
 

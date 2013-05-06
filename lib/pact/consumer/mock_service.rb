@@ -124,7 +124,7 @@ module Pact
           candidates.map(&:as_json).each do |candidate|
             ap candidate.diff_with_actual request_json
           end
-          [404, {}, ['No interaction found']]
+          [500, {}, ['No interaction found']]
         end
 
         def response_from response

@@ -3,8 +3,9 @@ require 'uri'
 require 'json'
 require 'hashie'
 require 'singleton'
-require 'awesome_print'
 require 'core/ext/hash'
+require 'logger'
+require 'awesome_print'
 
 module Pact
   module Consumer
@@ -30,6 +31,11 @@ module Pact
       end
 
       class StartupPoll
+
+        def initialize logger
+          @logger = logger
+        end
+
         def match? env
           env['REQUEST_PATH'] == '/index.html' &&
             env['REQUEST_METHOD'] == 'GET'
@@ -41,6 +47,10 @@ module Pact
       end
 
       class InteractionDelete
+
+        def initialize logger
+          @logger = logger
+        end
 
         def match? env
           env['REQUEST_PATH'] == '/interactions' &&
@@ -55,6 +65,10 @@ module Pact
 
       class InteractionPost
 
+        def initialize logger
+          @logger = logger
+        end
+
         def match? env
           env['REQUEST_PATH'] == '/interactions' &&
             env['REQUEST_METHOD'] == 'POST'
@@ -68,6 +82,10 @@ module Pact
       end
 
       class InteractionReplay
+
+        def initialize logger
+          @logger = logger
+        end
 
         REQUEST_KEYS = Hashie::Mash.new({
           'REQUEST_METHOD' => :method,
@@ -117,12 +135,12 @@ module Pact
         end
 
         def handle_unrecognised_request request, candidates
-          puts 'No interaction found for request: '
+          @logger.ap 'No interaction found for request: '
           request_json = request.as_json
-          ap request_json
-          puts 'Interaction diffs for that route:'
+          @logger.ap request_json
+          @logger.ap 'Interaction diffs for that route:'
           candidates.map(&:as_json).each do |candidate|
-            ap candidate.diff_with_actual request_json
+            @logger.ap candidate.diff_with_actual request_json
           end
           [500, {}, ['No interaction found']]
         end
@@ -137,12 +155,14 @@ module Pact
         end
       end
 
-      def initialize
+      def initialize options = {}
+        options = {log_file: STDOUT}.merge options
+        @logger = Logger.new options[:log_file]
         @handlers = [
-          StartupPoll.new,
-          InteractionPost.new,
-          InteractionDelete.new,
-          InteractionReplay.new
+          StartupPoll.new(@logger),
+          InteractionPost.new(@logger),
+          InteractionDelete.new(@logger),
+          InteractionReplay.new(@logger)
         ]
       end
 
@@ -152,9 +172,9 @@ module Pact
           relevant_handler = @handlers.detect { |handler| handler.match? env }
           response = relevant_handler.respond env
         rescue Exception => e
-          puts 'Error ocurred in mock service:'
-          ap e
-          ap e.backtrace
+          @logger.ap 'Error ocurred in mock service:'
+          @logger.ap e
+          @logger.ap e.backtrace
           raise e
         end
         response

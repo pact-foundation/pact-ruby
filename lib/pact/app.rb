@@ -1,6 +1,6 @@
-require 'capybara'
 require 'find_a_port'
 require 'thor'
+require 'thin'
 require 'thwait'
 require 'pact/consumer'
 
@@ -21,16 +21,7 @@ module Pact
       end
       port = options[:port] || FindAPort.available_port
       mock_service = Consumer::MockService.new(service_options)
-      Capybara.server_port = port
-      Capybara::Server.new(mock_service).boot
-      log "Mock service started on http://127.0.0.1:#{port}"
-      log "CTRL+C to stop"
-      begin
-        ThreadsWait.all_waits(Thread.list)
-      rescue Interrupt
-        log ""
-        log "Shutting down mock service on http://127.0.0.1:#{port}"
-      end
+      Thin::Server.start("0.0.0.0", port, mock_service)
     end
 
     private

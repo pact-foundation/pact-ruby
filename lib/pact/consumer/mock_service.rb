@@ -46,6 +46,24 @@ module Pact
         end
       end
 
+      class CapybaraIdentify
+
+        def initialize logger
+          @logger = logger
+        end
+
+        def match? env
+          env["PATH_INFO"] == "/__identify__"
+        end
+
+        def respond env
+          [200, {}, [object_id.to_s]].tap do |woot|
+            puts "woot"
+            puts woot
+          end
+        end
+      end
+
       class InteractionDelete
 
         def initialize logger
@@ -164,6 +182,7 @@ module Pact
         @logger = Logger.new options[:log_file]
         @handlers = [
           StartupPoll.new(@logger),
+          CapybaraIdentify.new(@logger),
           InteractionPost.new(@logger),
           InteractionDelete.new(@logger),
           InteractionReplay.new(@logger)
@@ -171,6 +190,7 @@ module Pact
       end
 
       def call env
+
         response = []
         begin
           relevant_handler = @handlers.detect { |handler| handler.match? env }

@@ -130,7 +130,11 @@ module Pact
             candidates << expected_request if expected_request.matches_route? actual_request
             expected_request.match actual_request
           end
-          raise 'Multiple interactions found!' if matching_interactions.size > 1
+          if matching_interactions.size > 1
+            @logger.ap 'Multiple interactions found:'
+            @logger.ap matching_interactions
+            raise 'Multiple interactions found!'
+          end
           matching_interactions.empty? ? handle_unrecognised_request(actual_request, candidates) : response_from(matching_interactions.first.response)
         end
 
@@ -139,9 +143,9 @@ module Pact
           request_json = request.as_json
           @logger.ap request_json
           @logger.ap 'Interaction diffs for that route:'
-          candidates.map(&:as_json).each do |candidate|
-            @logger.ap candidate.diff_with_actual request_json
-          end
+          @logger.ap(candidates.map do |candidate|
+            candidate.as_json.diff_with_actual request_json
+          end.to_a)
           [500, {}, ['No interaction found']]
         end
 

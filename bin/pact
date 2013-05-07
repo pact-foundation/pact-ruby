@@ -1,0 +1,4 @@
+#!/usr/bin/env ruby
+
+require 'pact/app'
+Pact::App.start

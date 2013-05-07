@@ -22,3 +22,4 @@ tags
 spec/pacts
 .rvmrc
 *.iml
+.rakeTasks

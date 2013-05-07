@@ -57,10 +57,7 @@ module Pact
         end
 
         def respond env
-          [200, {}, [object_id.to_s]].tap do |woot|
-            puts "woot"
-            puts woot
-          end
+          [200, {}, [object_id.to_s]]
         end
       end
 

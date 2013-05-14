@@ -35,6 +35,7 @@ module Pact
           Process.kill(9, pid) 
           Process.wait(pid)
         end
+        @spawned_app_pids = []
         @apps_spawned = false
       end
 

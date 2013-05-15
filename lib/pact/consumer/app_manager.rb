@@ -30,6 +30,10 @@ module Pact
         port
       end
 
+      def app_registered_on?(port)
+        @registered_apps.key? port
+      end
+
       def kill_all
         @spawned_app_pids.each do |pid| 
           Process.kill(9, pid) 
@@ -41,7 +45,7 @@ module Pact
 
       def clear_all
         kill_all
-        @registered_apps = []
+        @registered_apps = {}
       end
 
       def spawn_all

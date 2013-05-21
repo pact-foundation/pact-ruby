@@ -91,7 +91,7 @@ module Pact
           end
           ok
         elsif expected.respond_to? :match
-          expected.match actual
+          !actual.nil? && expected.match(actual)
         else
           expected == actual
         end

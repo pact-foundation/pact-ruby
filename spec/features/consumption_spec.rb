@@ -10,16 +10,14 @@ module Pact::Consumer
 
   describe "A service consumer side of a pact" do
 
-    let(:app_manager) { AppManager.instance }
-
     before :all do
-      app_manager.register(MockService.new, 1234)
-      app_manager.register(MockService.new, 4321)
-      app_manager.spawn_all
+      AppManager.instance.register(MockService.new, 1234)
+      AppManager.instance.register(MockService.new, 4321)
+      AppManager.instance.spawn_all
     end
 
     after :all do
-      app_manager.kill_all
+      AppManager.instance.kill_all
     end
 
     it "goes a little something like this" do

@@ -25,7 +25,6 @@ Gem::Specification.new do |gem|
   gem.add_runtime_dependency 'awesome_print', '~> 1.1.0'
   gem.add_runtime_dependency 'capybara', '~> 2.1.0'
   gem.add_runtime_dependency 'thor'
-  gem.add_runtime_dependency 'thin'
 
   gem.add_development_dependency 'rake', '~> 10.0.3'
   gem.add_development_dependency 'webmock', '~> 1.9.3'

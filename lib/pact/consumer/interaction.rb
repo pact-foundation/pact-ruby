@@ -27,7 +27,7 @@ module Pact
       def to_json(options = {})
         {
           :description => @description,
-          :request => @request,
+          :request => @request.as_json,
           :response => @response_terms
         }.to_json(options)
       end
@@ -37,7 +37,7 @@ module Pact
       def with_generated_response
         {
           :description => @description,
-          :request => @request,
+          :request => @request.as_json,
           :response => Reification.from_term(@response_terms)
         }
       end

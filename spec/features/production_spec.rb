@@ -21,7 +21,7 @@ module Pact::Producer
       ServiceUnderTest.new
     end
 
-    pact = JSON.parse <<-EOS
+    pact = JSON.load <<-EOS
     [
         {
             "description": "donut creation request",

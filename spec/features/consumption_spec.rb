@@ -53,7 +53,17 @@ module Pact::Consumer
         will_respond_with({
         status: 200,
         body: /deleted/
+      }).
+        upon_receiving('an update alligators request').with({
+          method: :put,
+          path: '/alligators',
+          body: [{"name" => 'Roger' }]
+      }).
+        will_respond_with({
+          status: 200,
+          body: [{"name" => "Roger", "age" => 20}]
       })
+
 
       alice_response = Net::HTTP.get_response(URI('http://localhost:1234/mallory'))
 
@@ -70,6 +80,16 @@ module Pact::Consumer
 
       expect(bob_post_response.code).to eql '201'
       expect(bob_post_response.body).to eql 'Donut created.'
+
+      uri = URI('http://localhost:4321/alligators')
+      post_req = Net::HTTP::Put.new(uri.path)
+      post_req.body = [{"name" => "Roger"}].to_json
+      bob_post_response = Net::HTTP.start(uri.hostname, uri.port) do |http|
+        http.request post_req
+      end
+
+      expect(bob_post_response.code).to eql '200'
+      expect(bob_post_response.body).to eql([{"name" => "Roger", "age" => 20}].to_json)
     end
 
   end

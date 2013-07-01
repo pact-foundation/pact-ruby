@@ -6,6 +6,7 @@ require 'singleton'
 require 'core/ext/hash'
 require 'logger'
 require 'awesome_print'
+require 'json/add/core'
 
 module Pact
   module Consumer
@@ -131,7 +132,7 @@ module Pact
           if (body_string.empty?)
             mashed_request.delete :body
           else
-            mashed_request[:body] = Hashie::Mash.new(JSON.parse(body_string))
+            mashed_request[:body] = JSON.parse(body_string) #Remember this can be an array!
           end
           mashed_request[:method] = mashed_request[:method].downcase
           mashed_request
@@ -170,7 +171,7 @@ module Pact
 
         def render_body body
           return '' unless body
-          body.respond_to?(:to_hash) ? body.to_json : body.force_encoding('utf-8')
+          body.kind_of?(String) ? body.force_encoding('utf-8') : body.to_json
         end
       end
 

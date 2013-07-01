@@ -18,7 +18,7 @@ Gem::Specification.new do |gem|
   gem.require_paths = ["lib"]
 
   gem.add_runtime_dependency 'randexp', '~> 0.1.7'
-  gem.add_runtime_dependency 'hashie', '~> 1.2.0'
+  gem.add_runtime_dependency 'hashie', '~> 2.0.5'
   gem.add_runtime_dependency 'rspec', '~> 2.12'
   gem.add_runtime_dependency 'find_a_port', '~> 1.0.1'
   gem.add_runtime_dependency 'rack-test', '~> 0.6.2'

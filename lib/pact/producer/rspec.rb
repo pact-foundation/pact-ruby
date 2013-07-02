@@ -92,34 +92,76 @@ module Pact
 end
 
 RSpec::Matchers.define :match_term do |expected|
-  match do |actual|
+
+  def matching? actual, expected, desc = nil, parent = nil
+    mismatch = {actual: actual, expected: expected, desc: desc, parent: parent}
     case
     when expected.is_a?(Regexp)
-      actual =~ expected
+      match_regex actual, expected, mismatch
     when expected.is_a?(Pact::Term)
-      expect(actual).to match_term expected.matcher
+      match_term actual, expected
     when expected.is_a?(Array)
-      if actual.is_a?(Array)
-        expected.each_with_index do |value, index|
-          expect(actual[index]).to match_term value
-        end
-        true
-      else
-        false
-      end
+      match_array actual, expected, mismatch
     when expected.is_a?(Hash)
-      if actual.is_a?(Hash)
-        expected.each do |key, value|
-          expect(actual[key]).to match_term value
-        end
-        true
-      else
-        false
+      match_hash actual, expected, mismatch
+    else
+      match_object actual, expected, mismatch
+    end
+    true
+  end
+
+  def match_object actual, expected, mismatch
+    throw :mismatch, mismatch unless actual == expected
+  end
+
+  def match_regex actual, expected, mismatch
+    throw :mismatch, mismatch unless actual =~ expected
+  end
+
+  def match_term actual, expected
+    matching? actual, expected.matcher
+  end
+
+  def match_hash actual, expected, mismatch
+    if actual.is_a?(Hash)
+      expected.each do |key, value|
+        matching? actual[key], value, "key '#{key}'", actual
       end
     else
-      actual == expected
+      throw :mismatch, mismatch
     end
   end
+
+  def match_array actual, expected, mismatch
+    if actual.is_a?(Array)
+      expected.each_with_index do |value, index|
+        matching? actual[index], value, "index #{index}", actual
+      end
+    else
+      throw :mismatch, mismatch
+    end
+  end
+
+
+  match do |actual|
+    @message = catch(:mismatch) do
+      matching? actual, expected
+    end
+    puts "MESSAGE #{@message}"
+    @message == true
+  end
+
+  def mismatch_message
+    message = " Expected '#{@message[:actual]}' to equal '#{@message[:expected]}'"
+    message << " at #{@message[:desc]}" if @message[:desc]
+    message << " of #{@message[:parent]}" if @message[:parent]
+    message
+  end
+
+  failure_message_for_should do | actual |
+    mismatch_message
+  end
+
 end
 
 RSpec.configure do |config|

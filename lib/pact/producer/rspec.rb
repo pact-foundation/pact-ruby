@@ -147,7 +147,6 @@ RSpec::Matchers.define :match_term do |expected|
     @message = catch(:mismatch) do
       matching? actual, expected
     end
-    puts "MESSAGE #{@message}"
     @message == true
   end
 

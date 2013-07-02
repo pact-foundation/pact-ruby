@@ -95,15 +95,11 @@ RSpec::Matchers.define :match_term do |expected|
 
   def matching? actual, expected, desc = nil, parent = nil
     mismatch = {actual: actual, expected: expected, desc: desc, parent: parent}
-    case
-    when expected.is_a?(Regexp)
-      match_regex actual, expected, mismatch
-    when expected.is_a?(Pact::Term)
+    case expected
+    when *[Array, Hash, Regexp]
+      send("match_#{expected.class.name.downcase}", actual, expected, mismatch)
+    when Pact::Term
       match_term actual, expected
-    when expected.is_a?(Array)
-      match_array actual, expected, mismatch
-    when expected.is_a?(Hash)
-      match_hash actual, expected, mismatch
     else
       match_object actual, expected, mismatch
     end
@@ -114,7 +110,7 @@ RSpec::Matchers.define :match_term do |expected|
     throw :mismatch, mismatch unless actual == expected
   end
 
-  def match_regex actual, expected, mismatch
+  def match_regexp actual, expected, mismatch
     throw :mismatch, mismatch unless actual =~ expected
   end
 

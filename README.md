@@ -20,6 +20,33 @@ Or install it yourself as:
 
 TODO: Write usage instructions here
 
+
+## Keeping pacts up to date
+
+Pacts are only useful when producers and consumers agree to the same terms.
+
+    $ rake pact:pull
+
+
+You'll need to set up the task with sources to make this work. In a Rakefile
+(perhaps in `lib/tasks/pact.rake`), add something like the following:
+
+    ```
+    require 'pact/rake_task'
+
+    Pact::RakeTask.new do |pact|
+      pact.file 'spec/consumers/producer-consumer_development_pact.json',
+        from_url: 'http://latestbuild.example.com/producer/producer-consumer_pact.json'
+
+      pact.file 'spec/consumers/producer-consumer_production_pact.json
+        from_url: 'http://producer.example.com/pacts/producer-consumer_pact.json'
+    end
+    ```
+
+Run your tests with the new, updated pacts and commit them to source control.
+
+    $ rake pact:pull && rake && git add -p
+
 ## Contributing
 
 1. Fork it

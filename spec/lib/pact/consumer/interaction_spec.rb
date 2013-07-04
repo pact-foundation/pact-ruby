@@ -102,6 +102,13 @@ module Pact
 
         end
 
+        context "with a fixture" do
+          subject { Interaction.new(producer, 'Test request').with(request).using_fixture(:no_alligators) }
+
+          it "includes the fixture name" do
+            expect(parsed_result['fixture_name']).should eq("no_alligators")
+          end
+        end
       end
     end
   end

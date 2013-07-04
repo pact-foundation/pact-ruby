@@ -9,6 +9,7 @@ module Pact
       def initialize(producer, description)
         @producer = producer
         @description = description
+        @fixture_name = nil
         @http = Net::HTTP.new(@producer.uri.host, @producer.uri.port)
       end
 
@@ -19,27 +20,32 @@ module Pact
         @producer
       end
 
+      def using_fixture(fixture_name)
+        @fixture_name = fixture_name.to_s
+        self
+      end
+
       def with(request_details)
         @request = Request::Expected.from_hash(request_details)
         self
       end
 
-      def to_json(options = {})
+      def as_json
         {
           :description => @description,
           :request => @request.as_json,
-          :response => @response_terms
-        }.to_json(options)
+          :response => @response_terms,
+        }.tap{ | hash | hash[:fixture_name] = @fixture_name if @fixture_name }
+      end
+
+      def to_json(options = {})
+        as_json.to_json(options)
       end
 
       private
 
       def with_generated_response
-        {
-          :description => @description,
-          :request => @request.as_json,
-          :response => Reification.from_term(@response_terms)
-        }
+        as_json.tap { | hash | hash[:response] = Reification.from_term(@response_terms) }
       end
 
     end

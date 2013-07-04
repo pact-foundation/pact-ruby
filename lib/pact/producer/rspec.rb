@@ -12,10 +12,14 @@ module Pact
         honour_pact JSON.load(File.read(pactfile))
       end
 
-      def honour_pact pact
+      def honour_pact pact, options = {}
         pact.each do |interaction|
           request = interaction['request']
           response = interaction['response']
+
+          if interaction['fixture_path']
+            load interaction['fixture_path']
+          end
 
           describe "#{interaction['description']} to '#{request['path']}'" do
             before do
@@ -48,8 +52,13 @@ module Pact
                 end
                 args << request_headers
               end
+
+              load_fixture options[:fixtures_dir], interaction['fixture_name']
+
               self.send(request['method'], *args)
+
             end
+
             if response['status']
               it "has status code #{response['status']}" do
                 expect(last_response.status).to eql response['status']
@@ -82,6 +91,14 @@ module Pact
             JSON.load(response.body)
           else
             response.body
+          end
+        end
+
+        def load_fixture fixtures_dir, fixture_name
+          if fixture_name
+            raise "Please specify a fixtures directory for the fixture \"#{fixture_name}\" by specifying a :fixtures_dir in the options" unless fixtures_dir
+            file_path = Pathname.new(fixtures_dir) + (fixture_name + ".rb")
+            load file_path
           end
         end
       end

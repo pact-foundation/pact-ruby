@@ -92,5 +92,25 @@ module Pact::Consumer
       expect(bob_post_response.body).to eql([{"name" => "Roger", "age" => 20}].to_json)
     end
 
+    context "with a fixture" do
+      it "goes like this" do
+        alice_service = consumer('consumer').assuming_a_service('Alice').
+          at('http://localhost:1234').
+          upon_receiving("a retrieve Mallory request").with({
+            method: :get,
+            path: '/mallory'
+          }).
+          using_fixture(:all_the_zebras).
+          will_respond_with({
+            status: 200,
+            headers: { 'Content-Type' => 'text/html' },
+            body: Pact::Term.new(matcher: /Mallory/, generate: 'That is some good Mallory.')
+          })
+
+          interactions = JSON.load(File.read(alice_service.pactfile_path))
+          interactions.first['fixture_name'].should eq('all_the_zebras')
+      end
+    end
+
   end
 end

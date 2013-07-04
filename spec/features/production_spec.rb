@@ -13,6 +13,23 @@ class ServiceUnderTest
 
 end
 
+class ServiceUnderTestWithFixture
+
+  def find_zebra_names
+    #simulate loading data from a database
+    data = JSON.load(File.read('tmp/a_mock_database.json'))
+    data.collect{ | zebra | zebra['name'] }
+  end
+
+  def call(env)
+    case env['PATH_INFO']
+    when "/zebra_names"
+        [200, {'Content-Type' => 'application/json'}, { names: find_zebra_names }.to_json]
+    end
+  end
+
+end
+
 module Pact::Producer
 
   describe "A service production side of a pact" do
@@ -62,5 +79,39 @@ module Pact::Producer
 
     honour_pact pact
 
+  end
+
+  describe "with a fixture" do
+
+    def app
+        ServiceUnderTestWithFixture.new
+    end
+
+    after do
+        #simulate cleaning up database
+        FileUtils::rm('tmp/a_mock_database.json')
+    end
+
+    pact = JSON.load <<-EOS
+    [
+        {
+            "description": "donut creation request",
+            "request": {
+                "method": {
+                    "json_class": "Symbol",
+                    "s": "post"
+                },
+                "path": "/zebra_names"
+            },
+            "response": {
+                "body": {"names": ["Jason", "Sarah"]},
+                "status": 200
+            },
+            "fixture_name" : "all_the_zebras"
+        }
+    ]
+    EOS
+
+    honour_pact pact, :fixtures_dir => 'spec/features/fixtures'
   end
 end

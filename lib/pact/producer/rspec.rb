@@ -8,8 +8,8 @@ module Pact
   module Producer
     module RSpec
 
-      def honour_pactfile pactfile
-        honour_pact JSON.load(File.read(pactfile))
+      def honour_pactfile pactfile, options = {}
+        honour_pact JSON.load(File.read(pactfile)), options
       end
 
       def honour_pact pact, options = {}

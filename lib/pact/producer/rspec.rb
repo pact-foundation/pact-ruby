@@ -19,7 +19,7 @@ module Pact
           request = interaction['request']
           response = interaction['response']
           description = "#{interaction['description']} to '#{request['path']}'"
-          description << " using fixture '#{interaction['producer_state_name']}'" if interaction['producer_state_name']
+          description << " when in state '#{interaction['producer_state_name']}'" if interaction['producer_state_name']
 
           describe description  do
             before do

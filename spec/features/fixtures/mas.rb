@@ -1,4 +1,3 @@
-require 'pact/producer/producer_state'
 
 producer_state :all_the_zebras do
   set_up do

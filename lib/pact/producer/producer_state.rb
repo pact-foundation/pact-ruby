@@ -1,5 +1,12 @@
 module Pact
   module Producer
+
+    module DSL
+      def producer_state name, &block
+        Pact::Producer::ProducerState.producer_state(name, &block).register
+      end
+    end
+
     class ProducerState
 
       attr_accessor :name
@@ -48,7 +55,6 @@ module Pact
   end
 end
 
-#Argh, global method, how can I fix this so it's still available without namespaceing?
-def producer_state name, &block
-  Pact::Producer::ProducerState.producer_state(name, &block).register
-end
+#Include this into the global namespace the same way RSpec does
+extend Pact::Producer::DSL
+Module.send(:include, Pact::Producer::DSL)

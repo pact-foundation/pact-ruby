@@ -82,6 +82,10 @@ module Pact
             end
           end
 
+          after do
+            after_pact_fixture interaction['fixture_name']
+          end
+
         end
 
       end
@@ -110,6 +114,13 @@ module Pact
 
         def camelize(str)
           str.split('_').map {|w| w.capitalize}.join
+        end
+
+        def after_pact_fixture fixture_name
+          if fixture_name
+            fixture_class = Object.const_get(camelize(fixture_name)).new
+            fixture_class.tear_down
+          end
         end
 
         def load_fixture fixtures_dir, fixture_name

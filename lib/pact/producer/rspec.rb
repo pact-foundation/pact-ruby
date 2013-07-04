@@ -13,6 +13,8 @@ module Pact
       end
 
       def honour_pact pact, options = {}
+        load_fixtures options[:fixtures_dir]
+
         pact.each do |interaction|
           request = interaction['request']
           response = interaction['response']
@@ -84,7 +86,19 @@ module Pact
 
       end
 
+      def load_fixtures fixtures_dir
+        if fixtures_dir
+          #puts $:
+          Dir[File.join(fixtures_dir, '**/*.rb')].each do |src_file|
+            puts "requiring #{src_file}"
+            #require src_file
+          end
+        end
+      end
+
       module TestMethods
+
+
         def parse_entity_from_response response
           case response.headers['Content-Type']
           when 'application/json'
@@ -94,11 +108,17 @@ module Pact
           end
         end
 
+        def camelize(str)
+          str.split('_').map {|w| w.capitalize}.join
+        end
+
         def load_fixture fixtures_dir, fixture_name
           if fixture_name
-            raise "Please specify a fixtures directory for the fixture \"#{fixture_name}\" by specifying a :fixtures_dir in the options" unless fixtures_dir
-            file_path = Pathname.new(fixtures_dir) + (fixture_name + ".rb")
-            load file_path
+            fixture_class = Object.const_get(camelize(fixture_name)).new
+            fixture_class.set_up
+            # raise "Please specify a fixtures directory for the fixture \"#{fixture_name}\" by specifying a :fixtures_dir in the options" unless fixtures_dir
+            # file_path = Pathname.new(fixtures_dir) + (fixture_name + ".rb")
+            # load file_path
           end
         end
       end

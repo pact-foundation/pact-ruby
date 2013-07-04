@@ -1,4 +1,5 @@
 require 'pact/producer/rspec'
+require 'features/fixtures/all_the_zebras'
 
 class ServiceUnderTest
 
@@ -85,11 +86,6 @@ module Pact::Producer
 
     def app
         ServiceUnderTestWithFixture.new
-    end
-
-    after do
-        #simulate cleaning up database
-        FileUtils::rm('tmp/a_mock_database.json')
     end
 
     pact = JSON.load <<-EOS

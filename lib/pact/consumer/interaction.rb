@@ -9,7 +9,7 @@ module Pact
       def initialize(producer, description)
         @producer = producer
         @description = description
-        @producer_state_name = nil
+        @producer_state = nil
         @http = Net::HTTP.new(@producer.uri.host, @producer.uri.port)
       end
 
@@ -20,8 +20,8 @@ module Pact
         @producer
       end
 
-      def when_in_state(producer_state_name)
-        @producer_state_name = producer_state_name.to_s
+      def given(producer_state)
+        @producer_state = producer_state
         self
       end
 
@@ -35,7 +35,7 @@ module Pact
           :description => @description,
           :request => @request.as_json,
           :response => @response_terms,
-        }.tap{ | hash | hash[:producer_state_name] = @producer_state_name if @producer_state_name }
+        }.tap{ | hash | hash[:producer_state] = @producer_state if @producer_state }
       end
 
       def to_json(options = {})

@@ -1,5 +1,5 @@
 require 'pact/producer/rspec'
-require 'features/fixtures/mas'
+require 'features/producer_states/zebras'
 
 class ServiceUnderTest
 
@@ -82,32 +82,62 @@ module Pact::Producer
 
   end
 
-  describe "with a fixture" do
+  describe "with a producer_state" do
 
     def app
         ServiceUnderTestWithFixture.new
     end
 
-    pact = JSON.load <<-EOS
-    [
-        {
-            "description": "donut creation request",
-            "request": {
-                "method": {
-                    "json_class": "Symbol",
-                    "s": "post"
+    context "that is a symbol" do
+        pact = JSON.load <<-EOS
+        [
+            {
+                "description": "donut creation request",
+                "request": {
+                    "method": {
+                        "json_class": "Symbol",
+                        "s": "post"
+                    },
+                    "path": "/zebra_names"
                 },
-                "path": "/zebra_names"
-            },
-            "response": {
-                "body": {"names": ["Jason", "Sarah"]},
-                "status": 200
-            },
-            "producer_state_name" : "all_the_zebras"
-        }
-    ]
-    EOS
+                "response": {
+                    "body": {"names": ["Jason", "Sarah"]},
+                    "status": 200
+                },
+                "producer_state" : {
+                    "json_class": "Symbol",
+                    "s": "the_zebras_are_here"
+                }
+            }
+        ]
+        EOS
 
-    honour_pact pact
+        honour_pact pact
+    end
+
+    context "that is a string" do
+        pact = JSON.load <<-EOS
+        [
+            {
+                "description": "donut creation request",
+                "request": {
+                    "method": {
+                        "json_class": "Symbol",
+                        "s": "post"
+                    },
+                    "path": "/zebra_names"
+                },
+                "response": {
+                    "body": {"names": ["Mark", "Gertrude"]},
+                    "status": 200
+                },
+                "producer_state" : "some other zebras are here"
+            }
+        ]
+        EOS
+
+        honour_pact pact
+    end
+
   end
 end

@@ -100,7 +100,7 @@ module Pact::Consumer
             method: :get,
             path: '/mallory'
           }).
-          when_in_state(:all_the_zebras).
+          given(:the_zebras_are_here).
           will_respond_with({
             status: 200,
             headers: { 'Content-Type' => 'text/html' },
@@ -108,7 +108,7 @@ module Pact::Consumer
           })
 
           interactions = JSON.load(File.read(alice_service.pactfile_path))
-          interactions.first['producer_state_name'].should eq('all_the_zebras')
+          interactions.first['producer_state'].should eq(:the_zebras_are_here)
       end
     end
 

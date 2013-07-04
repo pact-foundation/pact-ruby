@@ -102,11 +102,20 @@ module Pact
 
         end
 
-        context "with a fixture" do
-          subject { Interaction.new(producer, 'Test request').with(request).when_in_state(:no_alligators) }
+        context "with a producer_state" do
+          context "described with a string" do
+            subject { Interaction.new(producer, 'Test request').with(request).given("there are no alligators") }
 
-          it "includes the fixture name" do
-            expect(parsed_result['producer_state_name']).to eql("no_alligators")
+            it "includes the state name as a string" do
+              expect(parsed_result['producer_state']).to eql("there are no alligators")
+            end
+          end
+          context "described with a symbol" do
+            subject { Interaction.new(producer, 'Test request').with(request).given(:there_are_no_alligators) }
+
+            it "includes the state name as a symbol" do
+              expect(parsed_result['producer_state']).to eql(:there_are_no_alligators)
+            end
           end
         end
       end

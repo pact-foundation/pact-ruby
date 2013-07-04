@@ -19,7 +19,7 @@ module Pact
           request = interaction['request']
           response = interaction['response']
           description = "#{interaction['description']} to '#{request['path']}'"
-          description << " when in state '#{interaction['producer_state_name']}'" if interaction['producer_state_name']
+          description << " given '#{interaction['producer_state']}'" if interaction['producer_state']
 
           describe description  do
             before do
@@ -53,7 +53,7 @@ module Pact
                 args << request_headers
               end
 
-              set_up_producer_state interaction['producer_state_name']
+              set_up_producer_state interaction['producer_state']
 
               self.send(request['method'], *args)
 
@@ -83,7 +83,7 @@ module Pact
           end
 
           after do
-            tear_down_producer_state interaction['producer_state_name']
+            tear_down_producer_state interaction['producer_state']
           end
 
         end
@@ -101,16 +101,26 @@ module Pact
           end
         end
 
-        def tear_down_producer_state producer_state_name
+        def set_up_producer_state producer_state_name
           if producer_state_name
-            ProducerState.get(producer_state_name).tear_down
+            get_producer_state(producer_state_name).set_up
           end
         end
 
-        def set_up_producer_state producer_state_name
+        def tear_down_producer_state producer_state_name
           if producer_state_name
-            ProducerState.get(producer_state_name).set_up
+            get_producer_state(producer_state_name).tear_down
           end
+        end
+
+        private
+
+        def get_producer_state producer_state_name
+          unless producer_state = ProducerState.get(producer_state_name)
+            desc = producer_state_name.is_a?(String) ? "\"#{producer_state_name}\"" : ":#{producer_state_name}"
+            raise "Could not find a producer state defined for #{desc}. Have you required the producer state file in your spec?"
+          end
+          producer_state
         end
       end
     end

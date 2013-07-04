@@ -10,7 +10,7 @@ module Pact
     module RSpec
 
       def honour_pactfile pactfile
-        honour_pact JSON.load(File.read(pactfile)), options
+        honour_pact JSON.load(File.read(pactfile))
       end
 
       def honour_pact pact

@@ -3,17 +3,17 @@ require 'json/add/core'
 require 'rack/test'
 require 'pact/producer'
 require 'pact/reification'
+require 'pact/producer/interaction_fixture'
 
 module Pact
   module Producer
     module RSpec
 
-      def honour_pactfile pactfile, options = {}
+      def honour_pactfile pactfile
         honour_pact JSON.load(File.read(pactfile)), options
       end
 
-      def honour_pact pact, options = {}
-        load_fixtures options[:fixtures_dir]
+      def honour_pact pact
 
         pact.each do |interaction|
           request = interaction['request']
@@ -53,7 +53,7 @@ module Pact
                 args << request_headers
               end
 
-              load_fixture options[:fixtures_dir], interaction['fixture_name']
+              set_up_interaction_fixture interaction['fixture_name']
 
               self.send(request['method'], *args)
 
@@ -83,25 +83,14 @@ module Pact
           end
 
           after do
-            after_pact_fixture interaction['fixture_name']
+            tear_down_interaction_fixture interaction['fixture_name']
           end
 
         end
 
-      end
-
-      def load_fixtures fixtures_dir
-        if fixtures_dir
-          #puts $:
-          Dir[File.join(fixtures_dir, '**/*.rb')].each do |src_file|
-            puts "requiring #{src_file}"
-            #require src_file
-          end
-        end
       end
 
       module TestMethods
-
 
         def parse_entity_from_response response
           case response.headers['Content-Type']
@@ -112,24 +101,15 @@ module Pact
           end
         end
 
-        def camelize(str)
-          str.split('_').map {|w| w.capitalize}.join
-        end
-
-        def after_pact_fixture fixture_name
+        def tear_down_interaction_fixture fixture_name
           if fixture_name
-            fixture_class = Object.const_get(camelize(fixture_name)).new
-            fixture_class.tear_down
+            InteractionFixture.get(fixture_name).tear_down
           end
         end
 
-        def load_fixture fixtures_dir, fixture_name
+        def set_up_interaction_fixture fixture_name
           if fixture_name
-            fixture_class = Object.const_get(camelize(fixture_name)).new
-            fixture_class.set_up
-            # raise "Please specify a fixtures directory for the fixture \"#{fixture_name}\" by specifying a :fixtures_dir in the options" unless fixtures_dir
-            # file_path = Pathname.new(fixtures_dir) + (fixture_name + ".rb")
-            # load file_path
+            InteractionFixture.get(fixture_name).set_up
           end
         end
       end

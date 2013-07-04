@@ -1,5 +1,5 @@
 require 'pact/producer/rspec'
-require 'features/fixtures/all_the_zebras'
+require 'features/fixtures/mas'
 
 class ServiceUnderTest
 
@@ -108,6 +108,6 @@ module Pact::Producer
     ]
     EOS
 
-    honour_pact pact, :fixtures_dir => 'spec/features/fixtures'
+    honour_pact pact
   end
 end

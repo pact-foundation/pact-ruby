@@ -6,10 +6,10 @@ module Pact
   module Consumer
     class Interaction
 
-      def initialize(producer, description)
+      def initialize(producer, description, producer_state)
         @producer = producer
         @description = description
-        @producer_state = nil
+        @producer_state = producer_state
         @http = Net::HTTP.new(@producer.uri.host, @producer.uri.port)
       end
 
@@ -18,11 +18,6 @@ module Pact
         @http.request_post('/interactions', with_generated_response.to_json)
         @producer.update_pactfile
         @producer
-      end
-
-      def given(producer_state)
-        @producer_state = producer_state
-        self
       end
 
       def with(request_details)

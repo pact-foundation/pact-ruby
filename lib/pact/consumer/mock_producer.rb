@@ -10,6 +10,7 @@ module Pact
       def initialize(pactfile_root)
         @pactfile_root = pactfile_root
         @interactions = {}
+        @producer_state = nil
       end
 
       def consumer(consumer_name)
@@ -27,8 +28,13 @@ module Pact
         self
       end
 
+      def given(producer_state)
+        @producer_state = producer_state
+        self
+      end
+
       def upon_receiving(description)
-        @interactions[description] ||= Interaction.new(self, description)
+        @interactions[description] ||= Interaction.new(self, description, @producer_state)
       end
 
       def update_pactfile

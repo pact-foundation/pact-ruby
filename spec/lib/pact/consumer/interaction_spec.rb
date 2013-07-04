@@ -4,7 +4,7 @@ module Pact
   module Consumer
     describe Interaction do
 
-      subject { Interaction.new(producer, 'Test request').with(request) }
+      subject { Interaction.new(producer, 'Test request', nil).with(request) }
 
       let(:pact_path) { File.expand_path('../../../../pacts/mock', __FILE__) }
 
@@ -104,14 +104,14 @@ module Pact
 
         context "with a producer_state" do
           context "described with a string" do
-            subject { Interaction.new(producer, 'Test request').with(request).given("there are no alligators") }
+            subject { Interaction.new(producer, 'Test request', "there are no alligators").with(request) }
 
             it "includes the state name as a string" do
               expect(parsed_result['producer_state']).to eql("there are no alligators")
             end
           end
           context "described with a symbol" do
-            subject { Interaction.new(producer, 'Test request').with(request).given(:there_are_no_alligators) }
+            subject { Interaction.new(producer, 'Test request', :there_are_no_alligators).with(request) }
 
             it "includes the state name as a symbol" do
               expect(parsed_result['producer_state']).to eql(:there_are_no_alligators)

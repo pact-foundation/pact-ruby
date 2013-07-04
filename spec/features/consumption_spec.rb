@@ -96,11 +96,11 @@ module Pact::Consumer
       it "goes like this" do
         alice_service = consumer('consumer').assuming_a_service('Alice').
           at('http://localhost:1234').
+          given(:the_zebras_are_here).
           upon_receiving("a retrieve Mallory request").with({
             method: :get,
             path: '/mallory'
           }).
-          given(:the_zebras_are_here).
           will_respond_with({
             status: 200,
             headers: { 'Content-Type' => 'text/html' },

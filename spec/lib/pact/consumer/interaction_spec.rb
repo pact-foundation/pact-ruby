@@ -103,10 +103,10 @@ module Pact
         end
 
         context "with a fixture" do
-          subject { Interaction.new(producer, 'Test request').with(request).using_fixture(:no_alligators) }
+          subject { Interaction.new(producer, 'Test request').with(request).when_in_state(:no_alligators) }
 
           it "includes the fixture name" do
-            expect(parsed_result['fixture_name']).to eql("no_alligators")
+            expect(parsed_result['producer_state_name']).to eql("no_alligators")
           end
         end
       end

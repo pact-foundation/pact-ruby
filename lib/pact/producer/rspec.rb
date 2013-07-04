@@ -3,7 +3,7 @@ require 'json/add/core'
 require 'rack/test'
 require 'pact/producer'
 require 'pact/reification'
-require 'pact/producer/interaction_fixture'
+require 'pact/producer/producer_state'
 
 module Pact
   module Producer
@@ -19,7 +19,7 @@ module Pact
           request = interaction['request']
           response = interaction['response']
           description = "#{interaction['description']} to '#{request['path']}'"
-          description << " using fixture '#{interaction['fixture_name']}'" if interaction['fixture_name']
+          description << " using fixture '#{interaction['producer_state_name']}'" if interaction['producer_state_name']
 
           describe description  do
             before do
@@ -53,7 +53,7 @@ module Pact
                 args << request_headers
               end
 
-              set_up_interaction_fixture interaction['fixture_name']
+              set_up_producer_state interaction['producer_state_name']
 
               self.send(request['method'], *args)
 
@@ -83,7 +83,7 @@ module Pact
           end
 
           after do
-            tear_down_interaction_fixture interaction['fixture_name']
+            tear_down_producer_state interaction['producer_state_name']
           end
 
         end
@@ -101,15 +101,15 @@ module Pact
           end
         end
 
-        def tear_down_interaction_fixture fixture_name
-          if fixture_name
-            InteractionFixture.get(fixture_name).tear_down
+        def tear_down_producer_state producer_state_name
+          if producer_state_name
+            ProducerState.get(producer_state_name).tear_down
           end
         end
 
-        def set_up_interaction_fixture fixture_name
-          if fixture_name
-            InteractionFixture.get(fixture_name).set_up
+        def set_up_producer_state producer_state_name
+          if producer_state_name
+            ProducerState.get(producer_state_name).set_up
           end
         end
       end

@@ -9,7 +9,7 @@ module Pact
       def initialize(producer, description)
         @producer = producer
         @description = description
-        @fixture_name = nil
+        @producer_state_name = nil
         @http = Net::HTTP.new(@producer.uri.host, @producer.uri.port)
       end
 
@@ -20,8 +20,8 @@ module Pact
         @producer
       end
 
-      def using_fixture(fixture_name)
-        @fixture_name = fixture_name.to_s
+      def when_in_state(producer_state_name)
+        @producer_state_name = producer_state_name.to_s
         self
       end
 
@@ -35,7 +35,7 @@ module Pact
           :description => @description,
           :request => @request.as_json,
           :response => @response_terms,
-        }.tap{ | hash | hash[:fixture_name] = @fixture_name if @fixture_name }
+        }.tap{ | hash | hash[:producer_state_name] = @producer_state_name if @producer_state_name }
       end
 
       def to_json(options = {})

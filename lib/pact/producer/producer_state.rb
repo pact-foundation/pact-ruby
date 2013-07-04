@@ -1,23 +1,23 @@
 module Pact
   module Producer
-    class InteractionFixture
+    class ProducerState
 
       attr_accessor :name
 
-      def self.interaction_fixture name, &block
-        InteractionFixture.new(name, &block)
+      def self.producer_state name, &block
+        ProducerState.new(name, &block)
       end
 
-      def self.register name, interaction_fixture
-        interaction_fixtures[name.to_sym] = interaction_fixture
+      def self.register name, producer_state
+        producer_states[name.to_sym] = producer_state
       end
 
-      def self.interaction_fixtures
-        @@interaction_fixtures ||= {}
+      def self.producer_states
+        @@producer_states ||= {}
       end
 
       def self.get name
-        interaction_fixtures[name.to_sym]
+        producer_states[name.to_sym]
       end
 
       def register
@@ -49,6 +49,6 @@ module Pact
 end
 
 #Argh, global method, how can I fix this so it's still available without namespaceing?
-def interaction_fixture name, &block
-  Pact::Producer::InteractionFixture.interaction_fixture(name, &block).register
+def producer_state name, &block
+  Pact::Producer::ProducerState.producer_state(name, &block).register
 end

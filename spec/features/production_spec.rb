@@ -103,7 +103,7 @@ module Pact::Producer
                 "body": {"names": ["Jason", "Sarah"]},
                 "status": 200
             },
-            "fixture_name" : "all_the_zebras"
+            "producer_state_name" : "all_the_zebras"
         }
     ]
     EOS

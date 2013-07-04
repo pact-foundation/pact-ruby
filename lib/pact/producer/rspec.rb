@@ -16,12 +16,10 @@ module Pact
         pact.each do |interaction|
           request = interaction['request']
           response = interaction['response']
+          description = "#{interaction['description']} to '#{request['path']}'"
+          description << " using fixture '#{interaction['fixture_name']}'" if interaction['fixture_name']
 
-          if interaction['fixture_path']
-            load interaction['fixture_path']
-          end
-
-          describe "#{interaction['description']} to '#{request['path']}'" do
+          describe description  do
             before do
               path = request['path']
               query = request['query']
@@ -64,6 +62,7 @@ module Pact
                 expect(last_response.status).to eql response['status']
               end
             end
+
             if response['headers']
               describe "includes headers" do
                 response['headers'].each do |name, value|
@@ -73,6 +72,7 @@ module Pact
                 end
               end
             end
+
             if response['body']
               it "has matching body" do
                 expect(parse_entity_from_response(last_response)).to match_term response['body']
@@ -102,8 +102,6 @@ module Pact
           end
         end
       end
-
-
     end
   end
 end

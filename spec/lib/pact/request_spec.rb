@@ -22,6 +22,7 @@ module Pact
       its(:method) { should == 'get' }
       its(:path) { should == '/mallory' }
       its(:body) { should == 'hello mallory' }
+      its(:query) { should == nil }
 
       it "blows up if method is absent" do
         raw_request.delete 'method'

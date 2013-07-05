@@ -9,7 +9,7 @@ module Pact
         sym_hash = hash.inject({}) { |memo, (k,v)| memo[k.to_sym] = v; memo }
         method = sym_hash.fetch(:method)
         path = sym_hash.fetch(:path)
-        query = sym_hash.fetch(:query, "")
+        query = sym_hash.fetch(:query, nil)
         headers = sym_hash.fetch(:headers, nil)
         body = sym_hash.fetch(:body, nil)
         new(method, path, headers, body, query)

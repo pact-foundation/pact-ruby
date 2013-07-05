@@ -3,6 +3,7 @@ require 'fileutils'
 
 producer_state :the_zebras_are_here do
   set_up do
+    FileUtils.mkdir_p 'tmp'
     some_data = [{'name' => 'Jason'},{'name' => 'Sarah'}]
     File.open("tmp/a_mock_database.json", "w") { |file| file << some_data.to_json }
   end

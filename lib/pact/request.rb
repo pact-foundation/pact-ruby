@@ -60,7 +60,7 @@ module Pact
       end
 
       def matches_query?(actual_request)
-        query == actual_request.query
+        !query || (query == actual_request.query)
       end
 
       private

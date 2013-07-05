@@ -262,6 +262,15 @@ module Pact
           expect(subject.match actual_request).to be_false
         end
       end
+
+      context 'when there is no query' do
+        let(:expected_query) { nil }
+        let(:actual_query) { 'bar' }
+
+        it 'matches' do
+          expect(subject.match actual_request).to be_true
+        end
+      end
     end
 
   end

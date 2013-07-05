@@ -108,7 +108,7 @@ module Pact::Consumer
           })
 
           interactions = JSON.load(File.read(alice_service.pactfile_path))
-          interactions.first['producer_state'].should eq(:the_zebras_are_here)
+          interactions.first['producer_state'].should eq("the_zebras_are_here")
       end
     end
 

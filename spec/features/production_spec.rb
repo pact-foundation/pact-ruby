@@ -104,10 +104,7 @@ module Pact::Producer
                     "body": {"names": ["Jason", "Sarah"]},
                     "status": 200
                 },
-                "producer_state" : {
-                    "json_class": "Symbol",
-                    "s": "the_zebras_are_here"
-                }
+                "producer_state" : "the_zebras_are_here"
             }
         ]
         EOS

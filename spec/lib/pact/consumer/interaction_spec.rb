@@ -114,7 +114,7 @@ module Pact
             subject { Interaction.new(producer, 'Test request', :there_are_no_alligators).with(request) }
 
             it "includes the state name as a symbol" do
-              expect(parsed_result['producer_state']).to eql(:there_are_no_alligators)
+              expect(parsed_result['producer_state']).to eql("there_are_no_alligators")
             end
           end
         end

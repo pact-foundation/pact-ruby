@@ -24,7 +24,7 @@ module Pact
       end
 
       def self.get name
-        producer_states[name]
+        producer_states[name] || producer_states[name.to_sym]
       end
 
       def register

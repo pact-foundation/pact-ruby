@@ -117,8 +117,7 @@ module Pact
 
         def get_producer_state producer_state_name
           unless producer_state = ProducerState.get(producer_state_name)
-            desc = producer_state_name.is_a?(String) ? "\"#{producer_state_name}\"" : ":#{producer_state_name}"
-            raise "Could not find a producer state defined for #{desc}. Have you required the producer state file in your spec?"
+            raise "Could not find a producer state defined for \"#{producer_state_name}\". Have you required the producer state file in your spec?"
           end
           producer_state
         end

@@ -9,7 +9,7 @@ module Pact
       def initialize(producer, description, producer_state)
         @producer = producer
         @description = description
-        @producer_state = producer_state
+        @producer_state = producer_state.is_a?(Symbol) ? producer_state.to_s : producer_state
         @http = Net::HTTP.new(@producer.uri.host, @producer.uri.port)
       end
 

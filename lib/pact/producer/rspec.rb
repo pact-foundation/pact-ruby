@@ -4,16 +4,21 @@ require 'rack/test'
 require 'pact/producer'
 require 'pact/reification'
 require 'pact/producer/producer_state'
+require 'pact/json_warning'
 
 module Pact
   module Producer
     module RSpec
+
+      include Pact::JsonWarning
 
       def honour_pactfile pactfile
         honour_pact JSON.load(File.read(pactfile))
       end
 
       def honour_pact pact
+
+        check_for_active_support_json
 
         pact.each do |interaction|
           request = interaction['request']

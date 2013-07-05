@@ -1,9 +1,12 @@
 require 'uri'
 require 'json/add/core'
+require 'pact/json_warning'
 
 module Pact
   module Consumer
     class MockProducer
+
+      include Pact::JsonWarning
 
       attr_reader :uri
 
@@ -38,6 +41,7 @@ module Pact
       end
 
       def update_pactfile
+        check_for_active_support_json
         File.open(pactfile_path, 'w') do |f|
           f.write JSON.pretty_generate(@interactions.values)
         end

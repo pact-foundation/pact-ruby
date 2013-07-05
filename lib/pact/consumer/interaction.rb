@@ -1,6 +1,7 @@
 require 'net/http'
 require 'pact/reification'
 require 'pact/request'
+require 'json/add/core'
 
 module Pact
   module Consumer

@@ -18,7 +18,14 @@ Or install it yourself as:
 
 ## Usage
 
-TODO: Write usage instructions here
+A pact service can be run locally and is really useful for debugging purposes.
+
+    $ bundle exec pact service -p <port-num>
+
+The service prints messages it recieves to stdout which can be really useful
+when diagnosing issues with pacts.
+
+TODO: Write more usage instructions here
 
 
 ## Keeping pacts up to date

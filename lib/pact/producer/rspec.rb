@@ -187,7 +187,9 @@ RSpec::Matchers.define :match_term do |expected|
   end
 
   def mismatch_message
-    message = " Expected '#{@message[:actual]}' to equal '#{@message[:expected]}'"
+    actual = @message[:actual].nil? ? 'nil' : "\"#{@message[:actual]}\""
+    expected = @message[:expected].nil? ? 'nil' : "\"#{@message[:expected]}\""
+    message = " Expected #{actual} to match #{expected}"
     message << " at #{@message[:desc]}" if @message[:desc]
     message << " of #{@message[:parent]}" if @message[:parent]
     message

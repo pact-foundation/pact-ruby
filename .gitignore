@@ -23,3 +23,5 @@ spec/pacts
 *.iml
 .rakeTasks
 *~
+.ruby-gemset
+.ruby-version

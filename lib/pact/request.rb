@@ -43,7 +43,7 @@ module Pact
 
         base_json.merge!(body: body) if body
         base_json.merge!(headers: headers) if headers
-        base_json.merge!(query: query)
+        base_json.merge!(query: query) unless query.nil?
         base_json
       end
 
@@ -60,7 +60,7 @@ module Pact
       end
 
       def matches_query?(actual_request)
-        !query || (query == actual_request.query)
+        query == actual_request.query || query.nil?
       end
 
       private
@@ -72,7 +72,6 @@ module Pact
       end
 
       def recursively_matches?(expected, actual)
-
         if expected.respond_to? :to_hash
           ok = false
           if actual.respond_to? :to_hash

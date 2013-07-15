@@ -1,6 +1,12 @@
 # Pact
 
-Define a pact between service consumers and providers
+Define a pact between service consumers and providers.
+
+Pact privides a RSpec DSL for service consumers to define the request they will make to a service producer and the
+response they expect back. This expectation is used in the consumers specs to provide a mock producer, and is also
+played back in the producer specs to ensure the producer actually does provide the response the consumer expects.
+
+This allows you to test both sides of an integration point using fast unit tests.
 
 ## Installation
 
@@ -18,6 +24,7 @@ Or install it yourself as:
 
 ## Usage
 
+### Running a standalone mock server
 A pact service can be run locally and is really useful for debugging purposes.
 
     $ bundle exec pact service -p <port-num>

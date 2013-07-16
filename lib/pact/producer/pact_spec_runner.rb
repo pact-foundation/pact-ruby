@@ -1,7 +1,7 @@
 require 'open-uri'
 require 'rspec'
 require 'rspec/core'
-require 'rspec/core/formatters/progress_formatter'
+require 'rspec/core/formatters/documentation_formatter'
 require_relative 'rspec'
 
 module Pact
@@ -26,7 +26,7 @@ module Pact
 					config.output_stream = $stdout
 				end
 
-				formatter = ::RSpec::Core::Formatters::ProgressFormatter.new(config.output)
+				formatter = ::RSpec::Core::Formatters::DocumentationFormatter.new(config.output)
 				reporter =  ::RSpec::Core::Reporter.new(formatter)
 				config.instance_variable_set(:@reporter, reporter)
 

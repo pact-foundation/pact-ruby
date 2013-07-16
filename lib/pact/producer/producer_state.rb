@@ -6,7 +6,7 @@ module Pact
         Pact::Producer::ProducerState.producer_state(name, &block).register
       end
 
-      def producer_module name
+      def consumer name
         ProducerState.current_namespaces << name
         yield
         ProducerState.current_namespaces.pop

@@ -59,7 +59,7 @@ module Pact
 
       NAMESPACED_MESSAGES = []
 
-      producer_module :ns_one do
+      consumer :ns_one do
         producer_state 'foo' do
           set_up do
             NAMESPACED_MESSAGES << 'ns_one.foo'
@@ -67,8 +67,8 @@ module Pact
         end
       end
 
-      producer_module :ns_two do
-        producer_module :ns_three do
+      consumer :ns_two do
+        consumer :ns_three do
           producer_state 'foo' do
             set_up do
               NAMESPACED_MESSAGES << 'ns_two.ns_three.foo'

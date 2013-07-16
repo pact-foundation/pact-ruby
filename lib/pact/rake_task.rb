@@ -30,6 +30,7 @@ module Pact
           connections.each do |conn|
             body = fetch conn[:url]
             File.open(conn[:file], 'w') {|f| f.write body }
+            puts "Wrote #{conn[:url]} to #{conn[:file]}"
           end
         end
       end

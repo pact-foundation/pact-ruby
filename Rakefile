@@ -18,6 +18,8 @@ module Bundler
 end
 Bundler::GemHelper.install_tasks
 require 'rspec/core/rake_task'
+
+Dir.glob('lib/tasks/**/*.rake').each { |task| load task }
 RSpec::Core::RakeTask.new(:spec)
 
-task :default => :spec
+task :default => [:spec, 'pact:tests']

@@ -52,7 +52,7 @@ You'll need to set up the task with sources to make this work. In a Rakefile
       pact.file 'spec/consumers/producer-consumer_development_pact.json',
         from_url: 'http://latestbuild.example.com/producer/producer-consumer_pact.json'
 
-      pact.file 'spec/consumers/producer-consumer_production_pact.json
+      pact.file 'spec/consumers/producer-consumer_production_pact.json',
         from_url: 'http://producer.example.com/pacts/producer-consumer_pact.json'
     end
     ```

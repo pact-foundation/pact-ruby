@@ -54,6 +54,10 @@ You'll need to set up the task with sources to make this work. In a Rakefile
 
       pact.file 'spec/consumers/producer-consumer_production_pact.json',
         from_url: 'http://producer.example.com/pacts/producer-consumer_pact.json'
+        
+      # Pricing service example using BIQ's bamboo.
+      pact.file 'spec/consumers/pacts/condor-pricing.json',
+        from_url: 'http://master.cd.vpc.realestate.com.au/artifact/BIQ-CONDORSTAND/shared/build-latest/Integration-Pacts/condor-pricing.json'
     end
     ```
 

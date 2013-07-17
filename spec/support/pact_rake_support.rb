@@ -23,7 +23,7 @@ module Pact
 		end
 
 		#one with a top level consumer
-		Pact.consumer 'some-test-consumer' do
+		Pact.with_consumer 'some-test-consumer' do
 			producer_state "the weather is sunny" do
 				set_up do
 					WEATHER ||= {}

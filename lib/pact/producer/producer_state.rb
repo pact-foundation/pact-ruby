@@ -6,7 +6,7 @@ module Pact
         Pact::Producer::ProducerState.producer_state(name, &block).register
       end
 
-      def consumer name, &block
+      def with_consumer name, &block
         ProducerState.current_namespaces << name
         instance_eval(&block)
         ProducerState.current_namespaces.pop

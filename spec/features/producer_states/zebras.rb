@@ -1,7 +1,7 @@
 require 'json'
 require 'fileutils'
 
-Pact.consumer 'the-wild-beast-store' do
+Pact.with_consumer 'the-wild-beast-store' do
 
   producer_state :the_zebras_are_here do
     set_up do

@@ -7,17 +7,27 @@ require_relative 'rspec'
 module Pact
 	module Producer
 		class PactSpecRunner
-			def self.run(consumer_expectations, options = {})
 
-				consumer_expectations.each do | consumer_expectation |
-					require consumer_expectation[:support_file]
-					describe "Pact in #{consumer_expectation[:uri]}" do
-						open(consumer_expectation[:uri]) do | file |
-							honour_pact JSON.load(file.read), {consumer: consumer_expectation[:consumer]}
+			def self.run(spec_definitions, options = {})
+				initialize_specs spec_definitions
+				configure_rspec options
+				run_specs
+			end
+
+			private
+
+			def self.initialize_specs spec_definitions
+				spec_definitions.each do | spec_definition |
+					require spec_definition[:support_file]
+					describe "Pact in #{spec_definition[:uri]}" do
+						open(spec_definition[:uri]) do | file |
+							honour_pact JSON.load(file.read), {consumer: spec_definition[:consumer]}
 						end
 					end
 				end
+			end
 
+			def self.configure_rspec options
 				config = ::RSpec.configuration
 				config.color = true
 
@@ -29,11 +39,15 @@ module Pact
 				formatter = ::RSpec::Core::Formatters::DocumentationFormatter.new(config.output)
 				reporter =  ::RSpec::Core::Reporter.new(formatter)
 				config.instance_variable_set(:@reporter, reporter)
+			end
 
-				config.reporter.report(::RSpec::world.example_count, nil) do |reporter|
+			def self.run_specs
+				config = ::RSpec.configuration
+				world = ::RSpec::world
+				config.reporter.report(world.example_count, nil) do |reporter|
 				  begin
 				    config.run_hook(:before, :suite)
-				    ::RSpec::world.example_groups.ordered.map {|g| g.run(reporter)}.all? ? 0 : config.failure_exit_code
+				    world.example_groups.ordered.map {|g| g.run(reporter)}.all? ? 0 : config.failure_exit_code
 				  ensure
 				    config.run_hook(:after, :suite)
 				  end

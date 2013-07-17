@@ -1,7 +1,7 @@
 require 'json'
 require 'fileutils'
 
-consumer 'the-wild-beast-store' do
+Pact.consumer 'the-wild-beast-store' do
 
   producer_state :the_zebras_are_here do
     set_up do
@@ -16,7 +16,7 @@ consumer 'the-wild-beast-store' do
   end
 end
 
-producer_state "some other zebras are here" do
+Pact.producer_state "some other zebras are here" do
   set_up do
     some_data = [{'name' => 'Mark'},{'name' => 'Gertrude'}]
     File.open("tmp/a_mock_database.json", "w") { |file| file << some_data.to_json }

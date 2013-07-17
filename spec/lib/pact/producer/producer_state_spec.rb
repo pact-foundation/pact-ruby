@@ -8,7 +8,7 @@ module Pact
 
       MESSAGES = []
 
-      producer_state :no_alligators do
+      Pact.producer_state :no_alligators do
         set_up do
           MESSAGES << 'set_up'
         end
@@ -17,7 +17,7 @@ module Pact
         end
       end
 
-      producer_state 'some alligators' do
+      Pact.producer_state 'some alligators' do
       end
 
       before do
@@ -59,7 +59,7 @@ module Pact
 
       NAMESPACED_MESSAGES = []
 
-      consumer 'a consumer' do
+      Pact.consumer 'a consumer' do
         producer_state 'the weather is sunny' do
           set_up do
             NAMESPACED_MESSAGES << 'sunny!'

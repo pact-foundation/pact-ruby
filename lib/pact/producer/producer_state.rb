@@ -6,9 +6,9 @@ module Pact
         Pact::Producer::ProducerState.producer_state(name, &block).register
       end
 
-      def consumer name
+      def consumer name, &block
         ProducerState.current_namespaces << name
-        yield
+        instance_eval(&block)
         ProducerState.current_namespaces.pop
       end
     end
@@ -78,6 +78,4 @@ module Pact
   end
 end
 
-#Include this into the global namespace the same way RSpec does
-extend Pact::Producer::DSL
-Module.send(:include, Pact::Producer::DSL)
+Pact.send(:extend, Pact::Producer::DSL)

@@ -18,8 +18,8 @@ module Pact
 
 			def self.initialize_specs spec_definitions
 				spec_definitions.each do | spec_definition |
-					require spec_definition[:support_file]
 					describe "Pact in #{spec_definition[:uri]}" do
+						require spec_definition[:support_file] if spec_definition[:support_file]
 						open(spec_definition[:uri]) do | file |
 							honour_pact JSON.load(file.read), {consumer: spec_definition[:consumer]}
 						end

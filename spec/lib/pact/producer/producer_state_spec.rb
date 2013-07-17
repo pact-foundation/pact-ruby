@@ -59,20 +59,10 @@ module Pact
 
       NAMESPACED_MESSAGES = []
 
-      consumer :ns_one do
-        producer_state 'foo' do
+      consumer 'a consumer' do
+        producer_state 'the weather is sunny' do
           set_up do
-            NAMESPACED_MESSAGES << 'ns_one.foo'
-          end
-        end
-      end
-
-      consumer :ns_two do
-        consumer :ns_three do
-          producer_state 'foo' do
-            set_up do
-              NAMESPACED_MESSAGES << 'ns_two.ns_three.foo'
-            end
+            NAMESPACED_MESSAGES << 'sunny!'
           end
         end
       end
@@ -82,38 +72,23 @@ module Pact
       end
 
       describe '.get' do
-
-        context 'the first namespace' do
-
+        context 'for a consumer' do
           it 'has a namespaced name' do
-            ProducerState.get('ns_one.foo').should_not be_nil
+            ProducerState.get('the weather is sunny', :for => 'a consumer').should_not be_nil
           end
-        end
 
-        context 'the second namespace' do
-
-          it 'has a namespaced name' do
-            ProducerState.get('ns_two.ns_three.foo').should_not be_nil
+          it 'does not return the producer state when no namespace is specified' do
+            ProducerState.get('the weather is sunny').should be_nil
           end
         end
 
       end
 
       describe 'set_up' do
-
-        context 'the first namespace' do
-
+        context 'for a consumer' do
           it 'runs its own setup' do
-            ProducerState.get('ns_one.foo').set_up
-            NAMESPACED_MESSAGES.should eq ['ns_one.foo']
-          end
-        end
-
-        context 'the second namespace' do
-
-          it 'runs its own setup' do
-            ProducerState.get('ns_two.ns_three.foo').set_up
-            NAMESPACED_MESSAGES.should eq ['ns_two.ns_three.foo']
+            ProducerState.get('the weather is sunny', :for => 'a consumer').set_up
+            NAMESPACED_MESSAGES.should eq ['sunny!']
           end
         end
       end

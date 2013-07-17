@@ -7,9 +7,10 @@ module Pact
 			@support_file = 'some_file.rb'
 			@pact_uri = 'http://example.org/pact.json'
 			@task_name = 'pact:verify:pact_rake_spec'
+			@consumer = 'some-consumer'
 
 			VerificationTask.new(:pact_rake_spec) do | pact |
-				pact.uri @pact_uri, support_file: @support_file
+				pact.uri @pact_uri, support_file: @support_file, consumer: @consumer
 			end
 		end
 
@@ -23,7 +24,7 @@ module Pact
 
 		describe 'execute' do
 
-			let(:consumer_expectations) { [ uri: @pact_uri, support_file: @support_file ] }
+			let(:consumer_expectations) { [ uri: @pact_uri, support_file: @support_file, consumer: @consumer] }
 
 			it 'verifies the pacts using PactSpecRunner' do
 				Producer::PactSpecRunner.should_receive(:run).with(consumer_expectations).and_return(0)

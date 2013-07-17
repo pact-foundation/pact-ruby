@@ -12,11 +12,11 @@ module Pact
 
       include Pact::JsonWarning
 
-      def honour_pactfile pactfile
-        honour_pact JSON.load(File.read(pactfile))
+      def honour_pactfile pactfile, options = {}
+        honour_pact JSON.load(File.read(pactfile)), options
       end
 
-      def honour_pact pact
+      def honour_pact pact, options = {}
 
         check_for_active_support_json
 
@@ -58,7 +58,7 @@ module Pact
                 args << request_headers
               end
 
-              set_up_producer_state interaction['producer_state']
+              set_up_producer_state interaction['producer_state'], options[:consumer]
 
               self.send(request['method'], *args)
 
@@ -88,7 +88,7 @@ module Pact
           end
 
           after do
-            tear_down_producer_state interaction['producer_state']
+            tear_down_producer_state interaction['producer_state'], options[:consumer]
           end
 
         end
@@ -106,23 +106,24 @@ module Pact
           end
         end
 
-        def set_up_producer_state producer_state_name
+        def set_up_producer_state producer_state_name, consumer
           if producer_state_name
-            get_producer_state(producer_state_name).set_up
+            get_producer_state(producer_state_name, consumer).set_up
           end
         end
 
-        def tear_down_producer_state producer_state_name
+        def tear_down_producer_state producer_state_name, consumer
           if producer_state_name
-            get_producer_state(producer_state_name).tear_down
+            get_producer_state(producer_state_name, consumer).tear_down
           end
         end
 
         private
 
-        def get_producer_state producer_state_name
-          unless producer_state = ProducerState.get(producer_state_name)
-            raise "Could not find a producer state defined for \"#{producer_state_name}\". Have you required the producer state file in your spec?"
+        def get_producer_state producer_state_name, consumer
+          unless producer_state = ProducerState.get(producer_state_name, :for => consumer)
+            extra = consumer ? " for consumer \"#{consumer}\"" : ""
+            raise "Could not find a producer state defined for \"#{producer_state_name}\"#{extra}. Have you required the producer state file in your spec?"
           end
           producer_state
         end

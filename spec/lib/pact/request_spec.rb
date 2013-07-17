@@ -1,46 +1,46 @@
 require 'spec_helper'
 require 'pact/request'
 
-module Pact
+shared_examples "a request" do
+  describe "building from a hash" do
 
-  shared_examples "a request" do
-    describe "building from a hash" do
-
-      let(:raw_request) do
-        {
-          'method' => 'get',
-          'path' => '/mallory',
-          'headers' => {
-            'Content-Type' => 'application/json'
-          },
-          'body' => 'hello mallory'
-        }
-      end
-
-      subject { described_class.from_hash(raw_request) }
-
-      its(:method) { should == 'get' }
-      its(:path) { should == '/mallory' }
-      its(:body) { should == 'hello mallory' }
-      its(:query) { should == nil }
-
-      it "blows up if method is absent" do
-        raw_request.delete 'method'
-        expect { described_class.from_hash(raw_request) }.to raise_error
-      end
-
-      it "blows up if path is absent" do
-        raw_request.delete 'path'
-        expect { described_class.from_hash(raw_request) }.to raise_error
-      end
-
-      it "does not blow up if body is missing" do
-        raw_request.delete 'body'
-        expect { described_class.from_hash(raw_request) }.to_not raise_error
-      end
-
+    let(:raw_request) do
+      {
+        'method' => 'get',
+        'path' => '/mallory',
+        'headers' => {
+          'Content-Type' => 'application/json'
+        },
+        'body' => 'hello mallory'
+      }
     end
+
+    subject { described_class.from_hash(raw_request) }
+
+    its(:method) { should == 'get' }
+    its(:path) { should == '/mallory' }
+    its(:body) { should == 'hello mallory' }
+    its(:query) { should == nil }
+
+    it "blows up if method is absent" do
+      raw_request.delete 'method'
+      expect { described_class.from_hash(raw_request) }.to raise_error
+    end
+
+    it "blows up if path is absent" do
+      raw_request.delete 'path'
+      expect { described_class.from_hash(raw_request) }.to raise_error
+    end
+
+    it "does not blow up if body is missing" do
+      raw_request.delete 'body'
+      expect { described_class.from_hash(raw_request) }.to_not raise_error
+    end
+
   end
+end
+
+module Pact
 
   describe Request::Expected do
     it_behaves_like "a request"

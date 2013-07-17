@@ -109,7 +109,7 @@ module Pact::Producer
         ]
         EOS
 
-        honour_pact pact
+        honour_pact pact, consumer: 'the-wild-beast-store'
     end
 
     context "that is a string" do

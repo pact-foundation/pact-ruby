@@ -34,8 +34,9 @@ module Pact
         @@current_namespaces ||= []
       end
 
-      def self.get name
-        producer_states[name] || producer_states[name.to_sym]
+      def self.get name, options = {}
+        fullname = options[:for] ? "#{options[:for]}.#{name}" : name
+        producer_states[fullname] || producer_states[fullname.to_sym]
       end
 
       def register

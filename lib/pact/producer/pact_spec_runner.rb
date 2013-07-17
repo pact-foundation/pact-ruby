@@ -13,7 +13,7 @@ module Pact
 					require consumer_expectation[:support_file]
 					describe "Pact in #{consumer_expectation[:uri]}" do
 						open(consumer_expectation[:uri]) do | file |
-							honour_pact JSON.load(file.read)
+							honour_pact JSON.load(file.read), {consumer: consumer_expectation[:consumer]}
 						end
 					end
 				end

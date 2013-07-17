@@ -20,7 +20,7 @@ module Pact
 	  end
 
 	  def uri(uri, options)
-	    @pact_spec_config << {uri: uri, support_file: options[:support_file]}
+	    @pact_spec_config << {uri: uri, support_file: options[:support_file], consumer: options[:consumer]}
 	  end
 	end
 end

@@ -128,6 +128,20 @@ A pact service can be run locally and is really useful for debugging purposes.
 The service prints messages it recieves to stdout which can be really useful
 when diagnosing issues with pacts.
 
+## TODO
+
+Short term:
+- Rename ConsumerExpectation to ConsumerContract????
+- Simplify set up for consumer
+  - Move server spawning into to the "at" method
+  - automatically register before and after hooks in consumer
+- Provide before and after hooks and a place to define the app for Pact configuration in producer (remove Rspc from interface of Pact setup)
+- Make producer state lookup try consumer defined state first, then fall back to global one
+- Put producer and consumer name into pact file
+- Remove consumer name from the rake task, as it should now be able to be determined from the pact file.
+
+Long term:
+- Decouple Rspec from Pact and make rspec-pact gem for easy integration
 
 
 ## Contributing

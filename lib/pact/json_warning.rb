@@ -6,7 +6,7 @@ module Pact
       # Active support clobbers the as_json methods defined in the json/add directory of the json gem.
       # These methods are required to serialize and deserialize the Regexp and Symbol classes properly.
       # You can potentially fix this by making sure the json gem is required AFTER the active_support/json gem
-      # OR if you don't use the json part of activesupport you could remove the
+      # OR if you don't use the json part of activesupport you could only require the parts of active support you really need
       # OR you can only use strings in your pacts.
       # Good luck.
 

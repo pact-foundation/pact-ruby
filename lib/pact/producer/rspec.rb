@@ -13,14 +13,15 @@ module Pact
       include Pact::JsonWarning
 
       def honour_pactfile pactfile, options = {}
-        honour_pact JSON.load(File.read(pactfile)), options
+        consumer_expectation = Pact::ConsumerExpectation.from_json(File.read(pactfile))
+        honour_pact consumer_expectation.interactions, options
       end
 
-      def honour_pact pact, options = {}
+      def honour_pact interactions, options = {}
 
         check_for_active_support_json
 
-        pact.each do |interaction|
+        interactions.each do |interaction|
           request = interaction['request']
           response = interaction['response']
           description = "#{interaction['description']} to '#{request['path']}'"

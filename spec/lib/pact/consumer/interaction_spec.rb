@@ -82,7 +82,7 @@ module Pact
               'headers' => {
                 'Content-Type' => 'application/json'
               },
-              'body' => Pact::Term.new(generate: 'waffle', matcher: /ffl/),
+              'body' => Term.new(generate: 'waffle', matcher: /ffl/),
               'query' => ''
             })
         end
@@ -94,7 +94,7 @@ module Pact
           end
 
           it "serialises terms" do
-            term = Pact::Term.new(generate:'wiffle', matcher: /iff/)
+            term = Term.new(generate:'wiffle', matcher: /iff/)
             parsed_term = parsed_result['response']['wiffle']
             expect(term.matcher).to eql parsed_term.matcher
             expect(term.generate).to eql parsed_term.generate

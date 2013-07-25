@@ -107,7 +107,7 @@ module Pact::Consumer
             body: Pact::Term.new(matcher: /Mallory/, generate: 'That is some good Mallory.')
           })
 
-          interactions = JSON.load(File.read(alice_service.pactfile_path))
+          interactions = Pact::ConsumerExpectation.from_json(File.read(alice_service.pactfile_path)).interactions
           interactions.first['producer_state'].should eq("the_zebras_are_here")
       end
     end

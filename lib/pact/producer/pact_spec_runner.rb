@@ -3,6 +3,7 @@ require 'rspec'
 require 'rspec/core'
 require 'rspec/core/formatters/documentation_formatter'
 require_relative 'rspec'
+require 'pact/consumer_expectation'
 
 module Pact
 	module Producer
@@ -21,7 +22,7 @@ module Pact
 					describe "Pact in #{spec_definition[:uri]}" do
 						require spec_definition[:support_file] if spec_definition[:support_file]
 						open(spec_definition[:uri]) do | file |
-							honour_pact JSON.load(file.read), {consumer: spec_definition[:consumer]}
+							honour_pact Pact::ConsumerExpectation.from_json(file.read), {consumer: spec_definition[:consumer]}
 						end
 					end
 				end

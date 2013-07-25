@@ -43,7 +43,7 @@ module Pact
       def update_pactfile
         check_for_active_support_json
         File.open(pactfile_path, 'w') do |f|
-          f.write JSON.pretty_generate(@interactions.values)
+          f.write JSON.pretty_generate(pact)
         end
       end
 
@@ -53,6 +53,10 @@ module Pact
       end
 
       private
+
+      def pact
+        Pact::ConsumerExpectation.new(:interactions => @interactions.values)
+      end
 
       def filenamify name
         name.downcase.gsub(/\s/, '_')

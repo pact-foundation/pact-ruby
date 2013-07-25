@@ -3,7 +3,7 @@ module Pact
 
     module DSL
       def producer_state name, &block
-        Pact::Producer::ProducerState.producer_state(name, &block).register
+        ProducerState.producer_state(name, &block).register
       end
 
       def with_consumer name, &block

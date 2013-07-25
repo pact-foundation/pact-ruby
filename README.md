@@ -58,8 +58,8 @@ some_service.
         will_respond_with({status: 404, :body => {error: "There is no thing :("} })
 ```
 
-To define producer states that create the right data for "a thing exists" and "a thing does not exist",
-write the follwing in the producer project.
+To define producer states that create the right data for "a thing exists" and "a thing does not exist", write the following in the producer project. 
+Note that these states have been defined only for the 'some_consumer' consumer by using the Pact.with_consumer block.
 
 
 ```ruby

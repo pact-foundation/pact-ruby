@@ -28,7 +28,8 @@ module Pact
 
       def at(url)
         @uri = URI(url)
-        AppManager.instance.register_mock_service_for url
+        raise "You must first specify a service name" unless @service_name
+        AppManager.instance.register_mock_service_for @service_name, url
         self
       end
 

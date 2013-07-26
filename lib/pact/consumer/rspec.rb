@@ -14,10 +14,17 @@ module Pact
   end
 end
 
-RSpec.configure do |c|
-  c.include Pact::Consumer::RSpec, :pact => true
+RSpec.configure do |config|
+  config.include Pact::Consumer::RSpec, :pact => true
 
-  c.after :all, :pact => true do
+  config.before :each, :pact => true do
+    Pact::Consumer::AppManager.instance.ports_of_registered_apps.each do | port |
+      #Clear expectations
+      Net::HTTP.new("localhost", port).delete("/interactions")
+    end
+  end
+
+  config.after :all, :pact => true do
     Pact::Consumer::AppManager.instance.kill_all
   end
 end

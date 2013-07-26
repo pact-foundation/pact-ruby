@@ -21,11 +21,14 @@ module Pact
         @apps_spawned = false
       end
 
-      def register_mock_service_for url
+      def register_mock_service_for name, url
         uri = URI(url)
         raise "Currently only http is supported" unless uri.scheme == 'http'
         raise "Currently only services on localhost are supported" unless uri.host == 'localhost'
-        register(MockService.new, URI(url).port, true)
+
+        log = File.open("tmp/#{name}_pact.log", 'w')
+        log.sync = true
+        register(MockService.new(log_file: log), URI(url).port, true)
       end
 
       def register(app, port = FindAPort.available_port, spawn_now = false)
@@ -39,6 +42,10 @@ module Pact
 
       def app_registered_on?(port)
         @registered_apps.key? port
+      end
+
+      def ports_of_registered_apps
+        @registered_apps.keys
       end
 
       def kill_all

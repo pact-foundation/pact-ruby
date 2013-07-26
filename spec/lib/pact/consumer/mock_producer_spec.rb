@@ -33,10 +33,24 @@ module Pact
 
 			describe "at" do
 				let (:url) { 'http://localhost:1234' }
-				let (:mock_producer ) { MockProducer.new('') }
-				it "should start a mock service to support the given URL" do
-					AppManager.instance.should_receive(:register_mock_service_for).with(url)
-					mock_producer.at(url)
+				let (:service_name) { 'some_service' }
+				before do
+					AppManager.instance.stub(:register_mock_service_for)
+				end
+
+				context "when a service name has been set" do
+					let (:mock_producer ) { MockProducer.new('').assuming_a_service(service_name) }
+					it "starts a mock service to support the given URL" do
+						AppManager.instance.should_receive(:register_mock_service_for).with(service_name, url)
+						mock_producer.at(url)
+					end
+				end
+
+				context "when a service name has not yet been set" do
+					let (:mock_producer ) { MockProducer.new('') }
+					it "raises an error requesting a service name" do
+						expect { mock_producer.at(url) }.to raise_error "You must first specify a service name"
+					end
 				end
 			end
 		end

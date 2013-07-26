@@ -33,6 +33,10 @@ module Pact
         self
       end
 
+      def on_port(port)
+        at("http://localhost:#{port}")
+      end
+
       def given(producer_state)
         @producer_state = producer_state
         self

@@ -6,7 +6,7 @@ describe "A service consumer side of a pact", :pact => true  do
 
   it "goes a little something like this" do
     alice_service = consumer('consumer').assuming_a_service('Alice').
-    at('http://localhost:1234').
+    on_port(1234).
       upon_receiving("a retrieve Mallory request").with({
       method: :get,
       path: '/mallory'
@@ -18,7 +18,7 @@ describe "A service consumer side of a pact", :pact => true  do
     })
 
     bob_service = consumer('consumer').assuming_a_service('Bob').
-    at('http://localhost:4321').
+    on_port(4321).
       upon_receiving('a create donut request').with({
       method: :post,
       path: '/donuts',
@@ -79,7 +79,7 @@ describe "A service consumer side of a pact", :pact => true  do
   context "with a producer state" do
     it "goes like this" do
       alice_service = consumer('consumer').assuming_a_service('Alice').
-        at('http://localhost:1235').
+        on_port(1235).
         given(:the_zebras_are_here).
         upon_receiving("a retrieve Mallory request").with({
           method: :get,

@@ -28,6 +28,7 @@ module Pact
 
       def at(url)
         @uri = URI(url)
+        AppManager.instance.register_mock_service_for url
         self
       end
 

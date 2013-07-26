@@ -21,12 +21,19 @@ module Pact
         @apps_spawned = false
       end
 
-      def register(app, port = FindAPort.available_port)
+      def register_mock_service_for url
+        uri = URI(url)
+        raise "Currently only http is supported" unless uri.scheme == 'http'
+        raise "Currently only services on localhost are supported" unless uri.host == 'localhost'
+        register(MockService.new, URI(url).port, true)
+      end
+
+      def register(app, port = FindAPort.available_port, spawn_now = false)
         @registered_apps ||= {}
         existing = @registered_apps[port]
         raise "Port #{port} is already being used by #{existing}" if existing and not existing == app
         @registered_apps[port] = app
-        spawn(app, port) if @apps_spawned
+        spawn(app, port) if @apps_spawned || spawn_now
         port
       end
 

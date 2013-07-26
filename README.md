@@ -17,9 +17,55 @@ Put it in your Gemfile. You know how.
 
 ### Consumer project
 
+#### Configuration
+
+Pact.configure do | config |
+  config.pact_dir = "???" # Optional, default is ./spec/pacts
+  config.log_dir = "???" # Optional, default is ./log
+end
+
 #### Create a Consumer (Driven) Contract
 
-TODO: Fill in this once the process has been simplified
+```ruby
+
+class SomeServiceClient
+  def get_something
+    get("#{some_service_url}/something").body.to_json
+  end
+end
+
+# Use the :pact => true describe metadata to include all the pact generation functionality in your spec.
+
+describe "a pact with some service", :pact => true do
+
+  before :all do
+    # The same instance needs to be accessed by all the pact tests during a spec run, as creating
+    # a new one will overwrite previous interactions from the pact file
+    @some_service = consumer('some-consumer').assuming_a_service('some-producer').on_port(1234)
+  end
+
+  it "returns something when requested" do
+    @some_service.
+      given("something exists").
+        upon_receiving("a request for something").
+          with({ method: :get, path: '/something' }).
+            will_respond_with({
+              status: 200,
+              headers: { 'Content-Type' => 'application/json' },
+              body: {something: 'A thing!'}
+            })
+    # Use your service's client to make the request, rather than hand crafting a HTTP request,
+    # so that you can be sure that the request that you expect to
+    # be constructed is actually constructed.
+    # Do a quick sanity test to ensure client passes back the response properly.
+    expect(SomeServiceClient.get_something).to eql({something: 'A thing!'})
+  end
+end
+
+```
+
+The above code will generate a pact file in the configured pact dir.
+Logs will be output to the configured log dir that can be useful when diagnosing problems.
 
 ### Producer project
 

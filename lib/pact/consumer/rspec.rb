@@ -6,8 +6,8 @@ module Pact
     module RSpec
 
       def consumer(name)
-        FileUtils.mkdir_p Pact.configuration.pacts_path
-        MockProducer.new(Pact.configuration.pacts_path).consumer(name)
+        FileUtils.mkdir_p Pact.configuration.pact_dir
+        MockProducer.new(Pact.configuration.pact_dir).consumer(name)
       end
 
     end

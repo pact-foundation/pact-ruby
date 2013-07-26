@@ -26,9 +26,7 @@ module Pact
         raise "Currently only http is supported" unless uri.scheme == 'http'
         raise "Currently only services on localhost are supported" unless uri.host == 'localhost'
 
-        log = File.open("tmp/#{name}_pact.log", 'w')
-        log.sync = true
-        register(MockService.new(log_file: log), URI(url).port, true)
+        register(MockService.new(log_file: create_log_file(name)), uri.port, true)
       end
 
       def register(app, port = FindAPort.available_port, spawn_now = false)
@@ -99,6 +97,13 @@ module Pact
             false
           end
         end
+      end
+
+      def create_log_file service_name
+        FileUtils::mkdir_p Pact.configuration.log_dir
+        log = File.open(Pact.configuration.log_dir + "/#{service_name}_pact_creation.log", 'w')
+        log.sync = true
+        log
       end
 
     end

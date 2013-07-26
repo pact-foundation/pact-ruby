@@ -3,7 +3,7 @@ require 'pact/configuration'
 
 module Pact
   describe "configure" do
-    KEY_VALUE_PAIRS = {pacts_path: 'a path'}
+    KEY_VALUE_PAIRS = {pacts_path: 'a path', log_dir: 'a dir'}
 
     KEY_VALUE_PAIRS.each do | key, value |
       it "should allow configuration of #{key}" do
@@ -23,6 +23,9 @@ module Pact
 
     it "should have a default pacts_path" do
       expect(Pact.configuration.pacts_path).to eql File.expand_path('./spec/pacts')
+    end
+    it "should have a default log_dir" do
+      expect(Pact.configuration.log_dir).to eql File.expand_path('./log')
     end
   end
 end

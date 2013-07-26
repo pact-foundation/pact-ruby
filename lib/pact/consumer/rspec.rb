@@ -26,5 +26,6 @@ RSpec.configure do |config|
 
   config.after :all, :pact => true do
     Pact::Consumer::AppManager.instance.kill_all
+    Pact::Consumer::AppManager.instance.clear_all
   end
 end

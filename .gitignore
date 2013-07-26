@@ -25,3 +25,4 @@ spec/pacts
 *~
 .ruby-gemset
 .ruby-version
+log

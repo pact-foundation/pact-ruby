@@ -61,7 +61,7 @@ module Pact
       private
 
       def pact
-        Pact::ConsumerExpectation.new(:interactions => @interactions.values)
+        Pact::ConsumerContract.new(:interactions => @interactions.values)
       end
 
       def filenamify name

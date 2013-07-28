@@ -177,7 +177,7 @@ when diagnosing issues with pacts.
 ## TODO
 
 Short term:
-- Rename ConsumerExpectation to ConsumerContract????
+- Rename ConsumerContract to ConsumerContract (Done)
 - Simplify set up for consumer (Done)
   - Move server spawning into to the "at" method (Done)
   - automatically register before and after hooks in consumer (Done)

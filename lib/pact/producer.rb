@@ -1,3 +1,3 @@
 require_relative 'term'
 require_relative 'request'
-require_relative 'consumer_expectation'
+require_relative 'consumer_contract'

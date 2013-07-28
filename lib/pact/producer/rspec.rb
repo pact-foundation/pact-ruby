@@ -13,8 +13,8 @@ module Pact
       include Pact::JsonWarning
 
       def honour_pactfile pactfile, options = {}
-        consumer_expectation = Pact::ConsumerExpectation.from_json(File.read(pactfile))
-        honour_pact consumer_expectation.interactions, options
+        consumer_contract = Pact::ConsumerContract.from_json(File.read(pactfile))
+        honour_pact consumer_contract.interactions, options
       end
 
       def honour_pact interactions, options = {}

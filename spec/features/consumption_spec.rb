@@ -91,7 +91,7 @@ describe "A service consumer side of a pact", :pact => true  do
           body: Pact::Term.new(matcher: /Mallory/, generate: 'That is some good Mallory.')
         })
 
-        interactions = Pact::ConsumerExpectation.from_json(File.read(alice_service.pactfile_path)).interactions
+        interactions = Pact::ConsumerContract.from_json(File.read(alice_service.pactfile_path)).interactions
         interactions.first['producer_state'].should eq("the_zebras_are_here")
     end
   end

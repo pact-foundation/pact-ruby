@@ -24,10 +24,10 @@ module Pact
 
 		describe 'execute' do
 
-			let(:consumer_expectations) { [ uri: @pact_uri, support_file: @support_file, consumer: @consumer] }
+			let(:consumer_contract) { [ uri: @pact_uri, support_file: @support_file, consumer: @consumer] }
 
 			it 'verifies the pacts using PactSpecRunner' do
-				Producer::PactSpecRunner.should_receive(:run).with(consumer_expectations).and_return(0)
+				Producer::PactSpecRunner.should_receive(:run).with(consumer_contract).and_return(0)
 				Rake::Task[@task_name].execute
 			end
 

@@ -1,5 +1,5 @@
 require 'pact/producer/rspec'
-require 'pact/consumer_expectation'
+require 'pact/consumer_contract'
 require 'features/producer_states/zebras'
 
 module Pact::Producer
@@ -40,7 +40,7 @@ module Pact::Producer
       ServiceUnderTest.new
     end
 
-    pact = Pact::ConsumerExpectation.from_json <<-EOS
+    pact = Pact::ConsumerContract.from_json <<-EOS
     {
         "interactions" : [
             {
@@ -92,7 +92,7 @@ module Pact::Producer
     end
 
     context "that is a symbol" do
-        consumer_expectation = Pact::ConsumerExpectation.from_json <<-EOS
+        consumer_contract = Pact::ConsumerContract.from_json <<-EOS
         {
             "interactions" : [
                 {
@@ -114,11 +114,11 @@ module Pact::Producer
         }
         EOS
 
-        honour_pact consumer_expectation, consumer: 'the-wild-beast-store'
+        honour_pact consumer_contract, consumer: 'the-wild-beast-store'
     end
 
     context "that is a string" do
-        consumer_expectation = Pact::ConsumerExpectation.from_json <<-EOS
+        consumer_contract = Pact::ConsumerContract.from_json <<-EOS
         {
             "interactions" : [
                 {
@@ -140,7 +140,7 @@ module Pact::Producer
         }
         EOS
 
-        honour_pact consumer_expectation
+        honour_pact consumer_contract
     end
 
   end

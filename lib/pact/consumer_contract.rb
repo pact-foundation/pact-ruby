@@ -1,5 +1,5 @@
 module Pact
-	class ConsumerExpectation
+	class ConsumerContract
 
 		attr_reader :interactions
 
@@ -24,9 +24,9 @@ module Pact
 		def self.from_json string
 			deserialised_object = JSON.load(string)
 			if deserialised_object.is_a? Hash
-				ConsumerExpectation.new(interactions: deserialised_object['interactions'])
+				ConsumerContract.new(interactions: deserialised_object['interactions'])
 			elsif deserialised_object.is_a? Array #For backwards compatiblity
-				ConsumerExpectation.new(interactions: deserialised_object)
+				ConsumerContract.new(interactions: deserialised_object)
 			else
 				raise "Don't know how to handle deserialized object #{deserialised_object}"
 			end

@@ -15,7 +15,7 @@ module Pact
 					FileUtils.rm_rf pacts_dir
 					FileUtils.mkdir_p pacts_dir
 					mock_producer = MockProducer.new(pacts_dir.to_s)
-					JSON.should_receive(:pretty_generate).with(instance_of(Pact::ConsumerExpectation)).and_return(expected_pact_string)
+					JSON.should_receive(:pretty_generate).with(instance_of(Pact::ConsumerContract)).and_return(expected_pact_string)
 					mock_producer.instance_variable_set('@interactions', { "some description" => double("interaction", as_json: "something") })
 					mock_producer.instance_variable_set('@consumer_name', "test_consumer")
 					mock_producer.instance_variable_set('@service_name', "test_service")

@@ -67,6 +67,12 @@ module Pact
         end
       end
 
+      Pact.producer_state 'the weather is cloudy' do
+        set_up do
+          NAMESPACED_MESSAGES << 'cloudy :('
+        end
+      end
+
       before do
         NAMESPACED_MESSAGES.clear
       end
@@ -77,8 +83,8 @@ module Pact
             ProducerState.get('the weather is sunny', :for => 'a consumer').should_not be_nil
           end
 
-          it 'does not return the producer state when no namespace is specified' do
-            ProducerState.get('the weather is sunny').should be_nil
+          it 'falls back to a global state of the same name if one is not found for the specified consumer' do
+            ProducerState.get('the weather is cloudy', :for => 'a consumer').should_not be_nil
           end
         end
 

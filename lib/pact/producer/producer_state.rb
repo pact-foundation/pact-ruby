@@ -36,7 +36,7 @@ module Pact
 
       def self.get name, options = {}
         fullname = options[:for] ? "#{options[:for]}.#{name}" : name
-        producer_states[fullname] || producer_states[fullname.to_sym]
+        (producer_states[fullname] || producer_states[fullname.to_sym]) || producer_states[name]
       end
 
       def register

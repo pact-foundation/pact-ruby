@@ -182,6 +182,10 @@ Short term:
   - Move server spawning into to the "at" method (Done)
   - automatically register before and after hooks in consumer (Done)
 - Provide before and after hooks and a place to define the app for Pact configuration in producer (remove Rspc from interface of Pact setup)
+  - Set_up for state
+  - Tear_down for state
+  - Before hook for all
+  - After hook for all
 - Make producer state lookup try consumer defined state first, then fall back to global one
 - Put producer and consumer name into pact file
 - Remove consumer name from the rake task, as it should now be able to be determined from the pact file.

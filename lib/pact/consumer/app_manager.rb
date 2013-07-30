@@ -4,67 +4,68 @@ require 'capybara'
 require 'net/http'
 require 'uri'
 require 'find_a_port'
+require 'pact/logging'
 
 module Pact
   module Consumer
 
-    class AppManager
+    class AppRegistration
+      include Pact::Logging
+      attr_accessor :port
+      attr_accessor :app
+      attr_accessor :pid
 
-      include Singleton
-
-      attr_accessor :mock_port
-
-      def initialize
-        @spawned_app_pids = []
-        @registered_apps = {}
+      def initialize opts
         @max_wait = 10
-        @apps_spawned = false
+        @port = opts[:port]
+        @pid = opts[:pid]
+        @app = opts[:app]
       end
 
-      def register_mock_service_for name, url
-        uri = URI(url)
-        raise "Currently only http is supported" unless uri.scheme == 'http'
-        raise "Currently only services on localhost are supported" unless uri.host == 'localhost'
-
-        register(MockService.new(log_file: create_log_file(name)), uri.port, true)
+      def kill
+        logger.info "Killing #{self}"
+        Process.kill(9, pid)
+        Process.wait(pid)
+        self.pid = nil
       end
 
-      def register(app, port = FindAPort.available_port, spawn_now = false)
-        @registered_apps ||= {}
-        existing = @registered_apps[port]
-        raise "Port #{port} is already being used by #{existing}" if existing and not existing == app
-        @registered_apps[port] = app
-        spawn(app, port) if @apps_spawned || spawn_now
-        port
+      def not_spawned?
+        !spawned?
       end
 
-      def app_registered_on?(port)
-        @registered_apps.key? port
+      def spawned?
+        self.pid != nil
       end
 
-      def ports_of_registered_apps
-        @registered_apps.keys
+      def is_a_mock_service?
+        app.is_a? MockService
       end
 
-      def kill_all
-        @spawned_app_pids.each do |pid| 
-          Process.kill(9, pid) 
-          Process.wait(pid)
+      def to_s
+        "#{app} on port #{port} with pid #{pid}"
+      end
+
+      def spawn
+        # following stolen from https://github.com/jwilger/kookaburra
+        logger.info "Starting app #{self}..."
+        self.pid = fork do
+          Capybara.server_port = port
+          Capybara::Server.new(app).boot
+
+          # This ensures that this forked process keeps running, because the
+          # actual server is started in a thread by Capybara.
+          ThreadsWait.all_waits(Thread.list)
         end
-        @spawned_app_pids = []
-        @apps_spawned = false
-      end
 
-      def clear_all
-        kill_all
-        @registered_apps = {}
-      end
 
-      def spawn_all
-        @registered_apps.each do |port, app|
-          spawn(app, port)
+        wait_until do
+          begin
+            Net::HTTP.get_response(URI.parse("http://localhost:#{port}/index.html"))
+          rescue Errno::ECONNREFUSED
+            false
+          end
         end
-        @apps_spawned = true
+        logger.info "Started"
       end
 
       def wait_until
@@ -78,25 +79,63 @@ module Pact
         end
       end
 
-      def spawn app, port
-        # following stolen from https://github.com/jwilger/kookaburra
-        @spawned_app_pids ||= []
-        @spawned_app_pids << fork do
-          Capybara.server_port = port
-          Capybara::Server.new(app).boot
+    end
 
-          # This ensures that this forked process keeps running, because the
-          # actual server is started in a thread by Capybara.
-          ThreadsWait.all_waits(Thread.list)
-        end
+    class AppManager
 
-        wait_until do
-          begin
-            Net::HTTP.get_response(URI.parse("http://localhost:#{port}/index.html"))
-          rescue Errno::ECONNREFUSED
-            false
-          end
-        end
+      include Pact::Logging
+
+      include Singleton
+
+      attr_accessor :mock_port
+
+      def initialize
+        @apps_spawned = false
+        @app_registrations = []
+      end
+
+      def register_mock_service_for name, url
+        uri = URI(url)
+        raise "Currently only http is supported" unless uri.scheme == 'http'
+        raise "Currently only services on localhost are supported" unless uri.host == 'localhost'
+
+        register(MockService.new(log_file: create_log_file(name), name: name), uri.port, true)
+      end
+
+      def register(app, port = FindAPort.available_port, spawn_now = false)
+        existing = existing_app_on_port port
+        raise "Port #{port} is already being used by #{existing}" if existing and not existing == app
+        app_registration = register_app app, port
+        app_registration.spawn if @apps_spawned || spawn_now
+        port
+      end
+
+      def existing_app_on_port port
+        app_registration = @app_registrations.find { |app_registration| app_registration.port == port }
+        app_registration ? app_registration.app : nil
+      end
+
+      def app_registered_on?(port)
+        app_registrations.any? { |app_registration| app_registration.port == port }
+      end
+
+      def ports_of_mock_services
+        app_registrations.find_all(&:is_a_mock_service?).collect(&:port)
+      end
+
+      def kill_all
+        app_registrations.find_all(&:spawned?).collect(&:kill)
+        apps_spawned = false
+      end
+
+      def clear_all
+        kill_all
+        @app_registrations = []
+      end
+
+      def spawn_all
+        app_registrations.find_all(&:not_spawned?).collect(&:spawn)
+        @apps_spawned = true
       end
 
       def create_log_file service_name
@@ -106,6 +145,18 @@ module Pact
         log
       end
 
+
+      private
+
+      def app_registrations
+        @app_registrations
+      end
+
+      def register_app app, port
+        app_registration = AppRegistration.new :app => app, :port => port
+        app_registrations << app_registration
+        app_registration
+      end
     end
   end
 end

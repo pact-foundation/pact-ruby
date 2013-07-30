@@ -8,13 +8,13 @@ module Pact::Consumer
 
     describe "start_service_for" do
       before do
-        AppManager.instance.stub(:spawn) # Don't want process actually spawning!
+        AppRegistration.any_instance.stub(:spawn) # Don't want process actually spawning during the tests
       end
       let(:name) { 'some_service'}
       context "for http://localhost" do
         let(:url) { 'http://localhost:1234'}
         it "starts a mock service at the given port on localhost" do
-          AppManager.instance.should_receive(:spawn).with(instance_of(MockService), 1234)
+          AppRegistration.any_instance.should_receive(:spawn)
           AppManager.instance.register_mock_service_for name, url
         end
 

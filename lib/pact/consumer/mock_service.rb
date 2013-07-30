@@ -178,6 +178,7 @@ module Pact
       def initialize options = {}
         options = {log_file: STDOUT}.merge options
         @logger = Logger.new options[:log_file]
+        @name = options.fetch(:name, "MockService")
         @handlers = [
           StartupPoll.new(@logger),
           CapybaraIdentify.new(@logger),
@@ -185,6 +186,10 @@ module Pact
           InteractionDelete.new(@logger),
           InteractionReplay.new(@logger)
         ]
+      end
+
+      def to_s
+        "#{@name} #{super.to_s}"
       end
 
       def call env

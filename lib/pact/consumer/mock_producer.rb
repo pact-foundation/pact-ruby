@@ -1,12 +1,14 @@
 require 'uri'
 require 'json/add/core'
 require 'pact/json_warning'
+require 'pact/logging'
 
 module Pact
   module Consumer
     class MockProducer
 
       include Pact::JsonWarning
+      include Pact::Logging
 
       attr_reader :uri
 
@@ -26,15 +28,17 @@ module Pact
         self
       end
 
-      def at(url)
+      def at(url, options = {})
         @uri = URI(url)
         raise "You must first specify a service name" unless @service_name
-        AppManager.instance.register_mock_service_for @service_name, url
+        unless options[:standalone]
+          AppManager.instance.register_mock_service_for @service_name, url
+        end
         self
       end
 
-      def on_port(port)
-        at("http://localhost:#{port}")
+      def on_port(port, options = {})
+        at("http://localhost:#{port}", options)
       end
 
       def given(producer_state)
@@ -47,6 +51,7 @@ module Pact
       end
 
       def update_pactfile
+        logger.debug "Updating pact file for #{@service_name} at #{pactfile_path}"
         check_for_active_support_json
         File.open(pactfile_path, 'w') do |f|
           f.write JSON.pretty_generate(pact)

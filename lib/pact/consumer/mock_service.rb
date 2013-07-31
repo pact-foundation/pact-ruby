@@ -6,7 +6,12 @@ require 'singleton'
 require 'core/ext/hash'
 require 'logger'
 require 'awesome_print'
+require 'awesome_print/core_ext/logger' #For some reason we get an error indicating that the method 'ap' is private unless we load this specifically
 require 'json/add/core'
+
+AwesomePrint.defaults = {
+  :plain      => true
+}
 
 module Pact
   module Consumer
@@ -33,7 +38,8 @@ module Pact
 
       class StartupPoll
 
-        def initialize logger
+        def initialize name, logger
+          @name = name
           @logger = logger
         end
 
@@ -43,13 +49,15 @@ module Pact
         end
 
         def respond env
+          @logger.info "#{@name} started up"
           [200, {}, ['Started up fine']]
         end
       end
 
       class CapybaraIdentify
 
-        def initialize logger
+        def initialize name, logger
+          @name = name
           @logger = logger
         end
 
@@ -64,7 +72,8 @@ module Pact
 
       class InteractionDelete
 
-        def initialize logger
+        def initialize name, logger
+          @name = name
           @logger = logger
         end
 
@@ -75,13 +84,15 @@ module Pact
 
         def respond env
           InteractionList.instance.clear
+          @logger.info "Cleared interactions"
           [200, {}, ['Deleted interactions']]
         end
       end
 
       class InteractionPost
 
-        def initialize logger
+        def initialize name, logger
+          @name = name
           @logger = logger
         end
 
@@ -93,13 +104,16 @@ module Pact
         def respond env
           interactions = Hashie::Mash.new(JSON.load(env['rack.input'].string))
           InteractionList.instance.add interactions
+          @logger.info "Added interaction to #{@name}"
+          @logger.ap interactions
           [200, {}, ['Added interactions']]
         end
       end
 
       class InteractionReplay
 
-        def initialize logger
+        def initialize name, logger
+          @name = name
           @logger = logger
         end
 
@@ -140,6 +154,8 @@ module Pact
 
         def find_response raw_request
           actual_request = Request::Actual.from_hash(raw_request)
+          @logger.info "#{@name} received request"
+          @logger.ap actual_request.as_json
           candidates = []
           matching_interactions = InteractionList.instance.interactions.select do |interaction|
             expected_request = Request::Expected.from_hash(interaction.request)
@@ -147,15 +163,22 @@ module Pact
             expected_request.match actual_request
           end
           if matching_interactions.size > 1
-            @logger.ap 'Multiple interactions found:'
+            @logger.info "Multiple interactions found on #{@name}:"
             @logger.ap matching_interactions
             raise 'Multiple interactions found!'
           end
-          matching_interactions.empty? ? handle_unrecognised_request(actual_request, candidates) : response_from(matching_interactions.first.response)
+          if matching_interactions.empty?
+            handle_unrecognised_request(actual_request, candidates)
+          else
+            response = response_from(matching_interactions.first.response)
+            @logger.info "Found matching response on #{@name}:"
+            @logger.ap response
+            response
+          end
         end
 
         def handle_unrecognised_request request, candidates
-          @logger.ap 'No interaction found for request: '
+          @logger.ap "No interaction found on #{@name} for request: "
           request_json = request.as_json
           @logger.ap request_json
           @logger.ap 'Interaction diffs for that route:'
@@ -173,6 +196,10 @@ module Pact
           return '' unless body
           body.kind_of?(String) ? body.force_encoding('utf-8') : body.to_json
         end
+
+        def logger_info_ap msg
+          @logger.info msg
+        end
       end
 
       def initialize options = {}
@@ -180,11 +207,11 @@ module Pact
         @logger = Logger.new options[:log_file]
         @name = options.fetch(:name, "MockService")
         @handlers = [
-          StartupPoll.new(@logger),
-          CapybaraIdentify.new(@logger),
-          InteractionPost.new(@logger),
-          InteractionDelete.new(@logger),
-          InteractionReplay.new(@logger)
+          StartupPoll.new(@name, @logger),
+          CapybaraIdentify.new(@name, @logger),
+          InteractionPost.new(@name, @logger),
+          InteractionDelete.new(@name, @logger),
+          InteractionReplay.new(@name, @logger)
         ]
       end
 

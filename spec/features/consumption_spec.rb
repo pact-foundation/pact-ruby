@@ -2,11 +2,30 @@ require 'net/http'
 require 'pact/consumer'
 require 'pact/consumer/rspec'
 
+
 describe "A service consumer side of a pact", :pact => true  do
 
   it "goes a little something like this" do
-    alice_service = consumer('consumer').assuming_a_service('Alice').
-    on_port(1234).
+    Pact.clear_configuration
+    Pact::Consumer::AppManager.instance.clear_all
+
+    Pact.configure do | config |
+      config.consumer do
+        name "consumer"
+      end
+
+      config.producer :alice_service do
+        name "Alice"
+        port 1234
+      end
+
+      config.producer :bob_service do
+        name "Bob"
+        port 4321
+      end
+    end
+
+    alice_service. 
       upon_receiving("a retrieve Mallory request").with({
       method: :get,
       path: '/mallory'
@@ -17,8 +36,7 @@ describe "A service consumer side of a pact", :pact => true  do
       body: Pact::Term.new(matcher: /Mallory/, generate: 'That is some good Mallory.')
     })
 
-    bob_service = consumer('consumer').assuming_a_service('Bob').
-    on_port(4321).
+    bob_service.
       upon_receiving('a create donut request').with({
       method: :post,
       path: '/donuts',

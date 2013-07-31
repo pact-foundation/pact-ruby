@@ -1,5 +1,6 @@
 require 'ostruct'
 require 'logger'
+require 'pact/consumer/configuration_dsl'
 
 module Pact
 
@@ -7,6 +8,8 @@ module Pact
     attr_accessor :pact_dir
     attr_accessor :log_dir
     attr_accessor :logger
+
+    include Pact::Consumer::ConfigurationDSL
   end
 
   def self.configuration
@@ -15,6 +18,10 @@ module Pact
 
   def self.configure
     yield configuration
+  end
+
+  def self.clear_configuration
+    @@configuration = default_configuration
   end
 
   private
@@ -32,6 +39,7 @@ module Pact
   end
 
   def self.default_logger
+    FileUtils::mkdir_p default_log_dir
     logger = Logger.new(default_log_dir + "/pact_gem.log")
     logger.level = Logger::INFO
     logger

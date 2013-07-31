@@ -99,14 +99,14 @@ module Pact
         raise "Currently only http is supported" unless uri.scheme == 'http'
         raise "Currently only services on localhost are supported" unless uri.host == 'localhost'
 
-        register(MockService.new(log_file: create_log_file(name), name: name), uri.port, true)
+        register(MockService.new(log_file: create_log_file(name), name: name), uri.port)
       end
 
-      def register(app, port = FindAPort.available_port, spawn_now = false)
+      def register(app, port = FindAPort.available_port)
         existing = existing_app_on_port port
         raise "Port #{port} is already being used by #{existing}" if existing and not existing == app
         app_registration = register_app app, port
-        app_registration.spawn if @apps_spawned || spawn_now
+        app_registration.spawn if @apps_spawned
         port
       end
 

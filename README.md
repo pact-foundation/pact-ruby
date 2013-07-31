@@ -42,6 +42,8 @@ describe "a pact with some service", :pact => true do
     # The same instance needs to be accessed by all the pact tests during a spec run, as creating
     # a new one will overwrite previous interactions from the pact file
     @some_service = consumer('some-consumer').assuming_a_service('some-producer').on_port(1234)
+    # If you need to use this across multiple files, put it in your Rspec.configure in a before(:suite) block,
+    # and make it global (eg $some_service)
   end
 
   it "returns something when requested" do

@@ -19,6 +19,7 @@ RSpec.configure do |config|
 
   config.before :all, :pact => true do
     Pact::Consumer::AppManager.instance.spawn_all
+    FileUtils.mkdir_p Pact.configuration.pact_dir
   end
 
   config.before :each, :pact => true do

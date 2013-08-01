@@ -149,11 +149,11 @@ RSpec::Matchers.define :match_term do |expected|
   end
 
   def match_object actual, expected, mismatch
-    throw :mismatch, mismatch unless actual == expected
+    throw :mismatch, mismatch.merge({reason: 'Not equal'}) unless actual == expected
   end
 
   def match_regexp actual, expected, mismatch
-    throw :mismatch, mismatch unless actual =~ expected
+    throw :mismatch, mismatch.merge({reason: 'Regular expression match failed'}) unless actual =~ expected
   end
 
   def match_term actual, expected
@@ -166,7 +166,7 @@ RSpec::Matchers.define :match_term do |expected|
         matching? actual[key], value, "key '#{key}'", actual
       end
     else
-      throw :mismatch, mismatch
+      throw :mismatch, mismatch.merge({reason: "Expected #{actual.class.name} to be a Hash"})
     end
   end
 
@@ -176,7 +176,7 @@ RSpec::Matchers.define :match_term do |expected|
         matching? actual[index], value, "index #{index}", actual
       end
     else
-      throw :mismatch, mismatch
+      throw :mismatch, mismatch.merge({reason: "Expected #{actual.class.name} to be an Array"})
     end
   end
 
@@ -194,6 +194,7 @@ RSpec::Matchers.define :match_term do |expected|
     message = " Expected #{actual} to match #{expected}"
     message << " at #{@message[:desc]}" if @message[:desc]
     message << " of #{@message[:parent]}" if @message[:parent]
+    message << ". Reason: #{@message[:reason]}"
     message
   end
 

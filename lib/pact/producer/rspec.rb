@@ -100,7 +100,7 @@ module Pact
 
         def parse_entity_from_response response
           case response.headers['Content-Type']
-          when 'application/json'
+          when /json/
             JSON.load(response.body)
           else
             response.body

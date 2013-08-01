@@ -1,5 +1,6 @@
 require 'spec_helper'
 require 'pact/configuration'
+require 'pact/consumer/dsl'
 
 describe "configure" do
 
@@ -12,16 +13,17 @@ describe "configure" do
         name "My Consumer"
       end
 
-      config.producer :my_service do
-        port 1234
-        name "My Service"
-        standalone true
-      end
-
       config.producer :my_other_service do
         port 1235
         name "My Other Service"
         standalone false
+      end
+    end
+
+    Pact.with_producer "My Service" do
+      service :my_service do
+        port 1234
+        standalone true
       end
     end
   end
@@ -34,13 +36,6 @@ describe "configure" do
 
   describe "producers" do
     include Pact::Consumer::MockProducers
-    it "should be configured" do
-      Pact.configuration.producers.first.should be_instance_of Pact::Consumer::MockProducer
-    end
-
-    it "should have an item for each service" do
-      Pact.configuration.producers.length.should eq 2
-    end
 
     it "should have defined methods in MockServices for the producers" do
       my_service.should be_instance_of Pact::Consumer::MockProducer

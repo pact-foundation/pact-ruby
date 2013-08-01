@@ -34,20 +34,23 @@ class SomeServiceClient
   end
 end
 
+Pact.configure do | config |
+  config.consumer do
+    name 'Some Consumer'
+  end
+
+  config.producer :some_service do
+    name "Some Producer"
+    port 1234
+  end
+end
+
 # Use the :pact => true describe metadata to include all the pact generation functionality in your spec.
 
 describe "a pact with some service", :pact => true do
 
-  before :all do
-    # The same instance needs to be accessed by all the pact tests during a spec run, as creating
-    # a new one will overwrite previous interactions from the pact file
-    @some_service = consumer('some-consumer').assuming_a_service('some-producer').on_port(1234)
-    # If you need to use this across multiple files, put it in your Rspec.configure in a before(:suite) block,
-    # and make it global (eg $some_service)
-  end
-
   it "returns something when requested" do
-    @some_service.
+    some_service.
       given("something exists").
         upon_receiving("a request for something").
           with({ method: :get, path: '/something' }).
@@ -68,6 +71,17 @@ end
 
 The above code will generate a pact file in the configured pact dir.
 Logs will be output to the configured log dir that can be useful when diagnosing problems.
+
+To run your consumer app as a process during your test (eg for a Capybara test):
+
+```ruby
+Pact.configure do | config |
+  config.consumer do
+    name 'Some Consumer'
+    app my_consumer_rack_app
+    port 4321
+  end
+```
 
 ### Producer project
 

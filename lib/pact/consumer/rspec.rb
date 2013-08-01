@@ -1,5 +1,5 @@
 require_relative '../configuration'
-require_relative 'app_manager'
+require_relative '../consumer'
 
 module Pact
   module Consumer

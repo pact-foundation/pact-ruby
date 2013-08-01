@@ -32,15 +32,29 @@ module Pact
 
         def validate
           raise "Please provide a consumer name" unless @name
+          raise "Please provide a port for the consumer app" if @app && !@port
         end
 
         def name name
           @name = name
         end
 
+        def app app
+          @app = app
+        end
+
+        def port port
+          @port = port
+        end
+
         def create_service_consumer
           validate
+          register_consumer_app if @app
           Pact::Consumer::ServiceConsumer.new name: @name
+        end
+
+        def register_consumer_app
+          Pact::Consumer::AppManager.instance.register @app, @port
         end
       end
 

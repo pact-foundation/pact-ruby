@@ -8,86 +8,11 @@ require 'pact/logging'
 
 module Pact
   module Consumer
-
-    class AppRegistration
-      include Pact::Logging
-      attr_accessor :port
-      attr_accessor :app
-      attr_accessor :pid
-
-      def initialize opts
-        @max_wait = 10
-        @port = opts[:port]
-        @pid = opts[:pid]
-        @app = opts[:app]
-      end
-
-      def kill
-        logger.info "Killing #{self}"
-        Process.kill(9, pid)
-        Process.wait(pid)
-        self.pid = nil
-      end
-
-      def not_spawned?
-        !spawned?
-      end
-
-      def spawned?
-        self.pid != nil
-      end
-
-      def is_a_mock_service?
-        app.is_a? MockService
-      end
-
-      def to_s
-        "#{app} on port #{port} with pid #{pid}"
-      end
-
-      def spawn
-        # following stolen from https://github.com/jwilger/kookaburra
-        logger.info "Starting app #{self}..."
-        self.pid = fork do
-          Capybara.server_port = port
-          Capybara::Server.new(app).boot
-
-          # This ensures that this forked process keeps running, because the
-          # actual server is started in a thread by Capybara.
-          ThreadsWait.all_waits(Thread.list)
-        end
-
-
-        wait_until do
-          begin
-            Net::HTTP.get_response(URI.parse("http://localhost:#{port}/index.html"))
-          rescue Errno::ECONNREFUSED
-            false
-          end
-        end
-        logger.info "Started"
-      end
-
-      def wait_until
-        waited = 0
-        wait_time = 0.1
-        while waited < @max_wait do
-          break if yield
-          sleep wait_time
-          waited += wait_time
-          raise "Waited longer than #{@max_wait} seconds" if waited >= @max_wait
-        end
-      end
-
-    end
-
     class AppManager
 
       include Pact::Logging
 
       include Singleton
-
-      attr_accessor :mock_port
 
       def initialize
         @apps_spawned = false
@@ -138,15 +63,14 @@ module Pact
         @apps_spawned = true
       end
 
+      private
+
       def create_log_file service_name
         FileUtils::mkdir_p Pact.configuration.log_dir
         log = File.open(Pact.configuration.log_dir + "/#{service_name}_pact_creation.log", 'w')
         log.sync = true
         log
       end
-
-
-      private
 
       def app_registrations
         @app_registrations
@@ -157,6 +81,78 @@ module Pact
         app_registrations << app_registration
         app_registration
       end
+    end
+
+    class AppRegistration
+      include Pact::Logging
+      attr_accessor :port
+      attr_accessor :app
+      attr_accessor :pid
+
+      def initialize opts
+        @max_wait = 10
+        @port = opts[:port]
+        @pid = opts[:pid]
+        @app = opts[:app]
+      end
+
+      def kill
+        logger.info "Killing #{self}"
+        Process.kill(9, pid)
+        Process.wait(pid)
+        self.pid = nil
+      end
+
+      def not_spawned?
+        !spawned?
+      end
+
+      def spawned?
+        self.pid != nil
+      end
+
+      def is_a_mock_service?
+        app.is_a? MockService
+      end
+
+      def to_s
+        "#{app} on port #{port}" + (@pid ? " with pid #{pid}" : "")
+      end
+
+      def spawn
+        # following stolen from https://github.com/jwilger/kookaburra
+        logger.info "Starting app #{self}..."
+        self.pid = fork do
+          Capybara.server_port = port
+          Capybara::Server.new(app).boot
+
+          # This ensures that this forked process keeps running, because the
+          # actual server is started in a thread by Capybara.
+          ThreadsWait.all_waits(Thread.list)
+        end
+
+
+        wait_until do
+          begin
+            Net::HTTP.get_response(URI.parse("http://localhost:#{port}/index.html"))
+          rescue Errno::ECONNREFUSED
+            false
+          end
+        end
+        logger.info "Started with pid #{pid}"
+      end
+
+      def wait_until
+        waited = 0
+        wait_time = 0.1
+        while waited < @max_wait do
+          break if yield
+          sleep wait_time
+          waited += wait_time
+          raise "Waited longer than #{@max_wait} seconds" if waited >= @max_wait
+        end
+      end
+
     end
   end
 end

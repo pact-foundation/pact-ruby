@@ -25,7 +25,7 @@ module Pact
           request = interaction['request']
           response = interaction['response']
           description = "#{interaction['description']} to '#{request['path']}'"
-          description << " given '#{interaction['producer_state']}'" if interaction['producer_state']
+          description << " given #{interaction['producer_state']}" if interaction['producer_state']
 
           describe description  do
             before do

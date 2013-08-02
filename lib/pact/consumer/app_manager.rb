@@ -50,7 +50,7 @@ module Pact
 
       def kill_all
         app_registrations.find_all(&:spawned?).collect(&:kill)
-        apps_spawned = false
+        @apps_spawned = false
       end
 
       def clear_all

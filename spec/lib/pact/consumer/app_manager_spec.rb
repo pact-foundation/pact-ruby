@@ -16,6 +16,7 @@ module Pact::Consumer
         it "starts a mock service at the given port on localhost" do
           AppRegistration.any_instance.should_receive(:spawn)
           AppManager.instance.register_mock_service_for name, url
+          AppManager.instance.spawn_all
         end
 
         it "registers the mock service as running on the given port" do

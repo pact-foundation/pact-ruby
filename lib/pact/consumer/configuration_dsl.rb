@@ -27,6 +27,9 @@ module Pact
       class ConsumerDSL
 
         def initialize &block
+          @app = nil
+          @port = nil
+          @name = nil
           instance_eval(&block)
         end
 

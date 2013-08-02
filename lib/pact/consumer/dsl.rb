@@ -9,6 +9,7 @@ module Pact::Consumer
       class Producer
          def initialize name, &block
             @name = name
+            @service = nil
             instance_eval(&block)
          end
 
@@ -36,6 +37,7 @@ module Pact::Consumer
       class Service
          def initialize name, &block
             @name = name
+            @port = nil
             @standalone = false
             instance_eval(&block)
          end

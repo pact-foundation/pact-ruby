@@ -7,7 +7,6 @@ describe "A service consumer side of a pact", :pact => true  do
 
   it "goes a little something like this" do
     Pact.clear_configuration
-    Pact::Consumer::AppManager.instance.clear_all
 
     Pact.configure do | config |
       config.consumer do

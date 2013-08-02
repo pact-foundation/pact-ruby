@@ -7,7 +7,7 @@ require 'core/ext/hash'
 require 'logger'
 require 'awesome_print'
 require 'awesome_print/core_ext/logger' #For some reason we get an error indicating that the method 'ap' is private unless we load this specifically
-require 'json/add/core'
+require 'json/add/regexp'
 
 AwesomePrint.defaults = {
   :plain      => true

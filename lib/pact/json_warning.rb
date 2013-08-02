@@ -1,4 +1,5 @@
 require 'logger'
+require 'json/add/regexp'
 
 module Pact
   module JsonWarning
@@ -13,7 +14,8 @@ module Pact
       # If someone knows how to make sure the pact gem uses the json gem as_json methods when activesupport/json is used in the calling code,
       # without breaking the calling code, which may depend on activesupport/json... then please fix this.
       # Note: we can probably do this in Ruby 2.0 with refinements, but for now, we're all stuck on 1.9 :(
-      unless :test.as_json.is_a?(Hash)
+
+      unless Regexp.new('').as_json.is_a?(Hash)
         Logger.new($stderr).warn("It appears you are using ActiveSupport json in your project. You are now in rubygems hell. Please see Pact::JsonWarning for more info.")
       end
     end

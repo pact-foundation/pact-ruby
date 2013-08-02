@@ -1,5 +1,4 @@
 require 'json'
-require 'json/add/core'
 require 'rack/test'
 require 'pact/producer'
 require 'pact/reification'

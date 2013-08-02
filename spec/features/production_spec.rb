@@ -46,10 +46,7 @@ module Pact::Producer
             {
                 "description": "donut creation request",
                 "request": {
-                    "method": {
-                        "json_class": "Symbol",
-                        "s": "post"
-                    },
+                    "method": "post",
                     "path": "/donuts"
                 },
                 "response": {
@@ -60,10 +57,7 @@ module Pact::Producer
             {
                 "description": "charlie deletion request",
                 "request": {
-                    "method": {
-                        "json_class": "Symbol",
-                        "s": "delete"
-                    },
+                    "method": "delete",
                     "path": "/charlie"
                 },
                 "response": {
@@ -98,10 +92,7 @@ module Pact::Producer
                 {
                     "description": "donut creation request",
                     "request": {
-                        "method": {
-                            "json_class": "Symbol",
-                            "s": "post"
-                        },
+                        "method": "delete",
                         "path": "/zebra_names"
                     },
                     "response": {
@@ -124,10 +115,7 @@ module Pact::Producer
                 {
                     "description": "donut creation request",
                     "request": {
-                        "method": {
-                            "json_class": "Symbol",
-                            "s": "post"
-                        },
+                        "method": "post",
                         "path": "/zebra_names"
                     },
                     "response": {

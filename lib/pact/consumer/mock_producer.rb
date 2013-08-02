@@ -1,5 +1,5 @@
 require 'uri'
-require 'json/add/core'
+require 'json/add/regexp'
 require 'pact/json_warning'
 require 'pact/logging'
 

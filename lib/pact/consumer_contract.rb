@@ -14,7 +14,7 @@ module Pact
 		end
 
 		def to_json(options = {})
-			as_json(options).to_json
+			as_json(options).to_json(options)
 		end
 
 		def self.json_create(obj)

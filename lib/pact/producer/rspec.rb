@@ -4,12 +4,14 @@ require 'pact/producer'
 require 'pact/reification'
 require 'pact/producer/producer_state'
 require 'pact/json_warning'
+require 'pact/logging'
 
 module Pact
   module Producer
     module RSpec
 
       include Pact::JsonWarning
+      include Pact::Logging
 
       def honour_pactfile pactfile, options = {}
         consumer_contract = Pact::ConsumerContract.from_json(File.read(pactfile))
@@ -60,6 +62,8 @@ module Pact
 
               set_up_producer_state interaction['producer_state'], options[:consumer]
 
+              logger.debug "Sending #{request['method']} to #{path}"
+
               self.send(request['method'], *args)
 
             end
@@ -82,6 +86,7 @@ module Pact
 
             if response['body']
               it "has matching body" do
+                logger.debug "Response body is #{last_response.body}"
                 expect(parse_entity_from_response(last_response)).to match_term response['body']
               end
             end
@@ -96,6 +101,8 @@ module Pact
       end
 
       module TestMethods
+
+        include Pact::Logging
 
         def parse_entity_from_response response
           case response.headers['Content-Type']
@@ -161,6 +168,9 @@ RSpec::Matchers.define :match_term do |expected|
 
   def match_hash actual, expected, mismatch
     if actual.is_a?(Hash)
+      if actual.keys.size != expected.keys.size
+        throw :mismatch, mismatch.merge({reason: "Expected hash to have #{expected.keys.size} keys but got #{actual.keys.size}"})
+      end
       expected.each do |key, value|
         matching? actual[key], value, "key '#{key}'", actual
       end
@@ -171,6 +181,9 @@ RSpec::Matchers.define :match_term do |expected|
 
   def match_array actual, expected, mismatch
     if actual.is_a?(Array)
+      if actual.size != expected.size
+        throw :mismatch, mismatch.merge({reason: "Expected array length of #{actual.size} to be #{expected.size}"})
+      end
       expected.each_with_index do |value, index|
         matching? actual[index], value, "index #{index}", actual
       end

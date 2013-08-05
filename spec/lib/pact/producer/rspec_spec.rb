@@ -30,4 +30,12 @@ describe "the match_term matcher" do
     expect('wootle').to match_term 'wootle'
   end
 
+  it 'should not be confused by an empty hash' do
+    expect({:hello => 'everyone'}).to_not match_term({})
+  end
+
+  it 'should not be confused by an empty array' do
+    expect(['blah']).to_not match_term([])
+  end
+
 end

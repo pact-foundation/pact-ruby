@@ -3,7 +3,6 @@ require 'rspec'
 require 'rspec/core'
 require 'rspec/core/formatters/documentation_formatter'
 require_relative 'rspec'
-require 'pact/consumer_contract'
 
 module Pact
 	module Producer
@@ -19,20 +18,11 @@ module Pact
 
 			def self.initialize_specs spec_definitions
 				spec_definitions.each do | spec_definition |
-					pact = read_pact_from spec_definition[:uri]
 					describe "Pact in #{spec_definition[:uri]}" do
 						require spec_definition[:support_file] if spec_definition[:support_file]
-						honour_pact Pact::ConsumerContract.from_json(pact), {consumer: spec_definition[:consumer]}
+						honour_pactfile spec_definition[:uri], {consumer: spec_definition[:consumer]}
 					end
 				end
-			end
-
-			def self.read_pact_from uri
-				open(uri) { | file | file.read }
-			rescue StandardError => e
-				$stderr.puts "Error reading file from #{uri}"
-				$stderr.puts "#{e.to_s} #{e.backtrace.join("\n")}"
-				raise e
 			end
 
 			def self.configure_rspec options

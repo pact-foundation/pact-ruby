@@ -1,3 +1,1 @@
-require_relative 'term'
-require_relative 'request'
-require_relative 'consumer_contract'
+#TODO delete this file after checking if any projects load it

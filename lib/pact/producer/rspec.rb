@@ -27,14 +27,14 @@ module Pact
       def describe_interactions interactions, options
         interactions.each do |interaction|
           describe_interaction_with_producer_state interaction, options
-        end        
+        end
       end
 
       def describe_interaction_with_producer_state interaction, options
         if interaction['producer_state']
           describe "Given #{interaction['producer_state']}" do
             describe_interaction interaction, options
-          end          
+          end
         else
           describe_interaction interaction, options
         end
@@ -53,7 +53,7 @@ module Pact
           end
 
           describe_response interaction['response']
-        end        
+        end
 
       end
 
@@ -81,7 +81,7 @@ module Pact
               expect(parse_entity_from_response(last_response)).to match_term response['body']
             end
           end
-        end        
+        end
       end
 
       def description_for interaction
@@ -94,7 +94,7 @@ module Pact
         $stderr.puts "Error reading file from #{uri}"
         $stderr.puts "#{e.to_s} #{e.backtrace.join("\n")}"
         raise e
-      end      
+      end
 
     end
   end

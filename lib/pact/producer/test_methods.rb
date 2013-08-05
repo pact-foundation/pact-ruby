@@ -41,7 +41,7 @@ module Pact
         end
 
         logger.debug "Sending #{request['method']} to #{path}"
-        self.send(request['method'], *args)          
+        self.send(request['method'], *args)
       end
 
       private
@@ -55,7 +55,7 @@ module Pact
           else
             request_headers['HTTP_' + key.to_s] = value
           end
-        end          
+        end
       end
 
       def request_path request
@@ -64,7 +64,7 @@ module Pact
         if query && !query.empty?
           path += "?" + request['query']
         end
-        path          
+        path
       end
 
       def request_body request
@@ -73,7 +73,7 @@ module Pact
           body = JSON.dump(Pact::Reification.from_term(body))
         else
           body = ""
-        end          
+        end
       end
 
       def get_producer_state producer_state_name, consumer

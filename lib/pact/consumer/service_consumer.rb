@@ -9,6 +9,14 @@ module Pact
       def to_s
         name
       end
+
+      def as_json options = {}
+        {name: name}
+      end
+
+      def self.json_create obj
+        ServiceConsumer.new(:name => obj['name'])
+      end
     end
   end
 end

@@ -16,10 +16,12 @@ module Pact
         @pactfile_root = pactfile_root
         @interactions = {}
         @producer_state = nil
+        @consumer = nil
       end
 
       def consumer(consumer_name)
         @consumer_name = consumer_name
+        @consumer = ServiceConsumer.new(name: consumer_name)
         self
       end
 
@@ -66,7 +68,7 @@ module Pact
       private
 
       def pact
-        Pact::ConsumerContract.new(:interactions => @interactions.values)
+        Pact::ConsumerContract.new(:interactions => @interactions.values, :consumer => @consumer)
       end
 
       def filenamify name

@@ -1,14 +1,19 @@
+require 'pact/consumer/service_consumer'
+
 module Pact
 	class ConsumerContract
 
 		attr_reader :interactions
+		attr_reader :consumer
 
 		def initialize(opts)
 			@interactions = opts[:interactions]
+			@consumer = opts[:consumer]
 		end
 
 		def as_json(options = {})
 			{
+				consumer: @consumer.as_json,
 				interactions: @interactions.collect(&:as_json)
 			}
 		end
@@ -18,18 +23,19 @@ module Pact
 		end
 
 		def self.json_create(obj)
-		  new({:interactions => obj['interactions']})
+		  new({:interactions => obj['interactions'], :consumer => Pact::Consumer::ServiceConsumer.json_create(obj['consumer'] || {})})
 		end
 
 		def self.from_json string
 			deserialised_object = JSON.load(string)
-			if deserialised_object.is_a? Hash
-				ConsumerContract.new(interactions: deserialised_object['interactions'])
-			elsif deserialised_object.is_a? Array #For backwards compatiblity
-				ConsumerContract.new(interactions: deserialised_object)
-			else
-				raise "Don't know how to handle deserialized object #{deserialised_object}"
-			end
+			json_create(deserialised_object)
+			# if deserialised_object.is_a? Hash
+			# 	ConsumerContract.new(interactions: deserialised_object['interactions'])
+			# elsif deserialised_object.is_a? Array #For backwards compatiblity
+			# 	ConsumerContract.new(interactions: deserialised_object)
+			# else
+			# 	raise "Don't know how to handle deserialized object #{deserialised_object}"
+			# end
 		end
 
 		def each

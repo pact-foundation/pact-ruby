@@ -30,8 +30,11 @@ describe "the match_term matcher" do
     expect('wootle').to match_term 'wootle'
   end
 
-  it 'should not be confused by an empty hash' do
-    expect({:hello => 'everyone'}).to_not match_term({})
+  # Note: because a consumer specifies only the keys it cares about, the pact ignores keys that are returned
+  # by the producer, but not are not specified in the pact. This means that any hash will match an
+  # expected empty hash, because there is currently no way for a consumer to expect an absence of keys.
+  it 'is confused by an empty hash' do
+    expect({:hello => 'everyone'}).to match_term({})
   end
 
   it 'should not be confused by an empty array' do

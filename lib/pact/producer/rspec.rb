@@ -168,12 +168,14 @@ RSpec::Matchers.define :match_term do |expected|
 
   def match_hash actual, expected, mismatch
     if actual.is_a?(Hash)
-      if actual.keys.size != expected.keys.size
-        throw :mismatch, mismatch.merge({reason: "Expected hash to have #{expected.keys.size} keys but got #{actual.keys.size}"})
-      end
       expected.each do |key, value|
         matching? actual[key], value, "key '#{key}'", actual
       end
+
+      if expected.keys.size == 0
+        logger.warn "You have expected an empty hash - be aware that this will match any hash, empty or not."
+      end
+
     else
       throw :mismatch, mismatch.merge({reason: "Expected #{actual.class.name} to be a Hash"})
     end
@@ -181,11 +183,11 @@ RSpec::Matchers.define :match_term do |expected|
 
   def match_array actual, expected, mismatch
     if actual.is_a?(Array)
-      if actual.size != expected.size
-        throw :mismatch, mismatch.merge({reason: "Expected array length of #{actual.size} to be #{expected.size}"})
-      end
       expected.each_with_index do |value, index|
         matching? actual[index], value, "index #{index}", actual
+      end
+      if actual.size != expected.size
+        throw :mismatch, mismatch.merge({reason: "Expected array length of #{actual.size} to be #{expected.size}"})
       end
     else
       throw :mismatch, mismatch.merge({reason: "Expected #{actual.class.name} to be an Array"})

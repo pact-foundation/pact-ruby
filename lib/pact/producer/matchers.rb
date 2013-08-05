@@ -35,7 +35,7 @@ RSpec::Matchers.define :match_term do |expected|
       end
 
       if expected.keys.size == 0
-        logger.warn "You have expected an empty hash - be aware that this will match any hash, empty or not."
+        $stderr.puts "You have expected an empty hash - be aware that this will match any hash, empty or not."
       end
 
     else

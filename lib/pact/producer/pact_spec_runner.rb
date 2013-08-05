@@ -8,6 +8,8 @@ module Pact
 	module Producer
 		class PactSpecRunner
 
+			extend Pact::Producer::RSpec
+
 			def self.run(spec_definitions, options = {})
 				initialize_specs spec_definitions
 				configure_rspec options
@@ -18,10 +20,8 @@ module Pact
 
 			def self.initialize_specs spec_definitions
 				spec_definitions.each do | spec_definition |
-					describe "Pact in #{spec_definition[:uri]}" do
-						require spec_definition[:support_file] if spec_definition[:support_file]
-						honour_pactfile spec_definition[:uri], {consumer: spec_definition[:consumer]}
-					end
+					require spec_definition[:support_file] if spec_definition[:support_file]
+					honour_pactfile spec_definition[:uri], {consumer: spec_definition[:consumer]}
 				end
 			end
 

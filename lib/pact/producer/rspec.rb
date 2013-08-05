@@ -11,8 +11,10 @@ module Pact
       include Pact::JsonWarning
 
       def honour_pactfile pactfile_uri, options = {}
-        consumer_contract = Pact::ConsumerContract.from_json(read_pact_from(pactfile_uri))
-        honour_pact consumer_contract.interactions, options
+        describe "Pact in #{pactfile_uri}" do
+          consumer_contract = Pact::ConsumerContract.from_json(read_pact_from(pactfile_uri))
+          honour_pact consumer_contract.interactions, options
+        end
       end
 
       def honour_pact interactions, options = {}
@@ -100,4 +102,5 @@ end
 
 RSpec.configure do |config|
   config.extend Pact::Producer::RSpec
+  config.include Pact::Producer::TestMethods
 end

@@ -86,7 +86,3 @@ module Pact
     end
   end
 end
-
-RSpec.configure do |config|
-  config.include Pact::Producer::TestMethods
-end

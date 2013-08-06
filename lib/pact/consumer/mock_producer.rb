@@ -65,6 +65,12 @@ module Pact
         @pactfile_path ||= File.join(@pactfile_root, "#{filenamify(@consumer_name)}-#{filenamify(@service_name)}.json")
       end
 
+      def verify
+        http = Net::HTTP.new(uri.host, uri.port)
+        response = http.request_get('/verify')
+        raise response.body unless response.is_a? Net::HTTPSuccess
+      end
+
       private
 
       def pact

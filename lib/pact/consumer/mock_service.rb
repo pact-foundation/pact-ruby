@@ -25,10 +25,23 @@ module Pact
 
         def initialize
           @interactions = []
+          @matched_interactions = []
         end
 
         def add interactions
           @interactions << interactions
+        end
+
+        def register_matched interaction
+          @matched_interactions << interaction
+        end
+
+        def all_matched?
+          @interactions - @matched_interactions == []
+        end
+
+        def interaction_diffs
+          @interactions - @matched_interactions
         end
 
         def clear
@@ -171,6 +184,7 @@ module Pact
             handle_unrecognised_request(actual_request, candidates)
           else
             response = response_from(matching_interactions.first.response)
+            InteractionList.instance.register_matched matching_interactions.first
             @logger.info "Found matching response on #{@name}:"
             @logger.ap response
             response
@@ -202,6 +216,29 @@ module Pact
         end
       end
 
+      class VerificationGet
+        def initialize name, logger
+          @name = name
+          @logger = logger
+        end
+
+        def match? env
+          env['REQUEST_PATH'] == '/verify' &&
+            env['REQUEST_METHOD'] == 'GET'
+        end
+
+        def respond env
+          if InteractionList.instance.all_matched?
+            @logger.info "Interactions matched"
+            [200, {}, ['Interactions matched']]
+          else
+            @logger.warn "Actual interactions do not match expected interactions. Missing interactions:"
+            @logger.ap InteractionList.instance.interaction_diffs, :warn
+            [500, {}, ["Actual interactions do not match expected interactions"]]
+          end
+        end
+      end
+
       def initialize options = {}
         options = {log_file: STDOUT}.merge options
         @logger = Logger.new options[:log_file]
@@ -209,6 +246,7 @@ module Pact
         @handlers = [
           StartupPoll.new(@name, @logger),
           CapybaraIdentify.new(@name, @logger),
+          VerificationGet.new(@name, @logger),
           InteractionPost.new(@name, @logger),
           InteractionDelete.new(@name, @logger),
           InteractionReplay.new(@name, @logger)

@@ -42,6 +42,7 @@ module Pact::Producer
 
     pact = Pact::ConsumerContract.from_json <<-EOS
     {
+        "consumer" : { "name" : "a consumer"},
         "interactions" : [
             {
                 "description": "donut creation request",
@@ -88,6 +89,7 @@ module Pact::Producer
     context "that is a symbol" do
         consumer_contract = Pact::ConsumerContract.from_json <<-EOS
         {
+            "consumer" : { "name" : "the-wild-beast-store"},
             "interactions" : [
                 {
                     "description": "donut creation request",
@@ -105,12 +107,13 @@ module Pact::Producer
         }
         EOS
 
-        honour_pact consumer_contract, consumer: 'the-wild-beast-store'
+        honour_pact consumer_contract
     end
 
     context "that is a string" do
         consumer_contract = Pact::ConsumerContract.from_json <<-EOS
         {
+            "consumer" : { "name" : "some consumer"},
             "interactions" : [
                 {
                     "description": "donut creation request",

@@ -13,19 +13,19 @@ module Pact
       def honour_pactfile pactfile_uri, options = {}
         describe "Pact in #{pactfile_uri}" do
           consumer_contract = Pact::ConsumerContract.from_json(read_pact_from(pactfile_uri))
-          honour_pact consumer_contract.interactions, options
+          honour_pact consumer_contract, options
         end
       end
 
-      def honour_pact interactions, options = {}
+      def honour_pact consumer_contract, options = {}
         check_for_active_support_json
-        describe_interactions interactions, options
+        describe_pact consumer_contract, options.merge({:consumer => consumer_contract.consumer.name})
       end
 
       private
 
-      def describe_interactions interactions, options
-        interactions.each do |interaction|
+      def describe_pact pact, options
+        pact.interactions.each do |interaction|
           describe_interaction_with_producer_state interaction, options
         end
       end

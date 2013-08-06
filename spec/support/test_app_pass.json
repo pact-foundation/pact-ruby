@@ -1,3 +1,4 @@
 {
+  "consumer": {"name" : "some-test-consumer"},
    "interactions": [ {"description":"A test request","request":{"method":"get","path":"/weather","query":""},"response":{"status":200,"body":"sunny", "headers" : {"Content-Type": "text/plain"} }, "producer_state":"the weather is sunny"}
 ]}

@@ -40,7 +40,7 @@ module Pact
           args << request_headers(request)
         end
 
-        logger.debug "Sending #{request['method']} to #{path}"
+        logger.debug "Sending #{request['method']} with #{args}"
         self.send(request['method'], *args)
       end
 

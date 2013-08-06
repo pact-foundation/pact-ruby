@@ -234,6 +234,25 @@ module Pact
           expect(subject.match actual_request).to be_false
         end
       end
+      context "when the expected body contains non-matching hash where one field contains a substring of the other" do
+        pending do
+          let(:expected_body) do
+            {
+              name: 'Robert',
+            }
+          end
+
+          let(:actual_body) do
+            {
+              name: 'Rob'
+            }
+          end
+
+          it "does not match" do
+            expect(subject.match actual_request).to be_false
+          end
+        end
+      end
 
       context "when the expected body contains matching arrays" do
         let(:expected_body) do

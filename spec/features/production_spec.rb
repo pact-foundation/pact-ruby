@@ -76,7 +76,7 @@ module Pact::Producer
     }
     EOS
 
-    honour_pact pact
+    honour_consumer_contract pact
 
   end
 
@@ -107,7 +107,7 @@ module Pact::Producer
         }
         EOS
 
-        honour_pact consumer_contract
+        honour_consumer_contract consumer_contract
     end
 
     context "that is a string" do
@@ -131,7 +131,7 @@ module Pact::Producer
         }
         EOS
 
-        honour_pact consumer_contract
+        honour_consumer_contract consumer_contract
     end
 
   end

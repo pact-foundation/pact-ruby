@@ -56,6 +56,7 @@ module Pact
             request_headers['HTTP_' + key.to_s] = value
           end
         end
+        request_headers
       end
 
       def request_path request

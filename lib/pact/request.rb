@@ -89,7 +89,9 @@ module Pact
             end
           end
           ok
-        elsif expected.respond_to? :match
+        elsif expected.is_a?(Regexp) && actual.is_a?(String)
+          expected.match(actual.to_s)
+        elsif expected.is_a?(Pact::Term)
           !actual.nil? && expected.match(actual)
         else
           expected == actual

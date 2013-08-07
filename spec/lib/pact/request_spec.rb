@@ -291,8 +291,16 @@ module Pact
           expect(subject.match actual_request).to be_true
         end
       end
-    end
 
+      context "when a string is expected, but a number is found" do
+        let(:actual_body) { { thing: 123} }
+        let(:expected_body) { { thing: "123" } }
+
+        it 'does not match' do
+          expect(subject.match actual_request).to be_false
+        end
+      end
+    end
   end
 
   describe Request::Actual do

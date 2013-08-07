@@ -65,8 +65,9 @@ RSpec::Matchers.define :match_term do |expected|
   end
 
   def mismatch_message
-    actual = @message[:actual].nil? ? 'nil' : "\"#{@message[:actual]}\""
-    expected = @message[:expected].nil? ? 'nil' : "\"#{@message[:expected]}\""
+
+    actual = @message[:actual].nil? ? 'nil' : ( @message[:actual].is_a?(String) ? "\"#{@message[:actual]}\"" : @message[:actual])
+    expected = @message[:expected].nil? ? 'nil' : ( @message[:expected].is_a?(String) ? "\"#{@message[:expected]}\"" : @message[:expected])
     message = " Expected\n#{actual}\n to match\n#{expected}"
     message << "\n at #{@message[:desc]}" if @message[:desc]
     message << " of #{@message[:parent]}" if @message[:parent]

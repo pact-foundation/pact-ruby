@@ -41,4 +41,8 @@ describe "the match_term matcher" do
     expect(['blah']).to_not match_term([])
   end
 
+  it "should allow matches on an array where each item in the array only contains a subset of the actual" do
+    expect([{name: 'Fred', age: 12}, {name: 'John', age: 13}]).to match_term([{name: 'Fred'}, {name: 'John'}])
+  end
+
 end

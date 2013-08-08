@@ -25,6 +25,10 @@ module Pact
       generate == other.generate && matcher == other.matcher
     end
 
+    def to_s
+      "Pact::Term matcher: #{matcher.to_s}" + (generate.nil? ? "" : " generate: \"#{generate}\"")
+    end
+
     def diff_with_actual(actual)
       match(actual) ? nil : {
         expected: self,

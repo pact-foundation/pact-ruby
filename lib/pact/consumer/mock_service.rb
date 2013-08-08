@@ -3,11 +3,11 @@ require 'uri'
 require 'json'
 require 'hashie'
 require 'singleton'
-require 'core/ext/hash'
 require 'logger'
 require 'awesome_print'
 require 'awesome_print/core_ext/logger' #For some reason we get an error indicating that the method 'ap' is private unless we load this specifically
 require 'json/add/regexp'
+require 'pact/matchers'
 
 AwesomePrint.defaults = {
   :plain      => true
@@ -197,7 +197,7 @@ module Pact
           @logger.ap request_json
           @logger.ap 'Interaction diffs for that route:'
           @logger.ap(candidates.map do |candidate|
-            candidate.as_json.diff_with_actual request_json
+            diff(candidate.as_json, request_json)
           end.to_a)
           [500, {}, ['No interaction found']]
         end

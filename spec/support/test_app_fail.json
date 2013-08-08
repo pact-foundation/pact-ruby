@@ -1,4 +1,22 @@
 {
-   "consumer" : { "name": "an unknown consumer"},
-   "interactions": [{"description":"A test request","request":{"method":"get","path":"/weather","query":""},"response":{"status":200,"body":"this is not the weather you are looking for"}, "producer_state" :"the weather is cloudy"}
-]}
+    "consumer": {
+        "name": "an unknown consumer"
+    },
+    "interactions": [
+        {
+            "description": "A test request",
+            "request": {
+                "method": "get",
+                "path": "/weather",
+                "query": ""
+            },
+            "response": {
+                "status": 200,
+                "headers" : {"Content-type": "application/json"},
+                "body": {"message" : "this is not the weather you are looking for"}
+
+            },
+            "producer_state": "the weather is cloudy"
+        }
+    ]
+}

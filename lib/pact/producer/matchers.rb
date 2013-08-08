@@ -1,4 +1,5 @@
 require 'pact/term'
+require 'awesome_print'
 # TODO: Pull the matcher code out into it's own non-RSpec class
 
 RSpec::Matchers.define :match_term do |expected|
@@ -31,7 +32,7 @@ RSpec::Matchers.define :match_term do |expected|
   def match_hash actual, expected, mismatch
     if actual.is_a?(Hash)
       expected.each do |key, value|
-        matching? actual[key], value, "key '#{key}'", actual
+        matching? actual[key], value, "key \"#{key}\"", actual
       end
 
       if expected.keys.size == 0
@@ -65,13 +66,13 @@ RSpec::Matchers.define :match_term do |expected|
   end
 
   def mismatch_message
+    actual = @message[:actual].nil? ? 'nil' : ( @message[:actual].is_a?(String) ? "\"#{@message[:actual]}\"" : @message[:actual].ai)
+    expected = @message[:expected].nil? ? 'nil' : ( @message[:expected].is_a?(String) ? "\"#{@message[:expected]}\"" : @message[:expected].ai)
 
-    actual = @message[:actual].nil? ? 'nil' : ( @message[:actual].is_a?(String) ? "\"#{@message[:actual]}\"" : @message[:actual])
-    expected = @message[:expected].nil? ? 'nil' : ( @message[:expected].is_a?(String) ? "\"#{@message[:expected]}\"" : @message[:expected])
-    message = " Expected\n#{actual}\n to match\n#{expected}"
+    message = "#{@message[:reason]}\n"
+    message << "expected:\n #{expected}\ngot:\n #{actual}"
     message << "\n at #{@message[:desc]}" if @message[:desc]
-    message << " of #{@message[:parent]}" if @message[:parent]
-    message << ".\nReason: #{@message[:reason]}"
+    message << " of #{@message[:parent].ai}" if @message[:parent]
     message
   end
 

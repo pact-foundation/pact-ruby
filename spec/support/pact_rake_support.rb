@@ -5,7 +5,7 @@ module Pact
 		class TestApp
 			def call env
 				if env['PATH_INFO'] == '/weather'
-					[200, {'Content-Type' => 'text/plain'}, [WEATHER[:current_state]]]
+					[200, {'Content-Type' => 'application/json'}, [{message: WEATHER[:current_state]}.to_json]]
 				else
 					raise "unexpected path #{env['PATH_INFO']}!!!"
 				end

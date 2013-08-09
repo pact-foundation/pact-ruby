@@ -26,6 +26,60 @@ module Pact::Producer
 
 
     module ConfigurationDSL
+
+      describe ProducerDSL do
+
+        describe "initialize" do
+
+          context "with an object instead of a block" do
+            subject do
+              ProducerDSL.new do
+                name nil
+                app 'blah'
+              end
+            end
+            it "raises an error" do
+              expect{ subject }.to raise_error
+            end
+          end
+
+
+        end
+        describe "validate" do
+          context "when no name is provided" do
+            subject do
+              ProducerDSL.new do
+                app { Object.new }
+              end
+            end
+            it "raises an error" do
+              expect{ subject.validate}.to raise_error("Please provide a name for the Producer")
+            end
+          end
+          context "when nil name is provided" do
+            subject do
+              ProducerDSL.new do
+                name nil
+                app { Object.new }
+              end
+            end
+            it "raises an error" do
+              expect{ subject.validate}.to raise_error("Please provide a name for the Producer")
+            end
+          end
+          context "when no app is provided" do
+            subject do
+              ProducerDSL.new do
+                name 'Blah'
+              end
+            end
+            it "raises an error" do
+              expect{ subject.validate }.to raise_error("Please provide an app for the Producer")
+            end
+          end
+        end
+      end
+
       describe ProducerConfig do
         describe "app" do
           subject { ProducerConfig.new("blah") { Object.new } }
@@ -34,6 +88,7 @@ module Pact::Producer
           end
         end
       end
+
     end
   end
 end

@@ -1,6 +1,7 @@
 require_relative '../configuration'
 require_relative '../consumer'
 require_relative 'dsl'
+require_relative 'configuration_dsl'
 
 module Pact
   module Consumer

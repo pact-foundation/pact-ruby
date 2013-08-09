@@ -3,6 +3,7 @@ require 'pact/consumer_contract'
 require 'pact/json_warning'
 require_relative 'matchers'
 require_relative 'test_methods'
+require_relative 'configuration_dsl'
 
 module Pact
   module Producer
@@ -42,7 +43,15 @@ module Pact
 
       def describe_interaction interaction, options
 
-        describe description_for(interaction)  do
+        describe description_for(interaction) do
+
+          #Allow old way of configuring app for a while
+          unless ::RSpec.configuration.include_or_extend_modules.collect{ | m| m[1] }.any?{|m| (m.instance_methods).include?(:app) }
+            def app
+              Pact::configuration.producer.app
+            end
+          end
+
           before do
             set_up_producer_state interaction['producer_state'], options[:consumer]
             replay_interaction interaction

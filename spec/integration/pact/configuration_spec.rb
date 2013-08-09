@@ -12,18 +12,19 @@ describe "configure" do
       config.consumer do
         name "My Consumer"
       end
-
-      config.producer :my_other_service do
-        port 1235
-        name "My Other Service"
-        standalone false
-      end
     end
 
     Pact.with_producer "My Service" do
       service :my_service do
         port 1234
         standalone true
+      end
+    end
+
+    Pact.with_producer "My Other Service" do
+      service :my_other_service do
+        port 1235
+        standalone false
       end
     end
   end

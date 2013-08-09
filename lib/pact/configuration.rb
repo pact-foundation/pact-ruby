@@ -1,6 +1,5 @@
 require 'ostruct'
 require 'logger'
-require 'pact/consumer/configuration_dsl'
 
 module Pact
 
@@ -8,8 +7,6 @@ module Pact
     attr_accessor :pact_dir
     attr_accessor :log_dir
     attr_accessor :logger
-
-    include Pact::Consumer::ConfigurationDSL
   end
 
   def self.configuration

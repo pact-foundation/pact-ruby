@@ -10,21 +10,23 @@ describe "A service consumer side of a pact", :pact => true  do
 
     Pact.configure do | config |
       config.consumer do
-        name "consumer"
+        name "Consumer"
       end
+    end
 
-      config.producer :alice_service do
-        name "Alice"
+    Pact.with_producer "Alice" do
+      service :alice_service do
         port 1234
       end
+    end
 
-      config.producer :bob_service do
-        name "Bob"
+    Pact.with_producer "Bob" do
+      service :bob_service do
         port 4321
       end
     end
 
-    alice_service. 
+    alice_service.
       upon_receiving("a retrieve Mallory request").with({
       method: :get,
       path: '/mallory'

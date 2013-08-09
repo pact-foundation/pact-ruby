@@ -12,15 +12,13 @@ module Pact
 			end
 		end
 
-		module PactSpecHelper
-			def app
-			  TestApp.new
+		Pact.configure do | config |
+			config.producer do
+				name "Some Producer"
+				app { TestApp.new }
 			end
 		end
 
-		RSpec.configure do |config|
-			config.include PactSpecHelper
-		end
 
 		#one with a top level consumer
 		Pact.with_consumer 'some-test-consumer' do

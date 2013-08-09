@@ -103,17 +103,15 @@ Pact.configure do | config |
 
 ### Producer project
 
-#### Make the producer app available for the tests
+#### Configure your producer rack app
 
 ```ruby
-module AppUnderTest
-  def app
-    # Make your app available as a rack app here
-  end
-end
 
-RSpec.configure do |config|
-  config.include AppUnderTest
+Pact.configure do | config |
+  config.producer do
+    name "My Producer"
+    app { MyApp.new }
+  end
 end
 
 ```

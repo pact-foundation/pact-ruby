@@ -2,6 +2,7 @@ require 'pact/producer/rspec'
 require 'pact/consumer_contract'
 require 'features/producer_states/zebras'
 
+
 module Pact::Producer
 
   describe "A service production side of a pact" do
@@ -34,10 +35,6 @@ module Pact::Producer
         end
       end
 
-    end
-
-    def app
-      ServiceUnderTest.new
     end
 
     pact = Pact::ConsumerContract.from_json <<-EOS
@@ -76,15 +73,20 @@ module Pact::Producer
     }
     EOS
 
+    before do
+        Pact.configure do |config|
+            config.producer do
+                name "My Producer"
+                app { ServiceUnderTest.new }
+            end
+        end
+    end
+
     honour_consumer_contract pact
 
   end
 
   describe "with a producer_state" do
-
-    def app
-        ServiceUnderTestWithFixture.new
-    end
 
     context "that is a symbol" do
         consumer_contract = Pact::ConsumerContract.from_json <<-EOS
@@ -106,6 +108,16 @@ module Pact::Producer
             ]
         }
         EOS
+
+        before do
+            Pact.configure do |config|
+                config.producer do
+                    name "My Producer"
+                    app { ServiceUnderTestWithFixture.new }
+                end
+            end
+        end
+
 
         honour_consumer_contract consumer_contract
     end
@@ -130,6 +142,16 @@ module Pact::Producer
             ]
         }
         EOS
+
+        before do
+            Pact.configure do |config|
+                config.producer do
+                    name "ServiceUnderTestWithFixture"
+                    app { ServiceUnderTestWithFixture.new }
+                end
+            end
+        end
+
 
         honour_consumer_contract consumer_contract
     end

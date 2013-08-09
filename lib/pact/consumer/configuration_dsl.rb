@@ -1,18 +1,10 @@
 require_relative 'service_consumer'
 require_relative 'mock_producers'
+require_relative '../configuration'
 
 module Pact
   module Consumer
     module ConfigurationDSL
-
-      def producer identifier, &block
-        mock_producer = ProducerDSL.new(identifier, &block).create_mock_producer
-        producers << mock_producer
-      end
-
-      def producers
-        @producers ||= []
-      end
 
       def consumer &block
         if block_given?
@@ -118,3 +110,5 @@ module Pact
     end
   end
 end
+
+Pact::Configuration.send(:include, Pact::Consumer::ConfigurationDSL)

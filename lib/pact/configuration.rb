@@ -10,7 +10,7 @@ module Pact
   end
 
   def self.configuration
-    @@configuration ||= default_configuration
+    @configuration ||= default_configuration
   end
 
   def self.configure
@@ -18,7 +18,7 @@ module Pact
   end
 
   def self.clear_configuration
-    @@configuration = default_configuration
+    @configuration = default_configuration
   end
 
   private

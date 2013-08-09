@@ -124,6 +124,7 @@ module Pact
       end
 
       class InteractionReplay
+        include Pact::Matchers
 
         def initialize name, logger
           @name = name
@@ -196,10 +197,12 @@ module Pact
           request_json = request.as_json
           @logger.ap request_json
           @logger.ap 'Interaction diffs for that route:'
-          @logger.ap(candidates.map do |candidate|
+          interaction_diff = candidates.map do |candidate|
             diff(candidate.as_json, request_json)
-          end.to_a)
-          [500, {}, ['No interaction found']]
+          end.to_a
+          @logger.ap(interaction_diff)
+          response = {message: "No interaction found for #{request.path}", interaction_diff:  interaction_diff}
+          [500, {'Content-Type' => 'application/json'}, [response.to_json]]
         end
 
         def response_from response

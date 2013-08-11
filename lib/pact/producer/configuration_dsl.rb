@@ -12,7 +12,7 @@ module Pact
         elsif @producer
           @producer
         else
-          raise "Please configure a producer"
+          raise "Please configure your producer. See the Producer section in the README for examples."
         end
       end
 
@@ -39,7 +39,7 @@ module Pact
 
         def validate
           raise "Please provide a name for the Producer" unless @name
-          raise "Please provide an app for the Producer" unless @app_block
+          raise "Please configure an app for the Producer" unless @app_block
         end
 
         def name name

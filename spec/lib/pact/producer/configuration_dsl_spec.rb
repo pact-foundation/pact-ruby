@@ -10,17 +10,24 @@ module Pact::Producer
 
     describe "producer" do
       let(:mock_config) { MockConfig.new }
-      before do
-        mock_config.producer do
-          name "Fred"
-          app { "An app" }
+      context "when a producer is configured" do
+        before do
+          mock_config.producer do
+            name "Fred"
+            app { "An app" }
+          end
+        end
+        it "should allow configuration of the name" do
+          expect(mock_config.producer.name).to eql "Fred"
+        end
+        it "should allow configuration of the test app" do
+          expect(mock_config.producer.app).to eql "An app"
         end
       end
-      it "should allow configuration of the name" do
-        expect(mock_config.producer.name).to eql "Fred"
-      end
-      it "should allow configuration of the test app" do
-        expect(mock_config.producer.app).to eql "An app"
+      context "when a producer is not configured" do
+        it "raises an error" do
+          expect{ mock_config.producer }.to raise_error(/Please configure your producer/)
+        end
       end
     end
 
@@ -74,7 +81,7 @@ module Pact::Producer
               end
             end
             it "raises an error" do
-              expect{ subject.validate }.to raise_error("Please provide an app for the Producer")
+              expect{ subject.validate }.to raise_error("Please configure an app for the Producer")
             end
           end
         end

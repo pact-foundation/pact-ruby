@@ -1,6 +1,8 @@
 require 'spec_helper'
 require 'pact/configuration'
 require 'pact/consumer/dsl'
+require 'pact/consumer/configuration_dsl'
+require 'pact/producer/configuration_dsl'
 
 describe "configure" do
 
@@ -26,6 +28,12 @@ describe "configure" do
         port 1235
         standalone false
       end
+    end
+  end
+
+  describe "configuration" do
+    it "should return the same configuration object each time" do
+      expect(Pact.configuration).to equal(Pact.configuration)
     end
   end
 

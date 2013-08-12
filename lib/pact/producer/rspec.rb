@@ -21,7 +21,7 @@ module Pact
 
         def honour_pactfile pactfile_uri, options = {}
           describe "Pact in #{pactfile_uri}" do
-            consumer_contract = Pact::ConsumerContract.from_json(read_pact_from(pactfile_uri))
+            consumer_contract = Pact::ConsumerContract.from_json(read_pact_from(pactfile_uri, options))
             honour_consumer_contract consumer_contract, options
           end
         end
@@ -98,12 +98,20 @@ module Pact
           "#{interaction['description']} to #{interaction['request']['path']}"
         end
 
-        def read_pact_from uri
-          open(uri) { | file | file.read }
+        def read_pact_from uri, options = {}
+          pact = open(uri) { | file | file.read }
+          if options[:save_pactfile_to_tmp]
+            save_pactfile_to_tmp pact, File.basename(uri)
+          end
+          pact
         rescue StandardError => e
           $stderr.puts "Error reading file from #{uri}"
           $stderr.puts "#{e.to_s} #{e.backtrace.join("\n")}"
           raise e
+        end
+
+        def save_pactfile_to_tmp pact, name
+          File.open(Pact.configuration.tmp_dir + "/#{name}", "w") { |file|  file << pact}
         end
 
       end

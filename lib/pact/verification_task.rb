@@ -39,7 +39,13 @@ module Pact
 	      desc "Verify producer against the consumer pacts for #{name}"
 	      task "verify:#{name}" do
 	        exit_status = Producer::PactSpecRunner.run(pact_spec_config)
-	        fail "Did not match" if exit_status != 0
+	        fail failure_message if exit_status != 0
+	      end
+
+	      def failure_message
+	      	"\n* * * * * * * * * * * * * * * * * * *\n" +
+	      	"Producer did not honour pact file.\nSee\n * #{Pact.configuration.log_path}\n * #{Pact.configuration.tmp_dir}\nfor logs and pact files." +
+	      	"\n* * * * * * * * * * * * * * * * * * *\n\n"
 	      end
 	    end
 	  end

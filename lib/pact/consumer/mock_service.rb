@@ -193,9 +193,7 @@ module Pact
         end
 
         def handle_unrecognised_request request, candidates
-          @logger.ap "No interaction found on #{@name} for request: "
-          request_json = request.as_json
-          @logger.ap request_json
+          @logger.ap "No interaction found on #{@name} for request"
           @logger.ap 'Interaction diffs for that route:'
           interaction_diff = candidates.map do |candidate|
             diff(candidate.as_json, request_json)

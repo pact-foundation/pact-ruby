@@ -21,7 +21,8 @@ module Pact
 			def self.initialize_specs spec_definitions
 				spec_definitions.each do | spec_definition |
 					require spec_definition[:support_file] if spec_definition[:support_file]
-					honour_pactfile spec_definition[:uri], {consumer: spec_definition[:consumer]}
+					options = {consumer: spec_definition[:consumer], save_pactfile_to_tmp: true}
+					honour_pactfile spec_definition[:uri], options
 				end
 			end
 

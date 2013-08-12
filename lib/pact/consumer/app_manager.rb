@@ -67,7 +67,7 @@ module Pact
 
       def create_log_file service_name
         FileUtils::mkdir_p Pact.configuration.log_dir
-        log = File.open(Pact.configuration.log_dir + "/#{service_name}_pact_creation.log", 'w')
+        log = File.open(Pact.configuration.log_dir + "/#{service_name} pact creation.log", 'w')
         log.sync = true
         log
       end

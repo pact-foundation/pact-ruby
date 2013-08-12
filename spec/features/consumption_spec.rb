@@ -96,9 +96,24 @@ describe "A service consumer side of a pact", :pact => true  do
   end
 
   context "with a producer state" do
+    before do
+      Pact.clear_configuration
+
+      Pact.configure do | config |
+        config.consumer do
+          name "Consumer"
+        end
+      end
+
+      Pact.with_producer "Alice" do
+        service :alice_service do
+          port 1235
+        end
+      end
+    end
+
     it "goes like this" do
-      alice_service = consumer('consumer').assuming_a_service('Alice').
-        on_port(1235).
+      alice_service.
         given(:the_zebras_are_here).
         upon_receiving("a retrieve Mallory request").with({
           method: :get,

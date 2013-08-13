@@ -1,18 +1,22 @@
 require 'pact/consumer/service_consumer'
+require 'pact/consumer/service_producer'
 
 module Pact
 	class ConsumerContract
 
 		attr_reader :interactions
 		attr_reader :consumer
+		attr_reader :producer
 
 		def initialize(opts)
 			@interactions = opts[:interactions]
 			@consumer = opts[:consumer]
+			@producer = opts[:producer]
 		end
 
 		def as_json(options = {})
 			{
+				producer: @producer.as_json,
 				consumer: @consumer.as_json,
 				interactions: @interactions.collect(&:as_json)
 			}
@@ -25,7 +29,8 @@ module Pact
 		def self.json_create(obj)
 		  new({
 		  	:interactions => obj['interactions'],
-		  	:consumer => Pact::Consumer::ServiceConsumer.json_create(obj['consumer'])
+		  	:consumer => Pact::Consumer::ServiceConsumer.json_create(obj['consumer']),
+		  	:producer => Pact::Consumer::ServiceProducer.json_create(obj['producer'] || {})
 		  })
 		end
 
@@ -37,9 +42,9 @@ module Pact
 		def find_interaction criteria
 			interactions = find_interactions criteria
 			if interactions.size == 0
-				raise "Could not find interaction matching #{criteria} in pact file with #{@consumer.name}."
+				raise "Could not find interaction matching #{criteria} in pact file between #{consumer.name} and #{producer.name}."
 			elsif interactions.size > 1
-				raise "Found more than 1 interaction matching #{criteria} in pact file with #{@consumer.name}."
+				raise "Found more than 1 interaction matching #{criteria} in pact file between #{consumer.name} and #{producer.name}."
 			end
 			interactions.first
 		end

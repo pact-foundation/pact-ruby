@@ -17,6 +17,7 @@ module Pact
         @interactions = {}
         @producer_state = nil
         @consumer = nil
+        @producer = nil
       end
 
       def consumer(consumer_name)
@@ -27,6 +28,7 @@ module Pact
 
       def assuming_a_service(service_name)
         @service_name = service_name
+        @producer = ServiceProducer.new(name: service_name)
         self
       end
 
@@ -74,7 +76,7 @@ module Pact
       private
 
       def pact
-        Pact::ConsumerContract.new(:interactions => @interactions.values, :consumer => @consumer)
+        Pact::ConsumerContract.new(:interactions => @interactions.values, :consumer => @consumer, :producer => @producer)
       end
 
       def filenamify name

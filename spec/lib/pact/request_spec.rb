@@ -20,7 +20,7 @@ shared_examples "a request" do
     its(:method) { should == 'get' }
     its(:path) { should == '/mallory' }
     its(:body) { should == 'hello mallory' }
-    its(:query) { should == nil }
+    its(:query) { should eq Pact::Request::NullExpectation.new }
 
     it "blows up if method is absent" do
       raw_request.delete 'method'
@@ -105,6 +105,15 @@ module Pact
 
       context "when the expected body is nil and the actual body is empty" do
         let(:expected_body) { nil }
+        let(:actual_body) { '' }
+
+        it "does not match" do
+          expect(subject.match actual_request).to be_false
+        end
+      end
+
+      context "when the expected body has no expectation and the actual body is empty" do
+        let(:expected_body) { Request::NullExpectation.new }
         let(:actual_body) { '' }
 
         it "matches" do
@@ -283,8 +292,8 @@ module Pact
         end
       end
 
-      context 'when there is no query' do
-        let(:expected_query) { nil }
+      context 'when there is no query expectation' do
+        let(:expected_query) { Request::NullExpectation.new }
         let(:actual_query) { 'bar' }
 
         it 'matches' do

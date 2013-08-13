@@ -1,7 +1,36 @@
+require 'pact/matchers'
+
 module Pact
+
   module Request
 
+    class NullExpectation
+      def to_s
+        "<No expectation>"
+      end
+
+      def ==(other_object)
+       other_object.is_a? NullExpectation
+      end
+
+      def ===(other_object)
+       other_object.is_a? NullExpectation
+      end
+
+      def eql?(other_object)
+        self == other_object
+      end
+
+      def hash
+        2934820948209428748274238642672
+      end
+    end
+
     class Base
+    include Pact::Matchers
+    extend Pact::Matchers
+
+    NULL_EXPECTATION = NullExpectation.new
 
       attr_reader :method, :path, :headers, :body, :query
 
@@ -9,9 +38,9 @@ module Pact
         sym_hash = hash.inject({}) { |memo, (k,v)| memo[k.to_sym] = v; memo }
         method = sym_hash.fetch(:method)
         path = sym_hash.fetch(:path)
-        query = sym_hash.fetch(:query, nil)
-        headers = sym_hash.fetch(:headers, nil)
-        body = sym_hash.fetch(:body, nil)
+        query = sym_hash.fetch(:query, NULL_EXPECTATION)
+        headers = sym_hash.fetch(:headers, NULL_EXPECTATION)
+        body = sym_hash.fetch(:body, NULL_EXPECTATION)
         new(method, path, headers, body, query)
       end
 
@@ -21,14 +50,6 @@ module Pact
         @headers = headers
         @body = body
         @query = query
-      end
-
-      def empty_body?
-        if body.nil? || body == ''
-          true
-        else
-          false
-        end
       end
 
       def to_json(options = {})
@@ -41,9 +62,9 @@ module Pact
           path: path,
         }
 
-        base_json.merge!(body: body) if body
-        base_json.merge!(headers: headers) if headers
-        base_json.merge!(query: query)
+        base_json.merge!(body: body) unless body.is_a? NullExpectation
+        base_json.merge!(headers: headers) unless headers.is_a? NullExpectation
+        base_json.merge!(query: query) unless query.is_a? NullExpectation
         base_json
       end
 
@@ -52,50 +73,15 @@ module Pact
     class Expected < Base
 
       def match(actual_request)
-        matches_route?(actual_request) && matches_query?(actual_request) && matches_body?(actual_request)
+        difference(actual_request).empty?
       end
 
-      def matches_route?(actual_request)
-        (method == actual_request.method) && (path == actual_request.path)
+      def matches_route? actual_request
+        diff({:method => method, :path => path}, {:method => actual_request.method, :path => actual_request.path}).empty?
       end
 
-      def matches_query?(actual_request)
-        query == actual_request.query || query.nil?
-      end
-
-      private
-
-      def matches_body?(actual_request)
-        return true if empty_body? && actual_request.empty_body?
-        return false if actual_request.empty_body?
-        recursively_matches?(body, actual_request.body)
-      end
-
-      def recursively_matches?(expected, actual)
-        if expected.respond_to? :to_hash
-          ok = false
-          if actual.respond_to? :to_hash
-            ok = expected.to_hash.all? do |key, value|
-              recursively_matches?(value, actual[key])
-            end
-          end
-          ok
-        elsif expected.respond_to? :to_a
-          ok = false
-          if actual.respond_to? :to_a
-            ok = true
-            expected.to_a.each_with_index do |value, key|
-              ok = false unless recursively_matches?(value, actual[key])
-            end
-          end
-          ok
-        elsif expected.is_a?(Regexp) && actual.is_a?(String)
-          expected.match(actual.to_s)
-        elsif expected.is_a?(Pact::Term)
-          !actual.nil? && expected.match(actual)
-        else
-          expected == actual
-        end
+      def difference(actual_request)
+        diff(as_json, actual_request.as_json)
       end
 
     end

@@ -14,7 +14,7 @@ describe "A service consumer side of a pact", :pact => true  do
       end
     end
 
-    Pact.with_producer "Alice" do
+    Pact.with_producer "Alice Service" do
       service :alice_service do
         port 1234
       end
@@ -29,6 +29,7 @@ describe "A service consumer side of a pact", :pact => true  do
     alice_service.
       upon_receiving("a retrieve Mallory request").with({
       method: :get,
+      headers: {'Accept' => 'text/html'},
       path: '/mallory'
     }).
       will_respond_with({
@@ -43,7 +44,8 @@ describe "A service consumer side of a pact", :pact => true  do
       path: '/donuts',
       body: {
         "name" => Pact::Term.new(matcher: /Bob/)
-      }
+      },
+      headers: {'Accept' => 'text/plain', "Content-Type" => 'application/json'}
     }).
       will_respond_with({
       status: 201,
@@ -76,6 +78,8 @@ describe "A service consumer side of a pact", :pact => true  do
 
     uri = URI('http://localhost:4321/donuts')
     post_req = Net::HTTP::Post.new(uri.path)
+    post_req['Accept'] = "text/plain"
+    post_req['Content-Type'] = "application/json"
     post_req.body = {"name" => "Bobby"}.to_json
     bob_post_response = Net::HTTP.start(uri.hostname, uri.port) do |http|
       http.request post_req
@@ -86,6 +90,7 @@ describe "A service consumer side of a pact", :pact => true  do
 
     uri = URI('http://localhost:4321/alligators')
     post_req = Net::HTTP::Put.new(uri.path)
+    post_req['Content-Type'] = "application/json"
     post_req.body = [{"name" => "Roger"}].to_json
     bob_post_response = Net::HTTP.start(uri.hostname, uri.port) do |http|
       http.request post_req
@@ -93,6 +98,7 @@ describe "A service consumer side of a pact", :pact => true  do
 
     expect(bob_post_response.code).to eql '200'
     expect(bob_post_response.body).to eql([{"name" => "Roger", "age" => 20}].to_json)
+    sleep 1
   end
 
   context "with a producer state" do
@@ -105,19 +111,20 @@ describe "A service consumer side of a pact", :pact => true  do
         end
       end
 
-      Pact.with_producer "Alice" do
-        service :alice_service do
+      Pact.with_producer "Zebra Service" do
+        service :zebra_service do
           port 1235
         end
       end
     end
 
     it "goes like this" do
-      alice_service.
+      zebra_service.
         given(:the_zebras_are_here).
         upon_receiving("a retrieve Mallory request").with({
           method: :get,
-          path: '/mallory'
+          path: '/mallory',
+          headers: {'Accept' => 'text/html'}
         }).
         will_respond_with({
           status: 200,
@@ -125,8 +132,9 @@ describe "A service consumer side of a pact", :pact => true  do
           body: Pact::Term.new(matcher: /Mallory/, generate: 'That is some good Mallory.')
         })
 
-        interactions = Pact::ConsumerContract.from_json(File.read(alice_service.pactfile_path)).interactions
+        interactions = Pact::ConsumerContract.from_json(File.read(zebra_service.pactfile_path)).interactions
         interactions.first['producer_state'].should eq("the_zebras_are_here")
+        sleep 1
     end
   end
 

@@ -37,9 +37,9 @@ module Pact
 		def find_interaction criteria
 			interactions = find_interactions criteria
 			if interactions.size == 0
-				raise "Could not find interaction matching #{criteria} in pact file."
+				raise "Could not find interaction matching #{criteria} in pact file with #{@consumer.name}."
 			elsif interactions.size > 1
-				raise "Found more than 1 interaction matching #{criteria} in pact file."
+				raise "Found more than 1 interaction matching #{criteria} in pact file with #{@consumer.name}."
 			end
 			interactions.first
 		end

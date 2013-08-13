@@ -40,9 +40,10 @@ module Pact
     end
 
     describe "find_interactions" do
+      let(:consumer) { double('ServiceConsumer', :name => 'Consumer')}
       let(:interaction1) { {'description' => 'a request for food'} }
       let(:interaction2) { {'description' => 'a request for drink'} }
-      subject { ConsumerContract.new(:interactions => [interaction1, interaction2]) }
+      subject { ConsumerContract.new(:interactions => [interaction1, interaction2], :consumer => consumer) }
       context "by description" do
         context "when no interactions are found" do
           it "returns an empty array" do
@@ -53,13 +54,14 @@ module Pact
           it "returns an array of the matching interactions" do
             expect(subject.find_interactions(:description => /request/)).to eql [interaction1, interaction2]
           end
-        end        
+        end
       end
     end
     describe "find_interaction" do
+      let(:consumer) { double('ServiceConsumer', :name => 'Consumer')}
       let(:interaction1) { {'description' => 'a request for food'} }
       let(:interaction2) { {'description' => 'a request for drink'} }
-      subject { ConsumerContract.new(:interactions => [interaction1, interaction2]) }
+      subject { ConsumerContract.new(:interactions => [interaction1, interaction2], :consumer => consumer) }
       context "by description" do
         context "when a match is found" do
           it "returns the interaction" do
@@ -68,12 +70,12 @@ module Pact
         end
         context "when more than one match is found" do
           it "raises an error" do
-            expect{ subject.find_interaction(:description => /request/) }.to raise_error "Found more than 1 interaction matching {:description=>/request/} in pact file."
+            expect{ subject.find_interaction(:description => /request/) }.to raise_error "Found more than 1 interaction matching {:description=>/request/} in pact file with Consumer."
           end
         end
         context "when a match is not found" do
           it "raises an error" do
-            expect{ subject.find_interaction(:description => /blah/) }.to raise_error "Could not find interaction matching {:description=>/blah/} in pact file."
+            expect{ subject.find_interaction(:description => /blah/) }.to raise_error "Could not find interaction matching {:description=>/blah/} in pact file with Consumer."
           end
         end
       end

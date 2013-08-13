@@ -196,7 +196,7 @@ module Pact
           @logger.ap "No interaction found on #{@name} for request"
           @logger.ap 'Interaction diffs for that route:'
           interaction_diff = candidates.map do |candidate|
-            diff(candidate.as_json, request_json)
+            diff(candidate.as_json, request.as_json)
           end.to_a
           @logger.ap(interaction_diff)
           response = {message: "No interaction found for #{request.path}", interaction_diff:  interaction_diff}

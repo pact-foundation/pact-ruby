@@ -2,6 +2,72 @@ require 'spec_helper'
 require 'pact/consumer/mock_service'
 
 module Pact::Consumer
+
+  describe InteractionList do
+    before do
+      InteractionList.instance.clear
+    end
+
+    shared_context "unexpected requests and missed interactions" do
+      let(:expected_call) { {request: 'blah'} }
+      let(:unexpected_call) { {request: 'meh'} }
+      subject { 
+        interactionList = InteractionList.instance
+        interactionList.add expected_call
+        interactionList.register_unexpected unexpected_call
+        interactionList
+       }
+    end
+
+    shared_context "no unexpected requests or missed interactions exist" do
+      let(:expected_call) { {request: 'blah'} }
+      let(:unexpected_call) { {request: 'meh'} }
+      subject { 
+        interactionList = InteractionList.instance
+        interactionList.add expected_call
+        interactionList.register_matched expected_call
+        interactionList
+       }      
+    end
+
+    describe "interaction_diffs" do
+      context "when unexpected requests and missed interactions exist" do
+        include_context "unexpected requests and missed interactions"
+        let(:expected) {
+          {:missing_interactions=>[{:request=>"blah"}], :unexpected_requests=>[{:request=>"meh"}]}
+        }
+        it "returns the unexpected requests and missed interactions" do
+          expect(subject.interaction_diffs).to eq expected
+        end
+      end
+
+      context "when no unexpected requests or missed interactions exist" do
+        include_context "no unexpected requests or missed interactions exist"
+        let(:expected) {
+          {}
+        }        
+        it "returns an empty hash" do
+          expect(subject.interaction_diffs).to eq expected
+        end
+      end
+    end
+
+    describe "all_matched?" do
+      context "when unexpected requests or missed interactions exist" do
+        include_context "unexpected requests and missed interactions"
+        it "returns false" do
+          expect(subject.all_matched?).to be_false
+        end
+      end
+      context "when unexpected requests or missed interactions do not exist" do
+        include_context "no unexpected requests or missed interactions exist"
+        it "returns false" do
+          expect(subject.all_matched?).to be_true
+        end
+      end      
+    end
+  end
+
   describe RequestExtractor do
     class TestSubject
       include RequestExtractor

@@ -15,14 +15,14 @@ describe "A service consumer side of a pact", :pact => true  do
     end
 
     Pact.with_producer "Alice Service" do
-      service :alice_service do
+      mock_service :alice_service do
         verify true
         port 1234
       end
     end
 
     Pact.with_producer "Bob" do
-      service :bob_service do
+      mock_service :bob_service do
         verify false
         port 4321
       end
@@ -114,7 +114,7 @@ describe "A service consumer side of a pact", :pact => true  do
       end
 
       Pact.with_producer "Zebra Service" do
-        service :zebra_service do
+        mock_service :zebra_service do
           verify false
           port 1235
         end

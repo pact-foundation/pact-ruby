@@ -17,14 +17,14 @@ describe "configure" do
     end
 
     Pact.with_producer "My Service" do
-      service :my_service do
+      mock_service :my_service do
         port 1234
         standalone true
       end
     end
 
     Pact.with_producer "My Other Service" do
-      service :my_other_service do
+      mock_service :my_other_service do
         port 1235
         standalone false
       end

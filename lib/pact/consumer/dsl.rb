@@ -17,6 +17,8 @@ module Pact::Consumer
             @service = Service.new(name, &block)
          end
 
+         alias_method :mock_service, :service
+
         def create_mock_producer
           validate
           mock_producer_from_attributes

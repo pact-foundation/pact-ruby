@@ -53,7 +53,7 @@ end
 # will be what ever name you give as the service argument - in this case "my_producer"
 
 Pact.with_producer "My Producer" do
-  service :my_producer do
+  mock_service :my_producer do
     port 1234
   end
 end

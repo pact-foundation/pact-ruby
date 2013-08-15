@@ -10,7 +10,9 @@ require 'json/add/regexp'
 require 'pact/matchers'
 
 AwesomePrint.defaults = {
-  :plain      => true
+  indent: -2,
+  plain: true,
+  index: false
 }
 
 module Pact

@@ -22,10 +22,17 @@ module Pact
       include Singleton
 
       attr_reader :interactions
+      attr_reader :unexpected_requests
 
       def initialize
+        clear
+      end
+
+      # For testing, sigh
+      def clear
         @interactions = []
         @matched_interactions = []
+        @unexpected_requests = []        
       end
 
       def add interactions
@@ -36,17 +43,28 @@ module Pact
         @matched_interactions << interaction
       end
 
-      def all_matched?
-        @interactions - @matched_interactions == []
+      def register_unexpected request
+        @unexpected_requests << request
       end
 
-      def interaction_diffs
+      def all_matched?
+        interaction_diffs.empty?
+      end
+
+      def missing_interactions
         @interactions - @matched_interactions
       end
 
-      def clear
-        @interactions.clear
+      def interaction_diffs
+        { 
+          :missing_interactions => missing_interactions,
+          :unexpected_requests => unexpected_requests
+        }.inject({}) do | hash, pair |
+          hash[pair.first] = pair.last if pair.last.any?
+          hash
+        end
       end
+
     end
 
     class StartupPoll

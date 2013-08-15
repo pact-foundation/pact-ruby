@@ -1,7 +1,7 @@
 PATH
   remote: .
   specs:
-    pact (0.1.22)
+    pact (0.1.23)
       awesome_print (~> 1.1.0)
       capybara (~> 2.1.0)
       find_a_port (~> 1.0.1)

@@ -123,12 +123,18 @@ module Pact
         # following stolen from https://github.com/jwilger/kookaburra
         logger.info "Starting app #{self}..."
         self.pid = fork do
-          Capybara.server_port = port
-          Capybara::Server.new(app).boot
+          begin
+            Capybara.server_port = port
+            Capybara::Server.new(app).boot
 
-          # This ensures that this forked process keeps running, because the
-          # actual server is started in a thread by Capybara.
-          ThreadsWait.all_waits(Thread.list)
+            # This ensures that this forked process keeps running, because the
+            # actual server is started in a thread by Capybara.
+            ThreadsWait.all_waits(Thread.list)
+          rescue Exception => e
+            logger.error "Error starting up #{self}"
+            $stderr.puts "Error starting up #{self}"
+            raise e
+          end
         end
 
 

@@ -67,9 +67,22 @@ module Pact
 
       def create_log_file service_name
         FileUtils::mkdir_p Pact.configuration.log_dir
-        log = File.open(Pact.configuration.log_dir + "/#{service_name.downcase.gsub(/\s+/, '_')}_pact_creation.log", 'w')
+        log = File.open(log_file_path(service_name), 'w')
         log.sync = true
         log
+      end
+
+      def log_file_path service_name
+        File.join(Pact.configuration.log_dir, "#{log_file_name(service_name)}.log")
+      end
+
+      def log_file_name service_name
+        lower_case_name = service_name.downcase.gsub(/\s+/, '_')
+        if lower_case_name.include?('_service')
+          lower_case_name.gsub('_service', '_mock_service')
+        else
+          lower_case_name + '_mock_service'
+        end        
       end
 
       def app_registrations

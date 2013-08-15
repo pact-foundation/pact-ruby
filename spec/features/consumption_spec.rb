@@ -29,7 +29,6 @@ describe "A service consumer side of a pact", :pact => true  do
     alice_service.
       upon_receiving("a retrieve Mallory request").with({
       method: :get,
-      headers: {'Accept' => 'text/html'},
       path: '/mallory'
     }).
       will_respond_with({

@@ -1,5 +1,6 @@
 require 'pact/consumer/service_consumer'
 require 'pact/consumer/service_producer'
+require 'date'
 
 module Pact
 	class ConsumerContract
@@ -18,7 +19,13 @@ module Pact
 			{
 				producer: @producer.as_json,
 				consumer: @consumer.as_json,
-				interactions: @interactions.collect(&:as_json)
+				interactions: @interactions.collect(&:as_json),
+				metadata: {
+					date: DateTime.now.to_s,
+					pact_gem: {
+						version: Pact::VERSION
+					}
+				}
 			}
 		end
 

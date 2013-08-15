@@ -267,12 +267,12 @@ module Pact
 
       def respond env
         if InteractionList.instance.all_matched?
-          @logger.info "Veryifying - interactions matched"
+          @logger.info "Veryifying - interactions matched on #{@name}"
           [200, {}, ['Interactions matched']]
         else
           @logger.warn "Verifying - actual interactions do not match expected interactions. Missing interactions:"
           @logger.ap InteractionList.instance.interaction_diffs, :warn
-          [500, {}, ["Actual interactions do not match expected interactions"]]
+          [500, {}, ["Actual interactions do not match expected interactions on #{@name}. See logs for details."]]
         end
       end
     end

@@ -31,6 +31,12 @@ RSpec.configure do |config|
     end
   end
 
+  config.after :each, :pact => true do
+    Pact.configuration.producer_verifications.each do | producer_verification |
+      producer_verification.call
+    end
+  end
+
   config.after :suite do
     Pact.configuration.logger.info "After suite"
     Pact::Consumer::AppManager.instance.kill_all

@@ -39,6 +39,7 @@ module Pact::Consumer
             @name = name
             @port = nil
             @standalone = false
+            @verify = false            
             instance_eval(&block)
          end
 
@@ -50,12 +51,23 @@ module Pact::Consumer
             @standalone = standalone
          end
 
+         def verify verify
+            @verify = verify
+         end         
+
          def configure_mock_producer mock_producer
             validate
             mock_producer.on_port(@port, standalone: @standalone)
             create_mock_services_module_method mock_producer
+            setup_verification(mock_producer) if @verify
             mock_producer
          end
+
+        def setup_verification mock_producer
+          Pact.configuration.add_producer_verification do
+            mock_producer.verify
+          end
+        end         
 
          private
 

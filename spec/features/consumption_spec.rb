@@ -16,12 +16,14 @@ describe "A service consumer side of a pact", :pact => true  do
 
     Pact.with_producer "Alice Service" do
       service :alice_service do
+        verify true
         port 1234
       end
     end
 
     Pact.with_producer "Bob" do
       service :bob_service do
+        verify false
         port 4321
       end
     end
@@ -97,6 +99,7 @@ describe "A service consumer side of a pact", :pact => true  do
 
     expect(bob_post_response.code).to eql '200'
     expect(bob_post_response.body).to eql([{"name" => "Roger", "age" => 20}].to_json)
+    expect{ bob_service.verify }.to raise_error /do not match/
     sleep 1
   end
 
@@ -112,6 +115,7 @@ describe "A service consumer side of a pact", :pact => true  do
 
       Pact.with_producer "Zebra Service" do
         service :zebra_service do
+          verify false
           port 1235
         end
       end

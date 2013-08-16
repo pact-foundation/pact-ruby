@@ -21,7 +21,6 @@ module Pact
 				consumer: @consumer.as_json,
 				interactions: @interactions.collect(&:as_json),
 				metadata: {
-					date: DateTime.now.to_s,
 					pact_gem: {
 						version: Pact::VERSION
 					}

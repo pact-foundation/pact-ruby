@@ -20,7 +20,7 @@ module Pact
       let(:service_consumer) { double('ServiceConsumer', :as_json => {:a => 'consumer'}) }
       let(:service_producer) { double('ServiceProducer', :as_json => {:a => 'producer'}) }
       let(:pact) { ConsumerContract.new({:interactions => [MockInteraction.new], :consumer => service_consumer, :producer => service_producer }) }
-      let(:expected_as_json) { {:producer=>{:a=>"producer"}, :consumer=>{:a=>"consumer"}, :interactions=>[{:mock=>"interaction"}], :metadata=>{:date=>"2013-08-15T13:27:13+10:00", :pact_gem=>{:version=>"1.0"}}} }
+      let(:expected_as_json) { {:producer=>{:a=>"producer"}, :consumer=>{:a=>"consumer"}, :interactions=>[{:mock=>"interaction"}], :metadata=>{:pact_gem=>{:version=>"1.0"}}} }
 
       it "should return a hash representation of the Pact" do
         pact.as_json.should eq expected_as_json

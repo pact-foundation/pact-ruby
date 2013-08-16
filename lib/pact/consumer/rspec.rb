@@ -32,6 +32,7 @@ RSpec.configure do |config|
   end
 
   config.after :each, :pact => true do
+    Pact.configuration.logger.info "Verifying interactions"
     Pact.configuration.producer_verifications.each do | producer_verification |
       producer_verification.call
     end

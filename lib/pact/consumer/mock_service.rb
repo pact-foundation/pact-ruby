@@ -255,9 +255,10 @@ module Pact
     end
 
     class VerificationGet
-      def initialize name, logger
+      def initialize name, logger, log_description
         @name = name
         @logger = logger
+        @log_description = log_description
       end
 
       def match? env
@@ -267,12 +268,12 @@ module Pact
 
       def respond env
         if InteractionList.instance.all_matched?
-          @logger.info "Veryifying - interactions matched on #{@name}"
+          @logger.info "Veryifying - interactions matched for mock #{@name}"
           [200, {}, ['Interactions matched']]
         else
           @logger.warn "Verifying - actual interactions do not match expected interactions. Missing interactions:"
           @logger.ap InteractionList.instance.interaction_diffs, :warn
-          [500, {}, ["Actual interactions do not match expected interactions on #{@name}. See logs for details."]]
+          [500, {}, ["Actual interactions do not match expected interactions for mock #{@name}. See #{@log_description} for details."]]
         end
       end
     end
@@ -281,12 +282,20 @@ module Pact
 
       def initialize options = {}
         options = {log_file: STDOUT}.merge options
-        @logger = Logger.new options[:log_file]
+        log_stream = options[:log_file]
+        @logger = Logger.new log_stream
+
+        log_description = if log_stream.is_a? File
+           File.absolute_path(log_stream).gsub(Dir.pwd + "/", '')
+        else
+          "standard out/err"
+        end
+
         @name = options.fetch(:name, "MockService")
         @handlers = [
           StartupPoll.new(@name, @logger),
           CapybaraIdentify.new(@name, @logger),
-          VerificationGet.new(@name, @logger),
+          VerificationGet.new(@name, @logger, log_description),
           InteractionPost.new(@name, @logger),
           InteractionDelete.new(@name, @logger),
           InteractionReplay.new(@name, @logger)

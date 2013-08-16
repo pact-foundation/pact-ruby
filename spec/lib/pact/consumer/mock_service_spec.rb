@@ -11,7 +11,7 @@ module Pact::Consumer
     shared_context "unexpected requests and missed interactions" do
       let(:expected_call) { {request: 'blah'} }
       let(:unexpected_call) { {request: 'meh'} }
-      subject { 
+      subject {
         interactionList = InteractionList.instance
         interactionList.add expected_call
         interactionList.register_unexpected unexpected_call
@@ -22,12 +22,12 @@ module Pact::Consumer
     shared_context "no unexpected requests or missed interactions exist" do
       let(:expected_call) { {request: 'blah'} }
       let(:unexpected_call) { {request: 'meh'} }
-      subject { 
+      subject {
         interactionList = InteractionList.instance
         interactionList.add expected_call
         interactionList.register_matched expected_call
         interactionList
-       }      
+       }
     end
 
     describe "interaction_diffs" do
@@ -45,7 +45,7 @@ module Pact::Consumer
         include_context "no unexpected requests or missed interactions exist"
         let(:expected) {
           {}
-        }        
+        }
         it "returns an empty hash" do
           expect(subject.interaction_diffs).to eq expected
         end
@@ -64,7 +64,7 @@ module Pact::Consumer
         it "returns false" do
           expect(subject.all_matched?).to be_true
         end
-      end      
+      end
     end
   end
 

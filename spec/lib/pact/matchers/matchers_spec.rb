@@ -5,6 +5,94 @@ require 'pact/matchers'
 describe Pact::Matchers do
   include Pact::Matchers
 
+  describe 'structure_diff' do
+    let(:expected) {
+      {a: 'a string', b: 1, c: nil, d: [{e: 'thing'}], f: {g: 10}}
+    }
+
+    context "when the classes match" do
+      let(:actual) { {a: 'another string', b: 2, c: nil, d: [{e: 'something'}], f: {g: 100}} }
+      it "returns an empty hash" do
+        expect(structure_diff(expected, actual)).to be_empty
+      end
+    end
+
+    context "when a number is expected" do
+      let(:expected) { {a: 1} }
+      #let(:difference) { {a: {expected: 'Fixnum (eg. 1)', actual: 'String ("a string")'}}  }
+      let(:difference) { {a: {expected: {:class => Fixnum, eg: 1 } , actual: {:class => String, :value => 'a string'}}}  }
+
+      context "and a string is found" do
+        let(:actual) { {a: 'a string'}}
+        it "returns the diff" do
+          expect(structure_diff(expected, actual)).to eq difference
+        end
+      end
+      context "and nil is found" do
+        let(:actual) { {a: nil}}
+        let(:difference ) { {a: {:expected => {:class => Fixnum, eg: 1}, :actual => nil} } }
+        it "returns the diff" do
+          expect(structure_diff(expected, actual)).to eq difference
+        end
+      end
+      context "and a hash is found" do
+        let(:actual) { {a: {b: 1}} }
+        let(:difference) { {:a=>{:expected=>{:class=>Fixnum, :eg=>1}, :actual=>{:class=>Hash, :value=>{:b=>1}}}} }
+        it "returns the diff" do
+          expect(structure_diff(expected, actual)).to eq difference
+        end        
+      end
+      context "and an array is found" do
+        let(:actual) { {a: [1] } }
+        let(:difference) { {:a=>{:expected=>{:class=>Fixnum, :eg=>1}, :actual=>{:class=>Array, :value=>[1]}}} }
+        it "returns the diff" do
+          expect(structure_diff(expected, actual)).to eq difference
+        end         
+      end
+    end
+
+    context "when an array is expected" do
+      let(:expected) { [{name: 'Fred'}, {name: 'Mary'}] }
+      context "when an item with differing class values is found" do
+        let(:actual) { [{name: 'Fred'}, {name: 1}] }
+        let(:difference) { [
+          Pact::Matchers::NO_DIFF_INDICATOR,
+           {:name => {
+                :expected=> { :class=>String, :eg=>"Mary" },
+                :actual=> { :class=>Fixnum, :value=>1} }
+            }
+          ] 
+        }
+        it "returns the diff" do
+          expect(structure_diff(expected, actual)).to eq difference
+        end
+      end
+    end
+
+
+    context "when nil is expected" do
+      let(:expected) { {a: nil} }
+      context "and a string is found" do
+        let(:actual) { {a: 'a string'} }
+        let(:difference) { {:a=>{:expected=>nil, :actual=>{:class=>String, :value=>"a string"}}} }
+        it "returns the diff" do
+          expect(structure_diff(expected, actual)).to eq difference
+        end          
+      end
+    end
+
+    context "when a term is expected" do
+      let(:expected) { {a: Pact::Term.new(:matcher => /p/, :generate => 'apple')} }
+      context "and a non matching string is found" do
+        let(:actual) { {a: 'banana'} }
+        let(:difference) { {:a=>{:expected=>/p/, :actual=>"banana"}} }
+        it "returns the diff" do
+          expect(structure_diff(expected, actual)).to eq difference
+        end          
+      end      
+    end
+  end
+
   describe 'diffing' do
 
     context 'where an expected value is a non-empty string' do

@@ -51,7 +51,9 @@ module Pact
       end
 
       def upon_receiving(description)
-        @interactions["#{description} given #{@producer_state}"] ||= Interaction.new(self, description, @producer_state)
+        interaction_builder = InteractionBuilder.new(self, description, @producer_state)
+        @interactions["#{description} given #{@producer_state}"] ||= interaction_builder.interaction
+        interaction_builder
       end
 
       def update_pactfile

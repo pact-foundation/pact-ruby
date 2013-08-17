@@ -5,32 +5,23 @@ require 'pact/request'
 
 module Pact
   module Consumer
+
     class Interaction
 
-      def initialize(producer, description, producer_state)
-        @producer = producer
-        @description = description
-        @producer_state = producer_state.is_a?(Symbol) ? producer_state.to_s : producer_state
-        @http = Net::HTTP.new(@producer.uri.host, @producer.uri.port)
-      end
+      attr_accessor :description, :request, :response, :producer_state
 
-      def will_respond_with(response_terms)
-        @response_terms = response_terms
-        @http.request_post('/interactions', with_generated_response.to_json)
-        @producer.update_pactfile
-        @producer
-      end
-
-      def with(request_details)
-        @request = Request::Expected.from_hash(request_details)
-        self
+      def initialize options
+        @description = options[:description]
+        @request = options[:request]
+        @response = options[:response]
+        @producer_state = options[:producer_state]
       end
 
       def as_json
         {
           :description => @description,
           :request => @request.as_json,
-          :response => @response_terms,
+          :response => @response,
         }.tap{ | hash | hash[:producer_state] = @producer_state if @producer_state }
       end
 
@@ -38,10 +29,33 @@ module Pact
         as_json.to_json(options)
       end
 
-      private
 
-      def with_generated_response
-        as_json.tap { | hash | hash[:response] = Reification.from_term(@response_terms) }
+      def as_json_with_generated_response
+        as_json.tap { | hash | hash[:response] = Reification.from_term(response) }
+      end
+    end
+
+    class InteractionBuilder
+
+      attr_reader :interaction
+
+      def initialize(producer, description, producer_state)
+        producer_state = producer_state.nil? ? nil : producer_state.to_s
+        @interaction = Interaction.new(:description => description, :producer_state => producer_state)
+        @producer = producer
+        @http = Net::HTTP.new(@producer.uri.host, @producer.uri.port)
+      end
+
+      def will_respond_with(response)
+        interaction.response = response
+        @http.request_post('/interactions', interaction.as_json_with_generated_response.to_json)
+        @producer.update_pactfile
+        @producer
+      end
+
+      def with(request_details)
+        interaction.request = Request::Expected.from_hash(request_details)
+        self
       end
 
     end

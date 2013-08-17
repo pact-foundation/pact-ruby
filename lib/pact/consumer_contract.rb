@@ -33,17 +33,17 @@ module Pact
 			as_json(options).to_json(options)
 		end
 
-		def self.json_create(obj)
+		def self.from_hash(obj)
 		  new({
-		  	:interactions => obj['interactions'].collect { |hash| Pact::Consumer::Interaction.json_create(hash)},
-		  	:consumer => Pact::Consumer::ServiceConsumer.json_create(obj['consumer']),
-		  	:producer => Pact::Consumer::ServiceProducer.json_create(obj['producer'] || {})
+		  	:interactions => obj['interactions'].collect { |hash| Pact::Consumer::Interaction.from_hash(hash)},
+		  	:consumer => Pact::Consumer::ServiceConsumer.from_hash(obj['consumer']),
+		  	:producer => Pact::Consumer::ServiceProducer.from_hash(obj['producer'] || {})
 		  })
 		end
 
 		def self.from_json string
 			deserialised_object = JSON.load(string)
-			json_create(deserialised_object)
+			from_hash(deserialised_object)
 		end
 
 		def find_interaction criteria

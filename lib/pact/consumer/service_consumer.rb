@@ -14,7 +14,7 @@ module Pact
         {name: name}
       end
 
-      def self.json_create obj
+      def self.from_hash obj
         ServiceConsumer.new(:name => obj['name'])
       end
     end

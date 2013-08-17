@@ -30,17 +30,9 @@ module Pact
         self
       end
 
-      def at(url, options = {})
-        @uri = URI(url)
-        raise "You must first configure a producer" unless (consumer_contract.producer && consumer_contract.producer.name)
-        unless options[:standalone]
-          AppManager.instance.register_mock_service_for consumer_contract.producer.name, url
-        end
+      def on_port(port)
+        @uri = URI("http://localhost:#{port}")
         self
-      end
-
-      def on_port(port, options = {})
-        at("http://localhost:#{port}", options)
       end
 
       def given(producer_state)

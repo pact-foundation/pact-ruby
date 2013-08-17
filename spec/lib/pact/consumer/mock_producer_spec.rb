@@ -30,36 +30,6 @@ module Pact
 			  	File.read(expected_pact_path).should eql expected_pact_string
 			  end
 			end
-
-			describe "at" do
-				let (:url) { 'http://localhost:1234' }
-				let (:service_name) { 'some_service' }
-				let (:mock_producer ) { MockProducer.new('').assuming_a_service(service_name) }
-				before do
-					AppManager.instance.stub(:register_mock_service_for)
-				end
-
-				context "when a service name has been set" do
-					it "starts a mock service to support the given URL" do
-						AppManager.instance.should_receive(:register_mock_service_for).with(service_name, url)
-						mock_producer.at(url)
-					end
-				end
-
-				context "when a service name has not yet been set" do
-					let (:mock_producer ) { MockProducer.new('') }
-					it "raises an error requesting a service name" do
-						expect { mock_producer.at(url) }.to raise_error "You must first configure a producer"
-					end
-				end
-
-				context "when a service is marked as standalone" do
-					it "does not manage the process" do
-						AppManager.instance.should_not_receive(:register_mock_service_for)
-						mock_producer.at(url, standalone: true)
-					end
-				end
-			end
 		end
 	end
 end

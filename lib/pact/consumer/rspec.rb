@@ -7,11 +7,6 @@ module Pact
   module Consumer
     module RSpec
       include Pact::Consumer::MockProducers
-
-      def consumer(name)
-        FileUtils.mkdir_p Pact.configuration.pact_dir
-        MockProducer.new(Pact.configuration.pact_dir).consumer(name)
-      end
     end
   end
 end

@@ -32,7 +32,7 @@ module Pact::Consumer
           mock_producer = Pact::Consumer::MockProducer.new(Pact.configuration.pact_dir).
             consumer(Pact.configuration.consumer.name).
               assuming_a_service(@name)
-          @service.configure_mock_producer mock_producer
+          @service.configure_mock_producer mock_producer, @name
         end
       end
 
@@ -57,9 +57,12 @@ module Pact::Consumer
             @verify = verify
          end         
 
-         def configure_mock_producer mock_producer
+         def configure_mock_producer mock_producer, producer_name
             validate
-            mock_producer.on_port(@port, standalone: @standalone)
+            unless @standalone
+              AppManager.instance.register_mock_service_for producer_name, "http://localhost:#{@port}"
+            end
+            mock_producer.on_port(@port)
             create_mock_services_module_method mock_producer
             setup_verification(mock_producer) if @verify
             mock_producer

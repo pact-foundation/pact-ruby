@@ -6,12 +6,12 @@ require 'date'
 module Pact
 	class ConsumerContract
 
-		attr_reader :interactions
-		attr_reader :consumer
-		attr_reader :producer
+		attr_accessor :interactions
+		attr_accessor :consumer
+		attr_accessor :producer
 
-		def initialize(opts)
-			@interactions = opts[:interactions]
+		def initialize(opts = {})
+			@interactions = opts[:interactions] || []
 			@consumer = opts[:consumer]
 			@producer = opts[:producer]
 		end
@@ -78,5 +78,15 @@ module Pact
 		def match_criterion target, criterion
 			target == criterion || (criterion.is_a?(Regexp) && criterion.match(target))
 		end
+
+		def pact_file_name
+			"#{filenamify(consumer.name)}-#{filenamify(producer.name)}.json"
+		end
+
+		private
+
+      def filenamify name
+        name.downcase.gsub(/\s/, '_')
+      end		
 	end
 end

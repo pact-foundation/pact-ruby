@@ -32,7 +32,7 @@ module Pact
       end
 
       def replay_interaction interaction
-        request = interaction['request']
+        request = interaction.request
         path = request_path(request)
         args = [path, request_body(request)]
 

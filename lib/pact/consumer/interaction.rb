@@ -17,6 +17,14 @@ module Pact
         @producer_state = options[:producer_state]
       end
 
+      def self.json_create options
+        new(:description => options['description'],
+            :producer_state => options['producer_state'],
+            :request => options['request'],
+            :response => options['response']
+          )
+      end
+
       def as_json
         {
           :description => @description,

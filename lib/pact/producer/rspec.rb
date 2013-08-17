@@ -40,8 +40,8 @@ module Pact
         end
 
         def describe_interaction_with_producer_state interaction, options
-          if interaction['producer_state']
-            describe "Given #{interaction['producer_state']}" do
+          if interaction.producer_state
+            describe "Given #{interaction.producer_state}" do
               describe_interaction interaction, options
             end
           else
@@ -54,15 +54,15 @@ module Pact
           describe description_for(interaction) do
 
             before do
-              set_up_producer_state interaction['producer_state'], options[:consumer]
+              set_up_producer_state interaction.producer_state, options[:consumer]
               replay_interaction interaction
             end
 
             after do
-              tear_down_producer_state interaction['producer_state'], options[:consumer]
+              tear_down_producer_state interaction.producer_state, options[:consumer]
             end
 
-            describe_response interaction['response']
+            describe_response interaction.response
           end
 
         end
@@ -95,7 +95,7 @@ module Pact
         end
 
         def description_for interaction
-          "#{interaction['description']} to #{interaction['request']['path']}"
+          "#{interaction.description} to #{interaction.request['path']}"
         end
 
         def read_pact_from uri, options = {}

@@ -1,5 +1,6 @@
 require 'pact/consumer/service_consumer'
 require 'pact/consumer/service_producer'
+require 'pact/consumer/interaction'
 require 'date'
 
 module Pact
@@ -34,7 +35,7 @@ module Pact
 
 		def self.json_create(obj)
 		  new({
-		  	:interactions => obj['interactions'],
+		  	:interactions => obj['interactions'].collect { |hash| Pact::Consumer::Interaction.json_create(hash)},
 		  	:consumer => Pact::Consumer::ServiceConsumer.json_create(obj['consumer']),
 		  	:producer => Pact::Consumer::ServiceProducer.json_create(obj['producer'] || {})
 		  })

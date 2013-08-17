@@ -136,7 +136,7 @@ describe "A service consumer side of a pact", :pact => true  do
         })
 
         interactions = Pact::ConsumerContract.from_json(File.read(zebra_service.pactfile_path)).interactions
-        interactions.first['producer_state'].should eq("the_zebras_are_here")
+        interactions.first.producer_state.should eq("the_zebras_are_here")
         sleep 1
     end
   end

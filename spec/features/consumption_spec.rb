@@ -100,7 +100,6 @@ describe "A service consumer side of a pact", :pact => true  do
     expect(bob_post_response.code).to eql '200'
     expect(bob_post_response.body).to eql([{"name" => "Roger", "age" => 20}].to_json)
     expect{ bob_service.verify }.to raise_error /do not match/
-    sleep 1
   end
 
   context "with a producer state" do
@@ -135,7 +134,7 @@ describe "A service consumer side of a pact", :pact => true  do
           body: Pact::Term.new(matcher: /Mallory/, generate: 'That is some good Mallory.')
         })
 
-        interactions = Pact::ConsumerContract.from_json(File.read(zebra_service.pactfile_path)).interactions
+        interactions = Pact::ConsumerContract.from_json(File.read(zebra_service.consumer_contract.pactfile_path)).interactions
         interactions.first.producer_state.should eq("the_zebras_are_here")
         sleep 1
     end

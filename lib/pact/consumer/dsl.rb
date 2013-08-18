@@ -29,9 +29,11 @@ module Pact::Consumer
         end
 
         def mock_producer_from_attributes
-          mock_producer = Pact::Consumer::MockProducer.new(Pact.configuration.pact_dir).
-            consumer(Pact.configuration.consumer.name).
-              assuming_a_service(@name)
+          mock_producer = Pact::Consumer::MockProducer.new({
+            :consumer_name => Pact.configuration.consumer.name,
+            :producer_name => @name,
+            :pactfile_write_mode => Pact.configuration.pactfile_write_mode
+            })
           @service.configure_mock_producer mock_producer, @name
         end
       end

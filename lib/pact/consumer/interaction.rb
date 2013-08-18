@@ -20,7 +20,7 @@ module Pact
       def self.from_hash options
         new(:description => options['description'],
             :producer_state => options['producer_state'],
-            :request => options['request'],
+            :request => Pact::Request::Expected.from_hash(options['request']),
             :response => options['response']
           )
       end
@@ -54,18 +54,17 @@ module Pact
         @http = Net::HTTP.new(@producer.uri.host, @producer.uri.port)
       end
 
+      def with(request_details)
+        interaction.request = Request::Expected.from_hash(request_details)
+        self
+      end
+
       def will_respond_with(response)
         interaction.response = response
         @http.request_post('/interactions', interaction.as_json_with_generated_response.to_json)
         @producer.update_pactfile
         @producer
       end
-
-      def with(request_details)
-        interaction.request = Request::Expected.from_hash(request_details)
-        self
-      end
-
     end
   end
 end

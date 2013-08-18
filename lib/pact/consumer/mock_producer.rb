@@ -12,22 +12,30 @@ module Pact
 
       attr_reader :uri
       attr_reader :consumer_contract
+      attr_reader :pactfile_write_mode
 
-      def initialize(pactfile_root)
-        @pactfile_root = pactfile_root
+      def initialize(fields)
         @interactions = {}
         @producer_state = nil
-        @consumer_contract = Pact::ConsumerContract.new
+        @pactfile_write_mode = fields[:pactfile_write_mode]
+        @consumer_contract = Pact::ConsumerContract.new(
+          :consumer => ServiceConsumer.new(name: fields[:consumer_name]),
+          :producer => ServiceProducer.new(name: fields[:producer_name])
+          )
+        if pactfile_write_mode == :update && File.exist?(consumer_contract.pactfile_path)
+          load_existing_pactfile
+        end
       end
 
-      def consumer(consumer_name)
-        consumer_contract.consumer = ServiceConsumer.new(name: consumer_name) 
-        self
-      end
-
-      def assuming_a_service(service_name)
-        consumer_contract.producer = ServiceProducer.new(name: service_name)
-        self
+      def load_existing_pactfile
+        json = File.read(consumer_contract.pactfile_path)
+        if json.size > 0
+          existing_consumer_contract = Pact::ConsumerContract.from_json json
+          existing_consumer_contract.interactions.each do | interaction |
+            @interactions["#{interaction.description} given #{interaction.producer_state}"] = interaction
+          end
+          consumer_contract.interactions = @interactions.values
+        end
       end
 
       def on_port(port)
@@ -48,16 +56,7 @@ module Pact
       end
 
       def update_pactfile
-        logger.debug "Updating pact file for #{consumer_contract.producer.name} at #{pactfile_path}"
-        check_for_active_support_json
-        File.open(pactfile_path, 'w') do |f|
-          f.write JSON.pretty_generate(consumer_contract)
-        end
-      end
-
-      def pactfile_path
-        raise 'You must first specify a consumer and service name' unless consumer_contract.consumer and consumer_contract.producer
-        @pactfile_path ||= File.join(@pactfile_root, consumer_contract.pact_file_name)
+        consumer_contract.update_pactfile
       end
 
       def verify

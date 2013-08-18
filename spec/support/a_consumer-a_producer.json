@@ -1,0 +1,34 @@
+{
+  "producer": {
+    "name": "a producer"
+  },
+  "consumer": {
+    "name": "a consumer"
+  },
+  "interactions": [
+    {
+      "description": "request one",
+      "request": {
+        "method": "get",
+        "path": "/path_one"
+      },
+      "response": {
+      },
+      "producer_state": "state one"
+    },
+    {
+      "description": "request two",
+      "request": {
+        "method": "get",
+        "path": "/path_two"
+      },
+      "response": {
+      }
+    }
+  ],
+  "metadata": {
+    "pact_gem": {
+      "version": "0.1.24"
+    }
+  }
+}

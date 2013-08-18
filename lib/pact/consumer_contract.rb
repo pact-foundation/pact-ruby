@@ -1,10 +1,15 @@
 require 'pact/consumer/service_consumer'
 require 'pact/consumer/service_producer'
 require 'pact/consumer/interaction'
+require 'pact/logging'
+require 'pact/json_warning'
 require 'date'
 
 module Pact
 	class ConsumerContract
+
+		include Pact::Logging
+      include Pact::JsonWarning		
 
 		attr_accessor :interactions
 		attr_accessor :consumer
@@ -82,6 +87,19 @@ module Pact
 		def pact_file_name
 			"#{filenamify(consumer.name)}-#{filenamify(producer.name)}.json"
 		end
+
+      def pactfile_path
+        raise 'You must first specify a consumer and service name' unless (consumer && consumer.name && producer && producer.name)
+        @pactfile_path ||= File.join(Pact.configuration.pact_dir, pact_file_name)
+      end
+
+      def update_pactfile
+        logger.debug "Updating pact file for #{producer.name} at #{pactfile_path}"
+        check_for_active_support_json
+        File.open(pactfile_path, 'w') do |f|
+          f.write JSON.pretty_generate(self)
+        end
+      end      		
 
 		private
 

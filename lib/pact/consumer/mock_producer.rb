@@ -14,15 +14,15 @@ module Pact
       attr_reader :consumer_contract
       attr_reader :pactfile_write_mode
 
-      def initialize(fields)
+      def initialize(attributes)
         @interactions = {}
         @producer_state = nil
-        @pactfile_write_mode = fields[:pactfile_write_mode]
+        @pactfile_write_mode = attributes[:pactfile_write_mode]
         @consumer_contract = Pact::ConsumerContract.new(
-          :consumer => ServiceConsumer.new(name: fields[:consumer_name]),
-          :producer => ServiceProducer.new(name: fields[:producer_name])
+          :consumer => ServiceConsumer.new(name: attributes[:consumer_name]),
+          :producer => ServiceProducer.new(name: attributes[:producer_name])
           )
-        @uri = URI("http://localhost:#{fields[:port]}")
+        @uri = URI("http://localhost:#{attributes[:port]}")
         @http = Net::HTTP.new(uri.host, uri.port)
         if pactfile_write_mode == :update && File.exist?(consumer_contract.pactfile_path)
           load_existing_interactions

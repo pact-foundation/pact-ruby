@@ -7,9 +7,9 @@ module Pact
       new(generate: obj['data']['generate'], matcher: obj['data']['matcher'])
     end
 
-    def initialize(options = {})
-      @generate = options[:generate]
-      @matcher = options[:matcher]
+    def initialize(attributes = {})
+      @generate = attributes[:generate]
+      @matcher = attributes[:matcher]
     end
 
     def to_json(options = {})

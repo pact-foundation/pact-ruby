@@ -15,10 +15,10 @@ module Pact
 		attr_accessor :consumer
 		attr_accessor :producer
 
-		def initialize(opts = {})
-			@interactions = opts[:interactions] || []
-			@consumer = opts[:consumer]
-			@producer = opts[:producer]
+		def initialize(attributes = {})
+			@interactions = attributes[:interactions] || []
+			@consumer = attributes[:consumer]
+			@producer = attributes[:producer]
 		end
 
 		def as_json(options = {})

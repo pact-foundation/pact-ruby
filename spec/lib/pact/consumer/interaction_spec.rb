@@ -4,7 +4,13 @@ module Pact
   module Consumer
     describe InteractionBuilder do
 
-      subject { InteractionBuilder.new(producer, 'Test request', nil).with(request) }
+      subject { 
+        interaction_builder = InteractionBuilder.new(producer, 'Test request', nil).with(request) 
+        interaction_builder.on_interaction_fully_defined do | interaction |
+          producer.callback interaction
+        end
+        interaction_builder
+      }
 
       let(:pact_path) { File.expand_path('../../../../pacts/mock', __FILE__) }
 
@@ -26,37 +32,14 @@ module Pact
         double(uri: URI('http://example.com:2222'),
                pact_path: pact_path,
                update_pactfile: nil,
-               given: nil)
-      end
-
-      before do
-        stub_request(:post, 'example.com:2222/interactions')
+               given: nil,
+               callback: nil)
       end
 
       describe "setting up responses" do
 
-        it "posts the interaction with generated response to the mock service" do
-          interaction_json = JSON.dump({
-            description: 'Test request',
-            request: {
-              method: 'post',
-              path: '/foo',
-              body: Term.new(generate: 'waffle', matcher: /ffl/),
-              headers: { 'Content-Type' => 'application/json' },
-              query: "",
-            },
-            response: {
-              baz: 'qux',
-              wiffle: 'wiffle'
-            }
-          })
-
-          subject.will_respond_with response
-          WebMock.should have_requested(:post, 'example.com:2222/interactions').with(body: interaction_json)
-        end
-
-        it "updates the Producer's Pactfile" do
-          producer.should_receive(:update_pactfile)
+        it "invokes the callback" do
+          producer.should_receive(:callback).with(subject.interaction)
           subject.will_respond_with response
         end
 
@@ -105,14 +88,22 @@ module Pact
 
         context "with a producer_state" do
           context "described with a string" do
-            subject { InteractionBuilder.new(producer, 'Test request', "there are no alligators").with(request) }
+            subject { 
+              interaction_builder = InteractionBuilder.new(producer, 'Test request', "there are no alligators").with(request) 
+              interaction_builder.on_interaction_fully_defined {}
+              interaction_builder
+            }
 
             it "includes the state name as a string" do
               expect(parsed_result['producer_state']).to eql("there are no alligators")
             end
           end
           context "described with a symbol" do
-            subject { InteractionBuilder.new(producer, 'Test request', :there_are_no_alligators).with(request) }
+            subject { 
+              interaction_builder = InteractionBuilder.new(producer, 'Test request', :there_are_no_alligators).with(request) 
+              interaction_builder.on_interaction_fully_defined {}
+              interaction_builder
+            }
 
             it "includes the state name as a symbol" do
               expect(parsed_result['producer_state']).to eql("there_are_no_alligators")

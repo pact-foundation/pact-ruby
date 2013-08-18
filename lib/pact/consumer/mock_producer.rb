@@ -23,11 +23,11 @@ module Pact
           :producer => ServiceProducer.new(name: fields[:producer_name])
           )
         if pactfile_write_mode == :update && File.exist?(consumer_contract.pactfile_path)
-          load_existing_pactfile
+          load_existing_interactions
         end
       end
 
-      def load_existing_pactfile
+      def load_existing_interactions
         json = File.read(consumer_contract.pactfile_path)
         if json.size > 0
           existing_consumer_contract = Pact::ConsumerContract.from_json json
@@ -40,6 +40,7 @@ module Pact
 
       def on_port(port)
         @uri = URI("http://localhost:#{port}")
+        @http = Net::HTTP.new(uri.host, uri.port)
         self
       end
 
@@ -50,12 +51,22 @@ module Pact
 
       def upon_receiving(description)
         interaction_builder = InteractionBuilder.new(self, description, @producer_state)
+        producer = self
+        interaction_builder.on_interaction_fully_defined do | interaction |
+          producer.handle_interaction_fully_defined(interaction)
+        end
         @interactions["#{description} given #{@producer_state}"] ||= interaction_builder.interaction
         consumer_contract.interactions = @interactions.values
         interaction_builder
       end
 
       def update_pactfile
+        consumer_contract.update_pactfile
+      end
+
+      def handle_interaction_fully_defined interaction
+        @http.request_post('/interactions', interaction.as_json_with_generated_response.to_json)
+        @producer_state = nil
         consumer_contract.update_pactfile
       end
 

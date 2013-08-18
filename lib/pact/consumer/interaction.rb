@@ -51,7 +51,6 @@ module Pact
         producer_state = producer_state.nil? ? nil : producer_state.to_s
         @interaction = Interaction.new(:description => description, :producer_state => producer_state)
         @producer = producer
-        @http = Net::HTTP.new(@producer.uri.host, @producer.uri.port)
       end
 
       def with(request_details)
@@ -61,10 +60,12 @@ module Pact
 
       def will_respond_with(response)
         interaction.response = response
-        @http.request_post('/interactions', interaction.as_json_with_generated_response.to_json)
-        @producer.update_pactfile
-        @producer.given(nil) #Clear producer_state. Dirty hack. Fix this.
+        @callback.call interaction
         @producer
+      end
+
+      def on_interaction_fully_defined &block
+        @callback = block
       end
     end
   end

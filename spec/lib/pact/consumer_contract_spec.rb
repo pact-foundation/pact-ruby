@@ -34,7 +34,7 @@ module Pact
     describe ".from_json" do
       let(:loaded_pact) { ConsumerContract.from_json(string) }
       context "when the top level object is a ConsumerContract" do
-        let(:string) { '{"interactions":[{"mock":"interaction"}], "consumer": {"name" : "Bob"} }' }
+        let(:string) { '{"interactions":[{"request": {"path":"/path", "method" : "get"}}], "consumer": {"name" : "Bob"} }' }
 
         it "should create a Pact" do
           loaded_pact.should be_instance_of ConsumerContract

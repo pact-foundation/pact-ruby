@@ -95,7 +95,7 @@ module Pact
         end
 
         def description_for interaction
-          "#{interaction.description} to #{interaction.request['path']}"
+          "#{interaction.description} to #{interaction.request.path}"
         end
 
         def read_pact_from uri, options = {}

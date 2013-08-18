@@ -25,7 +25,8 @@ module Pact
       let(:producer) do
         double(uri: URI('http://example.com:2222'),
                pact_path: pact_path,
-               update_pactfile: nil)
+               update_pactfile: nil,
+               given: nil)
       end
 
       before do

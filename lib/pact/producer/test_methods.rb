@@ -36,19 +36,19 @@ module Pact
         path = request_path(request)
         args = [path, request_body(request)]
 
-        if request['headers']
+        if !request.headers.nil?
           args << request_headers(request)
         end
 
-        logger.debug "Sending #{request['method']} with #{args}"
-        self.send(request['method'], *args)
+        logger.debug "Sending #{request.method} with #{args}"
+        self.send(request.method, *args)
       end
 
       private
 
       def request_headers request
         request_headers = {}
-        request['headers'].each do |key, value|
+        request.headers.each do |key, value|
           key = key.upcase
           if key.match(/CONTENT.TYPE/)
             request_headers['CONTENT_TYPE'] = value
@@ -60,16 +60,16 @@ module Pact
       end
 
       def request_path request
-        path = request['path']
-        query = request['query']
+        path = request.path
+        query = request.query
         if query && !query.empty?
-          path += "?" + request['query']
+          path += "?" + request.query
         end
         path
       end
 
       def request_body request
-        body = request['body']
+        body = request.body
         if body
           body = JSON.dump(Pact::Reification.from_term(body))
         else

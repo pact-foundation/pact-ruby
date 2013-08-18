@@ -63,6 +63,7 @@ module Pact
         interaction.response = response
         @http.request_post('/interactions', interaction.as_json_with_generated_response.to_json)
         @producer.update_pactfile
+        @producer.given(nil) #Clear producer_state. Dirty hack. Fix this.
         @producer
       end
     end

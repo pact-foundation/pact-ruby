@@ -24,6 +24,14 @@ module Pact
       def hash
         2934820948209428748274238642672
       end
+
+      def empty?
+        true
+      end
+
+      def nil?
+        true
+      end
     end
 
     class Base

@@ -1,9 +1,9 @@
-require_relative 'mock_producers'
+require_relative 'consumer_contract_builders'
 
 module Pact::Consumer
    module DSL
       def with_producer name, &block
-         Producer.new(name, &block).create_mock_producer
+         Producer.new(name, &block).create_consumer_contract_builder
       end
 
       class Producer
@@ -19,22 +19,22 @@ module Pact::Consumer
 
          alias_method :mock_service, :service
 
-        def create_mock_producer
+        def create_consumer_contract_builder
           validate
-          mock_producer_from_attributes
+          consumer_contract_builder_from_attributes
         end
 
         def validate
           raise "Please configure a service for #{@name}" unless @service
         end
 
-        def mock_producer_from_attributes
-          mock_producer_fields = {
+        def consumer_contract_builder_from_attributes
+          consumer_contract_builder_fields = {
             :consumer_name => Pact.configuration.consumer.name,
             :producer_name => @name,
             :pactfile_write_mode => Pact.configuration.pactfile_write_mode
             }
-          @service.configure_mock_producer mock_producer_fields
+          @service.configure_consumer_contract_builder consumer_contract_builder_fields
         end
       end
 
@@ -59,31 +59,31 @@ module Pact::Consumer
             @verify = verify
          end         
 
-         def configure_mock_producer mock_producer_fields
+         def configure_consumer_contract_builder consumer_contract_builder_fields
             validate
             unless @standalone
-              AppManager.instance.register_mock_service_for mock_producer_fields[:producer_name], "http://localhost:#{@port}"
+              AppManager.instance.register_mock_service_for consumer_contract_builder_fields[:producer_name], "http://localhost:#{@port}"
             end
-            mock_producer = Pact::Consumer::MockProducer.new mock_producer_fields.merge({port: @port})
-            create_mock_services_module_method mock_producer
-            setup_verification(mock_producer) if @verify
-            mock_producer
+            consumer_contract_builder = Pact::Consumer::ConsumerContractBuilder.new consumer_contract_builder_fields.merge({port: @port})
+            create_mock_services_module_method consumer_contract_builder
+            setup_verification(consumer_contract_builder) if @verify
+            consumer_contract_builder
          end
 
-        def setup_verification mock_producer
+        def setup_verification consumer_contract_builder
           Pact.configuration.add_producer_verification do
-            mock_producer.verify
+            consumer_contract_builder.verify
           end
         end         
 
          private
 
-         # This makes the mock_producer available via a module method with the given identifier
+         # This makes the consumer_contract_builder available via a module method with the given identifier
          # as the method name.
          # I feel this should be defined somewhere else, but I'm not sure where
-         def create_mock_services_module_method mock_producer
-           Pact::Consumer::MockProducers.send(:define_method, @name.to_sym) do
-             mock_producer
+         def create_mock_services_module_method consumer_contract_builder
+           Pact::Consumer::ConsumerContractBuilders.send(:define_method, @name.to_sym) do
+             consumer_contract_builder
            end
          end
 

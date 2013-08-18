@@ -1,5 +1,5 @@
 require_relative 'service_consumer'
-require_relative 'mock_producers'
+require_relative 'consumer_contract_builders'
 require_relative '../configuration'
 
 module Pact

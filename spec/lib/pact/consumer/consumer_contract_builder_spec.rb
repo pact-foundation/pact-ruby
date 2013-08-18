@@ -4,7 +4,7 @@ require 'pathname'
 
 module Pact
 	module Consumer
-		describe MockProducer do
+		describe ConsumerContractBuilder do
 
 		   describe "initialize" do
 			   before do
@@ -19,8 +19,8 @@ module Pact
 
 			   let(:consumer_name) { 'a consumer' }
 			   let(:producer_name) { 'a producer' }
-			   let(:mock_producer) { 
-			      Pact::Consumer::MockProducer.new(
+			   let(:consumer_contract_builder) { 
+			      Pact::Consumer::ConsumerContractBuilder.new(
 			         :pactfile_write_mode => pactfile_write_mode,
 			         :consumer_name => consumer_name,
 			         :producer_name => producer_name,
@@ -29,14 +29,14 @@ module Pact
 			   context "when overwriting pact" do
 			      let(:pactfile_write_mode) {:overwrite}
 			      it "it overwrites the existing pact file" do
-			         expect(mock_producer.consumer_contract.interactions).to eq []
+			         expect(consumer_contract_builder.consumer_contract.interactions).to eq []
 			      end
 			   end
 
 			   context "when updating pact" do
 			      let(:pactfile_write_mode) {:update}
 			      it "updates the existing pact file" do
-			         expect(mock_producer.consumer_contract.interactions.size).to eq 2
+			         expect(consumer_contract_builder.consumer_contract.interactions.size).to eq 2
 			      end
 			   end		   	
 		   end			
@@ -44,7 +44,7 @@ module Pact
 			describe "handle_interaction_fully_defined" do
 
 				subject { 
-					Pact::Consumer::MockProducer.new({:consumer_name => 'blah', :producer_name => 'blah', :port => 2222})
+					Pact::Consumer::ConsumerContractBuilder.new({:consumer_name => 'blah', :producer_name => 'blah', :port => 2222})
 				}
 
 				let(:interaction_hash) {

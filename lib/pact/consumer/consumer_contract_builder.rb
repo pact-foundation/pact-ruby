@@ -5,7 +5,7 @@ require 'pact/logging'
 
 module Pact
   module Consumer
-    class MockProducer
+    class ConsumerContractBuilder
 
       include Pact::JsonWarning
       include Pact::Logging

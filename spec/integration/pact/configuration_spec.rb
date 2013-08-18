@@ -44,10 +44,10 @@ describe "configure" do
   end
 
   describe "producers" do
-    include Pact::Consumer::MockProducers
+    include Pact::Consumer::ConsumerContractBuilders
 
     it "should have defined methods in MockServices for the producers" do
-      my_service.should be_instance_of Pact::Consumer::MockProducer
+      my_service.should be_instance_of Pact::Consumer::ConsumerContractBuilder
     end
 
     context "when standalone is true" do

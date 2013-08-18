@@ -6,7 +6,7 @@ require_relative 'configuration_dsl'
 module Pact
   module Consumer
     module RSpec
-      include Pact::Consumer::MockProducers
+      include Pact::Consumer::ConsumerContractBuilders
     end
   end
 end

@@ -1,5 +1,5 @@
 require_relative 'consumer/interaction'
-require_relative 'consumer/mock_producer'
+require_relative 'consumer/consumer_contract_builder'
 require_relative 'consumer/mock_service'
 require_relative 'consumer/app_manager'
 require_relative 'term'

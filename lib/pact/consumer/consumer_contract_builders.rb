@@ -1,6 +1,6 @@
 module Pact
   module Consumer
-    module MockProducers
+    module ConsumerContractBuilders
       # Placeholder for mock service methods which will be dynamically created
       # from the Pact configuration.
 

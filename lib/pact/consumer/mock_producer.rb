@@ -22,6 +22,8 @@ module Pact
           :consumer => ServiceConsumer.new(name: fields[:consumer_name]),
           :producer => ServiceProducer.new(name: fields[:producer_name])
           )
+        @uri = URI("http://localhost:#{fields[:port]}")
+        @http = Net::HTTP.new(uri.host, uri.port)
         if pactfile_write_mode == :update && File.exist?(consumer_contract.pactfile_path)
           load_existing_interactions
         end
@@ -36,12 +38,6 @@ module Pact
           end
           consumer_contract.interactions = @interactions.values
         end
-      end
-
-      def on_port(port)
-        @uri = URI("http://localhost:#{port}")
-        @http = Net::HTTP.new(uri.host, uri.port)
-        self
       end
 
       def given(producer_state)

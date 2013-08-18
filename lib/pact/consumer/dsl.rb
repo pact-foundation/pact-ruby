@@ -29,12 +29,12 @@ module Pact::Consumer
         end
 
         def mock_producer_from_attributes
-          mock_producer = Pact::Consumer::MockProducer.new({
+          mock_producer_fields = {
             :consumer_name => Pact.configuration.consumer.name,
             :producer_name => @name,
             :pactfile_write_mode => Pact.configuration.pactfile_write_mode
-            })
-          @service.configure_mock_producer mock_producer, @name
+            }
+          @service.configure_mock_producer mock_producer_fields
         end
       end
 
@@ -59,12 +59,12 @@ module Pact::Consumer
             @verify = verify
          end         
 
-         def configure_mock_producer mock_producer, producer_name
+         def configure_mock_producer mock_producer_fields
             validate
             unless @standalone
-              AppManager.instance.register_mock_service_for producer_name, "http://localhost:#{@port}"
+              AppManager.instance.register_mock_service_for mock_producer_fields[:producer_name], "http://localhost:#{@port}"
             end
-            mock_producer.on_port(@port)
+            mock_producer = Pact::Consumer::MockProducer.new mock_producer_fields.merge({port: @port})
             create_mock_services_module_method mock_producer
             setup_verification(mock_producer) if @verify
             mock_producer

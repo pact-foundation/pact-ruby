@@ -23,7 +23,8 @@ module Pact
 			      Pact::Consumer::MockProducer.new(
 			         :pactfile_write_mode => pactfile_write_mode,
 			         :consumer_name => consumer_name,
-			         :producer_name => producer_name).on_port(1234)}
+			         :producer_name => producer_name,
+			         :port => 1234)}
 
 			   context "when overwriting pact" do
 			      let(:pactfile_write_mode) {:overwrite}
@@ -67,9 +68,7 @@ module Pact
 			describe "handle_interaction_fully_defined" do
 
 				subject { 
-					mock_producer = Pact::Consumer::MockProducer.new({:consumer_name => 'blah', :producer_name => 'blah'})
-					mock_producer.on_port(2222)
-					mock_producer
+					Pact::Consumer::MockProducer.new({:consumer_name => 'blah', :producer_name => 'blah', :port => 2222})
 				}
 
 				let(:interaction_hash) {

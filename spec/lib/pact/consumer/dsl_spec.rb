@@ -22,7 +22,8 @@ module Pact::Consumer::DSL
          let(:url) { "http://localhost:1234"}
 
          it "adds a verification to the Pact configuration" do
-            subject.configure_mock_producer mock_producer, mock_producer_name
+            Pact::Consumer::MockProducer.stub(:new).and_return(mock_producer)
+            subject.configure_mock_producer({})
             mock_producer.should_receive(:verify)
             Pact.configuration.producer_verifications.first.call
          end
@@ -30,7 +31,7 @@ module Pact::Consumer::DSL
          context "when standalone" do
             it "does not register the app with the AppManager" do
                Pact::Consumer::AppManager.instance.should_not_receive(:register_mock_service_for)
-               subject.configure_mock_producer mock_producer, mock_producer_name
+               subject.configure_mock_producer({})
             end
          end
          context "when not standalone" do
@@ -43,7 +44,7 @@ module Pact::Consumer::DSL
             }            
             it "registers the app with the AppManager" do
                Pact::Consumer::AppManager.instance.should_receive(:register_mock_service_for).with(mock_producer_name, url)
-               subject.configure_mock_producer mock_producer, mock_producer_name
+               subject.configure_mock_producer({:producer_name => mock_producer_name })
             end
          end         
       end

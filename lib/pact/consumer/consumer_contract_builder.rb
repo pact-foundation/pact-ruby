@@ -62,9 +62,9 @@ module Pact
         consumer_contract.update_pactfile
       end
 
-      def verify
+      def verify example_description
         http = Net::HTTP.new(uri.host, uri.port)
-        response = http.request_get('/verify')
+        response = http.request_get("/verify?example_description=#{URI.encode(example_description)}")
         raise response.body unless response.is_a? Net::HTTPSuccess
       end
 

@@ -43,7 +43,7 @@ module Pact::Consumer
             @name = name
             @port = nil
             @standalone = false
-            @verify = false            
+            @verify = false
             instance_eval(&block)
          end
 
@@ -57,7 +57,7 @@ module Pact::Consumer
 
          def verify verify
             @verify = verify
-         end         
+         end
 
          def configure_consumer_contract_builder consumer_contract_builder_fields
             validate
@@ -70,11 +70,12 @@ module Pact::Consumer
             consumer_contract_builder
          end
 
+
         def setup_verification consumer_contract_builder
-          Pact.configuration.add_producer_verification do
-            consumer_contract_builder.verify
+          Pact.configuration.add_producer_verification do | example_description |
+            consumer_contract_builder.verify example_description
           end
-        end         
+        end
 
          private
 

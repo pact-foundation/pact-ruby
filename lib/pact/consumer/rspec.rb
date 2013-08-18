@@ -26,10 +26,11 @@ RSpec.configure do |config|
     end
   end
 
-  config.after :each, :pact => true do
-    Pact.configuration.logger.info "Verifying interactions"
+  config.after :each, :pact => true do | example |
+    example_description = "#{example.example.example_group.description} #{example.example.description}"
+    Pact.configuration.logger.info "Verifying interactions for #{example_description}"
     Pact.configuration.producer_verifications.each do | producer_verification |
-      producer_verification.call
+      producer_verification.call example_description
     end
   end
 

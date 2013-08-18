@@ -262,19 +262,27 @@ module Pact
       end
 
       def match? env
-        env['REQUEST_PATH'] == '/verify' &&
+        env['REQUEST_PATH'].start_with?('/verify') &&
           env['REQUEST_METHOD'] == 'GET'
       end
 
       def respond env
         if InteractionList.instance.all_matched?
-          @logger.info "Veryifying - interactions matched for mock #{@name}"
+          @logger.info "Veryifying - interactions matched for example \"#{example_description(env)}\""
           [200, {}, ['Interactions matched']]
         else
-          @logger.warn "Verifying - actual interactions do not match expected interactions. Missing interactions:"
+          @logger.warn "Verifying - actual interactions do not match expected interactions for example \"#{example_description(env)}\". Missing interactions:"
           @logger.ap InteractionList.instance.interaction_diffs, :warn
           [500, {}, ["Actual interactions do not match expected interactions for mock #{@name}. See #{@log_description} for details."]]
         end
+      end
+
+      def example_description env
+        params_hash(env)['example_description']
+      end
+
+      def params_hash env
+        env["QUERY_STRING"].split("&").collect{| param| param.split("=")}.inject({}){|params, param| params[param.first] = URI.decode(param.last); params }
       end
     end
 

@@ -65,7 +65,7 @@ module Pact
       end
 
       def handle_interaction_fully_defined interaction
-        @http.request_post('/interactions', interaction.as_json_with_generated_response.to_json)
+        @http.request_post('/interactions', interaction.to_json_with_generated_response)
         @producer_state = nil
         consumer_contract.update_pactfile
       end

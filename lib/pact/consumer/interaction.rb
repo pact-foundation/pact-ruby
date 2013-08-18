@@ -38,8 +38,8 @@ module Pact
       end
 
 
-      def as_json_with_generated_response
-        as_json.tap { | hash | hash[:response] = Reification.from_term(response) }
+      def to_json_with_generated_response
+        as_json.tap { | hash | hash[:response] = Reification.from_term(response) }.to_json
       end
     end
 

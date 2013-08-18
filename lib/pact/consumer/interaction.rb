@@ -47,10 +47,9 @@ module Pact
 
       attr_reader :interaction
 
-      def initialize(producer, description, producer_state)
+      def initialize(description, producer_state)
         producer_state = producer_state.nil? ? nil : producer_state.to_s
         @interaction = Interaction.new(:description => description, :producer_state => producer_state)
-        @producer = producer
       end
 
       def with(request_details)
@@ -61,7 +60,6 @@ module Pact
       def will_respond_with(response)
         interaction.response = response
         @callback.call interaction
-        @producer
       end
 
       def on_interaction_fully_defined &block

@@ -50,7 +50,7 @@ module Pact
       end
 
       def upon_receiving(description)
-        interaction_builder = InteractionBuilder.new(self, description, @producer_state)
+        interaction_builder = InteractionBuilder.new(description, @producer_state)
         producer = self
         interaction_builder.on_interaction_fully_defined do | interaction |
           producer.handle_interaction_fully_defined(interaction)

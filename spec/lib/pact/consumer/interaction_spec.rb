@@ -5,7 +5,7 @@ module Pact
     describe InteractionBuilder do
 
       subject { 
-        interaction_builder = InteractionBuilder.new(producer, 'Test request', nil).with(request) 
+        interaction_builder = InteractionBuilder.new('Test request', nil).with(request) 
         interaction_builder.on_interaction_fully_defined do | interaction |
           producer.callback interaction
         end
@@ -41,10 +41,6 @@ module Pact
         it "invokes the callback" do
           producer.should_receive(:callback).with(subject.interaction)
           subject.will_respond_with response
-        end
-
-        it "returns the producer (for fluent API goodness)" do
-          expect(subject.will_respond_with response).to eql producer
         end
 
       end
@@ -89,7 +85,7 @@ module Pact
         context "with a producer_state" do
           context "described with a string" do
             subject { 
-              interaction_builder = InteractionBuilder.new(producer, 'Test request', "there are no alligators").with(request) 
+              interaction_builder = InteractionBuilder.new('Test request', "there are no alligators").with(request) 
               interaction_builder.on_interaction_fully_defined {}
               interaction_builder
             }
@@ -100,7 +96,7 @@ module Pact
           end
           context "described with a symbol" do
             subject { 
-              interaction_builder = InteractionBuilder.new(producer, 'Test request', :there_are_no_alligators).with(request) 
+              interaction_builder = InteractionBuilder.new('Test request', :there_are_no_alligators).with(request) 
               interaction_builder.on_interaction_fully_defined {}
               interaction_builder
             }

@@ -51,7 +51,8 @@ describe "A service consumer side of a pact", :pact => true  do
       will_respond_with({
       status: 201,
       body: 'Donut created.'
-    }).
+    })
+    bob_service.
       upon_receiving('a delete charlie request').with({
       method: :delete,
       path: '/charlie'
@@ -59,7 +60,8 @@ describe "A service consumer side of a pact", :pact => true  do
       will_respond_with({
       status: 200,
       body: /deleted/
-    }).
+    })
+    bob_service. 
       upon_receiving('an update alligators request').with({
         method: :put,
         path: '/alligators',

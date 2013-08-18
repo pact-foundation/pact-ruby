@@ -41,30 +41,6 @@ module Pact
 			   end		   	
 		   end			
 
-			describe "update_pactfile" do
-				let(:pacts_dir) { Pathname.new("./tmp/pactfiles") }
-				let(:expected_pact_path) { pacts_dir + "test_consumer-test_service.json" }
-				let(:expected_pact_string) { 'the_json' }
-
-				before do
-					Pact.configuration.stub(:pact_dir).and_return(Pathname.new("./tmp/pactfiles"))
-					FileUtils.rm_rf pacts_dir
-					FileUtils.mkdir_p pacts_dir
-					mock_producer = MockProducer.new(:consumer_name => 'test_consumer', :producer_name => 'test_service')
-					JSON.should_receive(:pretty_generate).with(instance_of(Pact::ConsumerContract)).and_return(expected_pact_string)
-					mock_producer.instance_variable_set('@interactions', { "some description" => double("interaction", as_json: "something") })
-					mock_producer.update_pactfile
-				end
-
-			  it "should write to a file specified by the consumer and producer name" do
-			  	File.exist?(expected_pact_path).should be_true
-			  end
-
-			  it "should write the interactions to the file" do
-			  	File.read(expected_pact_path).should eql expected_pact_string
-			  end
-			end
-
 			describe "handle_interaction_fully_defined" do
 
 				subject { 

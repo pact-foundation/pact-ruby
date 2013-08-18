@@ -97,5 +97,29 @@ module Pact
         end
       end
     end
+    describe "update_pactfile" do
+      let(:pacts_dir) { Pathname.new("./tmp/pactfiles") }
+      let(:expected_pact_path) { pacts_dir + "test_consumer-test_service.json" }
+      let(:expected_pact_string) { 'the_json' }
+      let(:consumer) { Pact::Consumer::ServiceConsumer.new(:name => 'test_consumer')}
+      let(:producer) { Pact::Consumer::ServiceProducer.new(:name => 'test_service')}
+      let(:interactions) { [double("interaction", as_json: "something")]}
+      subject { ConsumerContract.new(:consumer => consumer, :producer => producer, :interactions => interactions) }
+      before do
+        Pact.configuration.stub(:pact_dir).and_return(Pathname.new("./tmp/pactfiles"))
+        FileUtils.rm_rf pacts_dir
+        FileUtils.mkdir_p pacts_dir
+        JSON.should_receive(:pretty_generate).with(instance_of(Pact::ConsumerContract)).and_return(expected_pact_string)
+        subject.update_pactfile
+      end
+
+      it "should write to a file specified by the consumer and producer name" do
+        File.exist?(expected_pact_path).should be_true
+      end
+
+      it "should write the interactions to the file" do
+        File.read(expected_pact_path).should eql expected_pact_string
+      end
+    end    
   end 
 end

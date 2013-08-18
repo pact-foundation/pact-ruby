@@ -29,11 +29,7 @@ module Pact
       end
 
       let(:producer) do
-        double(uri: URI('http://example.com:2222'),
-               pact_path: pact_path,
-               update_pactfile: nil,
-               given: nil,
-               callback: nil)
+        double(callback: nil)
       end
 
       describe "setting up responses" do

@@ -3,6 +3,7 @@ require 'pact/consumer/dsl'
 require 'pact/consumer/configuration_dsl'
 
 module Pact::Consumer::DSL
+
    describe Service do
       before do
          Pact.clear_configuration

@@ -2,6 +2,52 @@ require_relative 'consumer_contract_builders'
 
 module Pact::Consumer
    module DSL
+
+      def service_consumer name, &block
+        ServiceConsumerDSL.new(name, &block).create_service_consumer
+      end
+
+      class ServiceConsumerDSL
+
+        def initialize name, &block
+          @name = name
+          consumer = Pact::Consumer::ServiceConsumer.new name: @name
+          @app = nil
+          @port = nil
+          instance_eval(&block)
+        end
+
+        def validate
+          raise "Please provide a consumer name" unless (@name && !@name.empty?)
+          raise "Please provide a port for the consumer app" if @app && !@port
+        end
+
+        def app app
+          @app = app
+        end
+
+        def port port
+          @port = port
+        end
+
+        def has_pact_with service_provider_name, &block
+          Producer.new(service_provider_name, @name, &block).create_consumer_contract_builder
+        end
+
+        def create_service_consumer
+          validate
+          register_consumer_app if @app
+        end
+
+        def register_consumer_app
+          Pact::Consumer::AppManager.instance.register @app, @port
+        end
+      end
+
+
+
+
+      #OLD ####
       def with_producer name, &block
          Producer.new(name, &block).create_consumer_contract_builder
       end
@@ -9,9 +55,10 @@ module Pact::Consumer
       alias_method :with_service_provider, :with_producer
 
       class Producer
-         def initialize name, &block
+         def initialize name, consumer_name = Pact.configuration.consumer.name, &block
             @name = name
             @service = nil
+            @consumer_name = consumer_name
             instance_eval(&block)
          end
 
@@ -32,7 +79,7 @@ module Pact::Consumer
 
         def consumer_contract_builder_from_attributes
           consumer_contract_builder_fields = {
-            :consumer_name => Pact.configuration.consumer.name,
+            :consumer_name => @consumer_name,
             :producer_name => @name,
             :pactfile_write_mode => Pact.configuration.pactfile_write_mode
             }

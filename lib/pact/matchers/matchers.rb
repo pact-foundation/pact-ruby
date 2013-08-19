@@ -1,4 +1,5 @@
 require 'awesome_print'
+require 'pact/term'
 
 module Pact
   module Matchers
@@ -17,7 +18,7 @@ module Pact
 
     def structure_diff expected, actual
       diff expected, actual, {structure: true}
-    end   
+    end
 
     def regexp_diff regexp, actual, options
       if actual != nil && regexp.match(actual)

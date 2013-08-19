@@ -32,7 +32,7 @@ module Pact
       def clear
         @interactions = []
         @matched_interactions = []
-        @unexpected_requests = []        
+        @unexpected_requests = []
       end
 
       def add interactions
@@ -65,6 +65,12 @@ module Pact
         end
       end
 
+    end
+
+    module RackHelper
+      def params_hash env
+        env["QUERY_STRING"].split("&").collect{| param| param.split("=")}.inject({}){|params, param| params[param.first] = URI.decode(param.last); params }
+      end
     end
 
     class StartupPoll
@@ -103,19 +109,21 @@ module Pact
 
     class InteractionDelete
 
+      include RackHelper
+
       def initialize name, logger
         @name = name
         @logger = logger
       end
 
       def match? env
-        env['REQUEST_PATH'] == '/interactions' &&
+        env['REQUEST_PATH'].start_with?('/interactions') &&
           env['REQUEST_METHOD'] == 'DELETE'
       end
 
       def respond env
         InteractionList.instance.clear
-        @logger.info "Cleared interactions"
+        @logger.info "Cleared interactions before example \"#{params_hash(env)['example_description']}\""
         [200, {}, ['Deleted interactions']]
       end
     end
@@ -255,6 +263,9 @@ module Pact
     end
 
     class VerificationGet
+
+      include RackHelper
+
       def initialize name, logger, log_description
         @name = name
         @logger = logger
@@ -279,10 +290,6 @@ module Pact
 
       def example_description env
         params_hash(env)['example_description']
-      end
-
-      def params_hash env
-        env["QUERY_STRING"].split("&").collect{| param| param.split("=")}.inject({}){|params, param| params[param.first] = URI.decode(param.last); params }
       end
     end
 

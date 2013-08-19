@@ -19,10 +19,11 @@ RSpec.configure do |config|
     FileUtils.mkdir_p Pact.configuration.pact_dir
   end
 
-  config.before :each, :pact => true do
+  config.before :each, :pact => true do | example |
+    example_description = "#{example.example.example_group.description} #{example.example.description}"
     Pact.configuration.logger.info "Clearing all expectations"
     Pact::Consumer::AppManager.instance.ports_of_mock_services.each do | port |
-      Net::HTTP.new("localhost", port).delete("/interactions")
+      Net::HTTP.new("localhost", port).delete("/interactions?example_description=#{URI.encode(example_description)}")
     end
   end
 

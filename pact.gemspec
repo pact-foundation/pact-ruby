@@ -6,11 +6,11 @@ require 'pact/version'
 Gem::Specification.new do |gem|
   gem.name          = "pact"
   gem.version       = Pact::VERSION
-  gem.authors       = ["James Fraser", "Sergei Matheson", "Brent Snook"]
-  gem.email         = ["james.fraser@alumni.swinburne.edu", "sergei.matheson@gmail.com", "brent@fuglylogic.com"]
+  gem.authors       = ["James Fraser", "Sergei Matheson", "Brent Snook", "Ronald Holshausen", "Bethany Skurrie"]
+  gem.email         = ["james.fraser@alumni.swinburne.edu", "sergei.matheson@gmail.com", "brent@fuglylogic.com", "uglyog@gmail.com", "bskurrie@dius.com.au"]
   gem.description   = %q{Define a pact between service consumers and providers}
   gem.summary       = %q{Define a pact between service consumers and providers}
-  gem.homepage      = "https://git.realestate.com.au/business-systems/pact"
+  gem.homepage      = "https://github.com/uglyog/pact.git"
 
   gem.files         = `git ls-files`.split($/)
   gem.executables   = gem.files.grep(%r{^bin/}).map{ |f| File.basename(f) }

@@ -74,11 +74,8 @@ module Pact::Producer
     EOS
 
     before do
-        Pact.configure do |config|
-            config.producer do
-                name "My Producer"
-                app { ServiceUnderTest.new }
-            end
+        Pact.service_provider "My Provider" do
+            app { ServiceUnderTest.new }
         end
     end
 
@@ -110,11 +107,8 @@ module Pact::Producer
         EOS
 
         before do
-            Pact.configure do |config|
-                config.producer do
-                    name "My Producer"
-                    app { ServiceUnderTestWithFixture.new }
-                end
+            Pact.service_provider "My Provider" do
+                app { ServiceUnderTestWithFixture.new }
             end
         end
 
@@ -144,11 +138,8 @@ module Pact::Producer
         EOS
 
         before do
-            Pact.configure do |config|
-                config.producer do
-                    name "ServiceUnderTestWithFixture"
-                    app { ServiceUnderTestWithFixture.new }
-                end
+            Pact.service_provider "ServiceUnderTestWithFixture" do
+                app { ServiceUnderTestWithFixture.new }
             end
         end
 

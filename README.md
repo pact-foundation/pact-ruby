@@ -102,11 +102,8 @@ end
 
 ```ruby
 
-Pact.configure do | config |
-  config.producer do
-    name "My Producer"
-    app { MyApp.new }
-  end
+Pact.service_provider "My Provider" do
+  app { MyApp.new }
 end
 
 ```

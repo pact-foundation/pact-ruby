@@ -15,11 +15,8 @@ require 'pact/producer/pact_spec_runner'
 	The support_file should include code that makes your rack app available for the rack testing framework.
 	Eg.
 
-	Pact.configure do | config |
-		config.producer do
-			name "My Producer"
-			app { TestApp.new }
-		end
+	Pact.service_provider "My Provider" do
+		app { TestApp.new }
 	end
 
 	It should also load all your app's dependencies (eg by calling out to spec_helper)

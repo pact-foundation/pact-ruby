@@ -31,17 +31,7 @@ module Pact
     def array_diff expected, actual, options
       if actual.is_a? Array
         if expected.length == actual.length
-          difference = []
-          diff_found = false
-          expected.each_with_index do | item, index|
-            if (item_diff = diff(item, actual[index], options)).any?
-              diff_found = true
-              difference << item_diff
-            else
-              difference << NO_DIFF_INDICATOR
-            end
-          end
-          diff_found ? difference : {}
+          actual_array_diff expected, actual, options
         else
           {expected: expected, actual: actual}
         end
@@ -50,14 +40,32 @@ module Pact
       end
     end
 
+    def actual_array_diff expected, actual, options
+      difference = []
+      diff_found = false
+      expected.each_with_index do | item, index|
+        if (item_diff = diff(item, actual[index], options)).any?
+          diff_found = true
+          difference << item_diff
+        else
+          difference << NO_DIFF_INDICATOR
+        end
+      end
+      diff_found ? difference : {}
+    end
+
+    def actual_hash_diff expected, actual, options
+      expected.keys.inject({}) do |diff, key|
+        if (diff_at_key = diff(expected[key], actual[key], options)).any?
+          diff[key] = diff_at_key
+        end
+        diff
+      end
+    end
+
     def hash_diff expected, actual, options
       if actual.is_a? Hash
-        expected.keys.inject({}) do |diff, key|
-          if (diff_at_key = diff(expected[key], actual[key], options)).any?
-            diff[key] = diff_at_key
-          end
-          diff
-        end
+        actual_hash_diff expected, actual, options
       else
         {expected: expected, actual: actual}
       end

@@ -1,30 +1,27 @@
 require 'uri'
 require 'json/add/regexp'
-require 'pact/json_warning'
 require 'pact/logging'
+require 'pact/consumer/mock_service_client'
 
 module Pact
   module Consumer
+
     class ConsumerContractBuilder
 
-      include Pact::JsonWarning
       include Pact::Logging
 
-      attr_reader :uri
       attr_reader :consumer_contract
-      attr_reader :pactfile_write_mode
+      attr_reader :mock_service_client
 
       def initialize(attributes)
         @interactions = {}
         @producer_state = nil
-        @pactfile_write_mode = attributes[:pactfile_write_mode]
         @consumer_contract = Pact::ConsumerContract.new(
           :consumer => ServiceConsumer.new(name: attributes[:consumer_name]),
           :producer => ServiceProducer.new(name: attributes[:producer_name])
           )
-        @uri = URI("http://localhost:#{attributes[:port]}")
-        @http = Net::HTTP.new(uri.host, uri.port)
-        if pactfile_write_mode == :update && File.exist?(consumer_contract.pactfile_path)
+        @mock_service_client = MockServiceClient.new(attributes[:producer_name], attributes[:port])
+        if attributes[:pactfile_write_mode] == :update && File.exist?(consumer_contract.pactfile_path)
           load_existing_interactions
         end
       end
@@ -57,15 +54,13 @@ module Pact
       end
 
       def handle_interaction_fully_defined interaction
-        @http.request_post('/interactions', interaction.to_json_with_generated_response)
+        mock_service_client.add_expected_interaction interaction
         @producer_state = nil
         consumer_contract.update_pactfile
       end
 
       def verify example_description
-        http = Net::HTTP.new(uri.host, uri.port)
-        response = http.request_get("/verify?example_description=#{URI.encode(example_description)}")
-        raise response.body unless response.is_a? Net::HTTPSuccess
+        mock_service_client.verify example_description
       end
 
       private

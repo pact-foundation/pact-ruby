@@ -2,6 +2,7 @@ require_relative '../configuration'
 require_relative '../consumer'
 require_relative 'dsl'
 require_relative 'configuration_dsl'
+require 'pact/consumer/consumer_contract_builder'
 
 module Pact
   module Consumer
@@ -23,7 +24,7 @@ RSpec.configure do |config|
     example_description = "#{example.example.example_group.description} #{example.example.description}"
     Pact.configuration.logger.info "Clearing all expectations"
     Pact::Consumer::AppManager.instance.ports_of_mock_services.each do | port |
-      Net::HTTP.new("localhost", port).delete("/interactions?example_description=#{URI.encode(example_description)}")
+      Pact::Consumer::MockServiceClient.clear_interactions port, example_description
     end
   end
 

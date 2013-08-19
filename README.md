@@ -41,9 +41,11 @@ class SomeServiceClient
   end
 end
 
-Pact.configure do | config |
-  config.service_consumer do
-    name 'My Consumer'
+Pact.service_consumer "My Consumer" do
+  has_pact_with "My Producer" do
+    mock_service :my_producer do
+      port 1234
+    end
   end
 end
 
@@ -52,11 +54,6 @@ end
 # which you will use to set up your expectations. The method name to access the mock producer
 # will be what ever name you give as the service argument - in this case "my_producer"
 
-Pact.with_service_provider "My Producer" do
-  mock_service :my_producer do
-    port 1234
-  end
-end
 
 # Use the :pact => true describe metadata to include all the pact generation functionality in your spec.
 
@@ -93,12 +90,10 @@ Logs will be output to the configured log dir that can be useful when diagnosing
 To run your consumer app as a process during your test (eg for a Capybara test):
 
 ```ruby
-Pact.configure do | config |
-  config.service_consumer do
-    name 'My Consumer'
-    app my_consumer_rack_app
-    port 4321
-  end
+Pact.service_consumer "My Consumer" do
+  app my_consumer_rack_app
+  port 4321
+end
 ```
 
 ### Producer project

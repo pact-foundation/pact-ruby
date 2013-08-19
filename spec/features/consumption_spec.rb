@@ -8,23 +8,19 @@ describe "A service consumer side of a pact", :pact => true  do
   it "goes a little something like this" do
     Pact.clear_configuration
 
-    Pact.configure do | config |
-      config.service_consumer do
-        name "Consumer"
+    Pact.service_consumer "Consumer" do
+      has_pact_with "Alice Service" do
+        mock_service :alice_service do
+          verify true
+          port 1234
+        end
       end
-    end
 
-    Pact.with_service_provider "Alice Service" do
-      mock_service :alice_service do
-        verify true
-        port 1234
-      end
-    end
-
-    Pact.with_service_provider "Bob" do
-      mock_service :bob_service do
-        verify false
-        port 4321
+      has_pact_with "Bob" do
+        mock_service :bob_service do
+          verify false
+          port 4321
+        end
       end
     end
 

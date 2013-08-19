@@ -11,19 +11,19 @@ describe "configure" do
     Pact::Consumer::AppManager.instance.clear_all
 
     Pact.configure do | config |
-      config.consumer do
+      config.service_consumer do
         name "My Consumer"
       end
     end
 
-    Pact.with_producer "My Service" do
+    Pact.with_service_provider "My Service" do
       mock_service :my_service do
         port 1234
         standalone true
       end
     end
 
-    Pact.with_producer "My Other Service" do
+    Pact.with_service_provider "My Other Service" do
       mock_service :my_other_service do
         port 1235
         standalone false

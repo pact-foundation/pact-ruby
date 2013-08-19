@@ -27,6 +27,8 @@ module Pact
         end
       end
 
+      alias_method :service_consumer, :consumer
+
       class ConsumerDSL
 
         def initialize &block

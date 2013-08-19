@@ -9,19 +9,19 @@ describe "A service consumer side of a pact", :pact => true  do
     Pact.clear_configuration
 
     Pact.configure do | config |
-      config.consumer do
+      config.service_consumer do
         name "Consumer"
       end
     end
 
-    Pact.with_producer "Alice Service" do
+    Pact.with_service_provider "Alice Service" do
       mock_service :alice_service do
         verify true
         port 1234
       end
     end
 
-    Pact.with_producer "Bob" do
+    Pact.with_service_provider "Bob" do
       mock_service :bob_service do
         verify false
         port 4321
@@ -109,12 +109,12 @@ describe "A service consumer side of a pact", :pact => true  do
       Pact.clear_configuration
 
       Pact.configure do | config |
-        config.consumer do
+        config.service_consumer do
           name "Consumer"
         end
       end
 
-      Pact.with_producer "Zebra Service" do
+      Pact.with_service_provider "Zebra Service" do
         mock_service :zebra_service do
           verify false
           port 1235

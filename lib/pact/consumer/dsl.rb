@@ -6,6 +6,8 @@ module Pact::Consumer
          Producer.new(name, &block).create_consumer_contract_builder
       end
 
+      alias_method :with_service_provider, :with_producer
+
       class Producer
          def initialize name, &block
             @name = name

@@ -42,7 +42,7 @@ class SomeServiceClient
 end
 
 Pact.configure do | config |
-  config.consumer do
+  config.service_consumer do
     name 'My Consumer'
   end
 end
@@ -52,7 +52,7 @@ end
 # which you will use to set up your expectations. The method name to access the mock producer
 # will be what ever name you give as the service argument - in this case "my_producer"
 
-Pact.with_producer "My Producer" do
+Pact.with_service_provider "My Producer" do
   mock_service :my_producer do
     port 1234
   end
@@ -94,7 +94,7 @@ To run your consumer app as a process during your test (eg for a Capybara test):
 
 ```ruby
 Pact.configure do | config |
-  config.consumer do
+  config.service_consumer do
     name 'My Consumer'
     app my_consumer_rack_app
     port 4321

@@ -4,12 +4,13 @@ require 'pact/consumer/interaction'
 require 'pact/logging'
 require 'pact/json_warning'
 require 'date'
+require 'pact/version'
 
 module Pact
 	class ConsumerContract
 
 		include Pact::Logging
-      include Pact::JsonWarning		
+      include Pact::JsonWarning
 
 		attr_accessor :interactions
 		attr_accessor :consumer

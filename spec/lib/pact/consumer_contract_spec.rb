@@ -11,9 +11,18 @@ module Pact
         end
       end
 
+      def silence_warnings
+        old_verbose, $VERBOSE = $VERBOSE, nil
+        yield
+      ensure
+        $VERBOSE = old_verbose
+      end      
+
       before do
         @backup_version = Pact::VERSION
-        Pact::VERSION = "1.0"
+        silence_warnings do
+          Pact::VERSION = "1.0"
+        end
         DateTime.stub(:now).and_return(DateTime.strptime("2013-08-15T13:27:13+10:00"))
       end
 
@@ -27,7 +36,9 @@ module Pact
       end
 
       after do
-        Pact::VERSION = @backup_version
+        silence_warnings do
+          Pact::VERSION = @backup_version
+        end
       end
     end
 

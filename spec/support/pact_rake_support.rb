@@ -12,11 +12,8 @@ module Pact
 			end
 		end
 
-		Pact.configure do | config |
-			config.producer do
-				name "Some Producer"
-				app { TestApp.new }
-			end
+		Pact.service_provider "Some Producer" do
+			app { TestApp.new }
 		end
 
 

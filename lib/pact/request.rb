@@ -80,6 +80,14 @@ module Pact
 
     class Expected < Base
 
+      attr_accessor :description
+
+      def self.from_hash(hash)
+        request = super
+        request.description = hash.fetch(:description, nil)
+        request
+      end
+
       def match(actual_request)
         difference(actual_request).empty?
       end

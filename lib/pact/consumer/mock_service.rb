@@ -169,7 +169,7 @@ module Pact
         mashed_request[:headers] = headers_from env
         body_string = mashed_request[:body].read
 
-        if (body_string.empty?)
+        if body_string.empty?
           mashed_request.delete :body
         else
           body_is_json = mashed_request[:headers]['Content-Type'] =~ /json/
@@ -217,7 +217,7 @@ module Pact
         @logger.ap actual_request.as_json
         candidates = []
         matching_interactions = InteractionList.instance.interactions.select do |interaction|
-          expected_request = Request::Expected.from_hash(interaction.request)
+          expected_request = Request::Expected.from_hash(interaction.request.merge(:description => interaction.description))
           candidates << expected_request if expected_request.matches_route? actual_request
           expected_request.match actual_request
         end
@@ -238,7 +238,7 @@ module Pact
       end
 
       def handle_unrecognised_request request, candidates
-        @logger.ap "No interaction found on #{@name} for request"
+        @logger.ap "No interaction found on #{@name} for request \"#{candidates.map(&:description).join(', ')}\""
         @logger.ap 'Interaction diffs for that route:'
         interaction_diff = candidates.map do |candidate|
           diff(candidate.as_json, request.as_json)

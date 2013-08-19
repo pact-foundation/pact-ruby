@@ -279,7 +279,7 @@ module Pact
 
       def respond env
         if InteractionList.instance.all_matched?
-          @logger.info "Veryifying - interactions matched for example \"#{example_description(env)}\""
+          @logger.info "Verifying - interactions matched for example \"#{example_description(env)}\""
           [200, {}, ['Interactions matched']]
         else
           @logger.warn "Verifying - actual interactions do not match expected interactions for example \"#{example_description(env)}\". Missing interactions:"

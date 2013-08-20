@@ -11,6 +11,9 @@ module Pact
         instance_eval(&block)
         ProducerState.current_namespaces.pop
       end
+
+      alias_method :provider_states_for, :with_consumer
+      alias_method :provider_state, :producer_state
     end
 
     class ProducerState
@@ -20,6 +23,10 @@ module Pact
 
       def self.producer_state name, &block
         ProducerState.new(name, current_namespaces.join('.'), &block)
+      end
+
+      def self.provider_state name, &block
+        producer_state name, &block
       end
 
       def self.register name, producer_state

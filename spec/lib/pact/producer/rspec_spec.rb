@@ -1,4 +1,4 @@
-require 'pact/producer/rspec'
+require 'pact/provider/rspec'
 
 describe "the match_term matcher" do
 

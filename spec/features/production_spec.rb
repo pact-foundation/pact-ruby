@@ -1,4 +1,4 @@
-require 'pact/producer/rspec'
+require 'pact/provider/rspec'
 require 'pact/consumer_contract'
 require 'features/producer_states/zebras'
 

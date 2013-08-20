@@ -1,0 +1,1 @@
+require 'pact/producer/rspec'

@@ -1,5 +1,5 @@
 require 'spec_helper'
-require 'pact/producer/rspec'
+require 'pact/provider/rspec'
 
 describe "provider side" do
    describe "configure" do

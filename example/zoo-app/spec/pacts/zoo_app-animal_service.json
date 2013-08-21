@@ -1,0 +1,100 @@
+{
+  "producer": {
+    "name": "Animal Service"
+  },
+  "consumer": {
+    "name": "Zoo App"
+  },
+  "interactions": [
+    {
+      "description": "a request for animals",
+      "request": {
+        "method": "get",
+        "path": "/animals"
+      },
+      "response": {
+        "status": 200,
+        "headers": {
+          "Content-Type": "application/json"
+        },
+        "body": {
+          "alligators": [
+            {
+              "name": "Bob"
+            }
+          ]
+        }
+      },
+      "producer_state": "there are alligators"
+    },
+    {
+      "description": "a request for alligators",
+      "request": {
+        "method": "get",
+        "path": "/alligators",
+        "headers": {
+          "Accept": "application/json"
+        }
+      },
+      "response": {
+        "status": 200,
+        "headers": {
+          "Content-Type": "application/json"
+        },
+        "body": [
+          {
+            "name": "Bob"
+          }
+        ]
+      },
+      "producer_state": "there are alligators"
+    },
+    {
+      "description": "a request for alligator Mary",
+      "request": {
+        "method": "get",
+        "path": "/alligators/Mary",
+        "headers": {
+          "Accept": "application/json"
+        }
+      },
+      "response": {
+        "status": 200,
+        "headers": {
+          "Content-Type": "application/json"
+        },
+        "body": [
+          {
+            "name": "Mary"
+          }
+        ]
+      },
+      "producer_state": "there is an alligator named Mary"
+    },
+    {
+      "description": "a request for alligators",
+      "request": {
+        "method": "get",
+        "path": "/alligators",
+        "headers": {
+          "Accept": "application/json"
+        }
+      },
+      "response": {
+        "status": 500,
+        "headers": {
+          "Content-Type": "application/json"
+        },
+        "body": {
+          "error": "Argh!!!"
+        }
+      },
+      "producer_state": "an error has occurred"
+    }
+  ],
+  "metadata": {
+    "pact_gem": {
+      "version": "0.1.32"
+    }
+  }
+}

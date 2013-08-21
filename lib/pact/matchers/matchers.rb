@@ -5,8 +5,11 @@ module Pact
   module Matchers
 
     NO_DIFF_INDICATOR = 'no difference here!'
+    UNEXPECTED_KEY = '<key not to be present>'
+    DEFAULT_OPTIONS = {allow_unexpected_keys: true, structure: false}
 
-    def diff expected, actual, options = {}
+    def diff expected, actual, opts = {}
+      options = DEFAULT_OPTIONS.merge(opts)
       case expected
       when Hash then hash_diff(expected, actual, options)
       when Array then array_diff(expected, actual, options)
@@ -55,11 +58,23 @@ module Pact
     end
 
     def actual_hash_diff expected, actual, options
-      expected.keys.inject({}) do |diff, key|
+      difference = expected.keys.inject({}) do |diff, key|
         if (diff_at_key = diff(expected[key], actual[key], options)).any?
           diff[key] = diff_at_key
         end
         diff
+      end
+      difference.merge(check_for_unexpected_keys(expected, actual, options))
+    end
+
+    def check_for_unexpected_keys expected, actual, options
+      if options[:allow_unexpected_keys]
+        {}
+      else
+        (actual.keys - expected.keys).inject({}) do | diff, key |
+          diff[key] = {:expected => UNEXPECTED_KEY, :actual => actual[key]}
+          diff
+        end
       end
     end
 

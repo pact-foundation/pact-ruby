@@ -5,6 +5,17 @@ require 'pact/matchers'
 describe Pact::Matchers do
   include Pact::Matchers
 
+  describe 'option {allow_unexpected_keys: false}' do
+    context "when an unexpected key is found" do
+      let(:expected) { {:a => 1} }
+      let(:actual) { {:a => 1, :b => 2} }
+      let(:difference) { {:b => {:expected => '<key not to be present>', :actual => 2 }} }
+      it "returns it in the diff" do
+        expect(diff(expected, actual, allow_unexpected_keys: false)).to eq difference
+      end
+    end
+  end
+
   describe 'structure_diff' do
     let(:expected) {
       {a: 'a string', b: 1, c: nil, d: [{e: 'thing'}], f: {g: 10}}
@@ -40,14 +51,14 @@ describe Pact::Matchers do
         let(:difference) { {:a=>{:expected=>{:class=>Fixnum, :eg=>1}, :actual=>{:class=>Hash, :value=>{:b=>1}}}} }
         it "returns the diff" do
           expect(structure_diff(expected, actual)).to eq difference
-        end        
+        end
       end
       context "and an array is found" do
         let(:actual) { {a: [1] } }
         let(:difference) { {:a=>{:expected=>{:class=>Fixnum, :eg=>1}, :actual=>{:class=>Array, :value=>[1]}}} }
         it "returns the diff" do
           expect(structure_diff(expected, actual)).to eq difference
-        end         
+        end
       end
     end
 
@@ -61,7 +72,7 @@ describe Pact::Matchers do
                 :expected=> { :class=>String, :eg=>"Mary" },
                 :actual=> { :class=>Fixnum, :value=>1} }
             }
-          ] 
+          ]
         }
         it "returns the diff" do
           expect(structure_diff(expected, actual)).to eq difference
@@ -77,7 +88,7 @@ describe Pact::Matchers do
         let(:difference) { {:a=>{:expected=>nil, :actual=>{:class=>String, :value=>"a string"}}} }
         it "returns the diff" do
           expect(structure_diff(expected, actual)).to eq difference
-        end          
+        end
       end
     end
 
@@ -88,8 +99,8 @@ describe Pact::Matchers do
         let(:difference) { {:a=>{:expected=>/p/, :actual=>"banana"}} }
         it "returns the diff" do
           expect(structure_diff(expected, actual)).to eq difference
-        end          
-      end      
+        end
+      end
     end
   end
 
@@ -261,17 +272,17 @@ describe Pact::Matchers do
     end
 
     context "when the expected value is a String matcher" do
-      
+
     end
 
     context "when the expected value is a Number matcher" do
-      
+
     end
     context "when the expected value is an array with a matcher" do
-      
+
     end
     context "when the expected value is a hash with a matcher" do
-      
+
     end
 
     context "when an expected value is nil but not nil is found" do

@@ -15,7 +15,7 @@ module Pact
       end
 
       def add_expected_interaction interaction
-        http.request_post('/interactions', interaction.to_json_with_generated_response)
+        http.request_post('/interactions', interaction.to_json_for_mock_service)
       end
 
       def self.clear_interactions port, example_description

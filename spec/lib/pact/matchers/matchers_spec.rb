@@ -16,6 +16,15 @@ describe Pact::Matchers do
     end
   end
 
+  describe "expecting key to be present with nil value and not finding key" do
+    let(:expected) { {a: nil} }
+    let(:actual) { {} }
+    let(:difference) { {a: {expected: nil, actual: Pact::Matchers::KeyNotFound.new }} }
+    it "returns the key in the diff" do
+      expect(diff(expected, actual)).to eq difference
+    end
+  end
+
   describe 'structure_diff' do
     let(:expected) {
       {a: 'a string', b: 1, c: nil, d: [{e: 'thing'}], f: {g: 10}}
@@ -133,7 +142,7 @@ describe Pact::Matchers do
       end
       context "when the actual value is an hash" do
         let(:actual) { {b: 'c'} }
-        let(:difference) { { a: {expected:"b", actual: nil}} }
+        let(:difference) { { a: {expected:"b", actual: Pact::Matchers::KeyNotFound.new}} }
         it "should return the diff" do
           expect(diff(subject, actual)).to eql(difference)
         end
@@ -297,7 +306,7 @@ describe Pact::Matchers do
     context "a deep mismatch" do
       subject { {a:  {b: { c: [1,2]}, d: { e: Pact::Term.new(matcher: /a/)}}, f: 1, g: {h: 99}} }
       let(:actual) { {a:  {b: { c: [1,2]}, d: { e: 'food'}}, f: "thing"} }
-      let(:difference) { {:a=>{:d=>{:e=>{:expected=>/a/, :actual=>"food"}}}, :f=>{:expected=>1, :actual=>"thing"}, :g=>{:expected=>{:h=>99}, :actual=>nil}} }
+      let(:difference) { {:a=>{:d=>{:e=>{:expected=>/a/, :actual=>"food"}}}, :f=>{:expected=>1, :actual=>"thing"}, :g=>{:expected=>{:h=>99}, :actual=> Pact::Matchers::KeyNotFound.new}} }
 
       it 'should return the diff' do
         expect(diff(subject, actual)).to eql(difference)

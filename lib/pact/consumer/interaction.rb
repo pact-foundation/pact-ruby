@@ -10,18 +10,18 @@ module Pact
 
       attr_accessor :description, :request, :response, :producer_state
 
-      def initialize options
-        @description = options[:description]
-        @request = options[:request]
-        @response = options[:response]
-        @producer_state = options[:producer_state]
+      def initialize attributes
+        @description = attributes[:description]
+        @request = attributes[:request]
+        @response = attributes[:response]
+        @producer_state = attributes[:producer_state]
       end
 
-      def self.from_hash options
-        new(:description => options['description'],
-            :producer_state => options['producer_state'],
-            :request => Pact::Request::Expected.from_hash(options['request']),
-            :response => options['response']
+      def self.from_hash hash
+        new(:description => hash['description'],
+            :producer_state => hash['producer_state'],
+            :request => Pact::Request::Expected.from_hash(hash['request']),
+            :response => hash['response']
           )
       end
 
@@ -37,9 +37,12 @@ module Pact
         as_json.to_json(options)
       end
 
+      def as_json_for_mock_service
+        {:response => Reification.from_term(response), :request => @request.as_json_with_options, :description => description }
+      end
 
-      def to_json_with_generated_response
-        as_json.tap { | hash | hash[:response] = Reification.from_term(response) }.to_json
+      def to_json_for_mock_service
+        as_json_for_mock_service.to_json
       end
     end
 

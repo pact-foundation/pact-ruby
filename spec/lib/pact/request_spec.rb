@@ -45,9 +45,34 @@ module Pact
   describe Request::Expected do
     it_behaves_like "a request"
 
+    describe "as_json_with_options" do
+      subject { Request::Expected.new(:get, '/path', {:header => 'value'}, {:body => 'yeah'}, "query", options) }
+      context "with options" do
+        let(:options) { {some: 'options'} }
+        it "includes the options" do
+          expect(subject.as_json_with_options[:options]).to eq options
+        end
+      end
+      context "without options" do
+        let(:options) { {} }
+        it "does not include the options" do
+          expect(subject.as_json_with_options.key?(:options)).to be_false
+        end
+      end
+    end
+    describe "as_json" do
+      subject { Request::Expected.new(:get, '/path', {:header => 'value'}, {:body => 'yeah'}, "query", {some: 'options'}) }
+      context "with options" do
+        it "does not include the options" do
+          expect(subject.as_json.key?(:options)).to be_false
+        end
+      end
+    end
+
     describe "matching to actual requests" do
 
-      subject { Request::Expected.new(expected_method, expected_path, expected_headers, expected_body, expected_query) }
+      subject { Request::Expected.new(expected_method, expected_path, expected_headers, expected_body, expected_query, options) }
+      let(:options) { {} }
 
       let(:expected_method) { 'get' }
       let(:expected_path) { '/foo' }
@@ -305,6 +330,23 @@ module Pact
 
         it 'does not match' do
           expect(subject.match actual_request).to be_false
+        end
+      end
+
+      context "when unexpected keys are found in the body" do
+        let(:expected_body) { {a: 1} }
+        let(:actual_body) { {a: 1, b: 2} }
+        context "when allowing unexpected keys" do
+          let(:options) { {'allow_unexpected_keys_in_body' => true} } #From json, these will be strings
+          it "matches" do
+            expect(subject.match actual_request).to be_true
+          end
+        end
+        context "when not allowing unexpected keys" do
+          let(:options) { {'allow_unexpected_keys_in_body' => false} }
+          it "does not match" do
+            expect(subject.match actual_request).to be_false
+          end
         end
       end
     end

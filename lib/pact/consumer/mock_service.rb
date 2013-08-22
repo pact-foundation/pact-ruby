@@ -56,7 +56,7 @@ module Pact
       end
 
       def interaction_diffs
-        { 
+        {
           :missing_interactions => missing_interactions,
           :unexpected_requests => unexpected_requests
         }.inject({}) do | hash, pair |
@@ -222,9 +222,9 @@ module Pact
           expected_request.match actual_request
         end
         if matching_interactions.size > 1
-          @logger.info "Multiple interactions found on #{@name}:"
+          @logger.error "Multiple interactions found on #{@name}:"
           @logger.ap matching_interactions
-          raise 'Multiple interactions found!'
+          raise "Multiple interactions found for path #{actual_request.path}!"
         end
         if matching_interactions.empty?
           handle_unrecognised_request(actual_request, candidates)
@@ -238,12 +238,12 @@ module Pact
       end
 
       def handle_unrecognised_request request, candidates
-        @logger.ap "No interaction found on #{@name} for request \"#{candidates.map(&:description).join(', ')}\""
-        @logger.ap 'Interaction diffs for that route:'
+        @logger.error "No interaction found on #{@name} amongst expected requests \"#{candidates.map(&:description).join(', ')}\""
+        @logger.error 'Interaction diffs for that route:'
         interaction_diff = candidates.map do |candidate|
-          diff(candidate.as_json, request.as_json)
+          candidate.difference(request)
         end.to_a
-        @logger.ap(interaction_diff)
+        @logger.ap(interaction_diff, :error)
         response = {message: "No interaction found for #{request.path}", interaction_diff:  interaction_diff}
         [500, {'Content-Type' => 'application/json'}, [response.to_json]]
       end

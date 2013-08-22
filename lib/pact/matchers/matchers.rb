@@ -6,7 +6,25 @@ module Pact
 
     NO_DIFF_INDICATOR = 'no difference here!'
     UNEXPECTED_KEY = '<key not to be present>'
-    DEFAULT_OPTIONS = {allow_unexpected_keys: true, structure: false}
+    DEFAULT_OPTIONS = {allow_unexpected_keys: true, structure: false}.freeze
+
+    class KeyNotFound
+      def == other
+        other.is_a? KeyNotFound
+      end
+
+      def eql? other
+        self == other
+      end
+
+      def to_s
+        "<key not found>"
+      end
+
+      def to_json options = {}
+        to_s
+      end
+    end
 
     def diff expected, actual, opts = {}
       options = DEFAULT_OPTIONS.merge(opts)
@@ -47,7 +65,7 @@ module Pact
       difference = []
       diff_found = false
       expected.each_with_index do | item, index|
-        if (item_diff = diff(item, actual[index], options)).any?
+        if (item_diff = diff(item, actual.fetch(index, KeyNotFound.new), options)).any?
           diff_found = true
           difference << item_diff
         else
@@ -59,7 +77,7 @@ module Pact
 
     def actual_hash_diff expected, actual, options
       difference = expected.keys.inject({}) do |diff, key|
-        if (diff_at_key = diff(expected[key], actual[key], options)).any?
+        if (diff_at_key = diff(expected[key], actual.fetch(key, KeyNotFound.new), options)).any?
           diff[key] = diff_at_key
         end
         diff

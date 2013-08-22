@@ -38,12 +38,12 @@ module Pact
 			      it "updates the existing pact file" do
 			         expect(consumer_contract_builder.consumer_contract.interactions.size).to eq 2
 			      end
-			   end		   	
-		   end			
+			   end
+		   end
 
 			describe "handle_interaction_fully_defined" do
 
-				subject { 
+				subject {
 					Pact::Consumer::ConsumerContractBuilder.new({:consumer_name => 'blah', :producer_name => 'blah', :port => 2222})
 				}
 
@@ -64,23 +64,23 @@ module Pact
 	          	}
 				}
 
-				let(:interaction_json) { JSON.dump(interaction_hash) }
+				let(:interaction_json) { interaction.to_json_for_mock_service }
 
-				let(:interaction) { Pact::Consumer::Interaction.from_hash(JSON.parse(interaction_json)) }
+				let(:interaction) { Pact::Consumer::Interaction.from_hash(JSON.parse(interaction_hash.to_json)) }
 
 				before do
 					stub_request(:post, 'localhost:2222/interactions')
 				end
 
-	        	it "posts the interaction with generated response to the mock service" do
-	          	subject.handle_interaction_fully_defined interaction
-	          	WebMock.should have_requested(:post, 'localhost:2222/interactions').with(body: interaction_json)
-	        	end
+      	it "posts the interaction with generated response to the mock service" do
+        	subject.handle_interaction_fully_defined interaction
+        	WebMock.should have_requested(:post, 'localhost:2222/interactions').with(body: interaction_json)
+      	end
 
-	        	it "updates the Producer's Pactfile" do
-	        		subject.consumer_contract.should_receive(:update_pactfile)
-	        		subject.handle_interaction_fully_defined interaction
-	        	end
+      	it "updates the Producer's Pactfile" do
+      		subject.consumer_contract.should_receive(:update_pactfile)
+      		subject.handle_interaction_fully_defined interaction
+      	end
 			end
 		end
 	end

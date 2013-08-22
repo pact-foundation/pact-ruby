@@ -41,6 +41,40 @@ module Pact
 
       end
 
+      describe "as_json_for_mock_service" do
+        let(:as_json_with_options ) { {:opts => 'blah'} }
+        let(:request) { double(Pact::Request::Expected, :as_json_with_options => {:opts => 'blah'})}
+        let(:response) { double('response') }
+        let(:generated_response ) { double('generated_response', :to_json => 'generated_response') }
+        subject { Interaction.new(:description => 'description', :request => request, :response => response, :producer_state => 'ignored')}
+        let(:expected_hash) { {:response => generated_response, :request => as_json_with_options, :description => '' } }
+
+        before do
+          Reification.stub(:from_term).with(response).and_return(generated_response)
+        end
+
+        it "generates an actual response" do
+          Reification.should_receive(:from_term).with(response).and_return(generated_response)
+          expect(subject.as_json_for_mock_service[:response]).to eq generated_response
+        end
+
+        it "includes the options in the request" do
+          expect(subject.as_json_for_mock_service[:request]).to eq as_json_with_options
+        end
+
+        it "does not send the producer state" do
+          expect(subject.as_json_for_mock_service.key?(:producer_state)).to be_false
+        end
+
+        it "includes the description" do
+          expect(subject.as_json_for_mock_service[:description]).to eq 'description'
+        end
+
+        it "doesn't have any other keys" do
+          expect(subject.as_json_for_mock_service.keys).to eq [:response, :request, :description]
+        end
+      end
+
       describe "to JSON" do
 
         let(:parsed_result) do

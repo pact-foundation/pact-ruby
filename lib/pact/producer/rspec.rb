@@ -112,6 +112,7 @@ module Pact
         end
 
         def save_pactfile_to_tmp pact, name
+          FileUtils.mkdir_p Pact.configuration.tmp_dir
           File.open(Pact.configuration.tmp_dir + "/#{name}", "w") { |file|  file << pact}
         end
 

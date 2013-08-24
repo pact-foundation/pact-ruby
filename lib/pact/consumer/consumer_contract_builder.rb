@@ -63,6 +63,12 @@ module Pact
         mock_service_client.verify example_description
       end
 
+      def wait_for_interactions options
+        wait_max_seconds = options.fetch(:wait_max_seconds, 3)
+        poll_interval = options.fetch(:poll_interval, 0.1)
+        mock_service_client.wait_for_interactions wait_max_seconds, poll_interval
+      end
+
       private
 
       def filenamify name

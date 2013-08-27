@@ -262,6 +262,27 @@ module Pact
       end
     end
 
+    class MissingInteractionsGet
+      include RackHelper
+
+      def initialize name, logger
+        @name = name
+        @logger = logger
+      end
+
+      def match? env
+        env['REQUEST_PATH'].start_with?('/number_of_missing_interactions') &&
+            env['REQUEST_METHOD'] == 'GET'
+      end
+
+      def respond env
+        number_of_missing_interactions = InteractionList.instance.missing_interactions.size
+        @logger.info "Number of missing interactions for mock \"#{@name}\" = #{number_of_missing_interactions}"
+        [200, {}, ["#{number_of_missing_interactions}"]]
+      end
+
+    end
+
     class VerificationGet
 
       include RackHelper
@@ -310,6 +331,7 @@ module Pact
         @handlers = [
           StartupPoll.new(@name, @logger),
           CapybaraIdentify.new(@name, @logger),
+          MissingInteractionsGet.new(@name, @logger),
           VerificationGet.new(@name, @logger, log_description),
           InteractionPost.new(@name, @logger),
           InteractionDelete.new(@name, @logger),

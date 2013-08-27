@@ -72,9 +72,10 @@ module Pact
 			end
 		end
 
+		# Move this to interaction
 		def match_criteria? interaction, criteria
 			criteria.each do | key, value |
-				unless match_criterion interaction[key.to_s], value
+				unless match_criterion interaction.send(key.to_s), value
 					return false
 				end
 			end
@@ -100,12 +101,12 @@ module Pact
         File.open(pactfile_path, 'w') do |f|
           f.write JSON.pretty_generate(self)
         end
-      end      		
+      end
 
 		private
 
       def filenamify name
         name.downcase.gsub(/\s/, '_')
-      end		
+      end
 	end
 end

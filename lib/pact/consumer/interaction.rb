@@ -38,7 +38,8 @@ module Pact
       end
 
       def as_json_for_mock_service
-        {:response => Reification.from_term(response), :request => @request.as_json_with_options, :description => description }
+        {:response => Reification.from_term(response), :request => @request.as_json_with_options, :description => description }.
+          tap{ | hash | hash[:producer_state] = @producer_state if @producer_state }
       end
 
       def to_json_for_mock_service

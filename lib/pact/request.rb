@@ -85,6 +85,23 @@ module Pact
         as_json.reject{ |key, value| !keep_keys.include? key }
       end
 
+      def short_description
+        "#{method} #{full_path}"
+      end
+
+      def full_path
+        fp = ''
+        if path.empty?
+          fp << "/"
+        else
+          fp << path
+        end
+        if query && !query.empty?
+          fp << ("?" + query)
+        end
+        fp
+      end
+
     end
 
     class Expected < Base
@@ -128,6 +145,10 @@ module Pact
 
       def as_json_with_options
         as_json.merge( options.empty? ? {} : { options: options} )
+      end
+
+      def generated_body
+        Pact::Reification.from_term(body)
       end
 
       # Don't want to put the default options in the pact json just yet, so calculating these at run time, rather than assigning

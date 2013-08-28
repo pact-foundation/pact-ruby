@@ -2,6 +2,28 @@ require 'spec_helper'
 require 'pact/request'
 
 shared_examples "a request" do
+
+  describe 'full_path' do
+    context "with empty path" do
+      subject { described_class.from_hash({:path => '', :method => 'get'}) }
+      it "returns the full path"do
+        expect(subject.full_path).to eq "/"
+      end
+    end
+    context "with a path" do
+      subject { described_class.from_hash({:path => '/path', :method => 'get'}) }
+      it "returns the full path"do
+        expect(subject.full_path).to eq "/path"
+      end
+    end
+    context "with a path and query" do
+      subject { described_class.from_hash({:path => '/path', :method => 'get', :query => "something"}) }
+      it "returns the full path"do
+        expect(subject.full_path).to eq "/path?something"
+      end
+    end
+  end
+
   describe "building from a hash" do
 
     let(:raw_request) do

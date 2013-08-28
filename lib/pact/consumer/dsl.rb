@@ -92,7 +92,7 @@ module Pact::Consumer
             @name = name
             @port = nil
             @standalone = false
-            @verify = false
+            @verify = true
             instance_eval(&block)
          end
 

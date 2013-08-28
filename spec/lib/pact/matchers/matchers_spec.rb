@@ -27,13 +27,23 @@ describe Pact::Matchers do
 
   describe 'structure_diff' do
     let(:expected) {
-      {a: 'a string', b: 1, c: nil, d: [{e: 'thing'}], f: {g: 10}}
+      {a: 'a string', b: 1, c: nil, d: [{e: 'thing'}], f: {g: 10}, h: false}
     }
 
     context "when the classes match" do
-      let(:actual) { {a: 'another string', b: 2, c: nil, d: [{e: 'something'}], f: {g: 100}} }
+      let(:actual) { {a: 'another string', b: 2, c: nil, d: [{e: 'something'}], f: {g: 100}, h: true} }
+      let(:difference) { {} }
       it "returns an empty hash" do
-        expect(structure_diff(expected, actual)).to be_empty
+        expect(structure_diff(expected, actual)).to eq difference
+      end
+    end
+
+    context "when a key is not found" do
+      let(:actual) { {a: 'blah'} }
+      let(:expected) { {b: 'blah'} }
+      let(:difference) { {:b=>{:expected=>{:class=>String, :eg=>"blah"}, :actual=>Pact::Matchers::KeyNotFound.new}} }
+      it "returns the difference" do
+        expect(structure_diff(expected, actual)).to eq difference
       end
     end
 

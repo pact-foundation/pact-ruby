@@ -105,13 +105,26 @@ module Pact
     end
 
     def class_diff expected, actual
-      if expected.class != actual.class
-        actual_display = actual.nil? ? nil : {:class => actual.class, :value => actual }
-        expected_display = expected.nil? ? nil : {:class => expected.class, eg: expected}
-        {:expected => expected_display, :actual => actual_display}
-      else
+      if classes_match? expected, actual
         {}
+      else
+        {:expected => structure_diff_expected_display(expected), :actual => structure_diff_actual_display(actual)}
       end
+    end
+
+    def structure_diff_actual_display actual
+      (actual.nil? || actual.is_a?(KeyNotFound) ) ? actual : {:class => actual.class, :value => actual }
+    end
+
+    def structure_diff_expected_display expected
+      (expected.nil?) ? expected : {:class => expected.class, eg: expected}
+    end
+
+    def classes_match? expected, actual
+      #There must be a more elegant way to do this
+      expected.class == actual.class ||
+        (expected.is_a?(TrueClass) && actual.is_a?(FalseClass)) ||
+          (expected.is_a?(FalseClass) && actual.is_a?(TrueClass))
     end
 
     def object_diff expected, actual, options

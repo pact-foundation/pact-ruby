@@ -11,6 +11,14 @@ This allows you to test both sides of an integration point using fast unit tests
 
 This gem is inspired by the concept of "Consumer driven contracts". See http://martinfowler.com/articles/consumerDrivenContracts.html for more information.
 
+## Features
+* A services is mocked using an actual process running on a specified port, so javascript clients can be tested as easily as backend clients.
+* "Provider states" (similar to fixtures) allow the same request to be made with a different expected response.
+* Consumers specify only the fields they are interested in, allowing a provider to return more fields without breaking the pact. This allows a provider to have a different pact with a different consumer, and know which fields each cares about in a given response.
+* Expected interactions are verified to have actually occurred.
+* A rake verification task allows a pact at any URI to be checked against a given service provider codebase.
+* Different versions of a consumer/provider pair can be easily tested against each other, allowing confidence when deploying new versions of each.
+
 ## Installation
 
 Put it in your Gemfile. You know how.

@@ -43,6 +43,7 @@ module Pact
         @matched_interactions << interaction
       end
 
+      # Request::Actual
       def register_unexpected request
         @unexpected_requests << request
       end
@@ -58,7 +59,7 @@ module Pact
       def interaction_diffs
         {
           :missing_interactions => missing_interactions,
-          :unexpected_requests => unexpected_requests
+          :unexpected_requests => unexpected_requests.collect(&:as_json)
         }.inject({}) do | hash, pair |
           hash[pair.first] = pair.last if pair.last.any?
           hash
@@ -238,6 +239,7 @@ module Pact
       end
 
       def handle_unrecognised_request request, candidates
+        InteractionList.instance.register_unexpected request
         @logger.error "No interaction found on #{@name} amongst expected requests \"#{candidates.map(&:description).join(', ')}\""
         @logger.error 'Interaction diffs for that route:'
         interaction_diff = candidates.map do |candidate|

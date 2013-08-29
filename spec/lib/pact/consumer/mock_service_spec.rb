@@ -10,7 +10,7 @@ module Pact::Consumer
 
     shared_context "unexpected requests and missed interactions" do
       let(:expected_call) { {request: 'blah'} }
-      let(:unexpected_call) { {request: 'meh'} }
+      let(:unexpected_call) { Pact::Request::Actual.from_hash(path: '/path', method: 'get') }
       subject {
         interactionList = InteractionList.instance
         interactionList.add expected_call
@@ -21,7 +21,7 @@ module Pact::Consumer
 
     shared_context "no unexpected requests or missed interactions exist" do
       let(:expected_call) { {request: 'blah'} }
-      let(:unexpected_call) { {request: 'meh'} }
+      let(:unexpected_call) { Pact::Request::Actual.from_hash(path: '/path', method: 'get') }
       subject {
         interactionList = InteractionList.instance
         interactionList.add expected_call
@@ -34,7 +34,7 @@ module Pact::Consumer
       context "when unexpected requests and missed interactions exist" do
         include_context "unexpected requests and missed interactions"
         let(:expected) {
-          {:missing_interactions=>[{:request=>"blah"}], :unexpected_requests=>[{:request=>"meh"}]}
+          {:missing_interactions=>[{:request=>"blah"}], :unexpected_requests=>[{:method=>"get", :path=>"/path"}]}
         }
         it "returns the unexpected requests and missed interactions" do
           expect(subject.interaction_diffs).to eq expected

@@ -1,16 +1,17 @@
-require 'pact/consumer_contract/service_consumer'
-require 'pact/consumer_contract/service_provider'
-require 'pact/consumer/interaction'
+require 'pact/consumer_contract'
 require 'pact/logging'
 require 'pact/json_warning'
 require 'date'
 require 'pact/version'
+require_relative 'service_consumer'
+require_relative 'service_provider'
+require_relative 'interaction'
 
 module Pact
   class ConsumerContract
 
     include Pact::Logging
-      include Pact::JsonWarning
+    include Pact::JsonWarning
 
     attr_accessor :interactions
     attr_accessor :consumer
@@ -41,9 +42,9 @@ module Pact
 
     def self.from_hash(obj)
       new({
-        :interactions => obj['interactions'].collect { |hash| Pact::Consumer::Interaction.from_hash(hash)},
-        :consumer => Pact::ServiceConsumer.from_hash(obj['consumer']),
-        :provider => Pact::ServiceProvider.from_hash(obj['provider'] || {})
+        :interactions => obj['interactions'].collect { |hash| Interaction.from_hash(hash)},
+        :consumer => ServiceConsumer.from_hash(obj['consumer']),
+        :provider => ServiceProvider.from_hash(obj['provider'] || {})
       })
     end
 

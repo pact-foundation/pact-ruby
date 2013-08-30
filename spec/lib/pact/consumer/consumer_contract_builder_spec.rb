@@ -66,7 +66,7 @@ module Pact
 
 				let(:interaction_json) { interaction.to_json_for_mock_service }
 
-				let(:interaction) { Pact::Consumer::Interaction.from_hash(JSON.parse(interaction_hash.to_json)) }
+				let(:interaction) { Pact::Interaction.from_hash(JSON.parse(interaction_hash.to_json)) }
 
 				before do
 					stub_request(:post, 'localhost:2222/interactions')

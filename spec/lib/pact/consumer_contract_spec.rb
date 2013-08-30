@@ -68,8 +68,8 @@ module Pact
     describe "find_interactions" do
       let(:consumer) { double('ServiceConsumer', :name => 'Consumer')}
       let(:provider) { double('ServiceProvider', :name => 'Provider')}
-      let(:interaction1) { Pact::Consumer::Interaction.new(:description => 'a request for food') }
-      let(:interaction2) { Pact::Consumer::Interaction.new(:description => 'a request for drink') }
+      let(:interaction1) { Pact::Interaction.new(:description => 'a request for food') }
+      let(:interaction2) { Pact::Interaction.new(:description => 'a request for drink') }
       subject { ConsumerContract.new(:interactions => [interaction1, interaction2], :consumer => consumer, :provider => provider) }
       context "by description" do
         context "when no interactions are found" do
@@ -88,8 +88,8 @@ module Pact
       let(:consumer) { double('ServiceConsumer', :name => 'Consumer')}
       let(:provider) { double('ServiceProvider', :name => 'Provider')}
       # Should be stubbing these
-      let(:interaction1) { Pact::Consumer::Interaction.new(:description => 'a request for food') }
-      let(:interaction2) { Pact::Consumer::Interaction.new(:description => 'a request for drink') }
+      let(:interaction1) { Pact::Interaction.new(:description => 'a request for food') }
+      let(:interaction2) { Pact::Interaction.new(:description => 'a request for drink') }
       subject { ConsumerContract.new(:interactions => [interaction1, interaction2], :consumer => consumer, :provider => provider) }
       context "by description" do
         context "when a match is found" do

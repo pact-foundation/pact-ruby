@@ -21,7 +21,8 @@ module Pact
           :provider => ServiceProvider.new(name: attributes[:provider_name])
           )
         @mock_service_client = MockServiceClient.new(attributes[:provider_name], attributes[:port])
-        if attributes[:pactfile_write_mode] == :update && pactfile_exists?
+        @pactfile_write_mode = attributes[:pactfile_write_mode]
+        if updating_pactfile? && pactfile_exists?
           load_existing_interactions
         end
       end
@@ -56,12 +57,16 @@ module Pact
         interaction_builder.on_interaction_fully_defined do | interaction |
           provider.handle_interaction_fully_defined(interaction)
         end
-        @interactions["#{description} given #{@provider_state}"] = interaction_builder.interaction
-        consumer_contract.interactions = @interactions.values
         interaction_builder
       end
 
       def handle_interaction_fully_defined interaction
+        interaction_key = "#{interaction.description} given #{interaction.provider_state}"
+        if overwriting_pactfile? && similar_interaction_exists?(interaction_key, interaction)
+          raise "Interaction with same description (#{interaction.description}) and provider state (#{interaction.provider_state}) already exists"
+        end
+        @interactions[interaction_key] = interaction
+        consumer_contract.interactions = @interactions.values
         mock_service_client.add_expected_interaction interaction
         @provider_state = nil
         consumer_contract.update_pactfile
@@ -79,8 +84,22 @@ module Pact
 
       private
 
+      attr_reader :pactfile_write_mode
+
+      def updating_pactfile?
+        pactfile_write_mode == :update
+      end
+
+      def overwriting_pactfile?
+        !updating_pactfile?
+      end
+
       def filenamify name
         name.downcase.gsub(/\s/, '_')
+      end
+
+      def similar_interaction_exists? key, new_interaction
+        @interactions.key?(key) && @interactions[key] != new_interaction
       end
 
     end

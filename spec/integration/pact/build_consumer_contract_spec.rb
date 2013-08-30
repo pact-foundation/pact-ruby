@@ -22,28 +22,38 @@ module Pact
       
       subject { Consumer::ConsumerContractBuilder.new(:consumer_name => consumer_name, :provider_name => provider_name, :pactfile_write_mode => pactfile_write_mode, :port => 1234) }
       
-      let(:similar_request_hash) { RequestFactory.create_hash :path => '/different_path' }
+      let(:different_request_hash) { RequestFactory.create_hash :path => '/similar_request' }
 
       #let(:interaction) { Pact::Interaction.new(description: description, request: Request::Expected.from_hash(request_hash), response: response_hash, provider_state: provider_state ) }
-      let(:similar_interaction)  { Pact::Interaction.new(description: description, request: Request::Expected.from_hash(similar_request_hash), response: response_hash, provider_state: provider_state ) }
+      let(:similar_interaction)  { Pact::Interaction.new(description: description, request: Request::Expected.from_hash(different_request_hash), response: response_hash, provider_state: provider_state ) }
 
 
       let(:new_description) { 'a new request'}
-      let(:new_interaction) { Pact::Interaction.new(description: new_description, request: Request::Expected.from_hash(similar_request_hash), response: response_hash, provider_state: provider_state ) }
+      let(:different_new_description) { 'a different new request'}
+      let(:new_interaction) { Pact::Interaction.new(description: new_description, request: Request::Expected.from_hash(different_request_hash), response: response_hash, provider_state: provider_state ) }
+      let(:different_new_interaction) { Pact::Interaction.new(description: new_description, request: Request::Expected.from_hash(different_request_hash), response: response_hash, provider_state: provider_state ) }
 
       def add_duplicate_interaction
          subject.given(provider_state).upon_receiving(description).with(request_hash).will_respond_with(response_hash)
       end
 
+      def add_interaction_which_will_be_accidentally_copied
+         subject.given(provider_state).upon_receiving(description).with(request_hash).will_respond_with(response_hash)
+      end
+
       def add_similar_interaction
-         subject.given(provider_state).upon_receiving(description).with(similar_request_hash).will_respond_with(response_hash)
+         subject.given(provider_state).upon_receiving(description).with(different_request_hash).will_respond_with(response_hash)
       end
 
       def add_new_interaction
-         subject.given(provider_state).upon_receiving(new_description).with(similar_request_hash).will_respond_with(response_hash)
+         subject.given(provider_state).upon_receiving(new_description).with(different_request_hash).will_respond_with(response_hash)
       end
 
-      describe "when pactfile_write_mode is :overwrite" do
+      def add_different_new_interaction
+         subject.given(provider_state).upon_receiving(different_new_description).with(request_hash).will_respond_with(response_hash)
+      end
+
+      describe "when pactfile_write_mode is :overwrite (by default, when running rake)" do
          let(:pactfile_write_mode) {:overwrite}
          context "when duplicate interactions are added" do
             before do
@@ -59,23 +69,32 @@ module Pact
                expect(subject.consumer_contract.interactions.size).to eq 1
             end
          end
-         context "when an interaction is added with the same description and provider state but not equal to an existing interaction" do
+         context "when a different new interaction is added" do
             before do
                add_new_interaction
+               add_different_new_interaction
+            end
+            it "is added" do
+               expect(subject.consumer_contract.interactions.size).to eq 2
+            end
+         end
+         context "when an interaction is added with the same description and provider state but not otherwise equal to an existing interaction" do
+            before do
+               add_interaction_which_will_be_accidentally_copied
             end        
-            xit "raises an error to avoid accidentally overwriting an existing interaction" do
-               expect{ add_similar_interaction }.to raise_error
+            it "raises an error as the user has most likely copy/pasted an existing interaction" do
+               expect{ add_similar_interaction }.to raise_error 'Interaction with same description (a request) and provider state (a thing exists) already exists'
             end
          end
       end
-      describe "when pactfile_write_mode is :update" do
+      describe "when pactfile_write_mode is :update (by default when running a single test)" do
          let(:consumer_contract) { ConsumerContractFactory.create consumer_name: consumer_name, provider_name: provider_name, interactions: interactions }
 
          before do
             consumer_contract.update_pactfile
          end         
          let(:pactfile_write_mode) {:update}
-         context "when duplicate interactions are added" do
+         context "when a duplicate interaction is added" do
             before do
                add_duplicate_interaction
             end
@@ -88,11 +107,19 @@ module Pact
                expect(subject.consumer_contract.interactions.size).to eq 1
             end
          end
-         context "when an interaction is added with the same description and provider state but not equal to an existing interaction" do
+         context "when a different new interaction is added" do
+            before do
+               add_different_new_interaction
+            end
+            it "is added" do
+               expect(subject.consumer_contract.interactions.size).to eq 2
+            end
+         end         
+         context "when an interaction is added with the same description and provider state but not otherwise equal to an existing interaction" do
             before do
                add_similar_interaction
             end 
-            it "overwrites the old interaction, as it is most likely an updated expectation" do
+            it "overwrites the existing interaction, the user has most likely updated the test, and is just regenerating the one file" do
                expect(subject.consumer_contract.interactions.last).to eq similar_interaction
                expect(subject.consumer_contract.interactions.size).to eq 1
             end

@@ -5,7 +5,7 @@ Could use:
 eg
 ex
 
-my_producer.
+my_provider.
    given("a thing exists").
       upon_receiving("a request for a thing").with({:method => 'get', :path => '/thing'})
          will_respond_with({:body => {

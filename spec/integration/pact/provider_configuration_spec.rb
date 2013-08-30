@@ -5,7 +5,7 @@ describe "provider side" do
    describe "configure" do
 
       class TestHelper
-         include Pact::Producer::RSpec::InstanceMethods
+         include Pact::Provider::RSpec::InstanceMethods
       end
 
       let(:application) { double("App")}

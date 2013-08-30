@@ -99,7 +99,7 @@ describe "A service consumer side of a pact", :pact => true  do
     expect{ bob_service.verify('goes a little something like this') }.to raise_error /do not match/
   end
 
-  context "with a producer state" do
+  context "with a provider state" do
     before do
       Pact.clear_configuration
 
@@ -132,12 +132,12 @@ describe "A service consumer side of a pact", :pact => true  do
         })
 
         interactions = Pact::ConsumerContract.from_json(File.read(zebra_service.consumer_contract.pactfile_path)).interactions
-        interactions.first.producer_state.should eq("the_zebras_are_here")
+        interactions.first.provider_state.should eq("the_zebras_are_here")
         sleep 1
     end
   end
 
-  context "with a async interaction with producer" do
+  context "with a async interaction with provider" do
     before do
       Pact.clear_configuration
 

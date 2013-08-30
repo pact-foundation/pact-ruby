@@ -1,10 +1,10 @@
 require 'pact/logging'
 require 'rack/test'
 require 'pact/reification'
-require 'pact/producer/producer_state'
+require 'pact/provider/provider_state'
 
 module Pact
-  module Producer
+  module Provider
     module TestMethods
 
       include Pact::Logging
@@ -19,15 +19,15 @@ module Pact
         end
       end
 
-      def set_up_producer_state producer_state_name, consumer
-        if producer_state_name
-          get_producer_state(producer_state_name, consumer).set_up
+      def set_up_provider_state provider_state_name, consumer
+        if provider_state_name
+          get_provider_state(provider_state_name, consumer).set_up
         end
       end
 
-      def tear_down_producer_state producer_state_name, consumer
-        if producer_state_name
-          get_producer_state(producer_state_name, consumer).tear_down
+      def tear_down_provider_state provider_state_name, consumer
+        if provider_state_name
+          get_provider_state(provider_state_name, consumer).tear_down
         end
       end
 
@@ -77,12 +77,12 @@ module Pact
         end
       end
 
-      def get_producer_state producer_state_name, consumer
-        unless producer_state = ProducerState.get(producer_state_name, :for => consumer)
+      def get_provider_state provider_state_name, consumer
+        unless provider_state = ProviderState.get(provider_state_name, :for => consumer)
           extra = consumer ? " for consumer \"#{consumer}\"" : ""
-          raise "Could not find a producer state defined for \"#{producer_state_name}\"#{extra}. Have you required the producer state file in your spec?"
+          raise "Could not find a provider state defined for \"#{provider_state_name}\"#{extra}. Have you required the provider state file in your spec?"
         end
-        producer_state
+        provider_state
       end
     end
   end

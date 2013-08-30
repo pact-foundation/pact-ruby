@@ -1,0 +1,101 @@
+# require 'spec_helper'
+# require 'pact/provider/configuration_dsl'
+
+# module Pact::Provider
+#   describe ConfigurationDSL do
+
+#     class MockConfig
+#       include ConfigurationDSL
+#     end
+
+#     describe "provider" do
+#       let(:mock_config) { MockConfig.new }
+#       context "when a provider is configured" do
+#         before do
+#           mock_config.provider do
+#             name "Fred"
+#             app { "An app" }
+#           end
+#         end
+#         it "should allow configuration of the name" do
+#           expect(mock_config.provider.name).to eql "Fred"
+#         end
+#         it "should allow configuration of the test app" do
+#           expect(mock_config.provider.app).to eql "An app"
+#         end
+#       end
+#       context "when a provider is not configured" do
+#         it "raises an error" do
+#           expect{ mock_config.provider }.to raise_error(/Please configure your provider/)
+#         end
+#       end
+#     end
+
+
+#     module ConfigurationDSL
+
+#       describe ProviderDSL do
+
+#         describe "initialize" do
+
+#           context "with an object instead of a block" do
+#             subject do
+#               ProviderDSL.new do
+#                 name nil
+#                 app 'blah'
+#               end
+#             end
+#             it "raises an error" do
+#               expect{ subject }.to raise_error
+#             end
+#           end
+
+
+#         end
+#         describe "validate" do
+#           context "when no name is provided" do
+#             subject do
+#               ProviderDSL.new do
+#                 app { Object.new }
+#               end
+#             end
+#             it "raises an error" do
+#               expect{ subject.validate}.to raise_error("Please provide a name for the Provider")
+#             end
+#           end
+#           context "when nil name is provided" do
+#             subject do
+#               ProviderDSL.new do
+#                 name nil
+#                 app { Object.new }
+#               end
+#             end
+#             it "raises an error" do
+#               expect{ subject.validate}.to raise_error("Please provide a name for the Provider")
+#             end
+#           end
+#           context "when no app is provided" do
+#             subject do
+#               ProviderDSL.new do
+#                 name 'Blah'
+#               end
+#             end
+#             it "raises an error" do
+#               expect{ subject.validate }.to raise_error("Please configure an app for the Provider")
+#             end
+#           end
+#         end
+#       end
+
+#       describe ProviderConfig do
+#         describe "app" do
+#           subject { ProviderConfig.new("blah") { Object.new } }
+#           it "should execute the app_block each time" do
+#             expect(subject.app.object_id).to_not equal(subject.app.object_id)
+#           end
+#         end
+#       end
+
+#     end
+#   end
+# end

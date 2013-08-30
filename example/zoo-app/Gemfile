@@ -1,11 +1,10 @@
 source 'https://rubygems.org'
-source 'http://rea-rubygems/'
 
 gem 'bundler', '~> 1.3.0'
 
 group :development, :test do
   gem 'rspec'
-  gem 'pact'
+  gem 'pact', path: '../../'
   gem 'pry'
 end
 

@@ -1,40 +1,36 @@
 module Pact
-  module Producer
+  module Provider
 
     module DSL
-      def producer_state name, &block
-        ProducerState.producer_state(name, &block).register
+      def provider_state name, &block
+        ProviderState.provider_state(name, &block).register
       end
 
       def with_consumer name, &block
-        ProducerState.current_namespaces << name
+        ProviderState.current_namespaces << name
         instance_eval(&block)
-        ProducerState.current_namespaces.pop
+        ProviderState.current_namespaces.pop
       end
 
       alias_method :provider_states_for, :with_consumer
-      alias_method :provider_state, :producer_state
+      alias_method :provider_state, :provider_state
     end
 
-    class ProducerState
+    class ProviderState
 
       attr_accessor :name
       attr_accessor :namespace
 
-      def self.producer_state name, &block
-        ProducerState.new(name, current_namespaces.join('.'), &block)
-      end
-
       def self.provider_state name, &block
-        producer_state name, &block
+        ProviderState.new(name, current_namespaces.join('.'), &block)
       end
 
-      def self.register name, producer_state
-        producer_states[name] = producer_state
+      def self.register name, provider_state
+        provider_states[name] = provider_state
       end
 
-      def self.producer_states
-        @@producer_states ||= {}
+      def self.provider_states
+        @@provider_states ||= {}
       end
 
       def self.current_namespaces
@@ -43,7 +39,7 @@ module Pact
 
       def self.get name, options = {}
         fullname = options[:for] ? "#{options[:for]}.#{name}" : name
-        (producer_states[fullname] || producer_states[fullname.to_sym]) || producer_states[name]
+        (provider_states[fullname] || provider_states[fullname.to_sym]) || provider_states[name]
       end
 
       def register
@@ -84,5 +80,3 @@ module Pact
     end
   end
 end
-
-Pact.send(:extend, Pact::Producer::DSL)

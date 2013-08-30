@@ -31,7 +31,7 @@ module Pact::Consumer
         end
 
         def has_pact_with service_provider_name, &block
-          Producer.new(service_provider_name, @name, &block).create_consumer_contract_builder
+          Provider.new(service_provider_name, @name, &block).create_consumer_contract_builder
         end
 
         def create_service_consumer
@@ -48,13 +48,13 @@ module Pact::Consumer
 
 
       #OLD ####
-      def with_producer name, &block
-         Producer.new(name, &block).create_consumer_contract_builder
+      def with_provider name, &block
+         Provider.new(name, &block).create_consumer_contract_builder
       end
 
-      alias_method :with_service_provider, :with_producer
+      alias_method :with_service_provider, :with_provider
 
-      class Producer
+      class Provider
          def initialize name, consumer_name = Pact.configuration.consumer.name, &block
             @name = name
             @service = nil
@@ -80,7 +80,7 @@ module Pact::Consumer
         def consumer_contract_builder_from_attributes
           consumer_contract_builder_fields = {
             :consumer_name => @consumer_name,
-            :producer_name => @name,
+            :provider_name => @name,
             :pactfile_write_mode => Pact.configuration.pactfile_write_mode
             }
           @service.configure_consumer_contract_builder consumer_contract_builder_fields
@@ -111,7 +111,7 @@ module Pact::Consumer
          def configure_consumer_contract_builder consumer_contract_builder_fields
             validate
             unless @standalone
-              AppManager.instance.register_mock_service_for consumer_contract_builder_fields[:producer_name], "http://localhost:#{@port}"
+              AppManager.instance.register_mock_service_for consumer_contract_builder_fields[:provider_name], "http://localhost:#{@port}"
             end
             consumer_contract_builder = Pact::Consumer::ConsumerContractBuilder.new consumer_contract_builder_fields.merge({port: @port})
             create_mock_services_module_method consumer_contract_builder
@@ -121,7 +121,7 @@ module Pact::Consumer
 
 
         def setup_verification consumer_contract_builder
-          Pact.configuration.add_producer_verification do | example_description |
+          Pact.configuration.add_provider_verification do | example_description |
             consumer_contract_builder.verify example_description
           end
         end

@@ -7,11 +7,11 @@ module Pact
 
 
     module Configuration
-      def add_producer_verification &block
-        producer_verifications << block
+      def add_provider_verification &block
+        provider_verifications << block
       end
-      def producer_verifications
-        @producer_verifications ||= []
+      def provider_verifications
+        @provider_verifications ||= []
       end
     end
 
@@ -23,7 +23,7 @@ module Pact
         elsif @consumer
           @consumer
         else
-          raise "Please configure a consumer before configuring producers"
+          raise "Please configure a consumer before configuring providers"
         end
       end
 

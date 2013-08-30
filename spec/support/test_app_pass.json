@@ -15,7 +15,7 @@
                 "headers" : {"Content-type": "application/json"},
                 "body": {"message" : "sunny"}
             },
-            "producer_state": "the weather is sunny"
+            "provider_state": "the weather is sunny"
         }
     ]
 }

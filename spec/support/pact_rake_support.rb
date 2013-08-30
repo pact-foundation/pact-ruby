@@ -12,7 +12,7 @@ module Pact
 			end
 		end
 
-		Pact.service_provider "Some Producer" do
+		Pact.service_provider "Some Provider" do
 			app { TestApp.new }
 		end
 

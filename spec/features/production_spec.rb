@@ -1,9 +1,9 @@
 require 'pact/provider/rspec'
 require 'pact/consumer_contract'
-require 'features/producer_states/zebras'
+require 'features/provider_states/zebras'
 
 
-module Pact::Producer
+module Pact::Provider
 
   describe "A service production side of a pact" do
 
@@ -83,7 +83,7 @@ module Pact::Producer
 
   end
 
-  describe "with a producer_state" do
+  describe "with a provider_state" do
 
     context "that is a symbol" do
         consumer_contract = Pact::ConsumerContract.from_json <<-EOS
@@ -100,7 +100,7 @@ module Pact::Producer
                         "body": {"names": ["Jason", "Sarah"]},
                         "status": 200
                     },
-                    "producer_state" : "the_zebras_are_here"
+                    "provider_state" : "the_zebras_are_here"
                 }
             ]
         }
@@ -131,7 +131,7 @@ module Pact::Producer
                         "body": {"names": ["Mark", "Gertrude"]},
                         "status": 200
                     },
-                    "producer_state" : "some other zebras are here"
+                    "provider_state" : "some other zebras are here"
                 }
             ]
         }

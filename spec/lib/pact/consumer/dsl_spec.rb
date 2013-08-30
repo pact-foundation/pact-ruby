@@ -18,7 +18,7 @@ module Pact::Consumer::DSL
             end
          }
 
-         let(:producer_name) { 'Mock Producer'}
+         let(:provider_name) { 'Mock Provider'}
          let(:consumer_contract_builder) { double('Pact::Consumer::ConsumerContractBuilder').as_null_object}
          let(:url) { "http://localhost:1234"}
 
@@ -26,7 +26,7 @@ module Pact::Consumer::DSL
             Pact::Consumer::ConsumerContractBuilder.stub(:new).and_return(consumer_contract_builder)
             subject.configure_consumer_contract_builder({})
             consumer_contract_builder.should_receive(:verify)
-            Pact.configuration.producer_verifications.first.call
+            Pact.configuration.provider_verifications.first.call
          end
 
          context "when standalone" do
@@ -44,8 +44,8 @@ module Pact::Consumer::DSL
                end
             }            
             it "registers the app with the AppManager" do
-               Pact::Consumer::AppManager.instance.should_receive(:register_mock_service_for).with(producer_name, url)
-               subject.configure_consumer_contract_builder({:producer_name => producer_name })
+               Pact::Consumer::AppManager.instance.should_receive(:register_mock_service_for).with(provider_name, url)
+               subject.configure_consumer_contract_builder({:provider_name => provider_name })
             end
          end         
       end

@@ -12,18 +12,18 @@ module Pact
 			      Pact.configuration.stub(:pact_dir).and_return(File.expand_path(tmp_pact_dir))
 			      FileUtils.rm_rf tmp_pact_dir
 			      FileUtils.mkdir_p tmp_pact_dir
-			      FileUtils.cp './spec/support/a_consumer-a_producer.json', "#{tmp_pact_dir}/a_consumer-a_producer.json"
+			      FileUtils.cp './spec/support/a_consumer-a_provider.json', "#{tmp_pact_dir}/a_consumer-a_provider.json"
 			   end
 
 			   let(:tmp_pact_dir) {"./tmp/pacts"}
 
 			   let(:consumer_name) { 'a consumer' }
-			   let(:producer_name) { 'a producer' }
+			   let(:provider_name) { 'a provider' }
 			   let(:consumer_contract_builder) { 
 			      Pact::Consumer::ConsumerContractBuilder.new(
 			         :pactfile_write_mode => pactfile_write_mode,
 			         :consumer_name => consumer_name,
-			         :producer_name => producer_name,
+			         :provider_name => provider_name,
 			         :port => 1234)}
 
 			   context "when overwriting pact" do
@@ -44,7 +44,7 @@ module Pact
 			describe "handle_interaction_fully_defined" do
 
 				subject {
-					Pact::Consumer::ConsumerContractBuilder.new({:consumer_name => 'blah', :producer_name => 'blah', :port => 2222})
+					Pact::Consumer::ConsumerContractBuilder.new({:consumer_name => 'blah', :provider_name => 'blah', :port => 2222})
 				}
 
 				let(:interaction_hash) {
@@ -77,7 +77,7 @@ module Pact
         	WebMock.should have_requested(:post, 'localhost:2222/interactions').with(body: interaction_json)
       	end
 
-      	it "updates the Producer's Pactfile" do
+      	it "updates the Provider's Pactfile" do
       		subject.consumer_contract.should_receive(:update_pactfile)
       		subject.handle_interaction_fully_defined interaction
       	end

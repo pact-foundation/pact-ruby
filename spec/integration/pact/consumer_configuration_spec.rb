@@ -2,7 +2,7 @@ require 'spec_helper'
 require 'pact/configuration'
 require 'pact/consumer/dsl'
 require 'pact/consumer/configuration_dsl'
-require 'pact/producer/configuration_dsl'
+require 'pact/provider/configuration_dsl'
 
 describe "consumer side" do
   describe "configure" do
@@ -59,11 +59,11 @@ describe "consumer side" do
       end
     end
 
-    describe "producers" do
+    describe "providers" do
 
       subject { TestHelper.new.my_service }
 
-      it "should have defined methods in MockServices for the producers" do
+      it "should have defined methods in MockServices for the providers" do
         subject.should be_instance_of Pact::Consumer::ConsumerContractBuilder
       end
 
@@ -121,10 +121,10 @@ describe "consumer side" do
       end
     end
 
-    describe "producers" do
+    describe "providers" do
       include Pact::Consumer::ConsumerContractBuilders
 
-      it "should have defined methods in MockServices for the producers" do
+      it "should have defined methods in MockServices for the providers" do
         my_service.should be_instance_of Pact::Consumer::ConsumerContractBuilder
       end
 

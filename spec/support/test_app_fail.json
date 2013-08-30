@@ -16,7 +16,7 @@
                 "body": {"message" : "this is not the weather you are looking for"}
 
             },
-            "producer_state": "the weather is cloudy"
+            "provider_state": "the weather is cloudy"
         }
     ]
 }

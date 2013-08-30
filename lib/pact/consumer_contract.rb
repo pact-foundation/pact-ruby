@@ -1,5 +1,5 @@
 require 'pact/consumer/service_consumer'
-require 'pact/consumer/service_producer'
+require 'pact/consumer/service_provider'
 require 'pact/consumer/interaction'
 require 'pact/logging'
 require 'pact/json_warning'
@@ -14,17 +14,17 @@ module Pact
 
 		attr_accessor :interactions
 		attr_accessor :consumer
-		attr_accessor :producer
+		attr_accessor :provider
 
 		def initialize(attributes = {})
 			@interactions = attributes[:interactions] || []
 			@consumer = attributes[:consumer]
-			@producer = attributes[:producer]
+			@provider = attributes[:provider]
 		end
 
 		def as_json(options = {})
 			{
-				producer: @producer.as_json,
+				provider: @provider.as_json,
 				consumer: @consumer.as_json,
 				interactions: @interactions.collect(&:as_json),
 				metadata: {
@@ -43,7 +43,7 @@ module Pact
 		  new({
 		  	:interactions => obj['interactions'].collect { |hash| Pact::Consumer::Interaction.from_hash(hash)},
 		  	:consumer => Pact::Consumer::ServiceConsumer.from_hash(obj['consumer']),
-		  	:producer => Pact::Consumer::ServiceProducer.from_hash(obj['producer'] || {})
+		  	:provider => Pact::Consumer::ServiceProvider.from_hash(obj['provider'] || {})
 		  })
 		end
 
@@ -55,9 +55,9 @@ module Pact
 		def find_interaction criteria
 			interactions = find_interactions criteria
 			if interactions.size == 0
-				raise "Could not find interaction matching #{criteria} in pact file between #{consumer.name} and #{producer.name}."
+				raise "Could not find interaction matching #{criteria} in pact file between #{consumer.name} and #{provider.name}."
 			elsif interactions.size > 1
-				raise "Found more than 1 interaction matching #{criteria} in pact file between #{consumer.name} and #{producer.name}."
+				raise "Found more than 1 interaction matching #{criteria} in pact file between #{consumer.name} and #{provider.name}."
 			end
 			interactions.first
 		end
@@ -87,16 +87,16 @@ module Pact
 		end
 
 		def pact_file_name
-			"#{filenamify(consumer.name)}-#{filenamify(producer.name)}.json"
+			"#{filenamify(consumer.name)}-#{filenamify(provider.name)}.json"
 		end
 
       def pactfile_path
-        raise 'You must first specify a consumer and service name' unless (consumer && consumer.name && producer && producer.name)
+        raise 'You must first specify a consumer and service name' unless (consumer && consumer.name && provider && provider.name)
         @pactfile_path ||= File.join(Pact.configuration.pact_dir, pact_file_name)
       end
 
       def update_pactfile
-        logger.debug "Updating pact file for #{producer.name} at #{pactfile_path}"
+        logger.debug "Updating pact file for #{provider.name} at #{pactfile_path}"
         check_for_active_support_json
         File.open(pactfile_path, 'w') do |f|
           f.write JSON.pretty_generate(self)

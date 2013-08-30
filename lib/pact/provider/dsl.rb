@@ -1,12 +1,21 @@
 module Pact
 
-   module Producer
+   module Provider
       module DSL
 
+         #TODO: Move this into a module, out of configuration
          module Configuration
             def provider= provider
-               @producer = provider
+               @provider = provider
             end
+
+            def provider
+              if defined? @provider
+                @provider
+              else
+                raise "Please configure your provider. See the Provider section in the README for examples."
+              end
+            end            
          end
 
          Pact::Configuration.send(:include, Configuration)
@@ -39,8 +48,8 @@ module Pact
            end
 
            def validate
-             raise "Please provide a name for the Producer" unless @name
-             raise "Please configure an app for the Producer" unless @app_block
+             raise "Please provide a name for the Provider" unless @name
+             raise "Please configure an app for the Provider" unless @app_block
            end
 
            def name name
@@ -59,3 +68,5 @@ module Pact
       end
    end
 end
+
+Pact.send(:extend, Pact::Provider::DSL)

@@ -1,10 +1,10 @@
 module Pact
   module Consumer
     # This is a crap name, it's really just a object for serializing to JSON
-    class ServiceProducer
+    class ServiceProvider
       attr_accessor :name
       def initialize options
-        @name = options[:name] || '[producer name unknown - please update the pact gem in the consumer project to the latest version and regenerate the pacts]'
+        @name = options[:name] || '[provider name unknown - please update the pact gem in the consumer project to the latest version and regenerate the pacts]'
       end
 
       def to_s
@@ -16,7 +16,7 @@ module Pact
       end
 
       def self.from_hash obj
-        ServiceProducer.new(:name => obj['name'])
+        ServiceProvider.new(:name => obj['name'])
       end
     end
   end

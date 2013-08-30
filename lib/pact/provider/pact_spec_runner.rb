@@ -5,10 +5,10 @@ require 'rspec/core/formatters/documentation_formatter'
 require_relative 'rspec'
 
 module Pact
-	module Producer
+	module Provider
 		class PactSpecRunner
 
-			extend Pact::Producer::RSpec::ClassMethods
+			extend Pact::Provider::RSpec::ClassMethods
 
 			def self.run(spec_definitions, options = {})
 				initialize_specs spec_definitions

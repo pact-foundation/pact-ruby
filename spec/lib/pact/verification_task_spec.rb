@@ -27,14 +27,14 @@ module Pact
 			let(:consumer_contract) { [ uri: @pact_uri, support_file: @support_file, consumer: @consumer] }
 
 			it 'verifies the pacts using PactSpecRunner' do
-				Producer::PactSpecRunner.should_receive(:run).with(consumer_contract).and_return(0)
+				Provider::PactSpecRunner.should_receive(:run).with(consumer_contract).and_return(0)
 				Rake::Task[@task_name].execute
 			end
 
 			context 'when all specs pass' do
 
 				before do
-					Producer::PactSpecRunner.stub(:run).and_return(0)
+					Provider::PactSpecRunner.stub(:run).and_return(0)
 				end
 
 				it 'does not raise an exception' do
@@ -45,7 +45,7 @@ module Pact
 			context 'when one or more specs fail' do
 
 				before do
-					Producer::PactSpecRunner.stub(:run).and_return(1)
+					Provider::PactSpecRunner.stub(:run).and_return(1)
 				end
 
 				it 'raises an exception' do

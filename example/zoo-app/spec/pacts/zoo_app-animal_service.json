@@ -1,5 +1,5 @@
 {
-  "producer": {
+  "provider": {
     "name": "Animal Service"
   },
   "consumer": {
@@ -25,7 +25,7 @@
           ]
         }
       },
-      "producer_state": "there are alligators"
+      "provider_state": "there are alligators"
     },
     {
       "description": "a request for alligators",
@@ -47,7 +47,7 @@
           }
         ]
       },
-      "producer_state": "there are alligators"
+      "provider_state": "there are alligators"
     },
     {
       "description": "a request for alligator Mary",
@@ -69,7 +69,7 @@
           }
         ]
       },
-      "producer_state": "there is an alligator named Mary"
+      "provider_state": "there is an alligator named Mary"
     },
     {
       "description": "a request for alligators",
@@ -89,12 +89,12 @@
           "error": "Argh!!!"
         }
       },
-      "producer_state": "an error has occurred"
+      "provider_state": "an error has occurred"
     }
   ],
   "metadata": {
     "pact_gem": {
-      "version": "0.1.32"
+      "version": "0.1.37"
     }
   }
 }

@@ -7,7 +7,7 @@ module Pact
       subject { 
         interaction_builder = InteractionBuilder.new('Test request', nil).with(request) 
         interaction_builder.on_interaction_fully_defined do | interaction |
-          producer.callback interaction
+          provider.callback interaction
         end
         interaction_builder
       }
@@ -28,14 +28,14 @@ module Pact
         { baz: /qux/, wiffle: Term.new(generate: 'wiffle', matcher: /iff/) }
       end
 
-      let(:producer) do
+      let(:provider) do
         double(callback: nil)
       end
 
       describe "setting up responses" do
 
         it "invokes the callback" do
-          producer.should_receive(:callback).with(subject.interaction)
+          provider.should_receive(:callback).with(subject.interaction)
           subject.will_respond_with response
         end
 
@@ -46,7 +46,7 @@ module Pact
         let(:request) { double(Pact::Request::Expected, :as_json_with_options => {:opts => 'blah'})}
         let(:response) { double('response') }
         let(:generated_response ) { double('generated_response', :to_json => 'generated_response') }
-        subject { Interaction.new(:description => 'description', :request => request, :response => response, :producer_state => 'some state')}
+        subject { Interaction.new(:description => 'description', :request => request, :response => response, :provider_state => 'some state')}
         let(:expected_hash) { {:response => generated_response, :request => as_json_with_options, :description => '' } }
 
         before do
@@ -62,8 +62,8 @@ module Pact
           expect(subject.as_json_for_mock_service[:request]).to eq as_json_with_options
         end
 
-        it "includes the producer state" do
-          expect(subject.as_json_for_mock_service[:producer_state]).to eq 'some state'
+        it "includes the provider state" do
+          expect(subject.as_json_for_mock_service[:provider_state]).to eq 'some state'
         end
 
         it "includes the description" do
@@ -71,7 +71,7 @@ module Pact
         end
 
         it "doesn't have any other keys" do
-          expect(subject.as_json_for_mock_service.keys).to eq [:response, :request, :description, :producer_state]
+          expect(subject.as_json_for_mock_service.keys).to eq [:response, :request, :description, :provider_state]
         end
       end
 
@@ -112,7 +112,7 @@ module Pact
 
         end
 
-        context "with a producer_state" do
+        context "with a provider_state" do
           context "described with a string" do
             subject { 
               interaction_builder = InteractionBuilder.new('Test request', "there are no alligators").with(request) 
@@ -121,7 +121,7 @@ module Pact
             }
 
             it "includes the state name as a string" do
-              expect(parsed_result['producer_state']).to eql("there are no alligators")
+              expect(parsed_result['provider_state']).to eql("there are no alligators")
             end
           end
           context "described with a symbol" do
@@ -132,7 +132,7 @@ module Pact
             }
 
             it "includes the state name as a symbol" do
-              expect(parsed_result['producer_state']).to eql("there_are_no_alligators")
+              expect(parsed_result['provider_state']).to eql("there_are_no_alligators")
             end
           end
         end

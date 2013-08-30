@@ -1,6 +1,6 @@
 {
-  "producer": {
-    "name": "a producer"
+  "provider": {
+    "name": "a provider"
   },
   "consumer": {
     "name": "a consumer"
@@ -14,7 +14,7 @@
       },
       "response": {
       },
-      "producer_state": "state one"
+      "provider_state": "state one"
     },
     {
       "description": "request two",

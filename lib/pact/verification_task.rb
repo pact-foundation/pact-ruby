@@ -1,5 +1,5 @@
 require 'rake/tasklib'
-require 'pact/producer/pact_spec_runner'
+require 'pact/provider/pact_spec_runner'
 
 =begin
 	To create a rake pact:verify:<something> task
@@ -33,15 +33,15 @@ module Pact
 	    yield self
 
 	    namespace :pact do
-	      desc "Verify producer against the consumer pacts for #{name}"
+	      desc "Verify provider against the consumer pacts for #{name}"
 	      task "verify:#{name}" do
-	        exit_status = Producer::PactSpecRunner.run(pact_spec_config)
+	        exit_status = Provider::PactSpecRunner.run(pact_spec_config)
 	        fail failure_message if exit_status != 0
 	      end
 
 	      def failure_message
 	      	"\n* * * * * * * * * * * * * * * * * * *\n" +
-	      	"Producer did not honour pact file.\nSee\n * #{Pact.configuration.log_path}\n * #{Pact.configuration.tmp_dir}\nfor logs and pact files." +
+	      	"Provider did not honour pact file.\nSee\n * #{Pact.configuration.log_path}\n * #{Pact.configuration.tmp_dir}\nfor logs and pact files." +
 	      	"\n* * * * * * * * * * * * * * * * * * *\n\n"
 	      end
 	    end

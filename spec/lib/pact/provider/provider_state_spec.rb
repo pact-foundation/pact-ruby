@@ -1,14 +1,14 @@
 require 'spec_helper'
-require 'pact/producer/producer_state'
+require 'pact/provider/provider_state'
 
 module Pact
-  module Producer
+  module Provider
 
-    describe 'global ProducerState' do
+    describe 'global ProviderState' do
 
       MESSAGES = []
 
-      Pact.producer_state :no_alligators do
+      Pact.provider_state :no_alligators do
         set_up do
           MESSAGES << 'set_up'
         end
@@ -17,14 +17,14 @@ module Pact
         end
       end
 
-      Pact.producer_state 'some alligators' do
+      Pact.provider_state 'some alligators' do
       end
 
       before do
         MESSAGES.clear
       end
 
-      subject { ProducerState.get('no_alligators') }
+      subject { ProviderState.get('no_alligators') }
 
       describe 'set_up' do
         it 'should call the block passed to set_up' do
@@ -42,32 +42,32 @@ module Pact
 
       describe '.get' do
         context 'when the name is a matching symbol' do
-          it 'will return the ProducerState' do
-            ProducerState.get('no_alligators').should_not be_nil
+          it 'will return the ProviderState' do
+            ProviderState.get('no_alligators').should_not be_nil
           end
         end
         context 'when the name is a matching string' do
-          it 'will return the ProducerState' do
-            ProducerState.get('some alligators').should_not be_nil
+          it 'will return the ProviderState' do
+            ProviderState.get('some alligators').should_not be_nil
           end
         end
       end
     end
 
 
-    describe 'namespaced ProducerStates' do
+    describe 'namespaced ProviderStates' do
 
       NAMESPACED_MESSAGES = []
 
       Pact.with_consumer 'a consumer' do
-        producer_state 'the weather is sunny' do
+        provider_state 'the weather is sunny' do
           set_up do
             NAMESPACED_MESSAGES << 'sunny!'
           end
         end
       end
 
-      Pact.producer_state 'the weather is cloudy' do
+      Pact.provider_state 'the weather is cloudy' do
         set_up do
           NAMESPACED_MESSAGES << 'cloudy :('
         end
@@ -80,11 +80,11 @@ module Pact
       describe '.get' do
         context 'for a consumer' do
           it 'has a namespaced name' do
-            ProducerState.get('the weather is sunny', :for => 'a consumer').should_not be_nil
+            ProviderState.get('the weather is sunny', :for => 'a consumer').should_not be_nil
           end
 
           it 'falls back to a global state of the same name if one is not found for the specified consumer' do
-            ProducerState.get('the weather is cloudy', :for => 'a consumer').should_not be_nil
+            ProviderState.get('the weather is cloudy', :for => 'a consumer').should_not be_nil
           end
         end
 
@@ -93,7 +93,7 @@ module Pact
       describe 'set_up' do
         context 'for a consumer' do
           it 'runs its own setup' do
-            ProducerState.get('the weather is sunny', :for => 'a consumer').set_up
+            ProviderState.get('the weather is sunny', :for => 'a consumer').set_up
             NAMESPACED_MESSAGES.should eq ['sunny!']
           end
         end

@@ -57,6 +57,14 @@ module Pact
 
       def == other
         other.is_a?(Interaction) && as_json == other.as_json
+      end
+
+      def eq? other
+        self == other
+      end
+
+      def to_s
+        to_json
       end         
    end
 end

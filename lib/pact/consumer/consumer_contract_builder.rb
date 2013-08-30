@@ -21,13 +21,13 @@ module Pact
           :provider => ServiceProvider.new(name: attributes[:provider_name])
           )
         @mock_service_client = MockServiceClient.new(attributes[:provider_name], attributes[:port])
-        if attributes[:pactfile_write_mode] == :update && File.exist?(consumer_contract.pactfile_path)
+        if attributes[:pactfile_write_mode] == :update && pactfile_exists?
           load_existing_interactions
         end
       end
 
       def load_existing_interactions
-        json = File.read(consumer_contract.pactfile_path)
+        json = existing_consumer_contract_json
         if json.size > 0
           existing_consumer_contract = Pact::ConsumerContract.from_json json
           existing_consumer_contract.interactions.each do | interaction |
@@ -35,6 +35,14 @@ module Pact
           end
           consumer_contract.interactions = @interactions.values
         end
+      end
+
+      def pactfile_exists?
+        File.exist?(consumer_contract.pactfile_path)
+      end
+
+      def existing_consumer_contract_json
+        File.read(consumer_contract.pactfile_path)
       end
 
       def given(provider_state)
@@ -48,7 +56,7 @@ module Pact
         interaction_builder.on_interaction_fully_defined do | interaction |
           provider.handle_interaction_fully_defined(interaction)
         end
-        @interactions["#{description} given #{@provider_state}"] ||= interaction_builder.interaction
+        @interactions["#{description} given #{@provider_state}"] = interaction_builder.interaction
         consumer_contract.interactions = @interactions.values
         interaction_builder
       end

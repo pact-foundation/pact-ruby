@@ -3,6 +3,15 @@ require_relative 'consumer_contract_builders'
 module Pact::Consumer
    module DSL
 
+      module Configuration
+        def add_provider_verification &block
+          provider_verifications << block
+        end
+        def provider_verifications
+          @provider_verifications ||= []
+        end
+      end    
+
       def service_consumer name, &block
         ServiceConsumerDSL.new(name, &block).create_service_consumer
       end
@@ -145,3 +154,4 @@ module Pact::Consumer
 end
 
 Pact.send(:extend, Pact::Consumer::DSL)
+Pact::Configuration.send(:include, Pact::Consumer::DSL::Configuration)

@@ -1,7 +1,6 @@
 require 'spec_helper'
 require 'pact/configuration'
 require 'pact/consumer/dsl'
-require 'pact/consumer/configuration_dsl'
 
 describe "consumer side" do
   describe "configure" do

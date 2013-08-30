@@ -1,6 +1,5 @@
 require 'spec_helper'
 require 'pact/consumer/dsl'
-require 'pact/consumer/configuration_dsl'
 
 module Pact::Consumer::DSL
 

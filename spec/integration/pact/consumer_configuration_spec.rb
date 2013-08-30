@@ -45,7 +45,7 @@ describe "consumer side" do
       subject { TestHelper.new.my_service.consumer_contract.consumer }
 
       it "should be configured" do
-        expect(subject).to be_instance_of Pact::Consumer::ServiceConsumer
+        expect(subject).to be_instance_of Pact::ServiceConsumer
       end
 
       it "should have the right name" do

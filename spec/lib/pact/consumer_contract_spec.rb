@@ -56,11 +56,11 @@ module Pact
         end
 
         it "should have a consumer" do
-          loaded_pact.consumer.should be_instance_of Pact::Consumer::ServiceConsumer
+          loaded_pact.consumer.should be_instance_of Pact::ServiceConsumer
         end
 
         it "should have a provider" do
-          loaded_pact.provider.should be_instance_of Pact::Consumer::ServiceProvider
+          loaded_pact.provider.should be_instance_of Pact::ServiceProvider
         end
       end
     end
@@ -113,8 +113,8 @@ module Pact
       let(:pacts_dir) { Pathname.new("./tmp/pactfiles") }
       let(:expected_pact_path) { pacts_dir + "test_consumer-test_service.json" }
       let(:expected_pact_string) { 'the_json' }
-      let(:consumer) { Pact::Consumer::ServiceConsumer.new(:name => 'test_consumer')}
-      let(:provider) { Pact::Consumer::ServiceProvider.new(:name => 'test_service')}
+      let(:consumer) { Pact::ServiceConsumer.new(:name => 'test_consumer')}
+      let(:provider) { Pact::ServiceProvider.new(:name => 'test_service')}
       let(:interactions) { [double("interaction", as_json: "something")]}
       subject { ConsumerContract.new(:consumer => consumer, :provider => provider, :interactions => interactions) }
       before do

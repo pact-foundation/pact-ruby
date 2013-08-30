@@ -20,7 +20,7 @@ module Pact::Consumer
 
         def initialize name, &block
           @name = name
-          consumer = Pact::Consumer::ServiceConsumer.new name: @name
+          consumer = Pact::ServiceConsumer.new name: @name
           @app = nil
           @port = nil
           instance_eval(&block)

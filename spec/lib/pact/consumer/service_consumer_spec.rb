@@ -1,6 +1,6 @@
 require 'spec_helper'
 
-module Pact::Consumer
+module Pact
    describe ServiceConsumer do
       describe "as_json" do
          it "returns a hash representation of the object" do

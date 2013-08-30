@@ -48,7 +48,7 @@ module Pact
            end
 
            def validate
-             raise "Please provide a name for the Provider" unless @name
+             raise "Please provide a name for the Provider" unless @name && !@name.strip.empty?
              raise "Please configure an app for the Provider" unless @app_block
            end
 

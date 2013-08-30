@@ -9,9 +9,11 @@ module Pact::Provider
     end
 
     describe "service_provider" do
+
       before do
         Pact.clear_configuration
       end
+
       let(:mock_config) { MockConfig.new }
       context "when a provider is configured" do
         before do
@@ -37,67 +39,63 @@ module Pact::Provider
 
     module DSL
 
-    #   describe ProviderDSL do
+      describe ServiceProviderDSL do
 
-    #     describe "initialize" do
+        describe "initialize" do
 
-    #       context "with an object instead of a block" do
-    #         subject do
-    #           ProviderDSL.new do
-    #             name nil
-    #             app 'blah'
-    #           end
-    #         end
-    #         it "raises an error" do
-    #           expect{ subject }.to raise_error
-    #         end
-    #       end
+          context "with an object instead of a block" do
+            subject do
+              ServiceProviderDSL.new 'name' do
+                app 'blah'
+              end
+            end
+            it "raises an error" do
+              expect{ subject }.to raise_error /wrong number of arguments/
+            end
+          end
 
+        end
+        describe "validate" do
+          context "when no name is provided" do
+            subject do
+              ServiceProviderDSL.new ' ' do
+                app { Object.new }
+              end
+            end
+            it "raises an error" do
+              expect{ subject.validate}.to raise_error("Please provide a name for the Provider")
+            end
+          end
+          context "when nil name is provided" do
+            subject do
+              ServiceProviderDSL.new nil do
+                app { Object.new }
+              end
+            end
+            it "raises an error" do
+              expect{ subject.validate}.to raise_error("Please provide a name for the Provider")
+            end
+          end
+          context "when no app is provided" do
+            subject do
+              ServiceProviderDSL.new 'Blah' do
+              end
+            end
+            it "raises an error" do
+              expect{ subject.validate }.to raise_error("Please configure an app for the Provider")
+            end
+          end
+        end
+      end
 
-    #     end
-    #     describe "validate" do
-    #       context "when no name is provided" do
-    #         subject do
-    #           ProviderDSL.new do
-    #             app { Object.new }
-    #           end
-    #         end
-    #         it "raises an error" do
-    #           expect{ subject.validate}.to raise_error("Please provide a name for the Provider")
-    #         end
-    #       end
-    #       context "when nil name is provided" do
-    #         subject do
-    #           ProviderDSL.new do
-    #             name nil
-    #             app { Object.new }
-    #           end
-    #         end
-    #         it "raises an error" do
-    #           expect{ subject.validate}.to raise_error("Please provide a name for the Provider")
-    #         end
-    #       end
-    #       context "when no app is provided" do
-    #         subject do
-    #           ProviderDSL.new do
-    #             name 'Blah'
-    #           end
-    #         end
-    #         it "raises an error" do
-    #           expect{ subject.validate }.to raise_error("Please configure an app for the Provider")
-    #         end
-    #       end
-    #     end
-    #   end
-
-      # describe ProviderConfig do
-      #   describe "app" do
-      #     subject { ProviderConfig.new("blah") { Object.new } }
-      #     it "should execute the app_block each time" do
-      #       expect(subject.app.object_id).to_not equal(subject.app.object_id)
-      #     end
-      #   end
-      # end
+      describe ServiceProviderConfig do
+        describe "app" do
+          subject { ServiceProviderConfig.new("blah") { Object.new } }
+          it "should execute the app_block each time" do
+            expect(subject.app.object_id).to_not equal(subject.app.object_id)
+          end
+        end
+      end
 
     end
   end

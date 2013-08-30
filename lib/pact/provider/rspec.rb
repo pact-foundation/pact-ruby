@@ -3,7 +3,6 @@ require 'pact/consumer_contract'
 require 'pact/json_warning'
 require_relative 'matchers'
 require_relative 'test_methods'
-require_relative 'configuration_dsl'
 require 'pact/provider/dsl'
 
 module Pact

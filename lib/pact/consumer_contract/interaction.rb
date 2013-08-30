@@ -53,6 +53,10 @@ module Pact
 
       def match_criterion target, criterion
         target == criterion || (criterion.is_a?(Regexp) && criterion.match(target))
-      end            
+      end
+
+      def == other
+        other.is_a?(Interaction) && as_json == other.as_json
+      end         
    end
 end

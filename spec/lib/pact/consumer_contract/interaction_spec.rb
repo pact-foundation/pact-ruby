@@ -1,12 +1,30 @@
 require 'spec_helper'
 require 'pact/reification'
+require 'pact/consumer_contract/interaction'
 
 module Pact
   module Consumer
+
     describe Interaction do
 
+      describe "==" do
+        subject { InteractionFactory.create }
+        context "when other is the same" do
+          let(:other) { InteractionFactory.create }
+          it "returns true" do
+            expect(subject == other).to be_true
+          end
+        end
+        context "when other is not the same" do
+          let(:other) { InteractionFactory.create(:request => {:path => '/a_different_path'}) }
+          it "returns false" do
+            expect(subject == other).to be_false
+          end
+        end
+      end
+
       describe "matches_criteria?" do
-        subject { Pact::Interaction.new(:description => 'a request for food') }
+        subject { InteractionFactory.create(:description => 'a request for food') }
         context "by description" do
           context "when the interaction matches" do
             it "returns true" do

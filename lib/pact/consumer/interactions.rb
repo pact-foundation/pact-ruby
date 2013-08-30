@@ -1,5 +1,6 @@
 module Pact
    module Consumer
+      # Could use a set but displaying and to_json functionality is better with an Array
       class UpdatableInteractions < Array
 
          def initialize list = []

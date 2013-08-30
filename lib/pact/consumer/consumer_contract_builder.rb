@@ -2,6 +2,7 @@ require 'uri'
 require 'json/add/regexp'
 require 'pact/logging'
 require 'pact/consumer/mock_service_client'
+require_relative 'interactions'
 
 module Pact
   module Consumer
@@ -14,28 +15,35 @@ module Pact
       attr_reader :mock_service_client
 
       def initialize(attributes)
-        @interactions = {} #TODO move interaction management out of a Hash!
         @provider_state = nil
+        @mock_service_client = MockServiceClient.new(attributes[:provider_name], attributes[:port])
         @consumer_contract = Pact::ConsumerContract.new(
           :consumer => ServiceConsumer.new(name: attributes[:consumer_name]),
           :provider => ServiceProvider.new(name: attributes[:provider_name])
           )
-        @mock_service_client = MockServiceClient.new(attributes[:provider_name], attributes[:port])
-        @pactfile_write_mode = attributes[:pactfile_write_mode]
-        if updating_pactfile? && pactfile_exists?
-          load_existing_interactions
+        interactions = if attributes[:pactfile_write_mode] == :update
+          UpdatableInteractions.new(existing_interactions)
+        else
+          DistinctInteractions.new
         end
+        @consumer_contract.interactions = interactions
       end
 
-      def load_existing_interactions
-        json = existing_consumer_contract_json
-        if json.size > 0
-          existing_consumer_contract = Pact::ConsumerContract.from_json json
-          existing_consumer_contract.interactions.each do | interaction |
-            @interactions["#{interaction.description} given #{interaction.provider_state}"] = interaction
+      def existing_interactions
+        interactions = []
+        if pactfile_exists?
+          json = existing_consumer_contract_json
+          if json.size > 0
+            begin
+              existing_consumer_contract = Pact::ConsumerContract.from_json json
+              interactions = existing_consumer_contract.interactions
+            rescue StandardError => e
+              log_and_puts "Could not load existing consumer contract from #{consumer_contract.pactfile_path} due to #{e}"
+              log_and_puts "Creating a new file."
+            end
           end
-          consumer_contract.interactions = @interactions.values
         end
+        interactions
       end
 
       def pactfile_exists?
@@ -61,12 +69,7 @@ module Pact
       end
 
       def handle_interaction_fully_defined interaction
-        interaction_key = "#{interaction.description} given #{interaction.provider_state}"
-        if overwriting_pactfile? && similar_interaction_exists?(interaction_key, interaction)
-          raise "Interaction with same description (#{interaction.description}) and provider state (#{interaction.provider_state}) already exists"
-        end
-        @interactions[interaction_key] = interaction
-        consumer_contract.interactions = @interactions.values
+        consumer_contract.interactions << interaction
         mock_service_client.add_expected_interaction interaction
         @provider_state = nil
         consumer_contract.update_pactfile
@@ -84,22 +87,9 @@ module Pact
 
       private
 
-      attr_reader :pactfile_write_mode
-
-      def updating_pactfile?
-        pactfile_write_mode == :update
-      end
-
-      def overwriting_pactfile?
-        !updating_pactfile?
-      end
-
-      def filenamify name
-        name.downcase.gsub(/\s/, '_')
-      end
-
-      def similar_interaction_exists? key, new_interaction
-        @interactions.key?(key) && @interactions[key] != new_interaction
+      def log_and_puts msg
+        $stderr.puts msg
+        logger.warn msg
       end
 
     end

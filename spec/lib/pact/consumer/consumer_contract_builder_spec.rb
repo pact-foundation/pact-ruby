@@ -39,6 +39,27 @@ module Pact
 			         expect(consumer_contract_builder.consumer_contract.interactions.size).to eq 2
 			      end
 			   end
+
+			   context "when an error occurs deserializing the existing pactfile" do
+			   	let(:pactfile_write_mode) {:update}
+			   	let(:error) { RuntimeError.new('some error')}
+			   	let(:line1) { /Could not load existing consumer contract from .* due to some error/ }
+			   	let(:line2) {'Creating a new file.'}
+			   	before do
+			   		ConsumerContract.stub(:from_json).and_raise(error)
+			   		$stderr.should_receive(:puts).with(line1)
+			   		$stderr.should_receive(:puts).with(line2)
+			   		Pact.configuration.logger.should_receive(:warn).with(line1)
+			   		Pact.configuration.logger.should_receive(:warn).with(line2)
+			   	end
+			   	it "logs the error" do
+			   		consumer_contract_builder
+			   	end
+
+			   	it "continues with a new file" do
+			   		expect(consumer_contract_builder.consumer_contract.interactions).to eq []
+			   	end
+			   end
 		   end
 
 			describe "handle_interaction_fully_defined" do

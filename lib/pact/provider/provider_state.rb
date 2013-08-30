@@ -6,14 +6,11 @@ module Pact
         ProviderState.provider_state(name, &block).register
       end
 
-      def with_consumer name, &block
+      def provider_states_for name, &block
         ProviderState.current_namespaces << name
         instance_eval(&block)
         ProviderState.current_namespaces.pop
       end
-
-      alias_method :provider_states_for, :with_consumer
-      alias_method :provider_state, :provider_state
     end
 
     class ProviderState

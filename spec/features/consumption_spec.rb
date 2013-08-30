@@ -103,16 +103,12 @@ describe "A service consumer side of a pact", :pact => true  do
     before do
       Pact.clear_configuration
 
-      Pact.configure do | config |
-        config.service_consumer do
-          name "Consumer"
-        end
-      end
-
-      Pact.with_service_provider "Zebra Service" do
-        mock_service :zebra_service do
-          verify false
-          port 1235
+      Pact.service_consumer "Consumer" do
+        has_pact_with "Zebra Service" do
+          mock_service :zebra_service do
+            verify false
+            port 1235
+          end
         end
       end
     end
@@ -141,16 +137,12 @@ describe "A service consumer side of a pact", :pact => true  do
     before do
       Pact.clear_configuration
 
-      Pact.configure do | config |
-        config.service_consumer do
-          name "Consumer"
-        end
-      end
-
-      Pact.with_service_provider "Zebra Service" do
-        mock_service :zebra_service do
-          verify true
-          port 1239
+      Pact.service_consumer "Consumer" do | config |
+        has_pact_with "Zebra Service" do
+          mock_service :zebra_service do
+            verify true
+            port 1239
+          end
         end
       end
     end

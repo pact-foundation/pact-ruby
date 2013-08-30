@@ -59,7 +59,7 @@ module Pact
 
       NAMESPACED_MESSAGES = []
 
-      Pact.with_consumer 'a consumer' do
+      Pact.provider_states_for 'a consumer' do
         provider_state 'the weather is sunny' do
           set_up do
             NAMESPACED_MESSAGES << 'sunny!'

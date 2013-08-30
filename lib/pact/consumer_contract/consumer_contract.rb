@@ -64,27 +64,13 @@ module Pact
     end
 
     def find_interactions criteria
-      interactions.select{ | interaction| match_criteria? interaction, criteria}
+      interactions.select{ | interaction| interaction.matches_criteria?(criteria)}
     end
 
     def each
       interactions.each do | interaction |
         yield interaction
       end
-    end
-
-    # Move this to interaction
-    def match_criteria? interaction, criteria
-      criteria.each do | key, value |
-        unless match_criterion interaction.send(key.to_s), value
-          return false
-        end
-      end
-      true
-    end
-
-    def match_criterion target, criterion
-      target == criterion || (criterion.is_a?(Regexp) && criterion.match(target))
     end
 
     def pact_file_name

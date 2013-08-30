@@ -40,5 +40,19 @@ module Pact
       def to_json_for_mock_service
         as_json_for_mock_service.to_json
       end
+
+      # Move this to interaction
+      def matches_criteria? criteria
+        criteria.each do | key, value |
+          unless match_criterion self.send(key.to_s), value
+            return false
+          end
+        end
+        true
+      end
+
+      def match_criterion target, criterion
+        target == criterion || (criterion.is_a?(Regexp) && criterion.match(target))
+      end            
    end
 end

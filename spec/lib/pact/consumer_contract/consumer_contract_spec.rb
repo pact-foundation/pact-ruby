@@ -66,49 +66,69 @@ module Pact
     end
 
     describe "find_interactions" do
-      let(:consumer) { double('ServiceConsumer', :name => 'Consumer')}
-      let(:provider) { double('ServiceProvider', :name => 'Provider')}
-      let(:interaction1) { Pact::Interaction.new(:description => 'a request for food') }
-      let(:interaction2) { Pact::Interaction.new(:description => 'a request for drink') }
-      subject { ConsumerContract.new(:interactions => [interaction1, interaction2], :consumer => consumer, :provider => provider) }
+      let(:consumer) { double('Pact::ServiceConsumer', :name => 'Consumer')}
+      let(:provider) { double('Pact::ServiceProvider', :name => 'Provider')}
+      let(:interaction) { double('Pact::Interaction') }
+      subject { ConsumerContract.new(:interactions => [interaction], :consumer => consumer, :provider => provider) }
+      let(:criteria) { {:description => /blah/} }
+      before do
+        interaction.should_receive(:matches_criteria?).with(criteria).and_return(matches)
+      end
       context "by description" do
         context "when no interactions are found" do
+          let(:matches) { false }
           it "returns an empty array" do
-            expect(subject.find_interactions(:description => /blah/)).to eql []
+            expect(subject.find_interactions(criteria)).to eql []
           end
         end
         context "when interactions are found" do
+          let(:matches) { true }
           it "returns an array of the matching interactions" do
-            expect(subject.find_interactions(:description => /request/)).to eql [interaction1, interaction2]
+            expect(subject.find_interactions(criteria)).to eql [interaction]
           end
         end
       end
     end
+
     describe "find_interaction" do
-      let(:consumer) { double('ServiceConsumer', :name => 'Consumer')}
-      let(:provider) { double('ServiceProvider', :name => 'Provider')}
-      # Should be stubbing these
-      let(:interaction1) { Pact::Interaction.new(:description => 'a request for food') }
-      let(:interaction2) { Pact::Interaction.new(:description => 'a request for drink') }
+      let(:consumer) { double('Pact::ServiceConsumer', :name => 'Consumer')}
+      let(:provider) { double('Pact::ServiceProvider', :name => 'Provider')}
+      let(:interaction1) { double('Pact::Interaction') }
+      let(:interaction2) { double('Pact::Interaction') }
+      let(:criteria) { {:description => /blah/} }
+
+      before do
+        interaction1.should_receive(:matches_criteria?).with(criteria).and_return(matches1)
+        interaction2.should_receive(:matches_criteria?).with(criteria).and_return(matches2)
+      end
+      
       subject { ConsumerContract.new(:interactions => [interaction1, interaction2], :consumer => consumer, :provider => provider) }
       context "by description" do
         context "when a match is found" do
+          let(:matches1) { true }
+          let(:matches2) { false }
+
           it "returns the interaction" do
-            expect(subject.find_interaction :description => /request.*food/).to eql interaction1
+            expect(subject.find_interaction criteria).to eql interaction1
           end
         end
         context "when more than one match is found" do
+          let(:matches1) { true }
+          let(:matches2) { true }
           it "raises an error" do
-            expect{ subject.find_interaction(:description => /request/) }.to raise_error "Found more than 1 interaction matching {:description=>/request/} in pact file between Consumer and Provider."
+            expect{ subject.find_interaction(criteria) }.to raise_error "Found more than 1 interaction matching {:description=>/blah/} in pact file between Consumer and Provider."
           end
         end
         context "when a match is not found" do
+          let(:matches1) { false }
+          let(:matches2) { false }          
           it "raises an error" do
-            expect{ subject.find_interaction(:description => /blah/) }.to raise_error "Could not find interaction matching {:description=>/blah/} in pact file between Consumer and Provider."
+            expect{ subject.find_interaction(criteria) }.to raise_error "Could not find interaction matching {:description=>/blah/} in pact file between Consumer and Provider."
           end
         end
       end
     end
+
     describe "update_pactfile" do
       let(:pacts_dir) { Pathname.new("./tmp/pactfiles") }
       let(:expected_pact_path) { pacts_dir + "test_consumer-test_service.json" }

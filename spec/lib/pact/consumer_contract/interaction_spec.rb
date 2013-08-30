@@ -1,8 +1,25 @@
 require 'spec_helper'
+require 'pact/reification'
 
 module Pact
   module Consumer
     describe Interaction do
+
+      describe "matches_criteria?" do
+        subject { Pact::Interaction.new(:description => 'a request for food') }
+        context "by description" do
+          context "when the interaction matches" do
+            it "returns true" do
+              expect(subject.matches_criteria?(:description => /request.*food/)).to be_true 
+            end
+          end
+          context "when the interaction does not match" do
+            it "returns false" do
+              expect(subject.matches_criteria?(:description => /blah/)).to be_false
+            end
+          end
+        end
+      end
 
       describe "as_json_for_mock_service" do
         let(:as_json_with_options ) { {:opts => 'blah'} }

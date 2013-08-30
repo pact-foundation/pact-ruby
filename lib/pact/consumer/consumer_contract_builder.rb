@@ -12,7 +12,6 @@ module Pact
       include Pact::Logging
 
       attr_reader :consumer_contract
-      attr_reader :mock_service_client
 
       def initialize(attributes)
         @provider_state = nil
@@ -21,58 +20,20 @@ module Pact
           :consumer => ServiceConsumer.new(name: attributes[:consumer_name]),
           :provider => ServiceProvider.new(name: attributes[:provider_name])
           )
-        interactions = if attributes[:pactfile_write_mode] == :update
-          UpdatableInteractions.new(existing_interactions)
-        else
-          DistinctInteractions.new
-        end
-        @consumer_contract.interactions = interactions
-      end
-
-      def existing_interactions
-        interactions = []
-        if pactfile_exists?
-          json = existing_consumer_contract_json
-          if json.size > 0
-            begin
-              existing_consumer_contract = Pact::ConsumerContract.from_json json
-              interactions = existing_consumer_contract.interactions
-            rescue StandardError => e
-              log_and_puts "Could not load existing consumer contract from #{consumer_contract.pactfile_path} due to #{e}"
-              log_and_puts "Creating a new file."
-            end
-          end
-        end
-        interactions
-      end
-
-      def pactfile_exists?
-        File.exist?(consumer_contract.pactfile_path)
-      end
-
-      def existing_consumer_contract_json
-        File.read(consumer_contract.pactfile_path)
+        @consumer_contract.interactions = interactions_for_new_consumer_contract(attributes[:pactfile_write_mode])
       end
 
       def given(provider_state)
-        @provider_state = provider_state
+        self.provider_state = provider_state
         self
       end
 
       def upon_receiving(description)
-        interaction_builder = InteractionBuilder.new(description, @provider_state)
-        provider = self
+        interaction_builder = InteractionBuilder.new(description, provider_state)
         interaction_builder.on_interaction_fully_defined do | interaction |
-          provider.handle_interaction_fully_defined(interaction)
+          self.handle_interaction_fully_defined(interaction)
         end
         interaction_builder
-      end
-
-      def handle_interaction_fully_defined interaction
-        consumer_contract.interactions << interaction
-        mock_service_client.add_expected_interaction interaction
-        @provider_state = nil
-        consumer_contract.update_pactfile
       end
 
       def verify example_description
@@ -85,12 +46,52 @@ module Pact
         mock_service_client.wait_for_interactions wait_max_seconds, poll_interval
       end
 
+      def handle_interaction_fully_defined interaction
+        consumer_contract.interactions << interaction
+        mock_service_client.add_expected_interaction interaction #TODO: What will happen if duplicate added?
+        consumer_contract.update_pactfile
+        self.provider_state = nil
+      end      
+
       private
+
+      attr_reader :mock_service_client
+      attr_accessor :provider_state
+
+      def interactions_for_new_consumer_contract pactfile_write_mode
+        if pactfile_write_mode == :update
+          UpdatableInteractions.new(existing_interactions)
+        else
+          DistinctInteractions.new
+        end        
+      end
 
       def log_and_puts msg
         $stderr.puts msg
         logger.warn msg
       end
+
+      def existing_interactions
+        interactions = []
+        if pactfile_exists?
+          begin
+            existing_consumer_contract = Pact::ConsumerContract.from_json existing_consumer_contract_json
+            interactions = existing_consumer_contract.interactions
+          rescue StandardError => e
+            log_and_puts "Could not load existing consumer contract from #{consumer_contract.pactfile_path} due to #{e}"
+            log_and_puts "Creating a new file."
+          end
+        end
+        interactions
+      end
+
+      def pactfile_exists?
+        File.exist?(consumer_contract.pactfile_path)
+      end
+
+      def existing_consumer_contract_json
+        File.read(consumer_contract.pactfile_path)
+      end      
 
     end
   end

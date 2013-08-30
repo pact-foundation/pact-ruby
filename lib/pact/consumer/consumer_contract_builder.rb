@@ -14,7 +14,7 @@ module Pact
       attr_reader :mock_service_client
 
       def initialize(attributes)
-        @interactions = {}
+        @interactions = {} #TODO move interaction management out of a Hash!
         @provider_state = nil
         @consumer_contract = Pact::ConsumerContract.new(
           :consumer => ServiceConsumer.new(name: attributes[:consumer_name]),

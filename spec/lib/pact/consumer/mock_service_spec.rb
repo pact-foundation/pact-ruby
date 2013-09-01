@@ -4,15 +4,11 @@ require 'pact/consumer/mock_service'
 module Pact::Consumer
 
   describe InteractionList do
-    before do
-      InteractionList.instance.clear
-    end
-
     shared_context "unexpected requests and missed interactions" do
       let(:expected_call) { {request: 'blah'} }
       let(:unexpected_call) { Pact::Request::Actual.from_hash(path: '/path', method: 'get') }
       subject {
-        interactionList = InteractionList.instance
+        interactionList = InteractionList.new
         interactionList.add expected_call
         interactionList.register_unexpected unexpected_call
         interactionList
@@ -23,7 +19,7 @@ module Pact::Consumer
       let(:expected_call) { {request: 'blah'} }
       let(:unexpected_call) { Pact::Request::Actual.from_hash(path: '/path', method: 'get') }
       subject {
-        interactionList = InteractionList.instance
+        interactionList = InteractionList.new
         interactionList.add expected_call
         interactionList.register_matched expected_call
         interactionList

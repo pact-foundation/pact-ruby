@@ -19,7 +19,7 @@ module Pact
   module Consumer
 
     class InteractionList
-      include Singleton
+      #include Singleton
 
       attr_reader :interactions
       attr_reader :unexpected_requests
@@ -112,9 +112,10 @@ module Pact
 
       include RackHelper
 
-      def initialize name, logger
+      def initialize name, logger, interaction_list
         @name = name
         @logger = logger
+        @interaction_list = interaction_list
       end
 
       def match? env
@@ -123,7 +124,7 @@ module Pact
       end
 
       def respond env
-        InteractionList.instance.clear
+        @interaction_list.clear
         @logger.info "Cleared interactions before example \"#{params_hash(env)['example_description']}\""
         [200, {}, ['Deleted interactions']]
       end
@@ -131,9 +132,10 @@ module Pact
 
     class InteractionPost
 
-      def initialize name, logger
+      def initialize name, logger, interaction_list
         @name = name
         @logger = logger
+        @interaction_list = interaction_list
       end
 
       def match? env
@@ -143,7 +145,7 @@ module Pact
 
       def respond env
         interactions = Hashie::Mash.new(JSON.load(env['rack.input'].string))
-        InteractionList.instance.add interactions
+        @interaction_list.add interactions
         @logger.info "Added interaction to #{@name}"
         @logger.ap interactions
         [200, {}, ['Added interactions']]
@@ -197,9 +199,10 @@ module Pact
       include Pact::Matchers
       include RequestExtractor
 
-      def initialize name, logger
+      def initialize name, logger, interaction_list
         @name = name
         @logger = logger
+        @interaction_list = interaction_list
       end
 
       def match? env
@@ -217,7 +220,7 @@ module Pact
         @logger.info "#{@name} received request"
         @logger.ap actual_request.as_json
         candidates = []
-        matching_interactions = InteractionList.instance.interactions.select do |interaction|
+        matching_interactions = @interaction_list.interactions.select do |interaction|
           expected_request = Request::Expected.from_hash(interaction.request.merge(:description => interaction.description))
           candidates << expected_request if expected_request.matches_route? actual_request
           expected_request.match actual_request
@@ -231,7 +234,7 @@ module Pact
           handle_unrecognised_request(actual_request, candidates)
         else
           response = response_from(matching_interactions.first.response)
-          InteractionList.instance.register_matched matching_interactions.first
+          @interaction_list.register_matched matching_interactions.first
           @logger.info "Found matching response on #{@name}:"
           @logger.ap response
           response
@@ -239,7 +242,7 @@ module Pact
       end
 
       def handle_unrecognised_request request, candidates
-        InteractionList.instance.register_unexpected request
+        @interaction_list.register_unexpected request
         @logger.error "No interaction found on #{@name} amongst expected requests \"#{candidates.map(&:description).join(', ')}\""
         @logger.error 'Interaction diffs for that route:'
         interaction_diff = candidates.map do |candidate|
@@ -267,9 +270,10 @@ module Pact
     class MissingInteractionsGet
       include RackHelper
 
-      def initialize name, logger
+      def initialize name, logger, interaction_list
         @name = name
         @logger = logger
+        @interaction_list = interaction_list
       end
 
       def match? env
@@ -278,7 +282,7 @@ module Pact
       end
 
       def respond env
-        number_of_missing_interactions = InteractionList.instance.missing_interactions.size
+        number_of_missing_interactions = @interaction_list.missing_interactions.size
         @logger.info "Number of missing interactions for mock \"#{@name}\" = #{number_of_missing_interactions}"
         [200, {}, ["#{number_of_missing_interactions}"]]
       end
@@ -289,10 +293,11 @@ module Pact
 
       include RackHelper
 
-      def initialize name, logger, log_description
+      def initialize name, logger, log_description, interaction_list
         @name = name
         @logger = logger
         @log_description = log_description
+        @interaction_list = interaction_list
       end
 
       def match? env
@@ -301,12 +306,12 @@ module Pact
       end
 
       def respond env
-        if InteractionList.instance.all_matched?
+        if @interaction_list.all_matched?
           @logger.info "Verifying - interactions matched for example \"#{example_description(env)}\""
           [200, {}, ['Interactions matched']]
         else
           @logger.warn "Verifying - actual interactions do not match expected interactions for example \"#{example_description(env)}\". Interaction diffs:"
-          @logger.ap InteractionList.instance.interaction_diffs, :warn
+          @logger.ap @interaction_list.interaction_diffs, :warn
           [500, {}, ["Actual interactions do not match expected interactions for mock #{@name}. See #{@log_description} for details."]]
         end
       end
@@ -329,15 +334,17 @@ module Pact
           "standard out/err"
         end
 
+        interaction_list = InteractionList.new
+
         @name = options.fetch(:name, "MockService")
         @handlers = [
           StartupPoll.new(@name, @logger),
           CapybaraIdentify.new(@name, @logger),
-          MissingInteractionsGet.new(@name, @logger),
-          VerificationGet.new(@name, @logger, log_description),
-          InteractionPost.new(@name, @logger),
-          InteractionDelete.new(@name, @logger),
-          InteractionReplay.new(@name, @logger)
+          MissingInteractionsGet.new(@name, @logger, interaction_list),
+          VerificationGet.new(@name, @logger, log_description, interaction_list),
+          InteractionPost.new(@name, @logger, interaction_list),
+          InteractionDelete.new(@name, @logger, interaction_list),
+          InteractionReplay.new(@name, @logger, interaction_list)
         ]
       end
 

@@ -5,6 +5,7 @@ require 'net/http'
 require 'uri'
 require 'find_a_port'
 require 'pact/logging'
+require 'pact/consumer/server'
 
 module Pact
   module Consumer
@@ -110,9 +111,11 @@ module Pact
       end
 
       def kill
-        logger.info "Killing #{self}"
-        Process.kill(9, pid)
-        Process.wait(pid)
+        # TODO: need to work out how to kill
+        # logger.info "Killing #{self}"
+        # Process.kill(9, pid)
+        # Process.wait(pid)
+        # self.pid = nil
         self.pid = nil
       end
 
@@ -133,6 +136,13 @@ module Pact
       end
 
       def spawn
+        logger.info "Starting app #{self}..."
+        Pact::Server.new(app, port).boot
+        self.pid = 'unknown'
+        logger.info "Started with pid #{pid}"
+      end
+
+      def old_spawn
         # following stolen from https://github.com/jwilger/kookaburra
         logger.info "Starting app #{self}..."
         self.pid = fork do

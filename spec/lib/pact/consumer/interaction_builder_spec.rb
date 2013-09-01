@@ -5,69 +5,86 @@ module Pact
   module Consumer
     describe InteractionBuilder do
 
-      subject { 
-        interaction_builder = InteractionBuilder.new('Test request', nil).with(request) 
-        interaction_builder.on_interaction_fully_defined do | interaction |
-          provider.callback interaction
+      subject { InteractionBuilder.new }
+      let(:interaction) { double('Interaction').as_null_object}
+
+      before do
+        Interaction.should_receive(:new).and_return(interaction)
+      end
+
+      describe "given" do
+        context "with a string provider state" do
+          it "sets the provider_state on the interaction" do
+            interaction.should_receive(:provider_state=).with('blah')
+            subject.given('blah')
+          end
         end
-        interaction_builder
-      }
 
-      let(:pact_path) { File.expand_path('../../../../pacts/mock', __FILE__) }
+        context "with a symbol provider state" do
+          it "sets the provider_state on the interaction as a string" do
+            interaction.should_receive(:provider_state=).with('some_symbol')
+            subject.given(:some_symbol)
+          end
+        end
 
-      let(:request) do
-        {
-          method: 'post',
-          path: '/foo',
-          body: Term.new(generate: 'waffle', matcher: /ffl/),
-          headers: { 'Content-Type' => 'application/json' },
-          query: '',
-        }
+        it "returns itself" do
+          expect(subject.given(nil)).to be(subject)
+        end
       end
 
-      let(:response) do
-        { baz: /qux/, wiffle: Term.new(generate: 'wiffle', matcher: /iff/) }
+      describe "upon_receiving" do
+        it "sets the description on the interaction" do
+          interaction.should_receive(:description=).with('blah')
+          subject.upon_receiving('blah')
+        end
+
+        it "returns itself" do
+          expect(subject.given(nil)).to be(subject)
+        end
       end
 
-      let(:provider) do
-        double(callback: nil)
-      end
+      describe "with" do
 
-      describe "setting up responses" do
+        let(:request) { {a: 'request'} }
+        let(:expected_request) { {an: 'expected_request'} }
 
-        it "invokes the callback" do
-          provider.should_receive(:callback).with(subject.interaction)
+        it "sets the request on the interaction as a instance of Request::Expected" do
+          Request::Expected.should_receive(:from_hash).with(request).and_return(expected_request)
+          interaction.should_receive(:request=).with(expected_request)
+          subject.with(request)
+        end
+
+        it "returns itself" do
+          expect(subject.given(nil)).to be(subject)
+        end
+      end 
+
+      describe "will_respond_with" do
+        let(:response) { {a: 'response'} }
+
+        let(:provider) do
+          double(callback: nil)
+        end
+
+        before do
+          subject.on_interaction_fully_defined do | interaction |
+            provider.callback interaction
+          end
+        end
+
+        it "sets the response on the interaction" do
+          interaction.should_receive(:response=).with(response)
+          subject.will_respond_with(response)
+        end
+
+        it "returns itself" do
+          expect(subject.given(nil)).to be(subject)
+        end
+
+        it "invokes the 'on_interaction_fully_defined' callback" do
+          provider.should_receive(:callback).with(interaction)
           subject.will_respond_with response
-        end
-
-      end
-
-      context "with a provider_state" do
-        let(:parsed_result) do
-          JSON.load(JSON.dump(subject.interaction))
-        end
-        context "described with a string" do
-          subject { 
-            interaction_builder = InteractionBuilder.new('Test request', "there are no alligators").with(request) 
-            interaction_builder.on_interaction_fully_defined {}
-            interaction_builder
-          }
-
-          it "includes the state name as a string" do
-            expect(parsed_result['provider_state']).to eql("there are no alligators")
-          end
-        end
-        context "described with a symbol" do
-          subject { 
-            interaction_builder = InteractionBuilder.new('Test request', :there_are_no_alligators).with(request) 
-            interaction_builder.on_interaction_fully_defined {}
-            interaction_builder
-          }
-
-          it "includes the state name as a symbol" do
-            expect(parsed_result['provider_state']).to eql("there_are_no_alligators")
-          end
-        end
+        end          
       end
     end
   end

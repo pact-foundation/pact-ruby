@@ -9,9 +9,18 @@ module Pact
 
       attr_reader :interaction
 
-      def initialize(description, provider_state)
-        provider_state = provider_state.nil? ? nil : provider_state.to_s
-        @interaction = Interaction.new(:description => description, :provider_state => provider_state)
+      def initialize
+        @interaction = Interaction.new
+      end
+
+      def upon_receiving description
+        @interaction.description = description
+        self
+      end
+
+      def given provider_state
+        @interaction.provider_state = provider_state.nil? ? nil : provider_state.to_s
+        self
       end
 
       def with(request_details)
@@ -22,6 +31,7 @@ module Pact
       def will_respond_with(response)
         interaction.response = response
         @callback.call interaction
+        self
       end
 
       def on_interaction_fully_defined &block

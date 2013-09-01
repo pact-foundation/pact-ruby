@@ -10,6 +10,7 @@ module Pact::Consumer
       let(:interaction_with_diff_description) { InteractionFactory.create :description => 'blah' }
       let(:interaction_with_diff_provider_state) { InteractionFactory.create :provider_state => 'blah' }
       let(:interactions) { [interaction] }
+
       shared_examples_for 'interactions' do
 
          subject { described_class.new(interactions) }

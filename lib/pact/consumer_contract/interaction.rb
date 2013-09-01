@@ -5,7 +5,7 @@ module Pact
 
       attr_accessor :description, :request, :response, :provider_state
 
-      def initialize attributes
+      def initialize attributes = {}
         @description = attributes[:description]
         @request = attributes[:request]
         @response = attributes[:response]

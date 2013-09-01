@@ -14,7 +14,7 @@ module Pact
       attr_reader :consumer_contract
 
       def initialize(attributes)
-        @provider_state = nil
+        @interaction_builder = nil
         @mock_service_client = MockServiceClient.new(attributes[:provider_name], attributes[:port])
         @consumer_contract = Pact::ConsumerContract.new(
           :consumer => ServiceConsumer.new(name: attributes[:consumer_name]),
@@ -25,16 +25,22 @@ module Pact
       end
 
       def given(provider_state)
-        self.provider_state = provider_state
-        self
+        interaction_builder.given(provider_state)
       end
 
       def upon_receiving(description)
-        interaction_builder = InteractionBuilder.new(description, provider_state)
-        interaction_builder.on_interaction_fully_defined do | interaction |
-          self.handle_interaction_fully_defined(interaction)
-        end
-        interaction_builder
+        interaction_builder.upon_receiving(description)
+      end
+
+      def interaction_builder
+        @interaction_builder ||= 
+        begin
+          interaction_builder = InteractionBuilder.new
+          interaction_builder.on_interaction_fully_defined do | interaction |
+            self.handle_interaction_fully_defined(interaction)
+          end
+          interaction_builder
+        end        
       end
 
       def verify example_description
@@ -51,21 +57,17 @@ module Pact
         interactions_filter << interaction
         mock_service_client.add_expected_interaction interaction #TODO: What will happen if duplicate added?
         consumer_contract.update_pactfile
-        self.provider_state = nil
+        self.interaction_builder = nil
       end      
 
       private
 
       attr_reader :mock_service_client
-      attr_accessor :provider_state
       attr_reader :interactions_filter
+      attr_writer :interaction_builder
 
       def interactions_for_new_consumer_contract pactfile_write_mode
-        if pactfile_write_mode == :update
-          existing_interactions
-        else
-          []
-        end        
+        pactfile_write_mode == :update ? existing_interactions : []
       end
 
       def filter interactions, pactfile_write_mode
@@ -85,7 +87,6 @@ module Pact
         interactions = []
         if pactfile_exists?
           begin
-            existing_consumer_contract = Pact::ConsumerContract.from_json existing_consumer_contract_json
             interactions = existing_consumer_contract.interactions
           rescue StandardError => e
             log_and_puts "Could not load existing consumer contract from #{consumer_contract.pactfile_path} due to #{e}"
@@ -99,8 +100,8 @@ module Pact
         File.exist?(consumer_contract.pactfile_path)
       end
 
-      def existing_consumer_contract_json
-        File.read(consumer_contract.pactfile_path)
+      def existing_consumer_contract
+        Pact::ConsumerContract.from_json(File.read(consumer_contract.pactfile_path))
       end      
 
     end

@@ -106,15 +106,25 @@ module Pact
 					stub_request(:post, 'localhost:2222/interactions')
 				end
 
-      	it "posts the interaction with generated response to the mock service" do
-        	subject.handle_interaction_fully_defined interaction
-        	WebMock.should have_requested(:post, 'localhost:2222/interactions').with(body: interaction_json)
-      	end
+	      	it "posts the interaction with generated response to the mock service" do
+		        	subject.handle_interaction_fully_defined interaction
+		        	WebMock.should have_requested(:post, 'localhost:2222/interactions').with(body: interaction_json)
+	      	end
 
-      	it "updates the Provider's Pactfile" do
-      		subject.consumer_contract.should_receive(:update_pactfile)
-      		subject.handle_interaction_fully_defined interaction
-      	end
+	      	it "adds the interaction to the consumer contract" do
+	      		subject.handle_interaction_fully_defined interaction
+	      		expect(subject.consumer_contract.interactions).to eq [interaction]
+	      	end
+
+	      	it "updates the provider's pactfile" do
+	      		subject.consumer_contract.should_receive(:update_pactfile)
+	      		subject.handle_interaction_fully_defined interaction
+	      	end
+
+	      	it "resets the interaction_builder to nil" do
+	      		subject.should_receive(:interaction_builder=).with(nil)
+	      		subject.handle_interaction_fully_defined interaction
+	      	end
 			end
 		end
 	end

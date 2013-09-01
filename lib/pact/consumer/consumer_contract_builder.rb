@@ -21,6 +21,7 @@ module Pact
           :provider => ServiceProvider.new(name: attributes[:provider_name])
           )
         @consumer_contract.interactions = interactions_for_new_consumer_contract(attributes[:pactfile_write_mode])
+        @interactions_filter = filter(@consumer_contract.interactions, attributes[:pactfile_write_mode])
       end
 
       def given(provider_state)
@@ -47,7 +48,7 @@ module Pact
       end
 
       def handle_interaction_fully_defined interaction
-        consumer_contract.interactions << interaction
+        interactions_filter << interaction
         mock_service_client.add_expected_interaction interaction #TODO: What will happen if duplicate added?
         consumer_contract.update_pactfile
         self.provider_state = nil
@@ -57,13 +58,22 @@ module Pact
 
       attr_reader :mock_service_client
       attr_accessor :provider_state
+      attr_reader :interactions_filter
 
       def interactions_for_new_consumer_contract pactfile_write_mode
         if pactfile_write_mode == :update
-          UpdatableInteractions.new(existing_interactions)
+          existing_interactions
         else
-          DistinctInteractions.new
+          []
         end        
+      end
+
+      def filter interactions, pactfile_write_mode
+        if pactfile_write_mode == :update
+          UpdatableInteractionsFilter.new(interactions)
+        else
+          DistinctInteractionsFilter.new(interactions)
+        end            
       end
 
       def log_and_puts msg

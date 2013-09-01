@@ -7,13 +7,16 @@ module Pact
 		describe ConsumerContractBuilder do
 
 		   describe "initialize" do
+		   	SUPPORT_PACT_FILE = './spec/support/a_consumer-a_provider.json'
 			   before do
 			      Pact.clear_configuration
 			      Pact.configuration.stub(:pact_dir).and_return(File.expand_path(tmp_pact_dir))
 			      FileUtils.rm_rf tmp_pact_dir
 			      FileUtils.mkdir_p tmp_pact_dir
-			      FileUtils.cp './spec/support/a_consumer-a_provider.json', "#{tmp_pact_dir}/a_consumer-a_provider.json"
+			      FileUtils.cp SUPPORT_PACT_FILE, "#{tmp_pact_dir}/a_consumer-a_provider.json"
 			   end
+
+			   let(:expected_interactions) { ConsumerContract.from_json(File.read(SUPPORT_PACT_FILE)).interactions }
 
 			   let(:tmp_pact_dir) {"./tmp/pacts"}
 
@@ -31,12 +34,22 @@ module Pact
 			      it "it overwrites the existing pact file" do
 			         expect(consumer_contract_builder.consumer_contract.interactions).to eq []
 			      end
+
+			      it "uses an DistinctInteractionsFilter to handle new interactions" do
+			      	Pact::Consumer::DistinctInteractionsFilter.should_receive(:new).with([])
+			      	consumer_contract_builder
+			      end
 			   end
 
 			   context "when updating pact" do
 			      let(:pactfile_write_mode) {:update}
-			      it "updates the existing pact file" do
-			         expect(consumer_contract_builder.consumer_contract.interactions.size).to eq 2
+			      it "loads the interactions from the existing pact file" do
+			         expect(consumer_contract_builder.consumer_contract.interactions).to eq expected_interactions
+			      end
+
+			      it "uses an UpdatableInteractionsFilter to handle new interactions" do
+			      	Pact::Consumer::UpdatableInteractionsFilter.should_receive(:new).with(expected_interactions)
+			      	consumer_contract_builder
 			      end
 			   end
 

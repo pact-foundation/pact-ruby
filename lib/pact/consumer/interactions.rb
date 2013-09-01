@@ -1,43 +1,38 @@
 module Pact
    module Consumer
-      # Could use a set but displaying and to_json functionality is better with an Array
-      class UpdatableInteractions < Array
 
-         def initialize list = []
-            super()
-            concat list            
+      #TODO: think of a better word than filter
+      class InteractionsFilter
+         def initialize interactions = []
+            @interactions = interactions
          end
+         
+         def index_of interaction
+            @interactions.find_index{ |i| i.matches_criteria?(description: interaction.description, provider_state: interaction.provider_state)}
+         end       
+      end
 
-         def concat list
-            list.each {|interaction| self << interaction}
-         end
+      class UpdatableInteractionsFilter < InteractionsFilter
 
          def << interaction
-            if (ndx = index(interaction)) 
-               self[ndx] = interaction
+            if (ndx = index_of(interaction)) 
+               @interactions[ndx] = interaction
             else
-               super
+               @interactions << interaction
             end
          end
 
-         def include? interaction
-            index(interaction) != nil
-         end
-
-         def index interaction
-            find_index{ |i| i.matches_criteria?(description: interaction.description, provider_state: interaction.provider_state)}
-         end
       end
 
-      class DistinctInteractions < UpdatableInteractions
+      class DistinctInteractionsFilter < InteractionsFilter
 
          def << interaction
-            if (ndx = index(interaction))
-               if self[ndx] != interaction
+            if (ndx = index_of(interaction))
+               if @interactions[ndx] != interaction
                   raise "Interaction with same description (#{interaction.description}) and provider state (#{interaction.provider_state}) already exists"
                end
             else
-               super
+               @interactions << interaction
             end
          end
       end

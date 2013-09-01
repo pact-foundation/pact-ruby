@@ -68,7 +68,7 @@ module Pact
     def run_default_server(app, port)
       require 'rack/handler/webrick'
       Rack::Handler::WEBrick.run(app, :Port => port, :AccessLog => [], :Logger => WEBrick::Log::new(nil, 0))
-    end    
+    end
 
     def boot
       unless responsive?

@@ -63,6 +63,30 @@ module Pact
           loaded_pact.provider.should be_instance_of Pact::ServiceProvider
         end
       end
+
+      context "with old 'producer' key" do
+        let(:string) { File.read('./spec/support/a_consumer-a_producer.json')}
+        it "should create a Pact" do
+          loaded_pact.should be_instance_of ConsumerContract
+        end
+
+        it "should have interactions" do
+          loaded_pact.interactions.should be_instance_of Array
+        end
+
+        it "should have a consumer" do
+          loaded_pact.consumer.should be_instance_of Pact::ServiceConsumer
+        end
+
+        it "should have a provider" do
+          loaded_pact.provider.should be_instance_of Pact::ServiceProvider
+          loaded_pact.provider.name.should eq "an old producer"
+        end
+
+        it "should have a provider_state" do
+          loaded_pact.interactions.first.provider_state.should eq 'state one'
+        end
+      end
     end
 
     describe "find_interactions" do
@@ -101,7 +125,7 @@ module Pact
         interaction1.should_receive(:matches_criteria?).with(criteria).and_return(matches1)
         interaction2.should_receive(:matches_criteria?).with(criteria).and_return(matches2)
       end
-      
+
       subject { ConsumerContract.new(:interactions => [interaction1, interaction2], :consumer => consumer, :provider => provider) }
       context "by description" do
         context "when a match is found" do
@@ -121,7 +145,7 @@ module Pact
         end
         context "when a match is not found" do
           let(:matches1) { false }
-          let(:matches2) { false }          
+          let(:matches2) { false }
           it "raises an error" do
             expect{ subject.find_interaction(criteria) }.to raise_error "Could not find interaction matching {:description=>/blah/} in pact file between Consumer and Provider."
           end
@@ -152,6 +176,6 @@ module Pact
       it "should write the interactions to the file" do
         File.read(expected_pact_path).should eql expected_pact_string
       end
-    end    
-  end 
+    end
+  end
 end

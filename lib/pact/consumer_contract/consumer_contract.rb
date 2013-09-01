@@ -49,8 +49,12 @@ module Pact
     end
 
     def self.from_json string
-      deserialised_object = JSON.load(string)
+      deserialised_object = JSON.load(maintain_backwards_compatiblity_with_producer_keys(string))
       from_hash(deserialised_object)
+    end
+
+    def self.maintain_backwards_compatiblity_with_producer_keys string
+      string.gsub('"producer":', '"provider":').gsub('"producer_state":', '"provider_state":')
     end
 
     def find_interaction criteria

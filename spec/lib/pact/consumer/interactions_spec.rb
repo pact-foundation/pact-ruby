@@ -1,5 +1,5 @@
 require 'spec_helper'
-require 'pact/consumer/interactions'
+require 'pact/consumer/interactions_filter'
 
 module Pact::Consumer
 

@@ -2,7 +2,7 @@ require 'uri'
 require 'json/add/regexp'
 require 'pact/logging'
 require 'pact/consumer/mock_service_client'
-require_relative 'interactions'
+require_relative 'interactions_filter'
 
 module Pact
   module Consumer

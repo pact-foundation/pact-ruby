@@ -1,5 +1,4 @@
 require 'thwait'
-require 'capybara'
 
 require 'net/http'
 require 'uri'
@@ -139,35 +138,6 @@ module Pact
         logger.info "Starting app #{self}..."
         Pact::Server.new(app, port).boot
         self.pid = 'unknown'
-        logger.info "Started with pid #{pid}"
-      end
-
-      def old_spawn
-        # following stolen from https://github.com/jwilger/kookaburra
-        logger.info "Starting app #{self}..."
-        self.pid = fork do
-          begin
-            Capybara.server_port = port
-            Capybara::Server.new(app).boot
-
-            # This ensures that this forked process keeps running, because the
-            # actual server is started in a thread by Capybara.
-            ThreadsWait.all_waits(Thread.list)
-          rescue Exception => e
-            logger.error "Error starting up #{self}"
-            $stderr.puts "Error starting up #{self}"
-            raise e
-          end
-        end
-
-
-        wait_until do
-          begin
-            Net::HTTP.get_response(URI.parse("http://localhost:#{port}/index.html"))
-          rescue Errno::ECONNREFUSED
-            false
-          end
-        end
         logger.info "Started with pid #{pid}"
       end
 

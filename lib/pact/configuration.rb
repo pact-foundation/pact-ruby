@@ -36,7 +36,7 @@ module Pact
     c.tmp_dir = File.expand_path('./tmp/pacts')
     c.log_dir = default_log_dir
     c.logger = default_logger c.log_path
-    c.pactfile_write_mode = defined?(Rake) ? :overwrite : :update
+    c.pactfile_write_mode = :overwrite
     c
   end
 

@@ -6,16 +6,16 @@ module Pact
          def initialize interactions = []
             @interactions = interactions
          end
-         
+
          def index_of interaction
             @interactions.find_index{ |i| i.matches_criteria?(description: interaction.description, provider_state: interaction.provider_state)}
-         end       
+         end
       end
 
       class UpdatableInteractionsFilter < InteractionsFilter
 
          def << interaction
-            if (ndx = index_of(interaction)) 
+            if (ndx = index_of(interaction))
                @interactions[ndx] = interaction
             else
                @interactions << interaction

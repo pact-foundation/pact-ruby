@@ -10,7 +10,7 @@ module Pact::Consumer
         def provider_verifications
           @provider_verifications ||= []
         end
-      end    
+      end
 
       def service_consumer name, &block
         ServiceConsumerDSL.new(name, &block).create_service_consumer

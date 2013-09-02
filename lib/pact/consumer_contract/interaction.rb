@@ -65,6 +65,6 @@ module Pact
 
       def to_s
         to_json
-      end         
+      end
    end
 end

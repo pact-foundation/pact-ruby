@@ -33,14 +33,14 @@ module Pact
       end
 
       def interaction_builder
-        @interaction_builder ||= 
+        @interaction_builder ||=
         begin
           interaction_builder = InteractionBuilder.new
           interaction_builder.on_interaction_fully_defined do | interaction |
             self.handle_interaction_fully_defined(interaction)
           end
           interaction_builder
-        end        
+        end
       end
 
       def verify example_description
@@ -58,7 +58,7 @@ module Pact
         mock_service_client.add_expected_interaction interaction #TODO: What will happen if duplicate added?
         consumer_contract.update_pactfile
         self.interaction_builder = nil
-      end      
+      end
 
       private
 
@@ -75,7 +75,7 @@ module Pact
           UpdatableInteractionsFilter.new(interactions)
         else
           DistinctInteractionsFilter.new(interactions)
-        end            
+        end
       end
 
       def log_and_puts msg
@@ -102,7 +102,7 @@ module Pact
 
       def existing_consumer_contract
         Pact::ConsumerContract.from_json(File.read(consumer_contract.pactfile_path))
-      end      
+      end
 
     end
   end

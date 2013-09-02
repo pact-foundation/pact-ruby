@@ -70,7 +70,7 @@ module Pact
 
       def request_body request
         body = request.body
-        if body
+        if !body.nil? #TODO - write test for this where this is a NullExpectation
           body = JSON.dump(Pact::Reification.from_term(body))
         else
           body = ""

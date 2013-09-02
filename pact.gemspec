@@ -24,7 +24,6 @@ Gem::Specification.new do |gem|
   gem.add_runtime_dependency 'find_a_port', '~> 1.0.1'
   gem.add_runtime_dependency 'rack-test', '~> 0.6.2'
   gem.add_runtime_dependency 'awesome_print', '~> 1.1.0'
-  gem.add_runtime_dependency 'capybara', '~> 2.1.0'
   gem.add_runtime_dependency 'thor'
   gem.add_runtime_dependency 'thin'
   gem.add_runtime_dependency 'json' #Not locking down a version because buncher gem requires 1.6, while other projects use 1.7.

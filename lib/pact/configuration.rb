@@ -36,8 +36,13 @@ module Pact
     c.tmp_dir = File.expand_path('./tmp/pacts')
     c.log_dir = default_log_dir
     c.logger = default_logger c.log_path
-    c.pactfile_write_mode = :overwrite
+    c.pactfile_write_mode = is_rake_running? ? :overwrite : :update
     c
+  end
+
+  #Would love a better way of determining this!
+  def self.is_rake_running?
+    `ps -ef | grep rake | grep -v 'grep'`.size > 0
   end
 
   def self.default_log_dir

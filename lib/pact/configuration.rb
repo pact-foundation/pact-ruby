@@ -40,9 +40,9 @@ module Pact
     c
   end
 
-  #Would love a better way of determining this!
+  #Would love a better way of determining this! It sure won't work on windows.
   def self.is_rake_running?
-    `ps -ef | grep rake | grep -v 'grep'`.size > 0
+    `ps -ef | grep rake | grep #{Process.ppid} | grep -v 'grep'`.size > 0
   end
 
   def self.default_log_dir

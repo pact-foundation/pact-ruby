@@ -78,9 +78,14 @@ module Pact
         end
       end
 
-      def log_and_puts msg
+      def warn_and_stderr msg
         $stderr.puts msg
         logger.warn msg
+      end
+
+      def info_and_puts msg
+        $stdout.puts msg
+        logger.info msg
       end
 
       def existing_interactions
@@ -88,9 +93,14 @@ module Pact
         if pactfile_exists?
           begin
             interactions = existing_consumer_contract.interactions
+            info_and_puts "*****************************************************************************"
+            info_and_puts "Updating existing file .#{consumer_contract.pactfile_path.gsub(Dir.pwd, '')} as config.pactfile_write_mode is :update"
+            info_and_puts "Only interactions defined in this test run will be updated."
+            info_and_puts "As interactions are identified by description and provider state, pleased note that if either of these have changed, the old interactions won't be removed from the pact file until rake is next run."
+            info_and_puts "*****************************************************************************"
           rescue StandardError => e
-            log_and_puts "Could not load existing consumer contract from #{consumer_contract.pactfile_path} due to #{e}"
-            log_and_puts "Creating a new file."
+            warn_and_stderr "Could not load existing consumer contract from #{consumer_contract.pactfile_path} due to #{e}"
+            warn_and_stderr "Creating a new file."
           end
         end
         interactions

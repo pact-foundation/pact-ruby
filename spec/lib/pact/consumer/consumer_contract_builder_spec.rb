@@ -22,7 +22,7 @@ module Pact
 
 			   let(:consumer_name) { 'a consumer' }
 			   let(:provider_name) { 'a provider' }
-			   let(:consumer_contract_builder) { 
+			   let(:consumer_contract_builder) {
 			      Pact::Consumer::ConsumerContractBuilder.new(
 			         :pactfile_write_mode => pactfile_write_mode,
 			         :consumer_name => consumer_name,
@@ -42,13 +42,34 @@ module Pact
 			   end
 
 			   context "when updating pact" do
+				   	before do
+
+				   	end
 			      let(:pactfile_write_mode) {:update}
 			      it "loads the interactions from the existing pact file" do
-			         expect(consumer_contract_builder.consumer_contract.interactions).to eq expected_interactions
+			      	ConsumerContractBuilder.any_instance.stub(:info_and_puts)
+			        expect(consumer_contract_builder.consumer_contract.interactions).to eq expected_interactions
 			      end
 
 			      it "uses an UpdatableInteractionsFilter to handle new interactions" do
+			      	ConsumerContractBuilder.any_instance.stub(:info_and_puts)
 			      	Pact::Consumer::UpdatableInteractionsFilter.should_receive(:new).with(expected_interactions)
+			      	consumer_contract_builder
+			      end
+
+			      let(:line0) { /\*/ }
+			      let(:line1) { /Updating existing file/ }
+			      let(:line2) { /Only interactions defined in this test run will be updated/ }
+			      let(:line3) { /As interactions are identified by description and provider state/ }
+			      it "logs a description message" do
+			      	$stdout.should_receive(:puts).with(line0).twice
+			      	$stdout.should_receive(:puts).with(line1)
+			      	$stdout.should_receive(:puts).with(line2)
+			      	$stdout.should_receive(:puts).with(line3)
+			      	Pact.configuration.logger.should_receive(:info).with(line0).twice
+			      	Pact.configuration.logger.should_receive(:info).with(line1)
+			      	Pact.configuration.logger.should_receive(:info).with(line2)
+			      	Pact.configuration.logger.should_receive(:info).with(line3)
 			      	consumer_contract_builder
 			      end
 			   end

@@ -1,4 +1,4 @@
-### 1.0.4 (unreleased)
+### 1.0.4 (6 September 2013)
 
 * Added pact/tasks as an easy way to load the rake tasks and classes into the client project [Beth Skurrie]
 * Removed unused rake_task.rb file [Beth Skurrie]

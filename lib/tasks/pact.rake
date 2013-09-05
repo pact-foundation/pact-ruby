@@ -1,8 +1,10 @@
 require 'pact'
 require 'pact/pact_task_helper'
 
-include PactTaskHelper
+
 namespace :pact do
+
+  include PactTaskHelper
 
 	desc "Runs the specified pact file against the service provider"
   task :verify, :pact_uri do | t, args |

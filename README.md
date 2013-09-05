@@ -117,6 +117,8 @@ end
 
 #### Configure your service provider rack app
 
+Create a `pact_helper.rb` in your service provider project. The file must be called pact_helper.rb so the verification tasks can find it, however there is some flexibility in where it can be stored. The recommended place is `specs/service_providers/pact_helper.rb`.
+
 ```ruby
 Pact.service_provider "My Provider" do
   app { MyApp.new }
@@ -150,7 +152,8 @@ Note that these states have been defined only for the 'My Consumer' consumer by 
 
 ```ruby
 # The consumer name here must match the name of the consumer configured in your consumer project
-# for it to use these states.
+# for it to correctly find these provider states.
+# Make sure the provider states are included in or required by your pact_helper.rb file.
 
 Pact.provider_states_for 'My Consumer' do
   provider_state "a thing exists" do
@@ -172,7 +175,7 @@ end
 
 ```
 
-If a state should be used for all consumers, the top level Pact.with_consumer can be skipped, and a global Pact.provider_state can be defined on its own. 
+If a state should be used for all consumers, the top level Pact.with_consumer can be skipped, and a global Pact.provider_state can be defined on its own.
 
 #### Create a rake task to verify that the service provider honours the pact
 

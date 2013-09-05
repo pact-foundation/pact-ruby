@@ -32,4 +32,5 @@ Gem::Specification.new do |gem|
   gem.add_development_dependency 'rake', '~> 10.0.3'
   gem.add_development_dependency 'webmock', '~> 1.9.3'
   gem.add_development_dependency 'pry'
+  gem.add_development_dependency 'fakefs', '~> 0.4'
 end

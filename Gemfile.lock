@@ -24,6 +24,7 @@ GEM
     daemons (1.1.9)
     diff-lcs (1.2.4)
     eventmachine (1.0.3)
+    fakefs (0.4.2)
     find_a_port (1.0.1)
     geminabox-client (0.0.2)
       multipart-post
@@ -63,6 +64,7 @@ PLATFORMS
   ruby
 
 DEPENDENCIES
+  fakefs (~> 0.4)
   geminabox-client
   pact!
   pry

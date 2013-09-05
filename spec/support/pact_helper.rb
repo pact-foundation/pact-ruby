@@ -1,4 +1,5 @@
 require 'json'
+# pact_helper for rake pact:tests
 
 module Pact
 	module Test

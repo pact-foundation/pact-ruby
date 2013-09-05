@@ -80,7 +80,12 @@ module Pact
       def get_provider_state provider_state_name, consumer
         unless provider_state = ProviderState.get(provider_state_name, :for => consumer)
           extra = consumer ? " for consumer \"#{consumer}\"" : ""
-          raise "Could not find a provider state defined for \"#{provider_state_name}\"#{extra}. Have you required the provider state file in your spec?"
+          error_msg = <<-eos
+Could not find a provider state named \"#{provider_state_name}\"#{extra}.
+Have you required the provider states file for this consumer in your pact_helper.rb?
+Check the name in the Pact.provider_states_for definition is exactly \"#{consumer}\"
+eos
+          raise error_msg
         end
         provider_state
       end

@@ -6,10 +6,8 @@ require_relative 'pact_task_helper'
 	To create a rake pact:verify:<something> task
 
 	Pact::VerificationTask.new(:head) do | pact |
-	  pact.uri 'http://master.cd.vpc.realestate.com.au/browse/BIQ-MAS/latestSuccessful/artifact/JOB2/Pacts/mas-contract_transaction_service.json',
-	              support_file: './spec/consumers/pact_helper'
-    pact.uri 'http://master.cd.vpc.realestate.com.au/browse/BIQ-IMAGINARY-CONSUMER/latestSuccessful/artifact/JOB2/Pacts/imaginary_consumer-contract_transaction_service.json',
-                support_file: './spec/consumers/pact_helper'
+	  pact.uri 'http://master.cd.vpc.realestate.com.au/browse/BIQ-MAS/latestSuccessful/artifact/JOB2/Pacts/mas-contract_transaction_service.json'
+    pact.uri 'http://master.cd.vpc.realestate.com.au/browse/BIQ-IMAGINARY-CONSUMER/latestSuccessful/artifact/JOB2/Pacts/imaginary_consumer-contract_transaction_service.json'
 	end
 
 	The pact.uri may be a local file system path or a remote URL.
@@ -32,21 +30,27 @@ module Pact
 	  include PactTaskHelper
 	  def initialize(name)
 	    @pact_spec_config = []
-
+	    @name = name
 	    yield self
-
-	    namespace :pact do
-
-	      desc "Verify provider against the consumer pacts for #{name}"
-	      task "verify:#{name}" do
-	        exit_status = Provider::PactSpecRunner.run(pact_spec_config)
-	        fail failure_message if exit_status != 0
-	      end
-	    end
+	    define_rake_task
 	  end
 
-	  def uri(uri, options)
+	  def uri(uri, options = {})
 	    @pact_spec_config << {uri: uri, support_file: options[:support_file]}
+	  end
+
+	  private
+
+	  attr_reader :name
+
+	  def define_rake_task
+	  	namespace :pact do
+	  	  desc "Verify provider against the consumer pacts for #{name}"
+	  	  task "verify:#{name}" do
+	  	    exit_status = Provider::PactSpecRunner.run(pact_spec_config)
+	  	    fail failure_message if exit_status != 0
+	  	  end
+	  	end
 	  end
 	end
 end

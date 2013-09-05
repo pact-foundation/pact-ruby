@@ -117,9 +117,12 @@ end
 
 #### Configure your service provider rack app
 
-Create a `pact_helper.rb` in your service provider project. The file must be called pact_helper.rb so the verification tasks can find it, however there is some flexibility in where it can be stored. The recommended place is `specs/service_providers/pact_helper.rb`.
+Create a `pact_helper.rb` in your service provider project. The file must be called pact_helper.rb so the built in verification tasks can find it, however there is some flexibility in where it can be stored. The recommended place is `specs/service_providers/pact_helper.rb`.
 
 ```ruby
+require 'spec_helper'
+require 'provider_states_for_my_consumer' #See next section on setting up provider states
+
 Pact.service_provider "My Provider" do
   app { MyApp.new }
 end
@@ -185,16 +188,14 @@ Here is an example pact:verify:head task, pointing the the pact file for "some_c
 
 ```ruby
 Pact::VerificationTask.new(:head) do | pact |
-  pact.uri 'http://our_build_server/MY-CONSUMER-BUILD/latestSuccessful/artifact/Pacts/some_consumer-this_service provider.json',
-    support_file: './spec/consumers/pact_helper'
+  pact.uri 'http://our_build_server/MY-CONSUMER-BUILD/latestSuccessful/artifact/Pacts/some_consumer-this_service provider.json'
 end
 ```
 
 ```ruby
 # Ideally we'd like to be able to create a production task like this, but firewalls are making this tricky right now.
 Pact::VerificationTask.new(:production) do | pact |
-  pact.uri 'http://our_prod_server/pacts/some_consumer-this_service_provider.json',
-    support_file: './spec/consumers/pact_helper'
+  pact.uri 'http://our_prod_server/pacts/some_consumer-this_service_provider.json'
 end
 ```
 

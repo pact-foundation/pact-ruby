@@ -11,14 +11,19 @@ require_relative 'pact_task_helper'
 	end
 
 	The pact.uri may be a local file system path or a remote URL.
-	The support_file should include code that makes your rack app available for the rack testing framework.
+
+	To run a pact:verify:xxx task you need to define a pact_helper.rb, ideally in spec/service_consumers.
+	It should contain your service_provider definition, and load any provider state definition files.
+	It should also load all your app's dependencies (eg by calling out to spec_helper)
+
 	Eg.
+
+	require 'spec_helper'
+	require 'provider_states_for_my_consumer'
 
 	Pact.service_provider "My Provider" do
 		app { TestApp.new }
 	end
-
-	It should also load all your app's dependencies (eg by calling out to spec_helper)
 
 =end
 

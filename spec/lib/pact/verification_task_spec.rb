@@ -24,7 +24,7 @@ module Pact
 
 		describe 'execute' do
 
-			let(:consumer_contract) { [ uri: @pact_uri, support_file: @support_file, consumer: @consumer] }
+			let(:consumer_contract) { [ uri: @pact_uri, support_file: @support_file] }
 
 			it 'verifies the pacts using PactSpecRunner' do
 				Provider::PactSpecRunner.should_receive(:run).with(consumer_contract).and_return(0)

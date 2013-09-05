@@ -1,5 +1,6 @@
 require 'rake/tasklib'
 require 'pact/provider/pact_spec_runner'
+require_relative 'pact_task_helper'
 
 =begin
 	To create a rake pact:verify:<something> task
@@ -23,32 +24,29 @@ require 'pact/provider/pact_spec_runner'
 
 =end
 
+
 module Pact
 	class VerificationTask < ::Rake::TaskLib
 	  attr_reader :pact_spec_config
 
+	  include PactTaskHelper
 	  def initialize(name)
 	    @pact_spec_config = []
 
 	    yield self
 
 	    namespace :pact do
+
 	      desc "Verify provider against the consumer pacts for #{name}"
 	      task "verify:#{name}" do
 	        exit_status = Provider::PactSpecRunner.run(pact_spec_config)
 	        fail failure_message if exit_status != 0
 	      end
-
-	      def failure_message
-	      	"\n* * * * * * * * * * * * * * * * * * *\n" +
-	      	"Provider did not honour pact file.\nSee\n * #{Pact.configuration.log_path}\n * #{Pact.configuration.tmp_dir}\nfor logs and pact files." +
-	      	"\n* * * * * * * * * * * * * * * * * * *\n\n"
-	      end
 	    end
 	  end
 
 	  def uri(uri, options)
-	    @pact_spec_config << {uri: uri, support_file: options[:support_file], consumer: options[:consumer]}
+	    @pact_spec_config << {uri: uri, support_file: options[:support_file]}
 	  end
 	end
 end

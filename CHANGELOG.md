@@ -1,3 +1,7 @@
+### 1.0.5 (unreleased)
+
+* Changed pact:verify failure message to display in red [Latheesh Padukana, Beth Skurrie]
+
 ### 1.0.4 (6 September 2013)
 
 * Added pact/tasks as an easy way to load the rake tasks and classes into the client project [Beth Skurrie]

@@ -11,7 +11,7 @@ namespace :pact do
     require 'pact/provider/pact_spec_runner'
     puts "Using pact at uri #{args[:pact_uri]}"
     pact_spec_config = {uri: args[:pact_uri]}
-    exit_status = Pact::Provider::PactSpecRunner.run([pact_spec_config])
+    exit_status = Pact::Provider::PactSpecRunner.new([pact_spec_config]).run
     fail failure_message if exit_status != 0
   end
 end

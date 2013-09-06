@@ -53,18 +53,18 @@ module Pact
 	  	Pact::ConsumerContract.from_uri config[:uri]
 	  end
 
-	  def publish_report config, output, result
+	  def publish_report config, output, result, provider_ref, reports_dir
   	    consumer_contract = parse_pactfile config
 	    	#TODO - when checking out a historical version, provider ref will be prod, however it will think it is head. Fix this!!!!
   	    report = Provider::VerificationReport.new(
   	    	:result => result,
   	    	:output => output,
   	    	:consumer => {:name => consumer_contract.consumer.name, :ref => name},
-  	    	:provider => {:name => consumer_contract.provider.name, :ref => 'head'}
+  	    	:provider => {:name => consumer_contract.provider.name, :ref => provider_ref}
   	    	)
 
-  	    FileUtils.mkdir_p "./reports/pact"
-  	    File.open("./reports/pact/#{report.report_file_name}", "w") { |file| file << JSON.pretty_generate(report) }
+  	    FileUtils.mkdir_p reports_dir
+  	    File.open("#{reports_dir}/#{report.report_file_name}", "w") { |file| file << JSON.pretty_generate(report) }
 	  end
 
 	  def define_rake_task
@@ -76,7 +76,7 @@ module Pact
 	  	  		#TODO: Change this to accept the ConsumerContract that is already parsed, so we don't make the same request twice
 		  	  	pact_spec_runner = Provider::PactSpecRunner.new([config])
 		  	    exit_status = pact_spec_runner.run
-		  	    publish_report config, pact_spec_runner.output, exit_status == 0
+		  	    publish_report config, pact_spec_runner.output, exit_status == 0, 'head', Pact.configuration.reports_dir
 		  	    exit_status
 	  	  	end
 

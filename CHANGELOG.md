@@ -1,3 +1,7 @@
+### 1.0.6 (unreleased)
+
+* Made reports dir configurable [Beth Skurrie]
+
 ### 1.0.5 (6 September 2013)
 
 * Added verification reports when running rake pact:verify:xxx [Latheesh Padukana, Beth Skurrie]

@@ -9,6 +9,7 @@ module Pact
     attr_accessor :logger
     attr_accessor :tmp_dir
     attr_accessor :pactfile_write_mode
+    attr_accessor :reports_dir
 
     def log_path
       log_dir + "/pact_gem.log"
@@ -37,6 +38,7 @@ module Pact
     c.log_dir = default_log_dir
     c.logger = default_logger c.log_path
     c.pactfile_write_mode = is_rake_running? ? :overwrite : :update
+    c.reports_dir = File.expand_path('./reports/pacts')
     c
   end
 

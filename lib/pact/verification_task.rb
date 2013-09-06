@@ -1,6 +1,7 @@
 require 'rake/tasklib'
 require 'pact/provider/pact_spec_runner'
 require_relative 'pact_task_helper'
+require_relative 'provider/verification_report'
 
 =begin
 	To create a rake pact:verify:<something> task
@@ -48,12 +49,38 @@ module Pact
 
 	  attr_reader :name
 
+	  def parse_pactfile config
+	  	Pact::ConsumerContract.from_uri config[:uri]
+	  end
+
+	  def publish_report config, output, result
+  	    consumer_contract = parse_pactfile config
+	    	#TODO - when checking out a historical version, provider ref will be prod, however it will think it is head. Fix this!!!!
+  	    report = Provider::VerificationReport.new(
+  	    	:result => result,
+  	    	:output => output,
+  	    	:consumer => {:name => consumer_contract.consumer.name, :ref => name},
+  	    	:provider => {:name => consumer_contract.provider.name, :ref => 'head'}
+  	    	)
+
+  	    FileUtils.mkdir_p "./reports/pact"
+  	    File.open("./reports/pact/#{report.report_file_name}", "w") { |file| file << JSON.pretty_generate(report) }
+	  end
+
 	  def define_rake_task
 	  	namespace :pact do
 	  	  desc "Verify provider against the consumer pacts for #{name}"
 	  	  task "verify:#{name}" do
-	  	    exit_status = Provider::PactSpecRunner.run(pact_spec_config)
-	  	    fail failure_message if exit_status != 0
+
+	  	  	exit_statuses = pact_spec_config.collect do | config |
+	  	  		#TODO: Change this to accept the ConsumerContract that is already parsed, so we don't make the same request twice
+		  	  	pact_spec_runner = Provider::PactSpecRunner.new([config])
+		  	    exit_status = pact_spec_runner.run
+		  	    publish_report config, pact_spec_runner.output, exit_status == 0
+		  	    exit_status
+	  	  	end
+
+	  	    fail failure_message if exit_statuses.any?{ | status | status != 0 }
 	  	  end
 	  	end
 	  end

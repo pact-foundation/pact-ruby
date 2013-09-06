@@ -3,15 +3,31 @@ require 'pact/logging'
 require 'pact/json_warning'
 require 'date'
 require 'pact/version'
+require 'open-uri'
 require_relative 'service_consumer'
 require_relative 'service_provider'
 require_relative 'interaction'
 
+
+
 module Pact
+
+  #TODO move to external file for reuse
+  module FileName
+    def file_name consumer_name, provider_name
+      "#{filenamify(consumer_name)}-#{filenamify(provider_name)}.json"
+    end
+
+    def filenamify name
+      name.downcase.gsub(/\s/, '_')
+    end
+  end
+
   class ConsumerContract
 
-    include Pact::Logging
-    include Pact::JsonWarning
+    include Logging
+    include JsonWarning
+    include FileName
 
     attr_accessor :interactions
     attr_accessor :consumer
@@ -37,7 +53,8 @@ module Pact
     end
 
     def to_json(options = {})
-      as_json(options).to_json(options)
+      as_json(options).to_json(
+        )
     end
 
     def self.from_hash(obj)
@@ -51,6 +68,10 @@ module Pact
     def self.from_json string
       deserialised_object = JSON.load(maintain_backwards_compatiblity_with_producer_keys(string))
       from_hash(deserialised_object)
+    end
+
+    def self.from_uri uri
+      from_json(open(uri){ |f| f.read })
     end
 
     def self.maintain_backwards_compatiblity_with_producer_keys string
@@ -78,26 +99,20 @@ module Pact
     end
 
     def pact_file_name
-      "#{filenamify(consumer.name)}-#{filenamify(provider.name)}.json"
+      file_name consumer.name, provider.name
     end
 
-      def pactfile_path
-        raise 'You must first specify a consumer and service name' unless (consumer && consumer.name && provider && provider.name)
-        @pactfile_path ||= File.join(Pact.configuration.pact_dir, pact_file_name)
-      end
+    def pactfile_path
+      raise 'You must first specify a consumer and service name' unless (consumer && consumer.name && provider && provider.name)
+      @pactfile_path ||= File.join(Pact.configuration.pact_dir, pact_file_name)
+    end
 
-      def update_pactfile
-        logger.debug "Updating pact file for #{provider.name} at #{pactfile_path}"
-        check_for_active_support_json
-        File.open(pactfile_path, 'w') do |f|
-          f.write JSON.pretty_generate(self)
-        end
+    def update_pactfile
+      logger.debug "Updating pact file for #{provider.name} at #{pactfile_path}"
+      check_for_active_support_json
+      File.open(pactfile_path, 'w') do |f|
+        f.write JSON.pretty_generate(self)
       end
-
-    private
-
-      def filenamify name
-        name.downcase.gsub(/\s/, '_')
-      end
+    end
   end
 end

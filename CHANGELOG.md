@@ -1,5 +1,6 @@
 ### 1.0.5 (unreleased)
 
+* Added verification reports when running rake pact:verify:xxx [Latheesh Padukana, Beth Skurrie]
 * Changed pact:verify failure message to display in red [Latheesh Padukana, Beth Skurrie]
 
 ### 1.0.4 (6 September 2013)

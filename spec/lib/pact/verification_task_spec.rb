@@ -19,6 +19,16 @@ module Pact
 			end
 		end
 
+		before do
+			VerificationTask.any_instance.stub(:publish_report)
+			Provider::PactSpecRunner.stub(:new).with(consumer_contract).and_return(pact_spec_runner)
+		end
+
+		let(:pact_spec_runner) { double('PactSpecRunner', :run => exit_code, :output => nil)}
+		let(:exit_code) {0}
+		let(:consumer_contract) { [ uri: @pact_uri, support_file: nil ] }
+
+
 		describe '.initialize' do
 			context 'with an explict support_file' do
 				it 'creates the tasks' do
@@ -34,11 +44,9 @@ module Pact
 
 		describe 'execute' do
 
-			let(:consumer_contract) { [ uri: @pact_uri, support_file: nil ] }
 
 			context "with no explict support file " do
 				it 'verifies the pacts using PactSpecRunner' do
-					Provider::PactSpecRunner.should_receive(:run).with(consumer_contract).and_return(0)
 					Rake::Task[@task_name].execute
 				end
 			end
@@ -46,16 +54,11 @@ module Pact
 			context "with an explict support_file" do
 				let(:consumer_contract) { [ uri: @pact_uri, support_file: @support_file] }
 				it 'verifies the pacts using PactSpecRunner' do
-					Provider::PactSpecRunner.should_receive(:run).with(consumer_contract).and_return(0)
 					Rake::Task[@task_name_with_explict_support_file].execute
 				end
 			end
 
 			context 'when all specs pass' do
-
-				before do
-					Provider::PactSpecRunner.stub(:run).and_return(0)
-				end
 
 				it 'does not raise an exception' do
 					Rake::Task[@task_name].execute
@@ -64,9 +67,7 @@ module Pact
 
 			context 'when one or more specs fail' do
 
-				before do
-					Provider::PactSpecRunner.stub(:run).and_return(1)
-				end
+				let(:exit_code) {1}
 
 				it 'raises an exception' do
 					expect { Rake::Task[@task_name].execute }.to raise_error RuntimeError

@@ -17,6 +17,8 @@ module Pact
 
       module ClassMethods
 
+        include ::RSpec::Core::DSL
+
         include Pact::JsonWarning
 
         def honour_pactfile pactfile_uri, options = {}

@@ -5,7 +5,7 @@ module Pact::Provider
   describe PactSpecRunner do
     describe "pact_helper_file", :fakefs => true do
 
-      subject { PactSpecRunner.send(:pact_helper_file) }
+      subject { PactSpecRunner.new({}).send(:pact_helper_file) }
 
       def make_pactfile dir
         FileUtils.mkdir_p ".#{dir}"

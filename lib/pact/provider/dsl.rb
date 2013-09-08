@@ -1,3 +1,5 @@
+require_relative 'verification'
+
 module Pact
 
    module Provider
@@ -37,6 +39,38 @@ module Pact
            def app
              @app_block.call
            end
+
+           def honours_pact_with consumer_name, ref = :head, &app_block
+           end
+         end
+
+         class VerificationDSL
+            def initialize consumer_name, ref, &block
+              @consumer_name = consumer_name
+              @ref = ref
+              @task = nil
+              instance_eval(&block)
+            end
+
+            def uri uri
+              @uri = uri
+            end
+
+            def task task
+              @task = task
+            end
+
+            def create_verification
+              validate
+              Pact::Provider::Verification.new(@consumer_name, @uri, @ref, @task)
+            end
+
+            private
+
+            def validate
+              raise "Please provide a uri for the verification" unless @uri
+            end
+
          end
 
          class ServiceProviderDSL

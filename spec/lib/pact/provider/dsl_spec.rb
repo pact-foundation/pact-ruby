@@ -39,6 +39,48 @@ module Pact::Provider
 
     module DSL
 
+      describe VerificationDSL do
+
+
+        describe 'create_verification' do
+          let(:url) {'http://some/uri'}
+          let(:consumer_name) {'some consumer'}
+          let(:ref) {:prod}
+          let(:task) {:local}
+          context "with valid values" do
+            subject do 
+              uri = url
+              VerificationDSL.new(consumer_name, ref) do
+                uri uri
+                task :local
+              end
+            end
+
+            it "creates a Verification" do
+              Pact::Provider::Verification.should_receive(:new).with(consumer_name, url, ref, task)
+              subject.create_verification
+            end
+
+            it "returns a Verification" do
+              Pact::Provider::Verification.should_receive(:new).and_return('a verification')
+              expect(subject.create_verification).to eq('a verification')
+            end
+          end
+
+          context "with a nil uri" do
+            subject do
+              VerificationDSL.new(consumer_name, ref) do
+                uri nil
+              end
+            end
+
+            it "raises a validation error" do
+              expect{ subject.create_verification}.to raise_error /Please provide a uri/
+            end
+          end
+        end
+      end
+
       describe ServiceProviderDSL do
 
         describe "initialize" do

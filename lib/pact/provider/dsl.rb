@@ -1,4 +1,4 @@
-require_relative 'verification'
+require_relative 'pact_verification'
 
 module Pact
 
@@ -17,7 +17,14 @@ module Pact
               else
                 raise "Please configure your provider. See the Provider section in the README for examples."
               end
-            end            
+            end
+
+            def add_pact_verification verification
+              pact_verifications << verification
+            end
+            def pact_verifications
+              @pact_verifications ||= []
+            end
          end
 
          Pact::Configuration.send(:include, Configuration)
@@ -39,20 +46,17 @@ module Pact
            def app
              @app_block.call
            end
-
-           def honours_pact_with consumer_name, ref = :head, &app_block
-           end
          end
 
          class VerificationDSL
-            def initialize consumer_name, ref, &block
+            def initialize consumer_name, options = {}, &block
               @consumer_name = consumer_name
-              @ref = ref
-              @task = nil
+              @ref = options.fetch(:ref, :head)
               instance_eval(&block)
+              @verifications = []
             end
 
-            def uri uri
+            def uri uri, options = {}
               @uri = uri
             end
 
@@ -62,7 +66,7 @@ module Pact
 
             def create_verification
               validate
-              Pact::Provider::Verification.new(@consumer_name, @uri, @ref, @task)
+              Pact::Provider::PactVerification.new(@consumer_name, @uri, @ref)
             end
 
             private
@@ -92,6 +96,11 @@ module Pact
 
            def app &block
              @app_block = block
+           end
+
+           def honours_pact_with consumer_name, options = {}, &app_block
+              verification = VerificationDSL.new(consumer_name, options, &app_block).create_verification
+              Pact.configuration.add_pact_verification verification
            end
 
            def create_service_provider

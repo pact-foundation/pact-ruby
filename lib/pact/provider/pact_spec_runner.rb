@@ -16,14 +16,6 @@ module Pact
 			attr_reader :options
 			attr_reader :output
 
-			PACT_HELPER_FILE_PATTERNS = [
-				"spec/**/*service*consumer*/pact_helper.rb",
-				"spec/**/*consumer*/pact_helper.rb",
-				"spec/**/pact_helper.rb",
-			  "**/pact_helper.rb"]
-
-			NO_PACT_HELPER_FOUND_MSG = "Please create a pact_helper.rb file that can be found using one of the following patterns: #{PACT_HELPER_FILE_PATTERNS.join(", ")}"
-
 			def initialize spec_definitions, options = {}
 				@spec_definitions = spec_definitions
 				@options = options
@@ -40,17 +32,11 @@ module Pact
 
 			def require_pact_helper spec_definition
 				if spec_definition[:support_file]
+					$stderr.puts "Specifying a support_file is deprecated. Please create a pact_helper.rb instead."
 					require spec_definition[:support_file]
 				else
-					require pact_helper_file
+					require 'pact/provider/client_project_pact_helper'
 				end
-			end
-
-			def pact_helper_file
-				pact_helper_search_results = []
-				PACT_HELPER_FILE_PATTERNS.find { | pattern | (pact_helper_search_results.concat(Dir.glob(pattern))).any? }
-				raise NO_PACT_HELPER_FOUND_MSG if pact_helper_search_results.empty?
-				"#{Dir.pwd}/#{pact_helper_search_results[0]}"
 			end
 
 			def initialize_specs

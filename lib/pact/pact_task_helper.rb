@@ -10,4 +10,10 @@ module PactTaskHelper
   def redify string
     "\e[31m#{string}\e[m"
   end
+
+  def handle_verification_failure
+    exit_status = yield
+    puts failure_message if exit_status != 0
+    exit exit_status
+  end
 end

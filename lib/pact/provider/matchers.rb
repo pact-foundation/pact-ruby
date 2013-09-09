@@ -2,6 +2,7 @@ require 'pact/term'
 require 'awesome_print'
 require 'pact/matchers'
 require 'awesome_print'
+require 'rspec'
 
 RSpec::Matchers.define :match_term do |expected|
   include Pact::Matchers

@@ -46,30 +46,29 @@ module Pact::Provider
           let(:url) {'http://some/uri'}
           let(:consumer_name) {'some consumer'}
           let(:ref) {:prod}
-          let(:task) {:local}
+          let(:options) { {:ref => :prod} }
           context "with valid values" do
-            subject do 
+            subject do
               uri = url
-              VerificationDSL.new(consumer_name, ref) do
+              VerificationDSL.new(consumer_name, options) do
                 uri uri
-                task :local
               end
             end
 
             it "creates a Verification" do
-              Pact::Provider::Verification.should_receive(:new).with(consumer_name, url, ref, task)
+              Pact::Provider::PactVerification.should_receive(:new).with(consumer_name, url, ref)
               subject.create_verification
             end
 
             it "returns a Verification" do
-              Pact::Provider::Verification.should_receive(:new).and_return('a verification')
+              Pact::Provider::PactVerification.should_receive(:new).and_return('a verification')
               expect(subject.create_verification).to eq('a verification')
             end
           end
 
           context "with a nil uri" do
             subject do
-              VerificationDSL.new(consumer_name, ref) do
+              VerificationDSL.new(consumer_name, options) do
                 uri nil
               end
             end
@@ -127,6 +126,42 @@ module Pact::Provider
               expect{ subject.validate }.to raise_error("Please configure an app for the Provider")
             end
           end
+        end
+
+        describe 'honours_pact_with' do
+          before do
+            Pact.clear_configuration
+          end
+
+          context "with no optional params" do
+            subject do
+              ServiceProviderDSL.new '' do
+                honours_pact_with 'some-consumer' do
+                  uri 'blah'
+                end
+              end
+            end
+            it 'adds a verification to the Pact.configuration' do
+              subject
+              expect(Pact.configuration.pact_verifications.first).to eq(Pact::Provider::PactVerification.new('some-consumer', 'blah', :head))
+            end
+          end
+
+          context "with all params specified" do
+            subject do
+              ServiceProviderDSL.new '' do
+                honours_pact_with 'some-consumer', :ref => :prod do
+                  uri 'blah'
+                end
+              end
+            end
+            it 'adds a verification to the Pact.configuration' do
+              subject
+              expect(Pact.configuration.pact_verifications.first).to eq(Pact::Provider::PactVerification.new('some-consumer', 'blah', :prod))
+            end
+
+          end
+
         end
       end
 

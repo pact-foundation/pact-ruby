@@ -1,4 +1,5 @@
 require 'json'
+require 'pact/provider/rspec'
 # pact_helper for rake pact:tests
 
 module Pact
@@ -15,20 +16,9 @@ module Pact
 
 		Pact.service_provider "Some Provider" do
 			app { TestApp.new }
-			honours_pact_with "some-test-consumer", :head do
-				uri './spec/support/test_app_pass.json'
-			end
-			honours_pact_with 'some-test-consumer', :prod do
-				uri './spec/support/test_app_fail.json'
-			end
-			honours_pact_with 'some-test-consumer', :local do
-				uri './/blah'
-				task :local
-			end
+
 			honours_pact_with 'some-test-consumer' do
-				uri './spec/support/test_app_pass.json', :ref => :head
-				uri './spec/support/test_app_pass.json', :ref => :prod
-				uri './spec/support/test_app_pass.json', :ref => :local, :task => :local
+				uri './spec/support/test_app_pass.json'
 			end
 		end
 

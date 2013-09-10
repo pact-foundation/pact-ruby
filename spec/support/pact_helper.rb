@@ -18,7 +18,7 @@ module Pact
 			app { TestApp.new }
 
 			honours_pact_with 'some-test-consumer' do
-				uri './spec/support/test_app_pass.json'
+				pact_uri './spec/support/test_app_pass.json'
 			end
 		end
 

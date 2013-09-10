@@ -1,6 +1,7 @@
 ### 1.0.6 (unreleased)
 
 * Made reports dir configurable [Beth Skurrie]
+* Changed the way the pact files are configured. They are now in the Pact.service_provider block in the pact_helper file. [Beth Skurrie]
 
 ### 1.0.5 (6 September 2013)
 

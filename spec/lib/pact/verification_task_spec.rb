@@ -70,6 +70,7 @@ module Pact
 				let(:exit_code) {1}
 
 				it 'raises an exception' do
+					$stderr.should_receive(:puts) #Confusing if this shows on the screen!
 					expect { Rake::Task[@task_name].execute }.to raise_error RuntimeError
 				end
 

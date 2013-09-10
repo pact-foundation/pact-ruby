@@ -51,7 +51,7 @@ module Pact::Provider
             subject do
               uri = url
               VerificationDSL.new(consumer_name, options) do
-                uri uri
+                pact_uri uri
               end
             end
 
@@ -69,12 +69,12 @@ module Pact::Provider
           context "with a nil uri" do
             subject do
               VerificationDSL.new(consumer_name, options) do
-                uri nil
+                pact_uri nil
               end
             end
 
             it "raises a validation error" do
-              expect{ subject.create_verification}.to raise_error /Please provide a uri/
+              expect{ subject.create_verification}.to raise_error /Please provide a pact_uri/
             end
           end
         end
@@ -137,7 +137,7 @@ module Pact::Provider
             subject do
               ServiceProviderDSL.new '' do
                 honours_pact_with 'some-consumer' do
-                  uri 'blah'
+                  pact_uri 'blah'
                 end
               end
             end
@@ -151,7 +151,7 @@ module Pact::Provider
             subject do
               ServiceProviderDSL.new '' do
                 honours_pact_with 'some-consumer', :ref => :prod do
-                  uri 'blah'
+                  pact_uri 'blah'
                 end
               end
             end

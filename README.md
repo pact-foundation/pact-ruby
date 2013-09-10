@@ -120,11 +120,18 @@ end
 Create a `pact_helper.rb` in your service provider project. The file must be called pact_helper.rb so the built in verification tasks can find it, however there is some flexibility in where it can be stored. The recommended place is `specs/service_providers/pact_helper.rb`.
 
 ```ruby
-require 'spec_helper'
-require 'provider_states_for_my_consumer' #See next section on setting up provider states
+require 'my_app' # Require the boot files for your app
+require 'provider_states_for_my_consumer' # See next section on setting up provider states
 
 Pact.service_provider "My Provider" do
   app { MyApp.new }
+
+  honours_pact_with 'My Consumer' do
+    # This example points to a local file, however, on a real project with a continuous integration
+    # box, you could publish your pacts as artifacts, and point this to the pact published by the
+    # last successful build.
+    pact_uri '../path-to-your-consumer-project/specs/pacts/my_consumer-my_provider.json'
+  end
 end
 
 ```
@@ -150,7 +157,6 @@ my_service.
 ```
 
 To define service provider states that create the right data for "a thing exists" and "a thing does not exist", write the following in the service provider project.
-Note that these states have been defined only for the 'My Consumer' consumer by using the Pact.provider_states_for block.
 
 
 ```ruby
@@ -180,35 +186,39 @@ end
 
 If a state should be used for all consumers, the top level Pact.with_consumer can be skipped, and a global Pact.provider_state can be defined on its own.
 
-#### Create a rake task to verify that the service provider honours the pact
-
-You'll need to create one or more pact:verify:xxx tasks, that allow the currently checked out service provider to be tested against other versions of its consumers - most importantly, head and production.
-
-Here is an example pact:verify:head task, pointing the the pact file for "some_consumer", found in the build artifacts of the latest successful build of "MY-CONSUMER" project.
+#### Verify that the service provider honours the pact
 
 ```ruby
-Pact::VerificationTask.new(:head) do | pact |
-  pact.uri 'http://our_build_server/MY-CONSUMER-BUILD/latestSuccessful/artifact/Pacts/some_consumer-this_service provider.json'
-end
+  #In your Rakefile
+  require 'pact/tasks'
 ```
 
+```
+  $ rake -T
+  rake pact:verify               # Verifies the pact files configured in the pact_helper.rb against this service provider.
+  rake pact:verify:at[pact_uri]  # Verifies the pact at the given URI against this service provider.
+  $ rake pact:verify
+```
+
+#### Verification using arbitrary pact files
+
+```
+# Local URI
+$ rake pact:verify:at[../path-to-your-consumer-project/specs/pacts/my_consumer-my_provider.json]
+
+# Remote URI
+$ rake pact:verify:at[http://build-box/MyConsumerBuild/latestSuccessful/artifacts/my_consumer-my_provider.json]
+```
+
+To make a shortcut task for pact at an arbitrary URI, add the following to your Rakefile.
+
 ```ruby
-# Ideally we'd like to be able to create a production task like this, but firewalls are making this tricky right now.
-Pact::VerificationTask.new(:production) do | pact |
-  pact.uri 'http://our_prod_server/pacts/some_consumer-this_service_provider.json'
+Pact::VerificationTask.new(:dev) do | pact |
+  pact.uri '../path-to-your-consumer-project/specs/pacts/my_consumer-my_provider.json'
 end
 ```
 
 The pact.uri may be a local file system path or a remote URL.
-
-The support_file should include the code that makes your rack app available for the rack testing framework, and should load all its dependencies (eg include spec_helper)
-
-Multiple pact.uri may be defined in the same rake task if a service provider has more than one consumer.
-
-#### Verify that the service provider honours the pact
-
-    rake pact:verify:head
-    rake pact:verify # will run all verify tasks
 
 
 ### Running a standalone mock server

@@ -52,12 +52,12 @@ module Pact
             def initialize consumer_name, options = {}, &block
               @consumer_name = consumer_name
               @ref = options.fetch(:ref, :head)
+              @pact_uri = nil
               instance_eval(&block)
-              @verifications = []
             end
 
-            def uri uri, options = {}
-              @uri = uri
+            def pact_uri pact_uri, options = {}
+              @pact_uri = pact_uri
             end
 
             def task task
@@ -66,13 +66,13 @@ module Pact
 
             def create_verification
               validate
-              Pact::Provider::PactVerification.new(@consumer_name, @uri, @ref)
+              Pact::Provider::PactVerification.new(@consumer_name, @pact_uri, @ref)
             end
 
             private
 
             def validate
-              raise "Please provide a uri for the verification" unless @uri
+              raise "Please provide a pact_uri for the verification" unless @pact_uri
             end
 
          end

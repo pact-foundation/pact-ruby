@@ -38,7 +38,7 @@ module Pact
 	    @pact_spec_config = []
 	    @name = name
 	    yield self
-	    define_rake_task
+	    rake_task
 	  end
 
 	  def uri(uri, options = {})
@@ -67,7 +67,7 @@ module Pact
   	    File.open("#{reports_dir}/#{report.report_file_name}", "w") { |file| file << JSON.pretty_generate(report) }
 	  end
 
-	  def define_rake_task
+	  def rake_task
 	  	namespace :pact do
 	  	  desc "Verify provider against the consumer pacts for #{name}"
 	  	  task "verify:#{name}" do
@@ -80,7 +80,9 @@ module Pact
 		  	    exit_status
 	  	  	end
 
-	  	    fail failure_message if exit_statuses.any?{ | status | status != 0 }
+	  	  	handle_verification_failure do
+	  	  		exit_statuses.count{ | status | status != 0 }
+	  	  	end
 	  	  end
 	  	end
 	  end

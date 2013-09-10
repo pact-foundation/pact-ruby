@@ -115,9 +115,9 @@ end
 
 ### Service Provider project
 
-#### Configure your service provider rack app
+#### Configure your service provider
 
-Create a `pact_helper.rb` in your service provider project. The file must be called pact_helper.rb so the built in verification tasks can find it, however there is some flexibility in where it can be stored. The recommended place is `specs/service_providers/pact_helper.rb`.
+Create a `pact_helper.rb` in your service provider project. The file must be called pact_helper.rb, however there is some flexibility in where it can be stored. The recommended place is `specs/service_providers/pact_helper.rb`.
 
 ```ruby
 require 'my_app' # Require the boot files for your app
@@ -127,9 +127,9 @@ Pact.service_provider "My Provider" do
   app { MyApp.new }
 
   honours_pact_with 'My Consumer' do
-    # This example points to a local file, however, on a real project with a continuous integration
-    # box, you could publish your pacts as artifacts, and point this to the pact published by the
-    # last successful build.
+    # This example points to a local file, however, on a real project with a continuous
+    # integration box, you could publish your pacts as artifacts,
+    # and point this to the pact published by the last successful build.
     pact_uri '../path-to-your-consumer-project/specs/pacts/my_consumer-my_provider.json'
   end
 end
@@ -213,6 +213,8 @@ $ rake pact:verify:at[http://build-box/MyConsumerBuild/latestSuccessful/artifact
 To make a shortcut task for pact at an arbitrary URI, add the following to your Rakefile.
 
 ```ruby
+# This creates a rake task that can be executed by running
+# $rake pact:verify:dev
 Pact::VerificationTask.new(:dev) do | pact |
   pact.uri '../path-to-your-consumer-project/specs/pacts/my_consumer-my_provider.json'
 end

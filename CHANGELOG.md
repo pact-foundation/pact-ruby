@@ -1,7 +1,7 @@
-### 1.0.6 (unreleased)
+### 1.0.6 (11 September 2012)
 
 * Made reports dir configurable [Beth Skurrie]
-* Changed the way the pact files are configured. They are now in the Pact.service_provider block in the pact_helper file. [Beth Skurrie]
+* Changed the way the pact files are configured. They are now in the Pact.service_provider block in the pact_helper file. Require 'pact/tasks' in the Rakefile and run 'rake pact:verify' instead of setting up custom tasks. [Beth Skurrie]
 
 ### 1.0.5 (6 September 2013)
 

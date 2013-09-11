@@ -3,6 +3,22 @@ require 'pact/request'
 
 shared_examples "a request" do
 
+  describe 'matching' do
+    let(:expected) do
+      Pact::Request::Expected.from_hash(
+        {'method' => 'get', 'path' => 'path', 'query' => /b/}
+        )
+    end
+
+    let(:actual) do
+      Pact::Request::Actual.from_hash({'method' => 'get', 'path' => 'path', 'query' => 'blah'})
+    end
+
+    it "should match" do
+      expect(expected.difference(actual)).to eq({})
+    end
+  end
+
   describe 'full_path' do
     context "with empty path" do
       subject { described_class.from_hash({:path => '', :method => 'get'}) }

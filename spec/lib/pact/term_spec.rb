@@ -32,5 +32,30 @@ module Pact
       end
     end
 
+    describe 'empty?' do
+
+      subject { Term.new(generate: generate, matcher: /some matcher/) }
+
+      context 'with generate' do
+
+        let(:generate) { 'generate here'}
+
+        it 'is not empty' do
+          expect(subject).to_not be_empty
+        end
+
+      end
+
+      context 'without generate' do
+
+        let(:generate) { nil }
+
+        it 'is empty' do
+          expect(subject).to be_empty
+        end
+      end
+
+    end
+
   end
 end

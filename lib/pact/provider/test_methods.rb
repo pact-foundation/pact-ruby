@@ -63,7 +63,8 @@ module Pact
         path = request.path
         query = request.query
         if query && !query.empty?
-          path += "?" + request.query
+          query = query.generate if query.kind_of? Pact::Term
+          path += "?" + query
         end
         path
       end

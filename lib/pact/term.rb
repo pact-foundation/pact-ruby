@@ -36,5 +36,9 @@ module Pact
       }
     end
 
+    def empty?
+      generate ? false : true
+    end
+
   end
 end

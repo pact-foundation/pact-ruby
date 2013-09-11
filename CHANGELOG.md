@@ -1,3 +1,7 @@
+### 1.0.7 (11 September 2012)
+
+* Allow request query to be a Pact Term. [Seb Glazebrook]
+
 ### 1.0.6 (11 September 2012)
 
 * Made reports dir configurable [Beth Skurrie]

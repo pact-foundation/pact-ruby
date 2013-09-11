@@ -314,7 +314,7 @@ describe Pact::Matchers do
     end
 
     context "a deep mismatch" do
-      subject { {a:  {b: { c: [1,2]}, d: { e: Pact::Term.new(matcher: /a/)}}, f: 1, g: {h: 99}} }
+      subject { {a:  {b: { c: [1,2]}, d: { e: Pact::Term.new(matcher: /a/, generate: 'apple')}}, f: 1, g: {h: 99}} }
       let(:actual) { {a:  {b: { c: [1,2]}, d: { e: 'food'}}, f: "thing"} }
       let(:difference) { {:a=>{:d=>{:e=>{:expected=>/a/, :actual=>"food"}}}, :f=>{:expected=>1, :actual=>"thing"}, :g=>{:expected=>{:h=>99}, :actual=> Pact::Matchers::KeyNotFound.new}} }
 
@@ -325,7 +325,7 @@ describe Pact::Matchers do
 
 
     context "where a Pact::Term is found that matches the actual value" do
-      subject { {:a => Pact::Term.new(:matcher => /a/)} }
+      subject { {:a => Pact::Term.new(:matcher => /a/, :generate => 'apple')} }
       let(:actual) { {:a => "apple" } }
 
       it 'does not include this in the diff' do
@@ -371,7 +371,7 @@ describe Pact::Matchers do
     end
 
     context "when an array that matches the Pact::Term is found" do
-      subject { [Pact::Term.new(:matcher => /4/),"5","6"] }
+      subject { [Pact::Term.new(:matcher => /4/, :generate => '4'),"5","6"] }
       let(:actual) { ["4","5","6"] }
 
       it 'includes this in the diff' do

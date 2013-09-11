@@ -251,7 +251,7 @@ module Pact
         let(:expected_body) do
           {
             name: 'Bob',
-            customer_id: Term.new(matcher: /CN.*/)
+            customer_id: Term.new(matcher: /CN.*/, generate: 'CN789')
           }
         end
 
@@ -271,7 +271,7 @@ module Pact
         let(:expected_body) do
           {
             name: 'Bob',
-            customer_id: Term.new(matcher: /foo/)
+            customer_id: Term.new(matcher: /foo/, generate: 'fooool')
           }
         end
 

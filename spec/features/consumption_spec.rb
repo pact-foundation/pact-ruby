@@ -39,7 +39,7 @@ describe "A service consumer side of a pact", :pact => true  do
       method: :post,
       path: '/donuts',
       body: {
-        "name" => Pact::Term.new(matcher: /Bob/)
+        "name" => Pact::Term.new(matcher: /Bob/, generate: 'Bob')
       },
       headers: {'Accept' => 'text/plain', "Content-Type" => 'application/json'}
     }).
@@ -56,7 +56,7 @@ describe "A service consumer side of a pact", :pact => true  do
       status: 200,
       body: /deleted/
     })
-    bob_service. 
+    bob_service.
       upon_receiving('an update alligators request').with({
         method: :put,
         path: '/alligators',

@@ -10,6 +10,9 @@ module Pact
     def initialize(attributes = {})
       @generate = attributes[:generate]
       @matcher = attributes[:matcher]
+      raise "Please specify a matcher for the Term" unless @matcher != nil
+      raise "Please specify a value to generate for the Term" unless @generate != nil
+      raise "Value to generate \"#{@generate}\" does not match regular expression #{@matcher}" unless @generate =~ @matcher
     end
 
     def to_json(options = {})
@@ -37,7 +40,7 @@ module Pact
     end
 
     def empty?
-      generate ? false : true
+      false
     end
 
   end

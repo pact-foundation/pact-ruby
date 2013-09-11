@@ -38,7 +38,7 @@ module Pact::Provider
 
         context 'Term query' do
 
-          let(:query) { Pact::Term.new(generate: 'query') }
+          let(:query) { Pact::Term.new(generate: 'query', matcher: /q/) }
 
           it 'appends the Term\'s generate to the path' do
             expect(@path).to eq('path?query')

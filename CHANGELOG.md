@@ -1,3 +1,7 @@
+### 1.0.8 (unreleased)
+
+* Added validation to ensure that a Term has both a matcher and a generate value, and that the value to generate matches the given regular expression [Beth Skurrie]
+
 ### 1.0.7 (11 September 2012)
 
 * Allow request query to be a Pact Term. [Seb Glazebrook]

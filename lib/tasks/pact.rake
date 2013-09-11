@@ -5,6 +5,7 @@ namespace :pact do
   task :verify do
     require 'pact/provider'
     require 'pact/pact_task_helper'
+    require 'pact/provider/client_project_pact_helper'
 
     include PactTaskHelper
 

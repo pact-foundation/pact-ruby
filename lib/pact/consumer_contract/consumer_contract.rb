@@ -55,8 +55,7 @@ module Pact
     end
 
     def to_json(options = {})
-      as_json(options).to_json(
-        )
+      as_json.to_json(options)
     end
 
     def self.from_hash(obj)

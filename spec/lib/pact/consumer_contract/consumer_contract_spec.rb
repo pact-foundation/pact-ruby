@@ -16,7 +16,7 @@ module Pact
         yield
       ensure
         $VERBOSE = old_verbose
-      end      
+      end
 
       before do
         @backup_version = Pact::VERSION
@@ -156,7 +156,25 @@ module Pact
     describe "update_pactfile" do
       let(:pacts_dir) { Pathname.new("./tmp/pactfiles") }
       let(:expected_pact_path) { pacts_dir + "test_consumer-test_service.json" }
-      let(:expected_pact_string) { 'the_json' }
+      let(:expected_pact_string) do <<-eos
+{
+  "provider": {
+    "name": "test_service"
+  },
+  "consumer": {
+    "name": "test_consumer"
+  },
+  "interactions": [
+    "something"
+  ],
+  "metadata": {
+    "pact_gem": {
+      "version": "#{Pact::VERSION}"
+    }
+  }
+}
+eos
+      end
       let(:consumer) { Pact::ServiceConsumer.new(:name => 'test_consumer')}
       let(:provider) { Pact::ServiceProvider.new(:name => 'test_service')}
       let(:interactions) { [double("interaction", as_json: "something")]}
@@ -165,7 +183,6 @@ module Pact
         Pact.configuration.stub(:pact_dir).and_return(Pathname.new("./tmp/pactfiles"))
         FileUtils.rm_rf pacts_dir
         FileUtils.mkdir_p pacts_dir
-        JSON.should_receive(:pretty_generate).with(instance_of(Pact::ConsumerContract)).and_return(expected_pact_string)
         subject.update_pactfile
       end
 
@@ -174,7 +191,7 @@ module Pact
       end
 
       it "should write the interactions to the file" do
-        File.read(expected_pact_path).should eql expected_pact_string
+        File.read(expected_pact_path).should eql expected_pact_string.strip
       end
     end
   end

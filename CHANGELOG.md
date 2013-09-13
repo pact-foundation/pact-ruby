@@ -1,3 +1,7 @@
+### 1.0.9 (unreleased)
+
+* Fixing pretty generate of json [Beth Skurrie]
+
 ### 1.0.8 (13 September 2013)
 
 * Added validation to ensure that a Term has both a matcher and a generate value, and that the value to generate matches the given regular expression [Beth Skurrie]

@@ -1,12 +1,14 @@
-### 1.0.8 (unreleased)
+### 1.0.8 (13 September 2013)
 
 * Added validation to ensure that a Term has both a matcher and a generate value, and that the value to generate matches the given regular expression [Beth Skurrie]
 
-### 1.0.7 (11 September 2012)
+* Added the SomethingLike class that does a structure diff on anything contianed within in it. Will change the name when we can think of something better! [Beth Skurrie, Greg Dziemidowicz]
+
+### 1.0.7 (11 September 2013)
 
 * Allow request query to be a Pact Term. [Seb Glazebrook]
 
-### 1.0.6 (11 September 2012)
+### 1.0.6 (11 September 2013)
 
 * Made reports dir configurable [Beth Skurrie]
 * Changed the way the pact files are configured. They are now in the Pact.service_provider block in the pact_helper file. Require 'pact/tasks' in the Rakefile and run 'rake pact:verify' instead of setting up custom tasks. [Beth Skurrie]

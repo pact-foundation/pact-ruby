@@ -33,6 +33,7 @@ module Pact
       when Array then array_diff(expected, actual, options)
       when Pact::Term then diff(expected.matcher, actual, options)
       when Regexp then regexp_diff(expected, actual, options)
+      when Pact::SomethingLike then diff(expected.contents, actual, options.merge(:structure => true))
       else object_diff(expected, actual, options)
       end
     end

@@ -1,9 +1,24 @@
 require 'spec_helper'
 require 'pact/term'
+require 'pact/something_like'
 require 'pact/matchers'
 
 describe Pact::Matchers do
   include Pact::Matchers
+
+  describe 'matching with something like' do
+
+    context 'when the actual is something like the expected' do
+      let(:expected) { Pact::SomethingLike.new( { a: 1 } ) }
+      let(:actual) { { a: 2} }
+
+      it 'returns an empty diff' do
+        expect(diff(expected, actual)).to eq({})
+      end
+
+    end
+
+  end
 
   describe 'option {allow_unexpected_keys: false}' do
     context "when an unexpected key is found" do

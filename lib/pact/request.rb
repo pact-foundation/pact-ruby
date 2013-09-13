@@ -1,4 +1,5 @@
 require 'pact/matchers'
+require 'pact/reification'
 
 module Pact
 

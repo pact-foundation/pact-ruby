@@ -1,5 +1,6 @@
 require 'awesome_print'
 require 'pact/term'
+require 'pact/something_like'
 
 module Pact
   module Matchers

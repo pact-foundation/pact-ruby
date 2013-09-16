@@ -1,6 +1,7 @@
-### 1.0.9 (unreleased)
+### 1.0.9 (16 September 2013)
 
 * Fixing pretty generate of json [Beth Skurrie]
+* Fixed missing require [Beth Skurrie]
 
 ### 1.0.8 (13 September 2013)
 

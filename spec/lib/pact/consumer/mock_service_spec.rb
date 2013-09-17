@@ -10,7 +10,7 @@ module Pact::Consumer
       subject {
         interactionList = InteractionList.new
         interactionList.add expected_call
-        interactionList.register_unexpected unexpected_call
+        interactionList.register_unexpected_request unexpected_call
         interactionList
        }
     end
@@ -124,7 +124,7 @@ module Pact::Consumer
       let(:expected_body) { body }
 
       it "extracts the body" do
-        expect(subject.request_from(rack_env)).to eq expected_request
+        expect(subject.request_as_hash_from(rack_env)).to eq expected_request
       end
     end
 
@@ -134,7 +134,7 @@ module Pact::Consumer
       let(:expected_body) { {"a" => "body"} }
 
       it "extracts the body" do
-        expect(subject.request_from(rack_env)).to eq expected_request
+        expect(subject.request_as_hash_from(rack_env)).to eq expected_request
       end
     end
 

@@ -158,12 +158,10 @@ module Pact
     class Expected < Base
 
       DEFAULT_OPTIONS = {:allow_unexpected_keys => false}.freeze
-      attr_accessor :description
       attr_accessor :options
 
       def self.from_hash(hash)
         request = super
-        request.description = hash.fetch(:description, nil)
         request.options = symbolize_keys(hash).fetch(:options, {})
         request
       end

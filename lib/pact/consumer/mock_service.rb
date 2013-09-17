@@ -19,7 +19,6 @@ module Pact
   module Consumer
 
     class InteractionList
-      #include Singleton
 
       attr_reader :interactions
       attr_reader :unexpected_requests
@@ -44,7 +43,7 @@ module Pact
       end
 
       # Request::Actual
-      def register_unexpected request
+      def register_unexpected_request request
         @unexpected_requests << request
       end
 
@@ -65,6 +64,12 @@ module Pact
           hash
         end
       end
+
+      def find_candidate_interactions actual_request
+        interactions.select do | interaction |
+          interaction.request.matches_route? actual_request
+        end        
+      end      
 
     end
 
@@ -144,24 +149,24 @@ module Pact
       end
 
       def respond env
-        interactions = Hashie::Mash.new(JSON.load(env['rack.input'].string))
+        interactions = Interaction.from_hash(JSON.load(env['rack.input'].string))
         @interaction_list.add interactions
         @logger.info "Added interaction to #{@name}"
-        @logger.ap interactions
+        @logger.ap interactions.as_json
         [200, {}, ['Added interactions']]
       end
     end
 
     module RequestExtractor
 
-      REQUEST_KEYS = Hashie::Mash.new({
+      REQUEST_KEYS = {
         'REQUEST_METHOD' => :method,
         'REQUEST_PATH' => :path,
         'QUERY_STRING' => :query,
         'rack.input' => :body
-      })
+      }
 
-      def request_from env
+      def request_as_hash_from env
         request = env.inject({}) do |memo, (k, v)|
           request_key = REQUEST_KEYS[k]
         memo[request_key] = v if request_key
@@ -210,51 +215,98 @@ module Pact
       end
 
       def respond env
-        find_response request_from(env)
+        find_response request_as_hash_from(env)
       end
 
       private
 
-      def find_response raw_request
-        actual_request = Request::Actual.from_hash(raw_request)
+      def find_response request_hash
+        actual_request = Request::Actual.from_hash(request_hash)
         @logger.info "#{@name} received request"
         @logger.ap actual_request.as_json
-        candidates = []
-        matching_interactions = @interaction_list.interactions.select do |interaction|
-          expected_request = Request::Expected.from_hash(interaction.request.merge(:description => interaction.description))
-          candidates << expected_request if expected_request.matches_route? actual_request
-          expected_request.match actual_request
-        end
-        if matching_interactions.size > 1
-          @logger.error "Multiple interactions found on #{@name}:"
-          @logger.ap matching_interactions
-          raise "Multiple interactions found for path #{actual_request.path}!"
-        end
-        if matching_interactions.empty?
-          handle_unrecognised_request(actual_request, candidates)
+        candidate_interactions = @interaction_list.find_candidate_interactions actual_request
+        matching_interactions = find_matching_interactions actual_request, from: candidate_interactions
+
+        case matching_interactions.size
+        when 0 then handle_unrecognised_request actual_request, candidate_interactions
+        when 1 then handle_matched_interaction matching_interactions.first
         else
-          response = response_from(matching_interactions.first.response)
-          @interaction_list.register_matched matching_interactions.first
-          @logger.info "Found matching response on #{@name}:"
-          @logger.ap response
-          response
+          handle_more_than_one_matching_interaction actual_request, matching_interactions
         end
       end
 
-      def handle_unrecognised_request request, candidates
-        @interaction_list.register_unexpected request
-        @logger.error "No interaction found on #{@name} amongst expected requests \"#{candidates.map(&:description).join(', ')}\""
-        @logger.error 'Interaction diffs for that route:'
-        interaction_diff = candidates.map do |candidate|
-          candidate.difference(request)
-        end.to_a
-        @logger.ap(interaction_diff, :error)
-        response = {message: "No interaction found for #{request.path}", interaction_diff:  interaction_diff}
+      def find_matching_interactions actual_request, opts
+        candidate_interactions = opts.fetch(:from)
+        candidate_interactions.select do | candidate_interaction |
+          candidate_interaction.request.match actual_request
+        end        
+      end 
+
+      def handle_matched_interaction interaction
+        @interaction_list.register_matched interaction
+        response = response_from(interaction.response)
+        @logger.info "Found matching response on #{@name}:"
+        @logger.ap interaction.response
+        response        
+      end
+
+      def multiple_interactions_found_response actual_request, matching_interactions
+        response = {
+          message: "Multiple interaction found for #{actual_request.method.upcase} #{actual_request.path}", 
+          matching_interactions:  matching_interactions.collect{ | interaction | request_summary_for(interaction) }
+        }
         [500, {'Content-Type' => 'application/json'}, [response.to_json]]
       end
 
+      def handle_more_than_one_matching_interaction actual_request, matching_interactions
+        @logger.error "Multiple interactions found on #{@name}:"
+        @logger.ap matching_interactions.collect(&:as_json)
+        multiple_interactions_found_response actual_request, matching_interactions
+      end
+
+      def interaction_diffs actual_request, candidate_interactions
+        candidate_interactions.collect do | candidate_interaction |
+          diff = candidate_interaction.request.difference(actual_request)
+          diff_summary_for candidate_interaction, diff
+        end        
+      end
+
+      def diff_summary_for interaction, diff
+        summary = {:description => interaction.description}
+        summary[:provider_state] = interaction.provider_state if interaction.provider_state
+        summary.merge(diff)
+      end
+
+      def request_summary_for interaction
+        summary = {:description => interaction.description}
+        summary[:provider_state] if interaction.provider_state
+        summary[:request] = interaction.request
+        summary
+      end
+
+      def unrecognised_request_response actual_request, interaction_diffs
+        response = {
+          message: "No interaction found for #{actual_request.method.upcase} #{actual_request.path}", 
+          interaction_diffs:  interaction_diffs
+        }
+        [500, {'Content-Type' => 'application/json'}, [response.to_json]]
+      end
+
+      def log_unrecognised_request_and_interaction_diff actual_request, interaction_diffs, candidate_interactions
+        @logger.error "No interaction found on #{@name} amongst expected requests \"#{candidate_interactions.map(&:description).join(', ')}\""
+        @logger.error 'Interaction diffs for that route:'
+        @logger.ap(interaction_diffs, :error)        
+      end
+
+      def handle_unrecognised_request actual_request, candidate_interactions
+        @interaction_list.register_unexpected_request actual_request
+        interaction_diffs = interaction_diffs(actual_request, candidate_interactions)
+        log_unrecognised_request_and_interaction_diff actual_request, interaction_diffs, candidate_interactions
+        unrecognised_request_response actual_request, interaction_diffs
+      end
+
       def response_from response
-        [response.status, (response.headers || {}).to_hash, [render_body(response.body)]]
+        [response['status'], (response['headers'] || {}).to_hash, [render_body(response['body'])]]
       end
 
       def render_body body

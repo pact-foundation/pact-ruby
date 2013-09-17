@@ -19,7 +19,6 @@ Gem::Specification.new do |gem|
   gem.license       = 'MIT'
 
   gem.add_runtime_dependency 'randexp', '~> 0.1.7'
-  gem.add_runtime_dependency 'hashie', '~> 2.0'
   gem.add_runtime_dependency 'rspec', '~> 2.12'
   gem.add_runtime_dependency 'find_a_port', '~> 1.0.1'
   gem.add_runtime_dependency 'rack-test', '~> 0.6.2'
@@ -33,4 +32,5 @@ Gem::Specification.new do |gem|
   gem.add_development_dependency 'webmock', '~> 1.9.3'
   gem.add_development_dependency 'pry'
   gem.add_development_dependency 'fakefs', '~> 0.4'
+  gem.add_development_dependency 'hashie', '~> 2.0'
 end

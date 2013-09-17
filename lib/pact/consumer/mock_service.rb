@@ -1,7 +1,6 @@
 require 'net/http'
 require 'uri'
 require 'json'
-require 'hashie'
 require 'singleton'
 require 'logger'
 require 'awesome_print'
@@ -169,22 +168,21 @@ module Pact
       def request_as_hash_from env
         request = env.inject({}) do |memo, (k, v)|
           request_key = REQUEST_KEYS[k]
-        memo[request_key] = v if request_key
-        memo
+          memo[request_key] = v if request_key
+          memo
         end
 
-        mashed_request = Hashie::Mash.new request
-        mashed_request[:headers] = headers_from env
-        body_string = mashed_request[:body].read
+        request[:headers] = headers_from env
+        body_string = request[:body].read
 
         if body_string.empty?
-          mashed_request.delete :body
+          request.delete :body
         else
-          body_is_json = mashed_request[:headers]['Content-Type'] =~ /json/
-          mashed_request[:body] =  body_is_json ? JSON.parse(body_string) : body_string
+          body_is_json = request[:headers]['Content-Type'] =~ /json/
+          request[:body] =  body_is_json ? JSON.parse(body_string) : body_string
         end
-        mashed_request[:method] = mashed_request[:method].downcase
-        mashed_request
+        request[:method] = request[:method].downcase
+        request
       end
 
       def headers_from env

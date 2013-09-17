@@ -104,11 +104,11 @@ module Pact::Consumer
 
     let(:expected_request) {
       {
-            "query" => "",
-           "method" => "post",
-             "body" => expected_body,
-             "path" => "/donuts",
-          "headers" => {
+            :query => "",
+           :method => "post",
+             :body => expected_body,
+             :path => "/donuts",
+          :headers => {
               "Content-Type" => content_type,
                     "Accept" => "text/plain",
                 "User-Agent" => "Ruby",

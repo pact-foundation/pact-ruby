@@ -119,7 +119,7 @@ module Pact
 	          	}
 				}
 
-				let(:interaction_json) { interaction.to_json_for_mock_service }
+				let(:interaction_json) { {} }
 
 				let(:interaction) { Pact::Interaction.from_hash(JSON.load(interaction_hash.to_json)) }
 

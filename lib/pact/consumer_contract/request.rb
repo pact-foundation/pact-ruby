@@ -194,7 +194,7 @@ module Pact
         as_json.merge( options.empty? ? {} : { options: options} )
       end
 
-      def generated_body
+      def reified_body
         Pact::Reification.from_term(body)
       end
 

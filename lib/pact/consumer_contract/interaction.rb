@@ -29,15 +29,6 @@ module Pact
         as_json.to_json(options)
       end
 
-      def as_json_for_mock_service
-        {:response => Reification.from_term(response), :request => @request.as_json_with_options, :description => description }.
-          tap{ | hash | hash[:provider_state] = @provider_state if @provider_state }
-      end
-
-      def to_json_for_mock_service
-        as_json_for_mock_service.to_json
-      end
-
       def matches_criteria? criteria
         criteria.each do | key, value |
           unless match_criterion self.send(key.to_s), value

@@ -1,6 +1,5 @@
 require 'net/http'
 require 'pact/reification'
-require 'pact/request'
 require 'pact/consumer_contract/interaction'
 
 module Pact

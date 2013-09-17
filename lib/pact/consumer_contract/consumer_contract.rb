@@ -1,15 +1,15 @@
-require 'pact/consumer_contract'
 require 'pact/logging'
 require 'pact/json_warning'
-require 'date'
-require 'pact/version'
-require 'open-uri'
-require 'pact/term'
 require 'pact/something_like'
 require 'pact/symbolize_keys'
+require 'pact/term'
+require 'pact/version'
+require 'date'
+require 'open-uri'
 require_relative 'service_consumer'
 require_relative 'service_provider'
 require_relative 'interaction'
+require_relative 'request'
 
 
 

@@ -1,5 +1,5 @@
 require 'spec_helper'
-require 'pact/request'
+require 'pact/consumer_contract/request'
 
 describe Pact::Request::Replayable do
 

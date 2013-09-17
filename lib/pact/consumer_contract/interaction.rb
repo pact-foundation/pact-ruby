@@ -1,4 +1,4 @@
-require 'pact/request'
+require 'pact/consumer_contract/request'
 require 'pact/symbolize_keys'
 
 module Pact

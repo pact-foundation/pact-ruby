@@ -1,6 +1,6 @@
 require 'pact/logging'
 require 'rack/test'
-require 'pact/request'
+require 'pact/consumer_contract/interaction'
 require 'pact/provider/provider_state'
 
 module Pact
@@ -18,12 +18,12 @@ module Pact
         self.send(request.method, *args)
       end
 
-      def parse_body_from_response response
-        case response.headers['Content-Type']
+      def parse_body_from_response rack_response
+        case rack_response.headers['Content-Type']
         when /json/
-          JSON.load(response.body)
+          JSON.load(rack_response.body)
         else
-          response.body
+          rack_response.body
         end
       end
 

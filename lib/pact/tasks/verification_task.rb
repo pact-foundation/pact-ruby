@@ -1,14 +1,14 @@
 require 'rake/tasklib'
 require 'pact/provider/pact_spec_runner'
-require_relative 'pact_task_helper'
-require_relative 'provider/verification_report'
+require 'pact/provider/verification_report'
+require 'pact/tasks/task_helper'
 
 =begin
 	To create a rake pact:verify:<something> task
 
 	Pact::VerificationTask.new(:head) do | pact |
 	  pact.uri 'http://master.cd.vpc.realestate.com.au/browse/BIQ-MAS/latestSuccessful/artifact/JOB2/Pacts/mas-contract_transaction_service.json'
-    pact.uri 'http://master.cd.vpc.realestate.com.au/browse/BIQ-IMAGINARY-CONSUMER/latestSuccessful/artifact/JOB2/Pacts/imaginary_consumer-contract_transaction_service.json'
+     pact.uri 'http://master.cd.vpc.realestate.com.au/browse/BIQ-IMAGINARY-CONSUMER/latestSuccessful/artifact/JOB2/Pacts/imaginary_consumer-contract_transaction_service.json'
 	end
 
 	The pact.uri may be a local file system path or a remote URL.

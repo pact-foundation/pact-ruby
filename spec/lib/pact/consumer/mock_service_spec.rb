@@ -6,7 +6,7 @@ module Pact::Consumer
   describe InteractionList do
     shared_context "unexpected requests and missed interactions" do
       let(:expected_call) { {request: 'blah'} }
-      let(:unexpected_call) { Pact::Request::Actual.from_hash(path: '/path', method: 'get') }
+      let(:unexpected_call) { Pact::Consumer::Request::Actual.from_hash(path: '/path', method: 'get') }
       subject {
         interactionList = InteractionList.new
         interactionList.add expected_call
@@ -17,7 +17,7 @@ module Pact::Consumer
 
     shared_context "no unexpected requests or missed interactions exist" do
       let(:expected_call) { {request: 'blah'} }
-      let(:unexpected_call) { Pact::Request::Actual.from_hash(path: '/path', method: 'get') }
+      let(:unexpected_call) { Pact::Consumer::Request::Actual.from_hash(path: '/path', method: 'get') }
       subject {
         interactionList = InteractionList.new
         interactionList.add expected_call

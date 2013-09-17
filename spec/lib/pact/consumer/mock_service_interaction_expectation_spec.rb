@@ -3,8 +3,9 @@ require 'pact/consumer/mock_service_interaction_expectation'
 
 describe Pact::Consumer::MockServiceInteractionExpectation do
   describe "as_json" do
-    let(:as_json_with_options ) { {:opts => 'blah'} }
-    let(:request) { instance_double('Pact::Request::Expected', :as_json_with_options => {:opts => 'blah'})}
+    let(:options ) { {} }
+    let(:request_as_json) { {a: 'request'} }
+    let(:request) { instance_double('Pact::Request::Expected', :as_json => request_as_json, :options => options)}
     let(:response) { double('response') }
     let(:generated_response ) { double('generated_response', :to_json => 'generated_response') }
     let(:interaction) { instance_double('Pact::Interaction', :description => 'description', :request => request, :response => response, :provider_state => 'some state') }
@@ -21,7 +22,7 @@ describe Pact::Consumer::MockServiceInteractionExpectation do
     end
 
     it "includes the options in the request" do
-      expect(subject.as_json[:request]).to eq as_json_with_options
+      expect(subject.as_json[:request]).to eq request_as_json
     end
 
     it "includes the provider state" do
@@ -34,6 +35,19 @@ describe Pact::Consumer::MockServiceInteractionExpectation do
 
     it "doesn't have any other keys" do
       expect(subject.as_json.keys).to eq [:description, :provider_state, :request, :response]
+    end
+
+    context "without options" do
+      it "does not include the options key" do
+        expect(subject.as_json.key?(:options)).to be_false
+      end
+    end
+
+    context "with options" do
+      let(:options) { {:opts => 'blah'} }
+      it "includes the options in the request hash" do
+        expect(subject.as_json[:request][:options]).to eq options
+      end
     end
   end
    

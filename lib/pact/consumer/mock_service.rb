@@ -7,6 +7,7 @@ require 'awesome_print'
 require 'awesome_print/core_ext/logger' #For some reason we get an error indicating that the method 'ap' is private unless we load this specifically
 require 'json/add/regexp'
 require 'pact/matchers'
+require 'pact/consumer/request'
 
 AwesomePrint.defaults = {
   indent: -2,

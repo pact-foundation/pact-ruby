@@ -33,7 +33,7 @@ module Pact
 	class VerificationTask < ::Rake::TaskLib
 	  attr_reader :pact_spec_config
 
-	  include PactTaskHelper
+	  include Pact::TaskHelper
 	  def initialize(name)
 	    @pact_spec_config = []
 	    @name = name

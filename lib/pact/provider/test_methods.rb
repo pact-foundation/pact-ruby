@@ -2,6 +2,7 @@ require 'pact/logging'
 require 'rack/test'
 require 'pact/consumer_contract/interaction'
 require 'pact/provider/provider_state'
+require 'pact/provider/request'
 
 module Pact
   module Provider

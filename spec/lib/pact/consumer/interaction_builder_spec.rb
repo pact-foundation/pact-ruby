@@ -49,7 +49,7 @@ module Pact
         let(:expected_request) { {an: 'expected_request'} }
 
         it "sets the request on the interaction as a instance of Request::Expected" do
-          Request::Expected.should_receive(:from_hash).with(request).and_return(expected_request)
+          Pact::Request::Expected.should_receive(:from_hash).with(request).and_return(expected_request)
           interaction.should_receive(:request=).with(expected_request)
           subject.with(request)
         end

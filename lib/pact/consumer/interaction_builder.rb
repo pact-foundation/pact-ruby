@@ -23,7 +23,7 @@ module Pact
       end
 
       def with(request_details)
-        interaction.request = Request::Expected.from_hash(request_details)
+        interaction.request = Pact::Request::Expected.from_hash(request_details)
         self
       end
 

@@ -34,7 +34,7 @@ describe Pact::Matchers do
   describe "expecting key to be present with nil value and not finding key" do
     let(:expected) { {a: nil} }
     let(:actual) { {} }
-    let(:difference) { {a: {expected: nil, actual: Pact::Matchers::KeyNotFound.new }} }
+    let(:difference) { {a: {expected: nil, actual: Pact::KeyNotFound.new }} }
     it "returns the key in the diff" do
       expect(diff(expected, actual)).to eq difference
     end
@@ -56,7 +56,7 @@ describe Pact::Matchers do
     context "when a key is not found" do
       let(:actual) { {a: 'blah'} }
       let(:expected) { {b: 'blah'} }
-      let(:difference) { {:b=>{:expected=>{:class=>String, :eg=>"blah"}, :actual=>Pact::Matchers::KeyNotFound.new}} }
+      let(:difference) { {:b=>{:expected=>{:class=>String, :eg=>"blah"}, :actual=>Pact::KeyNotFound.new}} }
       it "returns the difference" do
         expect(structure_diff(expected, actual)).to eq difference
       end
@@ -167,7 +167,7 @@ describe Pact::Matchers do
       end
       context "when the actual value is an hash" do
         let(:actual) { {b: 'c'} }
-        let(:difference) { { a: {expected:"b", actual: Pact::Matchers::KeyNotFound.new}} }
+        let(:difference) { { a: {expected:"b", actual: Pact::KeyNotFound.new}} }
         it "should return the diff" do
           expect(diff(subject, actual)).to eql(difference)
         end
@@ -331,7 +331,7 @@ describe Pact::Matchers do
     context "a deep mismatch" do
       subject { {a:  {b: { c: [1,2]}, d: { e: Pact::Term.new(matcher: /a/, generate: 'apple')}}, f: 1, g: {h: 99}} }
       let(:actual) { {a:  {b: { c: [1,2]}, d: { e: 'food'}}, f: "thing"} }
-      let(:difference) { {:a=>{:d=>{:e=>{:expected=>/a/, :actual=>"food"}}}, :f=>{:expected=>1, :actual=>"thing"}, :g=>{:expected=>{:h=>99}, :actual=> Pact::Matchers::KeyNotFound.new}} }
+      let(:difference) { {:a=>{:d=>{:e=>{:expected=>/a/, :actual=>"food"}}}, :f=>{:expected=>1, :actual=>"thing"}, :g=>{:expected=>{:h=>99}, :actual=> Pact::KeyNotFound.new}} }
 
       it 'should return the diff' do
         expect(diff(subject, actual)).to eql(difference)

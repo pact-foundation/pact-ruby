@@ -1,5 +1,5 @@
 require 'spec_helper'
-require 'pact/verification_task'
+require 'pact/tasks/verification_task'
 
 module Pact
 	describe VerificationTask do

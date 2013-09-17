@@ -8,10 +8,16 @@ module Pact
 			def call env
 				if env['PATH_INFO'] == '/weather'
 					[200, {'Content-Type' => 'application/json'}, [{message: WEATHER[:current_state]}.to_json]]
+				elsif env['PATH_INFO'] == '/sometext'
+					[200, {'Content-Type' => 'text/plain'}, ['some text']]
 				else
 					raise "unexpected path #{env['PATH_INFO']}!!!"
 				end
 			end
+		end
+
+		Pact.configure do | config |
+			config.logger.level = Logger::DEBUG
 		end
 
 		Pact.service_provider "Some Provider" do

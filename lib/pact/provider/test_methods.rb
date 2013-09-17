@@ -1,6 +1,6 @@
 require 'pact/logging'
 require 'rack/test'
-require 'pact/reification'
+require 'pact/request'
 require 'pact/provider/provider_state'
 
 module Pact
@@ -10,7 +10,15 @@ module Pact
       include Pact::Logging
       include Rack::Test::Methods
 
-      def parse_entity_from_response response
+      def replay_interaction interaction
+        request = Request::Replayable.new(interaction.request)
+        args = [request.path, request.body, request.headers]
+
+        logger.debug "Sending #{request.method} with #{args}"
+        self.send(request.method, *args)
+      end
+
+      def parse_body_from_response response
         case response.headers['Content-Type']
         when /json/
           JSON.load(response.body)
@@ -28,53 +36,6 @@ module Pact
       def tear_down_provider_state provider_state_name, consumer
         if provider_state_name
           get_provider_state(provider_state_name, consumer).tear_down
-        end
-      end
-
-      def replay_interaction interaction
-        request = interaction.request
-        path = request_path(request)
-        args = [path, request_body(request)]
-
-        if !request.headers.nil?
-          args << request_headers(request)
-        end
-
-        logger.debug "Sending #{request.method} with #{args}"
-        self.send(request.method, *args)
-      end
-
-      private
-
-      def request_headers request
-        request_headers = {}
-        request.headers.each do |key, value|
-          key = key.upcase
-          if key.match(/CONTENT.TYPE/)
-            request_headers['CONTENT_TYPE'] = value
-          else
-            request_headers['HTTP_' + key.to_s] = value
-          end
-        end
-        request_headers
-      end
-
-      def request_path request
-        path = request.path
-        query = request.query
-        if query && !query.empty?
-          query = query.generate if query.kind_of? Pact::Term
-          path += "?" + query
-        end
-        path
-      end
-
-      def request_body request
-        body = request.body
-        if !body.nil? #TODO - write test for this where this is a NullExpectation
-          body = JSON.dump(Pact::Reification.from_term(body))
-        else
-          body = ""
         end
       end
 

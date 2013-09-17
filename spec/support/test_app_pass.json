@@ -16,6 +16,20 @@
                 "body": {"message" : "sunny"}
             },
             "provider_state": "the weather is sunny"
-        }
+        },
+        {
+            "description": "A test request for text",
+            "request": {
+                "method": "get",
+                "path": "/sometext",
+                "query": "",
+                "body" : "some request text"
+            },
+            "response": {
+                "status": 200,
+                "headers" : {"Content-type": "text/plain"},
+                "body": "some text"
+            }
+        }        
     ]
 }

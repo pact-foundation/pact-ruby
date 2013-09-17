@@ -2,6 +2,9 @@
     "consumer": {
         "name": "an unknown consumer"
     },
+    "provider": {
+        "name": "an unknown provider"
+    },    
     "interactions": [
         {
             "description": "A test request",

@@ -6,6 +6,7 @@ require 'pact/version'
 require 'open-uri'
 require 'pact/term'
 require 'pact/something_like'
+require 'pact/symbolize_keys'
 require_relative 'service_consumer'
 require_relative 'service_provider'
 require_relative 'interaction'
@@ -27,6 +28,7 @@ module Pact
 
   class ConsumerContract
 
+    include SymbolizeKeys
     include Logging
     include JsonWarning
     include FileName
@@ -58,11 +60,12 @@ module Pact
       as_json.to_json(options)
     end
 
-    def self.from_hash(obj)
+    def self.from_hash(hash)
+      hash = symbolize_keys(hash)
       new({
-        :interactions => obj['interactions'].collect { |hash| Interaction.from_hash(hash)},
-        :consumer => ServiceConsumer.from_hash(obj['consumer']),
-        :provider => ServiceProvider.from_hash(obj['provider'] || {})
+        :interactions => hash[:interactions].collect { |hash| Interaction.from_hash(hash)},
+        :consumer => ServiceConsumer.from_hash(hash[:consumer]),
+        :provider => ServiceProvider.from_hash(hash[:provider])
       })
     end
 

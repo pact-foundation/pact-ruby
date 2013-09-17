@@ -1,7 +1,9 @@
 require 'pact/request'
+require 'pact/symbolize_keys'
 
 module Pact
    class Interaction
+      include SymbolizeKeys
 
       attr_accessor :description, :request, :response, :provider_state
 
@@ -13,19 +15,14 @@ module Pact
       end
 
       def self.from_hash hash
-        new(:description => hash['description'],
-            :provider_state => hash['provider_state'],
-            :request => Pact::Request::Expected.from_hash(hash['request']),
-            :response => hash['response']
-          )
+        request = Pact::Request::Expected.from_hash(hash['request'])
+        new(symbolize_keys(hash).merge({request: request}))
       end
 
       def as_json
-        {
-          :description => @description,
-          :request => @request.as_json,
-          :response => @response,
-        }.tap{ | hash | hash[:provider_state] = @provider_state if @provider_state }
+        hash = { :description => @description }
+        hash[:provider_state] = @provider_state if @provider_state #Easier to read when provider state at top
+        hash.merge(:request => @request.as_json, :response => @response)
       end
 
       def to_json(options = {})
@@ -41,7 +38,6 @@ module Pact
         as_json_for_mock_service.to_json
       end
 
-      # Move this to interaction
       def matches_criteria? criteria
         criteria.each do | key, value |
           unless match_criterion self.send(key.to_s), value
@@ -64,7 +60,7 @@ module Pact
       end
 
       def to_s
-        to_json
+        JSON.pretty_generate(self)
       end
    end
 end

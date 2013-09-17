@@ -40,6 +40,7 @@ module Pact::Provider
     pact = Pact::ConsumerContract.from_json <<-EOS
     {
         "consumer" : { "name" : "a consumer"},
+        "provider" : { "name" : "a provider"},
         "interactions" : [
             {
                 "description": "donut creation request",
@@ -89,6 +90,7 @@ module Pact::Provider
         consumer_contract = Pact::ConsumerContract.from_json <<-EOS
         {
             "consumer" : { "name" : "the-wild-beast-store"},
+            "provider" : { "name" : "provider"},
             "interactions" : [
                 {
                     "description": "donut creation request",
@@ -120,6 +122,7 @@ module Pact::Provider
         consumer_contract = Pact::ConsumerContract.from_json <<-EOS
         {
             "consumer" : { "name" : "some consumer"},
+            "provider" : { "name" : "provider"},
             "interactions" : [
                 {
                     "description": "donut creation request",

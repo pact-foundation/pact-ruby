@@ -1,5 +1,6 @@
 require 'pact/matchers'
 require 'pact/reification'
+require 'pact/symbolize_keys'
 
 module Pact
 
@@ -87,6 +88,7 @@ module Pact
 
     class Base
       include Pact::Matchers
+      include Pact::SymbolizeKeys
       extend Pact::Matchers
 
       NULL_EXPECTATION = NullExpectation.new
@@ -101,10 +103,6 @@ module Pact
         headers = sym_hash.fetch(:headers, NULL_EXPECTATION)
         body = sym_hash.fetch(:body, NULL_EXPECTATION)
         new(method, path, headers, body, query)
-      end
-
-      def self.symbolize_keys hash
-        hash.inject({}) { |memo, (k,v)| memo[k.to_sym] = v; memo }
       end
 
       def initialize(method, path, headers, body, query)
@@ -203,7 +201,7 @@ module Pact
       # Don't want to put the default options in the pact json just yet, so calculating these at run time, rather than assigning
       # the result to @options
       def runtime_options
-        DEFAULT_OPTIONS.merge(self.class.symbolize_keys(options))
+        DEFAULT_OPTIONS.merge(symbolize_keys(options))
       end
 
     end

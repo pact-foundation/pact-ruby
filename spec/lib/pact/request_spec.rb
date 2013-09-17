@@ -209,7 +209,7 @@ module Pact
       let(:actual_query) { '' }
 
       it "matches identical requests" do
-        expect(subject.match actual_request).to be_true
+        expect(subject.matches? actual_request).to be_true
       end
 
       context "when the methods are the same but one is symbolized" do
@@ -217,7 +217,7 @@ module Pact
         let(:actual_method) { 'get' }
 
         it "matches" do
-          expect(subject.match actual_request).to be_true
+          expect(subject.matches? actual_request).to be_true
         end
       end
 
@@ -226,7 +226,7 @@ module Pact
         let(:actual_method) { 'post' }
 
         it "does not match" do
-          expect(subject.match actual_request).to be_false
+          expect(subject.matches? actual_request).to be_false
         end
       end
 
@@ -235,7 +235,7 @@ module Pact
         let(:actual_path) { '/bar' }
 
         it "does not match" do
-          expect(subject.match actual_request).to be_false
+          expect(subject.matches? actual_request).to be_false
         end
       end
 
@@ -244,7 +244,7 @@ module Pact
         let(:actual_path) { '/foo/' }
 
         it "matches" do
-          expect(subject.match actual_request).to be_true
+          expect(subject.matches? actual_request).to be_true
         end
       end
 
@@ -253,7 +253,7 @@ module Pact
         let(:actual_body) { '' }
 
         it "does not match" do
-          expect(subject.match actual_request).to be_false
+          expect(subject.matches? actual_request).to be_false
         end
       end
 
@@ -262,7 +262,7 @@ module Pact
         let(:actual_body) { '' }
 
         it "matches" do
-          expect(subject.match actual_request).to be_true
+          expect(subject.matches? actual_request).to be_true
         end
       end
 
@@ -276,7 +276,7 @@ module Pact
         let(:actual_body) { nil }
 
         it "does not match" do
-          expect(subject.match actual_request).to be_false
+          expect(subject.matches? actual_request).to be_false
         end
       end
 
@@ -285,7 +285,7 @@ module Pact
         let(:actual_body) { 'bar' }
 
         it "does not match" do
-          expect(subject.match actual_request).to be_false
+          expect(subject.matches? actual_request).to be_false
         end
       end
 
@@ -305,7 +305,7 @@ module Pact
         end
 
         it "matches" do
-          expect(subject.match actual_request).to be_true
+          expect(subject.matches? actual_request).to be_true
         end
       end
 
@@ -325,7 +325,7 @@ module Pact
         end
 
         it "does not match" do
-          expect(subject.match actual_request).to be_false
+          expect(subject.matches? actual_request).to be_false
         end
       end
 
@@ -345,7 +345,7 @@ module Pact
         end
 
         it "matches" do
-          expect(subject.match actual_request).to be_true
+          expect(subject.matches? actual_request).to be_true
         end
       end
 
@@ -365,7 +365,7 @@ module Pact
         end
 
         it "does not match" do
-          expect(subject.match actual_request).to be_false
+          expect(subject.matches? actual_request).to be_false
         end
       end
 
@@ -385,7 +385,7 @@ module Pact
         end
 
         it "does not match" do
-          expect(subject.match actual_request).to be_false
+          expect(subject.matches? actual_request).to be_false
         end
       end
       context "when the expected body contains non-matching hash where one field contains a substring of the other" do
@@ -402,7 +402,7 @@ module Pact
           end
 
           it "does not match" do
-            expect(subject.match actual_request).to be_false
+            expect(subject.matches? actual_request).to be_false
           end
       end
 
@@ -422,7 +422,7 @@ module Pact
         end
 
         it "does not match" do
-          expect(subject.match actual_request).to be_true
+          expect(subject.matches? actual_request).to be_true
         end
       end
 
@@ -431,7 +431,7 @@ module Pact
         let(:actual_query) { 'bar' }
 
         it "does not match" do
-          expect(subject.match actual_request).to be_false
+          expect(subject.matches? actual_request).to be_false
         end
       end
 
@@ -440,7 +440,7 @@ module Pact
         let(:actual_query) { 'bar' }
 
         it 'matches' do
-          expect(subject.match actual_request).to be_true
+          expect(subject.matches? actual_request).to be_true
         end
       end
 
@@ -449,7 +449,7 @@ module Pact
         let(:expected_body) { { thing: "123" } }
 
         it 'does not match' do
-          expect(subject.match actual_request).to be_false
+          expect(subject.matches? actual_request).to be_false
         end
       end
 
@@ -459,13 +459,13 @@ module Pact
         context "when allowing unexpected keys" do
           let(:options) { {'allow_unexpected_keys_in_body' => true} } #From json, these will be strings
           it "matches" do
-            expect(subject.match actual_request).to be_true
+            expect(subject.matches? actual_request).to be_true
           end
         end
         context "when not allowing unexpected keys" do
           let(:options) { {'allow_unexpected_keys_in_body' => false} }
           it "does not match" do
-            expect(subject.match actual_request).to be_false
+            expect(subject.matches? actual_request).to be_false
           end
         end
       end

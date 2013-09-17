@@ -236,7 +236,7 @@ module Pact
       def find_matching_interactions actual_request, opts
         candidate_interactions = opts.fetch(:from)
         candidate_interactions.select do | candidate_interaction |
-          candidate_interaction.request.match actual_request
+          candidate_interaction.request.matches? actual_request
         end        
       end 
 

@@ -169,7 +169,7 @@ module Pact
         @options = options
       end
 
-      def match(actual_request)
+      def matches?(actual_request)
         difference(actual_request).empty?
       end
 
@@ -186,16 +186,9 @@ module Pact
         end
       end
 
-      def body_difference(actual_body)
-        diff({:body => body}, {body: actual_body}, allow_unexpected_keys: runtime_options[:allow_unexpected_keys_in_body])
-      end
-
+      # Need to get rid of this...
       def as_json_with_options
         as_json.merge( options.empty? ? {} : { options: options} )
-      end
-
-      def reified_body
-        Pact::Reification.from_term(body)
       end
 
       # Don't want to put the default options in the pact json just yet, so calculating these at run time, rather than assigning
@@ -204,6 +197,11 @@ module Pact
         DEFAULT_OPTIONS.merge(symbolize_keys(options))
       end
 
+      private
+
+      def body_difference(actual_body)
+        diff({:body => body}, {body: actual_body}, allow_unexpected_keys: runtime_options[:allow_unexpected_keys_in_body])
+      end
     end
 
     class Actual < Base

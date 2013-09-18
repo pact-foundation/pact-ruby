@@ -1,9 +1,9 @@
 require 'open-uri'
 require 'pact/consumer_contract'
 require 'pact/json_warning'
-require_relative 'matchers'
-require_relative 'test_methods'
-require 'pact/provider/dsl'
+require 'pact/provider/matchers'
+require 'pact/provider/test_methods'
+require 'pact/provider/configuration'
 
 module Pact
   module Provider
@@ -125,6 +125,5 @@ end
 RSpec.configure do |config|
   config.extend Pact::Provider::RSpec::ClassMethods
   config.include Pact::Provider::RSpec::InstanceMethods
-  config.include Pact::Provider::TestMethods
   config.include Pact::Provider::TestMethods
 end

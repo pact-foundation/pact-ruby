@@ -12,6 +12,7 @@ namespace :pact do
     handle_verification_failure do
       pact_verifications = Pact.configuration.pact_verifications
       verification_configs = pact_verifications.collect { | pact_verification | { :uri => pact_verification.uri }}
+      raise "Please configure a pact to verify" if verification_configs.empty?
       Pact::Provider::PactSpecRunner.new(verification_configs).run
     end
   end

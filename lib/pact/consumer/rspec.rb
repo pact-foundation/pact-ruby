@@ -1,7 +1,4 @@
-require_relative '../configuration'
-require_relative '../consumer'
-require_relative 'dsl'
-require 'pact/consumer/consumer_contract_builder'
+require 'pact/consumer'
 
 module Pact
   module Consumer

@@ -1,16 +1,17 @@
 require 'spec_helper'
-require 'pact/consumer/dsl'
+require 'pact/consumer/configuration'
 
-module Pact::Consumer::DSL
+module Pact::Consumer::Configuration
 
-   describe Service do
+   describe MockService do
       before do
          Pact.clear_configuration
          Pact::Consumer::AppManager.instance.stub(:register_mock_service_for)
       end
       describe "configure_consumer_contract_builder" do
+         let(:consumer_name) {'consumer'}
          subject { 
-            Service.new :mock_service do
+            MockService.build :mock_service, consumer_name, provider_name do
                port 1234
                standalone true
                verify true
@@ -18,12 +19,12 @@ module Pact::Consumer::DSL
          }
 
          let(:provider_name) { 'Mock Provider'}
-         let(:consumer_contract_builder) { double('Pact::Consumer::ConsumerContractBuilder').as_null_object}
+         let(:consumer_contract_builder) { instance_double('Pact::Consumer::ConsumerContractBuilder')}
          let(:url) { "http://localhost:1234"}
 
          it "adds a verification to the Pact configuration" do
             Pact::Consumer::ConsumerContractBuilder.stub(:new).and_return(consumer_contract_builder)
-            subject.configure_consumer_contract_builder({})
+            subject.finalize
             consumer_contract_builder.should_receive(:verify)
             Pact.configuration.provider_verifications.first.call
          end
@@ -31,12 +32,12 @@ module Pact::Consumer::DSL
          context "when standalone" do
             it "does not register the app with the AppManager" do
                Pact::Consumer::AppManager.instance.should_not_receive(:register_mock_service_for)
-               subject.configure_consumer_contract_builder({})
+               subject.finalize
             end
          end
          context "when not standalone" do
             subject { 
-               Service.new :mock_service do
+               MockService.build :mock_service, consumer_name, provider_name do
                   port 1234
                   standalone false
                   verify true
@@ -44,7 +45,7 @@ module Pact::Consumer::DSL
             }            
             it "registers the app with the AppManager" do
                Pact::Consumer::AppManager.instance.should_receive(:register_mock_service_for).with(provider_name, url)
-               subject.configure_consumer_contract_builder({:provider_name => provider_name })
+               subject.finalize
             end
          end         
       end

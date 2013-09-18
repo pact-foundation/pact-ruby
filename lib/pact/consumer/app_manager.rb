@@ -5,6 +5,7 @@ require 'uri'
 require 'find_a_port'
 require 'pact/logging'
 require 'pact/consumer/server'
+require 'singleton'
 
 module Pact
   module Consumer

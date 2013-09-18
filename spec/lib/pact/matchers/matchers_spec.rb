@@ -24,7 +24,7 @@ describe Pact::Matchers do
     context "when an unexpected key is found" do
       let(:expected) { {:a => 1} }
       let(:actual) { {:a => 1, :b => 2} }
-      let(:difference) { {:b => {:expected => '<key not to be present>', :actual => 2 }} }
+      let(:difference) { {:b => {:expected => Pact::UnexpectedKey.new, :actual => 2 }} }
       it "returns it in the diff" do
         expect(diff(expected, actual, allow_unexpected_keys: false)).to eq difference
       end
@@ -139,6 +139,24 @@ describe Pact::Matchers do
   end
 
   describe 'diffing' do
+
+    context "when expected is longer than the actual" do
+      subject { [1,2,3] }
+      let(:actual) { [1,2]}
+      let(:difference) { [Pact::Matchers::NO_DIFF_INDICATOR, Pact::Matchers::NO_DIFF_INDICATOR, {expected: 3, actual: Pact::IndexNotFound.new}] }
+      it 'returns the diff' do
+        expect(diff(subject, actual)).to eq(difference)
+      end
+    end
+
+    context "when actual array is longer than the expected" do
+      subject { [1] }
+      let(:actual) { [1,2]}
+      let(:difference) { [Pact::Matchers::NO_DIFF_INDICATOR, {expected: Pact::UnexpectedIndex.new , actual: 2}] }
+      it 'returns the diff' do
+        expect(diff(subject, actual)).to eq(difference)
+      end      
+    end
 
     context 'where an expected value is a non-empty string' do
 
@@ -334,7 +352,7 @@ describe Pact::Matchers do
       let(:difference) { {:a=>{:d=>{:e=>{:expected=>/a/, :actual=>"food"}}}, :f=>{:expected=>1, :actual=>"thing"}, :g=>{:expected=>{:h=>99}, :actual=> Pact::KeyNotFound.new}} }
 
       it 'should return the diff' do
-        expect(diff(subject, actual)).to eql(difference)
+        expect(diff(subject, actual)).to eq(difference)
       end
     end
 
@@ -344,7 +362,7 @@ describe Pact::Matchers do
       let(:actual) { {:a => "apple" } }
 
       it 'does not include this in the diff' do
-        expect(diff(subject, actual)).to eql({})
+        expect(diff(subject, actual)).to eq({})
       end
     end
 
@@ -362,7 +380,7 @@ describe Pact::Matchers do
       let(:actual) { [4,5,6] }
 
       it 'includes this in the diff' do
-        expect(diff(subject, actual)).to eql({:expected => {:a => :b}, :actual => [4,5,6] })
+        expect(diff(subject, actual)).to eq({:expected => {:a => :b}, :actual => [4,5,6] })
       end
     end
 
@@ -371,7 +389,7 @@ describe Pact::Matchers do
       let(:actual) { {:a => :b} }
 
       it 'includes this in the diff' do
-        expect(diff(subject, actual)).to eql({:expected => [4,5,6], :actual => {:a => :b} })
+        expect(diff(subject, actual)).to eq({:expected => [4,5,6], :actual => {:a => :b} })
       end
     end
 
@@ -381,7 +399,7 @@ describe Pact::Matchers do
       let(:difference) { [Pact::Matchers::NO_DIFF_INDICATOR, {:expected=>5, :actual=>6}, {:expected=>6, :actual=>7}] }
 
       it 'includes this in the diff' do
-        expect(diff(subject, actual)).to eql(difference)
+        expect(diff(subject, actual)).to eq(difference)
       end
     end
 
@@ -390,7 +408,7 @@ describe Pact::Matchers do
       let(:actual) { ["4","5","6"] }
 
       it 'includes this in the diff' do
-        expect(diff(subject, actual)).to eql({})
+        expect(diff(subject, actual)).to eq({})
       end
     end
 

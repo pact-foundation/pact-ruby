@@ -1,16 +1,18 @@
 require 'awesome_print'
 require 'pact/term'
 require 'pact/something_like'
-require 'pact/shared/key_not_found'
 require 'pact/shared/null_expectation'
+require 'pact/shared/key_not_found'
+require 'pact/matchers/unexpected_key'
+require 'pact/matchers/unexpected_index'
+require 'pact/matchers/index_not_found'
 
 module Pact
   module Matchers
 
     NO_DIFF_INDICATOR = 'no difference here!'
-    UNEXPECTED_KEY = '<key not to be present>'
+    #UnexpectedKey.new = '<key not to be present>'
     DEFAULT_OPTIONS = {allow_unexpected_keys: true, structure: false}.freeze
-
 
     def diff expected, actual, opts = {}
       options = DEFAULT_OPTIONS.merge(opts)
@@ -38,11 +40,7 @@ module Pact
 
     def array_diff expected, actual, options
       if actual.is_a? Array
-        if expected.length == actual.length
-          actual_array_diff expected, actual, options
-        else
-          {expected: expected, actual: actual}
-        end
+        actual_array_diff expected, actual, options
       else
         {expected: expected, actual: actual}
       end
@@ -51,8 +49,11 @@ module Pact
     def actual_array_diff expected, actual, options
       difference = []
       diff_found = false
-      expected.each_with_index do | item, index|
-        if (item_diff = diff(item, actual.fetch(index, Pact::KeyNotFound.new), options)).any?
+      length = [expected.length, actual.length].max
+      length.times do | index|
+        expected_item = expected.fetch(index, Pact::UnexpectedIndex.new)
+        actual_item = actual.fetch(index, Pact::IndexNotFound.new)
+        if (item_diff = diff(expected_item, actual_item, options)).any?
           diff_found = true
           difference << item_diff
         else
@@ -77,7 +78,7 @@ module Pact
         {}
       else
         (actual.keys - expected.keys).inject({}) do | diff, key |
-          diff[key] = {:expected => UNEXPECTED_KEY, :actual => actual[key]}
+          diff[key] = {:expected => UnexpectedKey.new, :actual => actual[key]}
           diff
         end
       end

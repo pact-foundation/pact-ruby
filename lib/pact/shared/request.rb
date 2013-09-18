@@ -12,16 +12,6 @@ module Pact
 
       attr_reader :method, :path, :headers, :body, :query, :options
 
-      def self.from_hash(hash)
-        sym_hash = symbolize_keys hash
-        method = sym_hash.fetch(:method)
-        path = sym_hash.fetch(:path)
-        query = sym_hash.fetch(:query, key_not_found)
-        headers = sym_hash.fetch(:headers, key_not_found)
-        body = sym_hash.fetch(:body, key_not_found)
-        new(method, path, headers, body, query)
-      end
-
       def initialize(method, path, headers, body, query)
         @method = method.to_s
         @path = path.chomp('/')

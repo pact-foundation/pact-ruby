@@ -50,8 +50,8 @@ module Pact
 
       let(:actual_method) { 'get' }
       let(:actual_path) { '/foo' }
-      let(:actual_headers) { nil }
-      let(:actual_body) { nil }
+      let(:actual_headers) { {} }
+      let(:actual_body) { '' }
       let(:actual_query) { '' }
 
       it "matches identical requests" do

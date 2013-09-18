@@ -11,9 +11,14 @@ module Pact
       attr_accessor :options #Temporary hack
 
       def self.from_hash(hash)
-        request = super
-        request.options = symbolize_keys(hash).fetch(:options, {})
-        request
+        sym_hash = symbolize_keys hash
+        method = sym_hash.fetch(:method)
+        path = sym_hash.fetch(:path)
+        query = sym_hash.fetch(:query, key_not_found)
+        headers = sym_hash.fetch(:headers, key_not_found)
+        body = sym_hash.fetch(:body, key_not_found)
+        options = sym_hash.fetch(:options, {})
+        new(method, path, headers, body, query, options)
       end
 
       def initialize(method, path, headers, body, query, options = {})

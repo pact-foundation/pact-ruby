@@ -6,10 +6,20 @@ module Pact
     module Request
       class Actual < Pact::Request::Base
 
+        def self.from_hash(hash)
+          sym_hash = symbolize_keys hash
+          method = sym_hash.fetch(:method)
+          path = sym_hash.fetch(:path)
+          query = sym_hash.fetch(:query)
+          headers = sym_hash.fetch(:headers)
+          body = sym_hash.fetch(:body, nil)
+          new(method, path, headers, body, query)
+        end
+
         protected
 
         def self.key_not_found
-          Pact::KeyNotFound.new
+          nil
         end       
       end      
     end

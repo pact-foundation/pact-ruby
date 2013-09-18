@@ -8,7 +8,7 @@ shared_examples "a request" do
     end
 
     let(:actual) do
-      Pact::Consumer::Request::Actual.from_hash({'method' => 'get', 'path' => 'path', 'query' => 'blah'})
+      Pact::Consumer::Request::Actual.from_hash({'method' => 'get', 'path' => 'path', 'query' => 'blah', 'headers' => {}, 'body' => ''})
     end
 
     it "should match" do
@@ -18,25 +18,25 @@ shared_examples "a request" do
 
   describe 'full_path' do
     context "with empty path" do
-      subject { described_class.from_hash({:path => '', :method => 'get'}) }
+      subject { described_class.from_hash({:path => '', :method => 'get', :query => '', :headers => {}}) }
       it "returns the full path"do
         expect(subject.full_path).to eq "/"
       end
     end
     context "with a path" do
-      subject { described_class.from_hash({:path => '/path', :method => 'get'}) }
+      subject { described_class.from_hash({:path => '/path', :method => 'get', :query => '', :headers => {}}) }
       it "returns the full path"do
         expect(subject.full_path).to eq "/path"
       end
     end
     context "with a path and query" do
-      subject { described_class.from_hash({:path => '/path', :method => 'get', :query => "something"}) }
+      subject { described_class.from_hash({:path => '/path', :method => 'get', :query => "something", :headers => {}}) }
       it "returns the full path"do
         expect(subject.full_path).to eq "/path?something"
       end
     end
     context "with a path and a query that is a Term" do
-      subject { described_class.from_hash({:path => '/path', :method => 'get', :query => Pact::Term.new(generate: 'a', matcher: /a/)}) }
+      subject { described_class.from_hash({:path => '/path', :method => 'get', :headers => {}, :query => Pact::Term.new(generate: 'a', matcher: /a/)}) }
       it "returns the full path with reified path" do
         expect(subject.full_path).to eq "/path?a"
       end

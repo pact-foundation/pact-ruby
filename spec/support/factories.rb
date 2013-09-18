@@ -71,8 +71,12 @@ end
 
 class RequestFactory
   extend Pact::HashUtils
-  DEFAULTS = {:path => '/path', :method => 'get'}.freeze
+  DEFAULTS = {:path => '/path', :method => 'get', :query => 'query', :headers => {}}.freeze
   def self.create_hash overrides = {}
    deep_merge(DEFAULTS, overrides)
+  end
+
+  def self.create_actual
+    Pact::Consumer::Request::Actual.from_hash(create_hash)
   end
 end

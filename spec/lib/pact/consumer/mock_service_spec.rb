@@ -5,23 +5,23 @@ module Pact::Consumer
 
   describe InteractionList do
     shared_context "unexpected requests and missed interactions" do
-      let(:expected_call) { {request: 'blah'} }
-      let(:unexpected_call) { Pact::Consumer::Request::Actual.from_hash(path: '/path', method: 'get', query: '', headers: {}) }
+      let(:expected_interaction) { InteractionFactory.create }
+      let(:unexpected_request) { RequestFactory.create_actual }
       subject {
         interactionList = InteractionList.new
-        interactionList.add expected_call
-        interactionList.register_unexpected_request unexpected_call
+        interactionList.add expected_interaction
+        interactionList.register_unexpected_request unexpected_request
         interactionList
        }
     end
 
     shared_context "no unexpected requests or missed interactions exist" do
-      let(:expected_call) { {request: 'blah'} }
-      let(:unexpected_call) { Pact::Consumer::Request::Actual.from_hash(path: '/path', method: 'get', query:'', headers: {}) }
+      let(:expected_interaction) { InteractionFactory.create }
+      let(:unexpected_request) { RequestFactory.create_actual }
       subject {
         interactionList = InteractionList.new
-        interactionList.add expected_call
-        interactionList.register_matched expected_call
+        interactionList.add expected_interaction
+        interactionList.register_matched expected_interaction
         interactionList
        }
     end
@@ -29,21 +29,21 @@ module Pact::Consumer
     describe "interaction_diffs" do
       context "when unexpected requests and missed interactions exist" do
         include_context "unexpected requests and missed interactions"
-        let(:expected) {
-          {:missing_interactions=>[{:request=>"blah"}], :unexpected_requests=>[{:method=>"get", :path=>"/path", :query=> '', :headers=>{}}]}
+        let(:expected_diff) {
+          {:missing_interactions=>[expected_interaction.as_json], :unexpected_requests=>[unexpected_request.as_json]}
         }
         it "returns the unexpected requests and missed interactions" do
-          expect(subject.interaction_diffs).to eq expected
+          expect(subject.interaction_diffs).to eq expected_diff
         end
       end
 
       context "when no unexpected requests or missed interactions exist" do
         include_context "no unexpected requests or missed interactions exist"
-        let(:expected) {
+        let(:expected_diff) {
           {}
         }
         it "returns an empty hash" do
-          expect(subject.interaction_diffs).to eq expected
+          expect(subject.interaction_diffs).to eq expected_diff
         end
       end
     end

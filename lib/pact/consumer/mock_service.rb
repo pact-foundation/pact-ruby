@@ -57,7 +57,7 @@ module Pact
 
       def interaction_diffs
         {
-          :missing_interactions => missing_interactions,
+          :missing_interactions => missing_interactions.collect(&:as_json),
           :unexpected_requests => unexpected_requests.collect(&:as_json)
         }.inject({}) do | hash, pair |
           hash[pair.first] = pair.last if pair.last.any?

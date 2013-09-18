@@ -36,6 +36,10 @@ module Pact
         base_json
       end
 
+      def method_and_path
+        "#{method.upcase} #{path}"
+      end
+
       def full_path
         fp = ''
         if path.empty?

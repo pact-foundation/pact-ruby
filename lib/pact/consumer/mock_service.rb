@@ -42,7 +42,6 @@ module Pact
         @matched_interactions << interaction
       end
 
-      # Request::Actual
       def register_unexpected_request request
         @unexpected_requests << request
       end
@@ -149,10 +148,10 @@ module Pact
       end
 
       def respond env
-        interactions = Interaction.from_hash(JSON.load(env['rack.input'].string))
-        @interaction_list.add interactions
-        @logger.info "Added interaction to #{@name}"
-        @logger.ap interactions.as_json
+        interaction = Interaction.from_hash(JSON.load(env['rack.input'].string))
+        @interaction_list.add interaction
+        @logger.info "Registered expected interaction #{interaction.request.method_and_path} for #{@name}"
+        @logger.ap interaction.as_json
         [200, {}, ['Added interactions']]
       end
     end
@@ -221,7 +220,7 @@ module Pact
 
       def find_response request_hash
         actual_request = Request::Actual.from_hash(request_hash)
-        @logger.info "#{@name} received request"
+        @logger.info "#{@name} received request #{actual_request.method_and_path}"
         @logger.ap actual_request.as_json
         candidate_interactions = @interaction_list.find_candidate_interactions actual_request
         matching_interactions = find_matching_interactions actual_request, from: candidate_interactions
@@ -251,7 +250,7 @@ module Pact
 
       def multiple_interactions_found_response actual_request, matching_interactions
         response = {
-          message: "Multiple interaction found for #{actual_request.method.upcase} #{actual_request.path}", 
+          message: "Multiple interaction found for #{actual_request.method_and_path}", 
           matching_interactions:  matching_interactions.collect{ | interaction | request_summary_for(interaction) }
         }
         [500, {'Content-Type' => 'application/json'}, [response.to_json]]
@@ -285,14 +284,14 @@ module Pact
 
       def unrecognised_request_response actual_request, interaction_diffs
         response = {
-          message: "No interaction found for #{actual_request.method.upcase} #{actual_request.path}", 
+          message: "No interaction found for #{actual_request.method_and_path}", 
           interaction_diffs:  interaction_diffs
         }
         [500, {'Content-Type' => 'application/json'}, [response.to_json]]
       end
 
       def log_unrecognised_request_and_interaction_diff actual_request, interaction_diffs, candidate_interactions
-        @logger.error "No interaction found on #{@name} amongst expected requests \"#{candidate_interactions.map(&:description).join(', ')}\""
+        @logger.error "No interaction found on #{@name} for #{actual_request.method_and_path}"
         @logger.error 'Interaction diffs for that route:'
         @logger.ap(interaction_diffs, :error)        
       end

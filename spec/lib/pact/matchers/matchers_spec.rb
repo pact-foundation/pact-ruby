@@ -1,6 +1,4 @@
 require 'spec_helper'
-require 'pact/term'
-require 'pact/something_like'
 require 'pact/matchers'
 
 describe Pact::Matchers do

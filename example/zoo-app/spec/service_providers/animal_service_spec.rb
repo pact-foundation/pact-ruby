@@ -73,7 +73,7 @@ module ZooApp
 
         before do
           animal_service.
-            given("there is an alligator named Mary").
+            given("there is not an alligator named Mary").
               upon_receiving("a request for alligator Mary").
                 with({ method: :get, path: '/alligators/Mary', :headers => {'Accept' => 'application/json'} }).
                   will_respond_with({

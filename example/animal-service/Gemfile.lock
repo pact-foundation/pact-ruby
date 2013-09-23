@@ -27,7 +27,7 @@ GEM
       multi_xml (>= 0.5.2)
     json (1.6.8)
     method_source (0.8.2)
-    multi_json (1.7.9)
+    multi_json (1.8.0)
     multi_xml (0.5.5)
     pry (0.9.12.2)
       coderay (~> 1.0.5)

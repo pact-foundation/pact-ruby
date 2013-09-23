@@ -63,11 +63,9 @@
         "headers": {
           "Content-Type": "application/json"
         },
-        "body": [
-          {
-            "name": "Mary"
-          }
-        ]
+        "body": {
+          "name": "Mary"
+        }
       },
       "provider_state": "there is an alligator named Mary"
     },
@@ -90,11 +88,28 @@
         }
       },
       "provider_state": "an error has occurred"
+    },
+    {
+      "description": "a request for alligator Mary",
+      "request": {
+        "method": "get",
+        "path": "/alligators/Mary",
+        "headers": {
+          "Accept": "application/json"
+        }
+      },
+      "response": {
+        "status": 404,
+        "headers": {
+          "Content-Type": "application/json"
+        }
+      },
+      "provider_state": "there is not an alligator named Mary"
     }
   ],
   "metadata": {
     "pact_gem": {
-      "version": "0.1.37"
+      "version": "1.0.9"
     }
   }
 }

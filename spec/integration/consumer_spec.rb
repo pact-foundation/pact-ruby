@@ -5,7 +5,7 @@ require 'pact/consumer/rspec'
 describe "A service consumer side of a pact", :pact => true  do
 
   context "with more than one matching interaction found" do
-    let(:expected_response) do 
+    let(:expected_response) do
       {"message"=>"Multiple interaction found for GET /path", "matching_interactions"=>[{"description"=>"a request", "request"=>{"method"=>"get", "path"=>"/path", "body"=>{"a"=>"some body"}, "headers"=>{"Content-Type"=>"application/json"}}}, {"description"=>"an identical request", "request"=>{"method"=>"get", "path"=>"/path", "body"=>{"a"=>"some body"}, "headers"=>{"Content-Type"=>"application/json"}}}]}
     end
 
@@ -48,20 +48,20 @@ describe "A service consumer side of a pact", :pact => true  do
 
   context "with no matching interaction found" do
 
-    let(:expected_response) do 
+    let(:expected_response) do
       {
-        "message"=>"No interaction found for GET /path", 
+        "message"=>"No interaction found for GET /path",
         "interaction_diffs"=>[{
           "description" => "a request that will not be properly matched",
           "provider_state" => "something",
           "body"=>{
             "a"=>{
-              "expected"=>"some body", 
+              "expected"=>"some body",
               "actual"=>"not matching body"
             }
           }
         }]
-      } 
+      }
     end
 
     it "returns an error" do
@@ -132,7 +132,7 @@ describe "A service consumer side of a pact", :pact => true  do
     before do
       Pact.clear_configuration
 
-      Pact.service_consumer "Consumer" do | config |
+      Pact.service_consumer "Consumer" do
         has_pact_with "Zebra Service" do
           mock_service :zebra_service do
             verify true

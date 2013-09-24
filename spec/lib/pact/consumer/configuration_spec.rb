@@ -9,17 +9,6 @@ module Pact::Consumer::Configuration
          Pact::Consumer::AppManager.instance.stub(:register_mock_service_for)
       end
 
-      describe "configure" do
-         it "should allow calling other methods in scope" do
-            def my_app
-               'blah'
-            end
-            Pact.service_consumer 'My Consumer' do
-               app my_app
-            end
-         end
-      end
-
       describe "configure_consumer_contract_builder" do
          let(:consumer_name) {'consumer'}
          subject {

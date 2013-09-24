@@ -12,6 +12,10 @@ module Pact
         raise response.body unless response.is_a? Net::HTTPSuccess
       end
 
+      def log msg
+        http.request_get("/log?msg=#{URI.encode(msg)}", {'X-Pact' => 'true'})
+      end
+
       def wait_for_interactions wait_max_seconds, poll_interval
         wait_until_true(wait_max_seconds, poll_interval) do
           response = http.request_get("/number_of_missing_interactions")

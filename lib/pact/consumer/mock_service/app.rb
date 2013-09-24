@@ -11,6 +11,7 @@ require 'pact/consumer/mock_service/interaction_post'
 require 'pact/consumer/mock_service/interaction_replay'
 require 'pact/consumer/mock_service/missing_interactions_get'
 require 'pact/consumer/mock_service/verification_get'
+require 'pact/consumer/mock_service/log_get'
 
 AwesomePrint.defaults = {
   indent: -2,
@@ -43,6 +44,7 @@ module Pact
           VerificationGet.new(@name, @logger, log_description, interaction_list),
           InteractionPost.new(@name, @logger, interaction_list),
           InteractionDelete.new(@name, @logger, interaction_list),
+          LogGet.new(@name, @logger),
           InteractionReplay.new(@name, @logger, interaction_list)
         ]
       end

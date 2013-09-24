@@ -33,4 +33,5 @@ Gem::Specification.new do |gem|
   gem.add_development_dependency 'pry'
   gem.add_development_dependency 'fakefs', '~> 0.4'
   gem.add_development_dependency 'hashie', '~> 2.0'
+  gem.add_development_dependency 'rspec-fire'
 end

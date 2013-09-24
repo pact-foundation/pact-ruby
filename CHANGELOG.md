@@ -15,8 +15,9 @@
 * Moving request file into consumer_contract folder. [Beth Skurrie, 7 days ago]
 * Symbolizing keys so from_hash does not have to duplicate so much of the constructor methods. Service provider is now mandatory. [Beth Skurrie, 7 days ago]
 * Removed Hashie from run time dependencies. [Beth Skurrie, 7 days ago]
-* Starting to clean up mock service. Adding integration tests for failure scenarios. (Beth Skurrie, 7 days ago]
+* Starting to clean up mock service. Adding integration tests for failure scenarios. [Beth Skurrie, 7 days ago]
 * Added RSpec fire to ensure stubbed methods exist. Pulled the recreation of a repayable request from an expected request out of the TestHelper into its own class. [Beth Skurrie, 7 days ago]
+* Fixed problem where methods in previous scope could not be accessed by the DSL delegator [Beth Skurrie]
 
 ### 1.0.9 (16 September 2013)
 

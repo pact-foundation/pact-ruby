@@ -1,3 +1,23 @@
+### 1.0.10 (24 September 2014)
+* Removing unused requires [Beth Skurrie, 20 hours ago]
+* Adding example changes [Beth Skurrie, 20 hours ago]
+* Cleaning up provider configuration DSL. [Beth Skurrie, 6 days ago]
+* Cleaned up consumer configuration DSL. [Beth Skurrie, 6 days ago]
+* Splitting MockService request handlers into their own separate files. Divide and conquer... [Beth Skurrie, 6 days ago]
+* Improving logging in mock service. [Beth Skurrie, 6 days ago]
+* Cleaned up interaction list test. [Beth Skurrie, 6 days ago]
+* Added better messages for matching when arrays are of different lengths. [Beth Skurrie, 6 days ago]
+* Refactoring the Request world. Put each sub class of Request into it's relevant module. [Beth Skurrie, 6 days ago]
+* Renaming request.match to request.matches? [Beth Skurrie, 7 days ago]
+* Commenting and cleaning code. [Beth Skurrie, 7 days ago]
+* Removed horrible as_json_for_mock_service method and created new class to do the same thing. [Beth Skurrie, 7 days ago]
+* Moving rake task files into tasks directory. [Beth Skurrie, 7 days ago]
+* Moving request file into consumer_contract folder. [Beth Skurrie, 7 days ago]
+* Symbolizing keys so from_hash does not have to duplicate so much of the constructor methods. Service provider is now mandatory. [Beth Skurrie, 7 days ago]
+* Removed Hashie from run time dependencies. [Beth Skurrie, 7 days ago]
+* Starting to clean up mock service. Adding integration tests for failure scenarios. (Beth Skurrie, 7 days ago]
+* Added RSpec fire to ensure stubbed methods exist. Pulled the recreation of a repayable request from an expected request out of the TestHelper into its own class. [Beth Skurrie, 7 days ago]
+
 ### 1.0.9 (16 September 2013)
 
 * Fixing pretty generate of json [Beth Skurrie]

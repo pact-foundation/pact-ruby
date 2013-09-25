@@ -1,3 +1,6 @@
+### 1.0.11 (26 September 2014)
+* Added X-Pact-Mock-Service headers to all mock service administration requests, reducing the risk of the client project making a request that is unintentionally intercepted by the mock service administration handlers. [Beth Skurrie]
+
 ### 1.0.10 (24 September 2014)
 * Removing unused requires [Beth Skurrie, 20 hours ago]
 * Adding example changes [Beth Skurrie, 20 hours ago]

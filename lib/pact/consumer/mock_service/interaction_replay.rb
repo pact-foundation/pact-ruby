@@ -8,6 +8,8 @@ module Pact
       include Pact::Matchers
       include RackRequestHelper
 
+      attr_accessor :name, :logger, :interaction_list
+
       def initialize name, logger, interaction_list
         @name = name
         @logger = logger
@@ -26,9 +28,9 @@ module Pact
 
       def find_response request_hash
         actual_request = Request::Actual.from_hash(request_hash)
-        @logger.info "#{@name} received request #{actual_request.method_and_path}"
-        @logger.ap actual_request.as_json
-        candidate_interactions = @interaction_list.find_candidate_interactions actual_request
+        logger.info "#{name} received request #{actual_request.method_and_path}"
+        logger.ap actual_request.as_json
+        candidate_interactions = interaction_list.find_candidate_interactions actual_request
         matching_interactions = find_matching_interactions actual_request, from: candidate_interactions
 
         case matching_interactions.size
@@ -43,28 +45,28 @@ module Pact
         candidate_interactions = opts.fetch(:from)
         candidate_interactions.select do | candidate_interaction |
           candidate_interaction.request.matches? actual_request
-        end        
-      end 
+        end
+      end
 
       def handle_matched_interaction interaction
-        @interaction_list.register_matched interaction
+        interaction_list.register_matched interaction
         response = response_from(interaction.response)
-        @logger.info "Found matching response on #{@name}:"
-        @logger.ap interaction.response
-        response        
+        logger.info "Found matching response on #{name}:"
+        logger.ap interaction.response
+        response
       end
 
       def multiple_interactions_found_response actual_request, matching_interactions
         response = {
-          message: "Multiple interaction found for #{actual_request.method_and_path}", 
+          message: "Multiple interaction found for #{actual_request.method_and_path}",
           matching_interactions:  matching_interactions.collect{ | interaction | request_summary_for(interaction) }
         }
         [500, {'Content-Type' => 'application/json'}, [response.to_json]]
       end
 
       def handle_more_than_one_matching_interaction actual_request, matching_interactions
-        @logger.error "Multiple interactions found on #{@name}:"
-        @logger.ap matching_interactions.collect(&:as_json)
+        logger.error "Multiple interactions found on #{name}:"
+        logger.ap matching_interactions.collect(&:as_json)
         multiple_interactions_found_response actual_request, matching_interactions
       end
 
@@ -72,7 +74,7 @@ module Pact
         candidate_interactions.collect do | candidate_interaction |
           diff = candidate_interaction.request.difference(actual_request)
           diff_summary_for candidate_interaction, diff
-        end        
+        end
       end
 
       def diff_summary_for interaction, diff
@@ -90,20 +92,20 @@ module Pact
 
       def unrecognised_request_response actual_request, interaction_diffs
         response = {
-          message: "No interaction found for #{actual_request.method_and_path}", 
+          message: "No interaction found for #{actual_request.method_and_path}",
           interaction_diffs:  interaction_diffs
         }
         [500, {'Content-Type' => 'application/json'}, [response.to_json]]
       end
 
       def log_unrecognised_request_and_interaction_diff actual_request, interaction_diffs, candidate_interactions
-        @logger.error "No interaction found on #{@name} for #{actual_request.method_and_path}"
-        @logger.error 'Interaction diffs for that route:'
-        @logger.ap(interaction_diffs, :error)        
+        logger.error "No interaction found on #{name} for #{actual_request.method_and_path}"
+        logger.error 'Interaction diffs for that route:'
+        logger.ap(interaction_diffs, :error)
       end
 
       def handle_unrecognised_request actual_request, candidate_interactions
-        @interaction_list.register_unexpected_request actual_request
+        interaction_list.register_unexpected_request actual_request
         interaction_diffs = interaction_diffs(actual_request, candidate_interactions)
         log_unrecognised_request_and_interaction_diff actual_request, interaction_diffs, candidate_interactions
         unrecognised_request_response actual_request, interaction_diffs
@@ -119,7 +121,7 @@ module Pact
       end
 
       def logger_info_ap msg
-        @logger.info msg
+        logger.info msg
       end
     end
   end

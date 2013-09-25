@@ -83,7 +83,7 @@ module Pact
           lower_case_name.gsub('_service', '_mock_service')
         else
           lower_case_name + '_mock_service'
-        end        
+        end
       end
 
       def app_registrations

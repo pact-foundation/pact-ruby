@@ -1,22 +1,22 @@
+require 'pact/consumer/mock_service/mock_service_administration_endpoint'
+
 module Pact
   module Consumer
-    class LogGet
+    class LogGet < MockServiceAdministrationEndpoint
 
       include RackRequestHelper
 
-      def initialize name, logger
-        @name = name
-        @logger = logger
+      def request_path
+        '/log'
       end
 
-      def match? env
-        headers_from(env)['X-Pact'] &&
-        env['REQUEST_PATH'].start_with?('/log') &&
-          env['REQUEST_METHOD'] == 'GET'
+      def request_method
+        'GET'
       end
+
 
       def respond env
-        @logger.info "Log message from client - #{message(env)}"
+        logger.info "Debug message from client - #{message(env)}"
         [200, {}, []]
       end
 

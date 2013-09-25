@@ -1,23 +1,29 @@
+require 'pact/consumer/mock_service/mock_service_administration_endpoint'
+
 module Pact
   module Consumer
-    class InteractionPost
+    class InteractionPost < MockServiceAdministrationEndpoint
+
+      attr_accessor :interaction_list
 
       def initialize name, logger, interaction_list
-        @name = name
-        @logger = logger
+        super name, logger
         @interaction_list = interaction_list
       end
 
-      def match? env
-        env['REQUEST_PATH'] == '/interactions' &&
-          env['REQUEST_METHOD'] == 'POST'
+      def request_path
+        '/interactions'
+      end
+
+      def request_method
+        'POST'
       end
 
       def respond env
         interaction = Interaction.from_hash(JSON.load(env['rack.input'].string))
-        @interaction_list.add interaction
-        @logger.info "Registered expected interaction #{interaction.request.method_and_path} for #{@name}"
-        @logger.ap interaction.as_json
+        interaction_list.add interaction
+        logger.info "Registered expected interaction #{interaction.request.method_and_path} for #{name}"
+        logger.ap interaction.as_json
         [200, {}, ['Added interactions']]
       end
     end

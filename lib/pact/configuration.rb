@@ -8,11 +8,26 @@ module Pact
     attr_accessor :log_dir
     attr_accessor :logger
     attr_accessor :tmp_dir
-    attr_accessor :pactfile_write_mode
     attr_accessor :reports_dir
+    attr_writer :pactfile_write_mode
 
     def log_path
       log_dir + "/pact_gem.log"
+    end
+
+    def pactfile_write_mode
+      if @pactfile_write_mode == :smart
+        is_rake_running? ? :overwrite : :update
+      else
+        @pactfile_write_mode
+      end
+    end
+
+    private
+
+    #Would love a better way of determining this! It sure won't work on windows.
+    def is_rake_running?
+      `ps -ef | grep rake | grep #{Process.ppid} | grep -v 'grep'`.size > 0
     end
   end
 
@@ -37,14 +52,9 @@ module Pact
     c.tmp_dir = File.expand_path('./tmp/pacts')
     c.log_dir = default_log_dir
     c.logger = default_logger c.log_path
-    c.pactfile_write_mode = is_rake_running? ? :overwrite : :update
+    c.pactfile_write_mode = :overwrite
     c.reports_dir = File.expand_path('./reports/pacts')
     c
-  end
-
-  #Would love a better way of determining this! It sure won't work on windows.
-  def self.is_rake_running?
-    `ps -ef | grep rake | grep #{Process.ppid} | grep -v 'grep'`.size > 0
   end
 
   def self.default_log_dir

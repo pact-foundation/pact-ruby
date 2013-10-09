@@ -3,9 +3,7 @@
 Define a pact between service consumers and providers.
 
 
-Pact provides an RSpec DSL for service consumers to define the request they will make to a service service provider and the
-response they expect back. This expectation is used in the consumers specs to provide a mock service provider, and is also
-played back in the service provider specs to ensure the service provider actually does provide the response the consumer expects.
+Pact provides an RSpec DSL for service consumers to define the request they will make to a service service provider and the response they expect back. This expectation is used in the consumers specs to provide a mock service provider, and is also played back in the service provider specs to ensure the service provider actually does provide the response the consumer expects.
 
 This allows you to test both sides of an integration point using fast unit tests.
 
@@ -25,9 +23,7 @@ Put it in your Gemfile. You know how.
 
 ## Usage
 
-### Service Consumer project
-
-#### Configuration
+### Configuration
 
 ```ruby
 Pact.configure do | config |
@@ -35,68 +31,73 @@ Pact.configure do | config |
   config.log_dir = "???" # Optional, default is ./log
   config.logger = "??" # Optional, defaults to a file logger to the configured log_dir.
   config.logger.level = Logger::DEBUG #By default this is INFO, bump this up to debug for more detailed logs
-  # Optional.
-  # The default pactfile_write_mode is "defined?(Rake) ? :overwrite : :update"
-  # This allows it to create a clean file when running rake, but only update the executed interactions when running a specific test using "rspec spec/...".
-  # This is the recommended setting.
-  config.pactfile_write_mode = :ovewrite / :update
+  config.pactfile_write_mode = :ovewrite / :update / :smart # Optional. The default pactfile_write_mode is :overwrite. See notes in Advanced section for further information.
 end
 ```
 
-#### Create a Consumer (Driven) Contract
+### Service Consumer project
+
+#### Create a Consumer Driven Contract (pact file) using the spec for your client class
 
 ```ruby
-require 'pact/consumer/rspec'
 
-class SomeServiceClient
+# Imagine a service provider client class that looks something like this
+
+class MyServiceProviderClient
   include HTTParty
-  # Load your base_uri from a stub-able source
-  base_uri App.configuration.some_service_base_uri
+  base_uri 'http://my-service'
 
-  def get_something
-    JSON.parse(self.class.get("/something").body)
+  def get_text_from_something
+    JSON.parse(self.class.get("/something").body)['text']
   end
 end
 
-Pact.service_consumer "My Consumer" do
-  has_pact_with "My Provider" do
+# The following code creates a service on localhost:1234 which will respond to your application's queries
+# over HTTP as if it were the real "My Service Provider" app. It also creats a mock service provider object
+# which you will use to set up your expectations. The method name to access the mock service provider
+# will be what ever name you give as the service argument - in this case "my_service_provider"
+
+require 'pact/consumer/rspec'
+
+Pact.service_consumer "My Service Consumer" do
+  has_pact_with "My Service Provider" do
     mock_service :my_service_provider do
       port 1234
     end
   end
 end
 
-# The following block creates a service on localhost:1234 which will respond to your application's queries
-# over HTTP as if it were the real "My Provider" app. It also creats a mock service provider object
-# which you will use to set up your expectations. The method name to access the mock service provider
-# will be what ever name you give as the service argument - in this case "my_service_provider"
-
-
 # Use the :pact => true describe metadata to include all the pact generation functionality in your spec.
 
-describe "a pact with My Provider", :pact => true do
+describe MyServiceProviderClient, :pact => true do
 
   before do
     # Configure your client to point to the stub service on localhost using the port you have specified
-    Application.configuration.stub(:some_service_base_uri).and_return('localhost:1234')
+    MyServiceProviderClient.base_uri 'localhost:1234'
   end
 
-  it "returns something when requested" do
-    my_service_provider.
-      given("something exists").
-        upon_receiving("a request for something").
-          with({ method: :get, path: '/something' }).
-            will_respond_with({
-              status: 200,
-              headers: { 'Content-Type' => 'application/json' },
-              body: {something: 'A thing!', something_else: 'Woot!'}
-            })
-    # Use your service's client to make the request, rather than hand crafting a HTTP request,
-    # so that you can be sure that the request that you expect to
-    # be constructed is actually constructed by your client.
-    # Do a quick sanity test to ensure client passes back the response properly.
-    expect(SomeServiceClient.get_something).to eql({something: 'A thing!'})
+  describe "get_text_from_something" do
+    before do
+      my_service_provider.
+        .given("something exists")
+        .upon_receiving("a request for something")
+        .with( method: :get, path: '/something' )
+        .will_respond_with(
+          status: 200,
+          headers: { 'Content-Type' => 'application/json' },
+          body: {text: 'A thing!', something_else: 'Woot!'}
+        )
+    end
+
+    it "returns the text from something" do
+      # Use your service's client to make the request, rather than hand crafting a HTTP request,
+      # so that you can be sure that the request that will be recorded in the pact file
+      # is one that is actually made by your app.
+      expect(MyServiceProviderClient.get_text_from_something).to eql("A thing!")
+    end
+
   end
+
 end
 
 ```
@@ -123,13 +124,13 @@ Create a `pact_helper.rb` in your service provider project. The file must be cal
 require 'my_app' # Require the boot files for your app
 require 'provider_states_for_my_consumer' # See next section on setting up provider states
 
-Pact.service_provider "My Provider" do
+Pact.service_provider "My Service Provider" do
   app { MyApp.new }
 
-  honours_pact_with 'My Consumer' do
+  honours_pact_with 'My Service Consumer' do
     # This example points to a local file, however, on a real project with a continuous
-    # integration box, you could publish your pacts as artifacts,
-    # and point this to the pact published by the last successful build.
+    # integration box, you would publish your pacts as artifacts,
+    # and point the pact_uri to the pact published by the last successful build.
     pact_uri '../path-to-your-consumer-project/specs/pacts/my_consumer-my_provider.json'
   end
 end
@@ -164,7 +165,7 @@ To define service provider states that create the right data for "a thing exists
 # for it to correctly find these provider states.
 # Make sure the provider states are included in or required by your pact_helper.rb file.
 
-Pact.provider_states_for 'My Consumer' do
+Pact.provider_states_for 'My Service Consumer' do
   provider_state "a thing exists" do
     set_up do
       # Create a thing here using your factory of choice
@@ -189,7 +190,8 @@ If a state should be used for all consumers, the top level Pact.with_consumer ca
 #### Verify that the service provider honours the pact
 
 ```ruby
-  #In your Rakefile
+  # In your Rakefile
+  # If the pact gem is in the test/development section of your Gemfile, you may want to put an env check around this so it doesn't load the pact tasks in prod.
   require 'pact/tasks'
 ```
 
@@ -230,6 +232,12 @@ A pact service can be run locally and is really useful for debugging purposes.
 
 The service prints messages it recieves to stdout which can be really useful
 when diagnosing issues with pacts.
+
+## Advanced
+
+### Notes on pact file write mode
+
+By default, the pact file will be overwritten (started from scratch) every time any rspec runs any spec using pacts. This means that if there are interactions that haven't been executed in the most recent rspec run, they are effectively removed from the pact file. If you have long running pact specs (e.g. they are generated using the browser with Capybara) and you are developing both consumer and provider in parallel, or trying to fix a broken interaction, it can be tedius to run all the specs at once. In this scenario, you can set the pactfile_write_mode to :update. This will keep all existing interactions, and update only the changed ones, identified by description and provider state. The down side of this is that if either of those fields change, the old interactions will not be removed from the pact file. As a middle path, you can set pactfile_write_mode to :smart. This will use :overwrite mode when running rake (as determined by a call to system using 'ps') and :update when running an individual spec.
 
 ## TODO
 

@@ -1,3 +1,7 @@
+### Unreleased
+
+* Changing default pactfile_write_mode to :overwrite, and adding :smart option to dynamically determine whether rake is running. [Beth Skurrie]
+
 ### 1.0.11 (26 September 2014)
 * Added X-Pact-Mock-Service headers to all mock service administration requests, reducing the risk of the client project making a request that is unintentionally intercepted by the mock service administration handlers. [Beth Skurrie]
 

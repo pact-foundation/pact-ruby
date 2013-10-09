@@ -1,7 +1,7 @@
 PATH
   remote: .
   specs:
-    pact (1.0.11)
+    pact (1.0.12)
       awesome_print (~> 1.1.0)
       find_a_port (~> 1.0.1)
       json
@@ -52,10 +52,10 @@ GEM
     rspec-mocks (2.14.3)
     safe_yaml (0.9.5)
     slop (3.4.6)
-    thin (1.5.1)
+    thin (1.6.0)
       daemons (>= 1.0.9)
-      eventmachine (>= 0.12.6)
-      rack (>= 1.0.0)
+      eventmachine (>= 1.0.0)
+      rack (>= 1.5.0)
     thor (0.18.1)
     webmock (1.9.3)
       addressable (>= 2.2.7)

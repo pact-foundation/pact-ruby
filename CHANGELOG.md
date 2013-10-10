@@ -1,3 +1,7 @@
+### 1.0.13 (10 October 2013)
+
+* Fixed bug deserialising Pact::SomethingLike [Beth Skurrie]
+
 ### 1.0.12 (9 October 2013)
 
 * Changing default pactfile_write_mode to :overwrite, and adding :smart option to dynamically determine whether rake is running. [Beth Skurrie]

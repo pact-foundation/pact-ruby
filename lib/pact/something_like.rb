@@ -25,7 +25,15 @@ module Pact
     end
 
     def self.json_create hash
-      new(symbolize_keys(hash))
+      new(symbolize_keys(hash)[:contents])
+    end
+
+    def eq other
+      self == other
+    end
+
+    def == other
+      other.is_a?(SomethingLike) && other.contents == self.contents
     end
 
     def generate

@@ -47,7 +47,15 @@ module Pact
           error_msg = <<-eos
 Could not find a provider state named \"#{provider_state_name}\"#{extra}.
 Have you required the provider states file for this consumer in your pact_helper.rb?
-Check the name in the Pact.provider_states_for definition is exactly \"#{consumer}\"
+If you have not yet defined a provider state for \"#{provider_state_name}\", here is a template:
+
+Pact.provider_states_for \"#{consumer}\" do
+  provider_state \"#{provider_state_name}\" do
+    set_up do
+      # Your set up code goes here
+    end
+  end
+end
 eos
           raise error_msg
         end

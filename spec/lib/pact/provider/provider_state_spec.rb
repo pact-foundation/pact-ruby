@@ -18,6 +18,7 @@ module Pact
       end
 
       Pact.provider_state 'some alligators' do
+        no_op
       end
 
       before do
@@ -52,6 +53,43 @@ module Pact
           end
         end
       end
+    end
+
+    describe 'no_op' do
+      context "when a no_op is defined instead of a set_up or tear_down" do
+        it "treats set_up and tear_down as empty blocks" do
+          Pact.provider_state 'with_no_op' do
+            no_op
+          end
+          ProviderState.get('with_no_op').set_up
+          ProviderState.get('with_no_op').tear_down
+        end
+      end
+      context "when a no_op is defined with a set_up" do
+        it "raises an error" do
+          expect do
+            Pact.provider_state 'with_no_op_and_set_up' do
+              no_op
+              set_up do
+
+              end
+            end.to raise_error(/Provider state \"with_no_op_and_set_up\" has been defined as a no_op but it also has a set_up block. Please remove one or the other./)
+          end
+        end
+      end
+      context "when a no_op is defined with a tear_down" do
+        it "raises an error" do
+          expect do
+            Pact.provider_state 'with_no_op_and_set_up' do
+              no_op
+              tear_down do
+
+              end
+            end.to raise_error(/Provider state \"with_no_op_and_set_up\" has been defined as a no_op but it also has a tear_down block. Please remove one or the other./)
+          end
+        end
+      end
+
     end
 
 
@@ -96,6 +134,26 @@ module Pact
             ProviderState.get('the weather is sunny', :for => 'a consumer').set_up
             NAMESPACED_MESSAGES.should eq ['sunny!']
           end
+        end
+      end
+    end
+
+    describe "invalid provider state" do
+      context "when no set_up or tear_down is provided" do
+        it "raises an error to prevent someone forgetting about the set_up and putting the set_up code directly in the provider_state block and wasting 20 minutes trying to work out why their provider states aren't working properly" do
+          expect do
+            Pact.provider_state 'invalid' do
+            end
+          end.to raise_error(/Please provide a set_up or tear_down block for provider state \"invalid\"/)
+        end
+      end
+      context "when a no_op is defined" do
+        it "does not raise an error" do
+          expect do
+            Pact.provider_state 'valid' do
+              no_op
+            end
+          end.not_to raise_error
         end
       end
     end

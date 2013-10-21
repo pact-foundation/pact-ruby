@@ -1,3 +1,15 @@
+Do this to generate your change history
+
+    git log --date=relative --pretty=format:'  * %h - %s (%an, %ad)'
+
+### 1.0.14 (22 October 2013)
+
+* 406e746 - Added a template for the provider state when no provider state is found (Beth, 9 minutes ago)
+* 1f58be8 - Adding error messages when set_up or tear_down are not defined, and added no_op as a way to avoid having to use an empty set_up block when there is no data to set up (Beth)
+* 78d3999 - Merge pull request #2 from stuliston/json_warning_minor_refactor (Ronald Holshausen, 18 hours ago)
+* be4a466 - Altering JsonWarning so that it only warns once. Added spec to confirm that's the case. (Stuart Liston, 21 hours ago)
+* 3b11b42 - Fixing the issue where a method defined in global scope could not be accessed in the DSL delegation code (Beth, 11 days ago)
+
 ### 1.0.13 (10 October 2013)
 
 * Fixed bug deserialising Pact::SomethingLike [Beth Skurrie]

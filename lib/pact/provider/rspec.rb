@@ -89,7 +89,6 @@ module Pact
 
             if response['body']
               it "has a matching body" do
-                logger.debug "Response body is #{last_response.body}"
                 expect(parse_body_from_response(last_response)).to match_term response['body']
               end
             end

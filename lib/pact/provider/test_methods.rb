@@ -20,6 +20,7 @@ module Pact
       end
 
       def parse_body_from_response rack_response
+        logger.debug "Unparsed response body is #{last_response.body}"
         case rack_response.headers['Content-Type']
         when /json/
           JSON.load(rack_response.body)

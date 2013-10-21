@@ -254,6 +254,7 @@ Short term:
 - Make service provider state lookup try consumer defined state first, then fall back to global one (Done)
 - Put service provider and consumer name into pact file (Done)
 - Remove consumer name from the rake task, as it should now be able to be determined from the pact file. (Done)
+- FIX EXAMPLE!!!
 - Provide more flexible matching (eg the keys should match, and the classes of the values should match, but the values of each key do not need to be equal). This is to make the pact verification less brittle.
 
 Long term:

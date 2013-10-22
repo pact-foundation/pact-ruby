@@ -147,14 +147,14 @@ For example, some code that creates the pact in a consumer project might look li
 my_service.
    given("a thing exists").
      upon_receiving("a request for a thing").
-        with({method: 'get', path: '/thing'}).
-          will_respond_with({status: 200, :body => {thing: "yay!"} })
+        with(method: 'get', path: '/thing').
+          will_respond_with(status: 200, :body => {thing: "yay!"} )
 
 my_service.
   given("a thing does not exist").
    upon_receiving("a request for a thing").
-      with({method: 'get', path: '/thing'}).
-        will_respond_with({status: 404, :body => {error: "There is no thing :("} })
+      with(method: 'get', path: '/thing').
+        will_respond_with(status: 404, :body => {error: "There is no thing :("} )
 ```
 
 To define service provider states that create the right data for "a thing exists" and "a thing does not exist", write the following in the service provider project.

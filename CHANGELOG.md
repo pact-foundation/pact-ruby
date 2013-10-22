@@ -2,6 +2,13 @@ Do this to generate your change history
 
     git log --date=relative --pretty=format:'  * %h - %s (%an, %ad)'
 
+### 1.0.15 (22 October 2013)
+
+ * 6800a58 - Updating README with latest TODOs (Beth, 2 hours ago)
+ * 99a6827 - Improving logging in pact:verify. Fixing bug where Pact log level was ignored. (Beth, 3 hours ago)
+ * 5434f54 - Updating README with best practice and information on the :pact => :verify metadata. (Beth, 4 hours ago)
+ * 16dd2be - Adding :pact => :verify to pact:verify rspec examples for https://github.com/uglyog/pact/issues/3 (Beth, 5 hours ago)
+
 ### 1.0.14 (22 October 2013)
 
 * 406e746 - Added a template for the provider state when no provider state is found (Beth, 9 minutes ago)

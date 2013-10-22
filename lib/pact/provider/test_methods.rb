@@ -15,12 +15,14 @@ module Pact
         request = Request::Replayable.new(interaction.request)
         args = [request.path, request.body, request.headers]
 
-        logger.debug "Sending #{request.method} with #{args}"
-        self.send(request.method, *args)
+        logger.info "Sending #{request.method} request to path: \"#{request.path}\" with headers: #{request.headers}, see debug logs for body"
+        logger.debug "body :#{request.body}"
+        response = self.send(request.method, *args)
+        logger.info "Received response with status: #{response.status}, headers: #{response.headers}, see debug logs for body"
+        logger.debug "body: #{response.body}"
       end
 
       def parse_body_from_response rack_response
-        logger.debug "Unparsed response body is #{last_response.body}"
         case rack_response.headers['Content-Type']
         when /json/
           JSON.load(rack_response.body)

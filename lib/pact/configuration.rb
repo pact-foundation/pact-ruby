@@ -12,7 +12,7 @@ module Pact
     attr_writer :pactfile_write_mode
 
     def log_path
-      log_dir + "/pact_gem.log"
+      log_dir + "/pact.log"
     end
 
     def pactfile_write_mode

@@ -24,16 +24,7 @@ module Pact
     class MockService
 
       def initialize options = {}
-        options = {log_file: STDOUT}.merge options
-        log_stream = options[:log_file]
-        @logger = Logger.new log_stream
-
-        log_description = if log_stream.is_a? File
-           File.absolute_path(log_stream).gsub(Dir.pwd + "/", '')
-        else
-          "standard out/err"
-        end
-
+        log_description = configure_logger options
         interaction_list = InteractionList.new
 
         @name = options.fetch(:name, "MockService")
@@ -45,6 +36,19 @@ module Pact
           LogGet.new(@name, @logger),
           InteractionReplay.new(@name, @logger, interaction_list)
         ]
+      end
+
+      def configure_logger options
+        options = {log_file: STDOUT}.merge options
+        log_stream = options[:log_file]
+        @logger = Logger.new log_stream
+        @logger.level = Pact.configuration.logger.level
+
+        if log_stream.is_a? File
+           File.absolute_path(log_stream).gsub(Dir.pwd + "/", '')
+        else
+          "standard out/err"
+        end
       end
 
       def to_s

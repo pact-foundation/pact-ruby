@@ -47,10 +47,24 @@ class MyServiceProviderClient
   include HTTParty
   base_uri 'http://my-service'
 
-  def get_text_from_something
-    JSON.parse(self.class.get("/something").body)['text']
+  def get_something
+    name = JSON.parse(self.class.get("/something").body)['name']
+    Something.new(name)
   end
 end
+
+class Something
+  attr_reader :name
+
+  def intialize name
+    @name = name
+  end
+
+  def == other
+    other.is_a?(Something) && other.name == name
+  end
+end
+
 
 # The following code creates a service on localhost:1234 which will respond to your application's queries
 # over HTTP as if it were the real "My Service Provider" app. It also creats a mock service provider object
@@ -76,7 +90,7 @@ describe MyServiceProviderClient, :pact => true do
     MyServiceProviderClient.base_uri 'localhost:1234'
   end
 
-  describe "get_text_from_something" do
+  describe "get_something" do
     before do
       my_service_provider.
         .given("something exists")
@@ -85,15 +99,12 @@ describe MyServiceProviderClient, :pact => true do
         .will_respond_with(
           status: 200,
           headers: { 'Content-Type' => 'application/json' },
-          body: {text: 'A thing!', something_else: 'Woot!'}
+          body: {name: 'A small something'}
         )
     end
 
-    it "returns the text from something" do
-      # Use your service's client to make the request, rather than hand crafting a HTTP request,
-      # so that you can be sure that the request that will be recorded in the pact file
-      # is one that is actually made by your app.
-      expect(MyServiceProviderClient.get_text_from_something).to eql("A thing!")
+    it "returns a Something" do
+      expect(MyServiceProviderClient.get_something).to eq(Something.new('A small something'))
     end
 
   end

@@ -274,24 +274,13 @@ See https://www.relishapp.com/rspec/rspec-core/docs/hooks/filters for more infor
 ## TODO
 
 Short term:
-- Rename Pact to ConsumerContract (Done)
-- Simplify set up for consumer (Done)
-  - Move server spawning into to the "at" method (Done)
-  - automatically register before and after hooks in consumer (Done)
-- Provide before and after hooks and a place to define the app for Pact configuration in service provider (remove Rspc from interface of Pact setup) (Done)
-  - Set_up for state
-  - Tear_down for state
-  - Before hook for all
-  - After hook for all
-- Make service provider state lookup try consumer defined state first, then fall back to global one (Done)
-- Put service provider and consumer name into pact file (Done)
-- Remove consumer name from the rake task, as it should now be able to be determined from the pact file. (Done)
 - FIX EXAMPLE!!!
-- Provide more flexible matching (eg the keys should match, and the classes of the values should match, but the values of each key do not need to be equal). This is to make the pact verification less brittle.
+- Make a pact-broker to store and return all the pacts, removing dependency on the CI box URLs.
+- Provide a better work around for ActiveSupport JSON rubygems hell.
 
 Long term:
+- Provide more flexible matching (eg the keys should match, and the classes of the values should match, but the values of each key do not need to be equal). This is to make the pact verification less brittle.
 - Decouple Rspec from Pact and make rspec-pact gem for easy integration
-
 
 ## Contributing
 

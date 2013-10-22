@@ -177,9 +177,7 @@ Pact.provider_states_for 'My Service Consumer' do
   end
 
   provider_state "a thing does not exist" do
-    set_up do
-      # Well, probably not much to do here, but you get the picture.
-    end
+    no_op # If there's nothing to do because the state name is more for documentation purposes, you can use no_op to imply this.
   end
 end
 
@@ -225,6 +223,28 @@ end
 The pact.uri may be a local file system path or a remote URL.
 
 
+## Pact best practices
+
+### Ensure all calls to the provider go through your provider client class
+
+Do not hand create any HTTP requests in your consumer app or specs. Testing through your provider client class gives you the assurance that your consumer app will be creating exactly the HTTP requests that you think it should.
+
+### Do not stub your database calls in the provider project
+
+This is the best time for you to test your database integration. If you stub your database calls, you are getting little more assurance that the real end-to-end will work than if you'd used a unit test. It's the appropriate time to incur the overhead of a database call.
+
+### Use factories to create your expected models in your consumer project
+
+Sure, you've checked that your client deserialises the HTTP response into the object you expect, but then you need to make sure in your other tests where you stub your client that you're stubbing it with a valid object. The best way to do this is to use factories for all your tests.
+
+### Publish your pacts as artifacts on your CI machine
+
+Configure the pact_uri in the Pact.service_provider block with the pact artifact URL of your last successful build. This way you're only verifying green builds. No point verifying a broken one.
+(Watch this space - pact-broker coming soon, so we don't have to use messy build box artifact URLs)
+
+
+## Advanced
+
 ### Running a standalone mock server
 A pact service can be run locally and is really useful for debugging purposes.
 
@@ -233,11 +253,23 @@ A pact service can be run locally and is really useful for debugging purposes.
 The service prints messages it recieves to stdout which can be really useful
 when diagnosing issues with pacts.
 
-## Advanced
-
 ### Notes on pact file write mode
 
 By default, the pact file will be overwritten (started from scratch) every time any rspec runs any spec using pacts. This means that if there are interactions that haven't been executed in the most recent rspec run, they are effectively removed from the pact file. If you have long running pact specs (e.g. they are generated using the browser with Capybara) and you are developing both consumer and provider in parallel, or trying to fix a broken interaction, it can be tedius to run all the specs at once. In this scenario, you can set the pactfile_write_mode to :update. This will keep all existing interactions, and update only the changed ones, identified by description and provider state. The down side of this is that if either of those fields change, the old interactions will not be removed from the pact file. As a middle path, you can set pactfile_write_mode to :smart. This will use :overwrite mode when running rake (as determined by a call to system using 'ps') and :update when running an individual spec.
+
+### To use RSpec hooks for pact:verify
+
+The pact:verify RSpec examples have the metadata `{:pact => :verify}` defined. You can add RSpec hooks using a filter as shown here:
+
+```ruby
+RSpec.configure do | config |
+  config.before :each, :pact => :verify do
+    # Your code here
+  end
+end
+```
+
+See https://www.relishapp.com/rspec/rspec-core/docs/hooks/filters for more information.
 
 ## TODO
 

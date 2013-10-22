@@ -53,7 +53,7 @@ module Pact
 
         def describe_interaction interaction, options
 
-          describe description_for(interaction) do
+          describe description_for(interaction), :pact => :verify do
 
             before do
               set_up_provider_state interaction.provider_state, options[:consumer]

@@ -237,6 +237,10 @@ This is the best time for you to test your database integration. If you stub you
 
 Sure, you've checked that your client deserialises the HTTP response into the object you expect, but then you need to make sure in your other tests where you stub your client that you're stubbing it with a valid object. The best way to do this is to use factories for all your tests.
 
+### Add pact:verify to your default rake task
+
+It should run with all your other tests. If an integration is broken, you want to know about it *before* you check in.
+
 ### Publish your pacts as artifacts on your CI machine
 
 Configure the pact_uri in the Pact.service_provider block with the pact artifact URL of your last successful build. This way you're only verifying green builds. No point verifying a broken one.

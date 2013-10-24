@@ -3,6 +3,7 @@ require 'rspec'
 require 'rspec/core'
 require 'rspec/core/formatters/documentation_formatter'
 require 'rspec/core/formatters/json_formatter'
+require 'pact/provider/pact_helper_locator'
 require_relative 'rspec'
 
 
@@ -11,6 +12,11 @@ module Pact
 		class PactSpecRunner
 
 			include Pact::Provider::RSpec::ClassMethods
+
+			SUPPORT_FILE_DEPRECATION_MESSAGE = "The :support_file option is deprecated. " +
+					"The preferred way to specify a support file is to create a pact_helper.rb in one of the following paths: " +
+					Pact::Provider::PactHelperLocater::PACT_HELPER_FILE_PATTERNS.join(", ") +
+					". If you cannot do this, you may use the :pact_helper option in place of the :support_file option."
 
 			attr_reader :spec_definitions
 			attr_reader :options
@@ -31,8 +37,10 @@ module Pact
 			private
 
 			def require_pact_helper spec_definition
-				if spec_definition[:support_file]
-					$stderr.puts "Specifying a support_file is deprecated. Please create a pact_helper.rb instead."
+				if spec_definition[:pact_helper]
+					require spec_definition[:pact_helper]
+				elsif spec_definition[:support_file]
+					$stderr.puts SUPPORT_FILE_DEPRECATION_MESSAGE
 					require spec_definition[:support_file]
 				else
 					require 'pact/provider/client_project_pact_helper'

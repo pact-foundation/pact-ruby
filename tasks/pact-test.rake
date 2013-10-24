@@ -14,7 +14,7 @@ namespace :pact do
 		result = Pact::Provider::PactSpecRunner.new([{ uri: './spec/support/test_app_pass.json' }], silent: silent).run
 		fail 'Expected pact to pass' unless (result == 0)
 
-		result = Pact::Provider::PactSpecRunner.new([{ uri: './spec/support/test_app_fail.json', support_file: './spec/support/pact_helper.rb' }], silent: silent).run
+		result = Pact::Provider::PactSpecRunner.new([{ uri: './spec/support/test_app_fail.json', pact_helper: './spec/support/pact_helper.rb' }], silent: silent).run
 		fail 'Expected pact to fail' if (result == 0)
 
 		expect_to_pass "bundle exec rake pact:verify"

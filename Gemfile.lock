@@ -13,7 +13,6 @@ PATH
 
 GEM
   remote: https://rubygems.org/
-  remote: http://rea-rubygems/
   specs:
     addressable (2.3.5)
     awesome_print (1.1.0)
@@ -25,12 +24,9 @@ GEM
     eventmachine (1.0.3)
     fakefs (0.4.2)
     find_a_port (1.0.1)
-    geminabox-client (0.0.2)
-      multipart-post
     hashie (2.0.5)
     json (1.8.1)
     method_source (0.8.2)
-    multipart-post (1.2.0)
     pry (0.9.12.2)
       coderay (~> 1.0.5)
       method_source (~> 0.8)
@@ -66,7 +62,6 @@ PLATFORMS
 
 DEPENDENCIES
   fakefs (~> 0.4)
-  geminabox-client
   hashie (~> 2.0)
   pact!
   pry

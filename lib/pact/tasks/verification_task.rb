@@ -28,7 +28,6 @@ require 'pact/tasks/task_helper'
 
 =end
 
-
 module Pact
   class VerificationTask < ::Rake::TaskLib
     attr_reader :pact_spec_config
@@ -74,7 +73,8 @@ module Pact
 
           options = {}
           criteria = {}
-          args.each do |key, value|
+          [:description, :provider_state].each  do |key|
+            value = ENV.fetch("PACT_#{key.to_s.upcase}", args[key])
             criteria[key] = Regexp.new(value) unless value.nil?
           end
           options[:criteria] = criteria unless criteria.empty?

@@ -18,7 +18,6 @@ module Bundler
 end
 Bundler::GemHelper.install_tasks
 require 'rspec/core/rake_task'
-require 'geminabox-client'
 
 Dir.glob('lib/tasks/**/*.rake').each { |task| load task }
 Dir.glob('tasks/**/*.rake').each { |task| load task }
@@ -29,5 +28,6 @@ task :default => [:spec, 'pact:tests']
 desc "Release to REA gems host"
 task :publish => :build do
   gem_file = "pkg/pact-#{Pact::VERSION}.gem"
+  require 'geminabox-client'
   Geminabox::Client.new('http://rea-rubygems').upload(gem_file)
 end

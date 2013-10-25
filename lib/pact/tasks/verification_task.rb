@@ -70,11 +70,18 @@ module Pact
     def rake_task
       namespace :pact do
         desc "Verify provider against the consumer pacts for #{name}"
-        task "verify:#{name}" do
+        task "verify:#{name}", :description, :provider_state do |t, args|
+
+          options = {}
+          criteria = {}
+          args.each do |key, value|
+            criteria[key] = Regexp.new(value) unless value.nil?
+          end
+          options[:criteria] = criteria unless criteria.empty?
 
           exit_statuses = pact_spec_config.collect do | config |
             #TODO: Change this to accept the ConsumerContract that is already parsed, so we don't make the same request twice
-            pact_spec_runner = Provider::PactSpecRunner.new([config])
+            pact_spec_runner = Provider::PactSpecRunner.new([config], options)
             exit_status = pact_spec_runner.run
             publish_report config, pact_spec_runner.output, exit_status == 0, 'head', Pact.configuration.reports_dir
             exit_status

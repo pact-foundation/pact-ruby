@@ -21,7 +21,7 @@ module Pact
 
     before do
       VerificationTask.any_instance.stub(:publish_report)
-      Provider::PactSpecRunner.stub(:new).with(consumer_contract).and_return(pact_spec_runner)
+      Provider::PactSpecRunner.stub(:new).with(consumer_contract, {}).and_return(pact_spec_runner)
     end
 
     let(:pact_spec_runner) { double('PactSpecRunner', :run => exit_code, :output => nil)}
@@ -45,7 +45,7 @@ module Pact
     describe 'execute' do
 
 
-      context "with no explict support file " do
+      context "with no explicit support file " do
         it 'verifies the pacts using PactSpecRunner' do
           Rake::Task[@task_name].execute
         end
@@ -55,6 +55,20 @@ module Pact
         let(:consumer_contract) { [ uri: @pact_uri, support_file: @support_file] }
         it 'verifies the pacts using PactSpecRunner' do
           Rake::Task[@task_name_with_explict_support_file].execute
+        end
+      end
+
+      context "with criteria" do
+        it 'passes the criteria to the PactSpecRunner as regexes' do
+          Provider::PactSpecRunner.should_receive(:new).with(
+            consumer_contract, {
+              criteria: {
+                description: /stuff/,
+                producer_state: /things/
+              }
+            }
+          ).and_return(pact_spec_runner)
+          Rake::Task[@task_name].execute(description: 'stuff', producer_state: 'things')
         end
       end
 

@@ -36,8 +36,16 @@ module Pact
         private
 
         def describe_consumer_contract consumer_contract, options
-          consumer_contract.interactions.each do |interaction|
+          consumer_interactions(consumer_contract, options).each do |interaction|
             describe_interaction_with_provider_state interaction, options
+          end
+        end
+
+        def consumer_interactions(consumer_contract, options)
+          if options[:criteria].nil?
+            consumer_contract.interactions
+          else
+            consumer_contract.interactions.select {|interaction| interaction.matches_criteria? options[:criteria] }
           end
         end
 

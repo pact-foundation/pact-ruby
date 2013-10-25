@@ -50,7 +50,11 @@ module Pact
       def initialize_specs
         spec_definitions.each do | spec_definition |
           require_pact_helper spec_definition
-          options = {consumer: spec_definition[:consumer], save_pactfile_to_tmp: true}
+          options = {
+            consumer: spec_definition[:consumer],
+            save_pactfile_to_tmp: true,
+            criteria: @options[:criteria]
+          }
           honour_pactfile spec_definition[:uri], options
         end
       end

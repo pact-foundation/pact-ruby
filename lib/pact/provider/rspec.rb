@@ -22,6 +22,7 @@ module Pact
         include Pact::JsonWarning
 
         def honour_pactfile pactfile_uri, options = {}
+          puts "Filtering specs by: #{options[:criteria]}" if options[:criteria]
           describe "Pact in #{pactfile_uri}" do
             consumer_contract = Pact::ConsumerContract.from_json(read_pact_from(pactfile_uri, options))
             honour_consumer_contract consumer_contract, options
@@ -45,7 +46,7 @@ module Pact
           if options[:criteria].nil?
             consumer_contract.interactions
           else
-            consumer_contract.interactions.select {|interaction| interaction.matches_criteria? options[:criteria] }
+            consumer_contract.find_interactions options[:criteria]
           end
         end
 

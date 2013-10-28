@@ -2,6 +2,19 @@ Do this to generate your change history
 
     git log --date=relative --pretty=format:'  * %h - %s (%an, %ad)'
 
+### 1.10.16 (28 October 2013)
+
+* ce0d102 - Fixing specs after adding pact_helper and changing producer_state to provider_state. There is no producer here any more! Naughty producer. (Beth, 71 seconds ago)
+* 90f7203 - Fixing bug where RSpec world was not cleared between pact:verify tasks. (Beth, 16 minutes ago)
+* b323336 - Fixed bug where pact_helper option was not being passed into the PactSpecRunner from the task configuration (Beth, 4 hours ago)
+* b1e78f5 - Added environment variable support. (Sergei Matheson, 3 days ago)
+* 2b9f39a - Allow match criteria to be passed through to pact:verify tasks on command line (Sergei Matheson, 3 days ago)
+* 2241f29 - Un-deprecating the support_file functionality after having discovered a valid use for it (project that contains two rack apps that have a pact with each other). Renamed op
+* c94fc13 - Updating example provider state (Beth, 4 days ago)
+* 6900f39 - Updating README with better client class example (Beth, 5 days ago)
+* e41f755 - Update README.md (bskurrie, 5 days ago)
+* 2abcce4 - Adding to pact best practices. (Beth, 5 days ago)
+
 ### 1.0.15 (22 October 2013)
 
  * 6800a58 - Updating README with latest TODOs (Beth, 2 hours ago)

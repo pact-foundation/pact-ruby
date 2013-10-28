@@ -1,3 +1,4 @@
+require 'spec_helper'
 require 'pact/provider/rspec'
 require 'pact/consumer_contract'
 require 'features/provider_states/zebras'

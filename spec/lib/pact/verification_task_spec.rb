@@ -4,14 +4,15 @@ require 'pact/tasks/verification_task'
 module Pact
   describe VerificationTask do
     before :all do
-      @support_file = '/custom/path/support_file.rb'
+      @support_file = nil
+      @pact_helper = '/custom/path/support_file.rb'
       @pact_uri = 'http://example.org/pact.json'
       @task_name = 'pact:verify:pact_rake_spec'
       @task_name_with_explict_support_file = 'pact:verify:pact_rake_spec_with_explict_support_file'
       @consumer = 'some-consumer'
 
       VerificationTask.new(:pact_rake_spec_with_explict_support_file) do | pact |
-        pact.uri @pact_uri, support_file: @support_file
+        pact.uri @pact_uri, support_file: @support_file, pact_helper: @pact_helper
       end
 
       VerificationTask.new(:pact_rake_spec) do | pact |
@@ -26,7 +27,7 @@ module Pact
 
     let(:pact_spec_runner) { double('PactSpecRunner', :run => exit_code, :output => nil)}
     let(:exit_code) {0}
-    let(:consumer_contract) { [ uri: @pact_uri, support_file: nil ] }
+    let(:consumer_contract) { [ uri: @pact_uri, support_file: nil, pact_helper: nil ] }
 
 
     describe '.initialize' do
@@ -52,7 +53,7 @@ module Pact
       end
 
       context "with an explict support_file" do
-        let(:consumer_contract) { [ uri: @pact_uri, support_file: @support_file] }
+        let(:consumer_contract) { [ uri: @pact_uri, support_file: @support_file, pact_helper: @pact_helper] }
         it 'verifies the pacts using PactSpecRunner' do
           Rake::Task[@task_name_with_explict_support_file].execute
         end
@@ -64,11 +65,11 @@ module Pact
             consumer_contract, {
               criteria: {
                 description: /stuff/,
-                producer_state: /things/
+                provider_state: /things/
               }
             }
           ).and_return(pact_spec_runner)
-          Rake::Task[@task_name].execute(description: 'stuff', producer_state: 'things')
+          Rake::Task[@task_name].execute(description: 'stuff', provider_state: 'things')
         end
       end
 

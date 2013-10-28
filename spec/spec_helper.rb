@@ -11,4 +11,8 @@ WebMock.disable_net_connect!(allow_localhost: true)
 RSpec.configure do | config |
   config.include(FakeFS::SpecHelpers, :fakefs => true)
   config.include(RSpec::Fire)
+
+  config.extend Pact::Provider::RSpec::ClassMethods
+  config.include Pact::Provider::RSpec::InstanceMethods
+  config.include Pact::Provider::TestMethods
 end

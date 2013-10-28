@@ -29,20 +29,27 @@ module Pact
       end
 
       def run
-        initialize_specs
-        configure_rspec
-        run_specs
+        begin
+          configure_rspec
+          initialize_specs
+          run_specs
+        ensure
+          ::RSpec.reset
+        end
       end
 
       private
 
       def require_pact_helper spec_definition
         if spec_definition[:pact_helper]
+          puts "Requiring #{spec_definition[:pact_helper]}"
           require spec_definition[:pact_helper]
         elsif spec_definition[:support_file]
+          puts "Requiring #{spec_definition[:support_file]}"
           $stderr.puts SUPPORT_FILE_DEPRECATION_MESSAGE
           require spec_definition[:support_file]
         else
+          puts "Requiring #{Pact::Provider::PactHelperLocater.pact_helper_path}"
           require 'pact/provider/client_project_pact_helper'
         end
       end
@@ -61,7 +68,16 @@ module Pact
 
       def configure_rspec
         config = ::RSpec.configuration
+
         config.color = true
+        config.extend Pact::Provider::RSpec::ClassMethods
+        config.include Pact::Provider::RSpec::InstanceMethods
+        config.include Pact::Provider::TestMethods
+
+        config.before :each, :pact => :verify do | example |
+          example_description = "#{example.example.example_group.description} #{example.example.description}"
+          Pact.configuration.logger.info "Running example '#{example_description}'"
+        end
 
         unless options[:silent]
           config.error_stream = $stderr

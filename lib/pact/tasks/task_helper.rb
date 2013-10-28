@@ -19,5 +19,14 @@ module Pact
         fail
       end
     end
+
+    def spec_criteria defaults = {description: nil, provider_state: nil}
+      criteria = {}
+      [:description, :provider_state].each  do | key |
+        value = ENV.fetch("PACT_#{key.to_s.upcase}", defaults[key])
+        criteria[key] = Regexp.new(value) unless value.nil?
+      end
+      criteria.any? ? criteria : nil
+    end
   end
 end

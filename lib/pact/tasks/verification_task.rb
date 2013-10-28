@@ -71,13 +71,7 @@ module Pact
         desc "Verify provider against the consumer pacts for #{name}"
         task "verify:#{name}", :description, :provider_state do |t, args|
 
-          options = {}
-          criteria = {}
-          [:description, :provider_state].each  do |key|
-            value = ENV.fetch("PACT_#{key.to_s.upcase}", args[key])
-            criteria[key] = Regexp.new(value) unless value.nil?
-          end
-          options[:criteria] = criteria unless criteria.empty?
+          options = {criteria: spec_criteria(args)}
 
           exit_statuses = pact_spec_config.collect do | config |
             #TODO: Change this to accept the ConsumerContract that is already parsed, so we don't make the same request twice

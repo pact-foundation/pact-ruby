@@ -10,10 +10,11 @@ namespace :pact do
     include Pact::TaskHelper
 
     handle_verification_failure do
+      options = {criteria: spec_criteria}
       pact_verifications = Pact.configuration.pact_verifications
       verification_configs = pact_verifications.collect { | pact_verification | { :uri => pact_verification.uri }}
       raise "Please configure a pact to verify" if verification_configs.empty?
-      Pact::Provider::PactSpecRunner.new(verification_configs).run
+      Pact::Provider::PactSpecRunner.new(verification_configs, options).run
     end
   end
 
@@ -26,7 +27,8 @@ namespace :pact do
 
     handle_verification_failure do
       puts "Verifying pact at uri #{args[:pact_uri]}"
-      Pact::Provider::PactSpecRunner.new([{uri: args[:pact_uri]}]).run
+      options = {criteria: spec_criteria}
+      Pact::Provider::PactSpecRunner.new([{uri: args[:pact_uri]}], options).run
     end
   end
 

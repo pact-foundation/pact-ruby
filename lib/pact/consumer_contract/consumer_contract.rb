@@ -15,6 +15,26 @@ require_relative 'request'
 
 module Pact
 
+  module PactFile
+    extend self
+    def read uri, options = {}
+      pact = open(uri) { | file | file.read }
+      if options[:save_pactfile_to_tmp]
+        save_pactfile_to_tmp pact, ::File.basename(uri)
+      end
+      pact
+    rescue StandardError => e
+      $stderr.puts "Error reading file from #{uri}"
+      $stderr.puts "#{e.to_s} #{e.backtrace.join("\n")}"
+      raise e
+    end
+
+    def save_pactfile_to_tmp pact, name
+      ::FileUtils.mkdir_p Pact.configuration.tmp_dir
+      ::File.open(Pact.configuration.tmp_dir + "/#{name}", "w") { |file|  file << pact}
+    end
+  end
+
   #TODO move to external file for reuse
   module FileName
     def file_name consumer_name, provider_name
@@ -74,8 +94,8 @@ module Pact
       from_hash(deserialised_object)
     end
 
-    def self.from_uri uri
-      from_json(open(uri){ |f| f.read })
+    def self.from_uri uri, options = {}
+      from_json(Pact::PactFile.read(uri, options))
     end
 
     def self.maintain_backwards_compatiblity_with_producer_keys string

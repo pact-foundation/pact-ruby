@@ -10,6 +10,7 @@ module Pact
       @task_name = 'pact:verify:pact_rake_spec'
       @task_name_with_explict_support_file = 'pact:verify:pact_rake_spec_with_explict_support_file'
       @consumer = 'some-consumer'
+      @criteria = {:description => /wiffle/}
 
       VerificationTask.new(:pact_rake_spec_with_explict_support_file) do | pact |
         pact.uri @pact_uri, support_file: @support_file, pact_helper: @pact_helper
@@ -20,14 +21,20 @@ module Pact
       end
     end
 
+    after :each do
+      ENV.delete 'PACT_DESCRIPTION'
+    end
+
     before do
+      ENV['PACT_DESCRIPTION'] = 'wiffle'
       VerificationTask.any_instance.stub(:publish_report)
-      Provider::PactSpecRunner.stub(:new).with(consumer_contract, {}).and_return(pact_spec_runner)
+      Provider::PactSpecRunner.stub(:new).with(consumer_contract, options).and_return(pact_spec_runner)
     end
 
     let(:pact_spec_runner) { double('PactSpecRunner', :run => exit_code, :output => nil)}
     let(:exit_code) {0}
     let(:consumer_contract) { [ uri: @pact_uri, support_file: nil, pact_helper: nil ] }
+    let(:options) { {criteria: @criteria} }
 
 
     describe '.initialize' do
@@ -61,6 +68,7 @@ module Pact
 
       context "with criteria" do
         it 'passes the criteria to the PactSpecRunner as regexes' do
+          ENV.delete 'PACT_DESCRIPTION'
           Provider::PactSpecRunner.should_receive(:new).with(
             consumer_contract, {
               criteria: {

@@ -1,6 +1,5 @@
 require 'open-uri'
 require 'pact/consumer_contract'
-require 'pact/json_warning'
 require 'pact/provider/matchers'
 require 'pact/provider/test_methods'
 require 'pact/provider/configuration'
@@ -19,8 +18,6 @@ module Pact
 
         include ::RSpec::Core::DSL
 
-        include Pact::JsonWarning
-
         def honour_pactfile pactfile_uri, options = {}
           puts "Filtering specs by: #{options[:criteria]}" if options[:criteria]
           consumer_contract = Pact::ConsumerContract.from_json(read_pact_from(pactfile_uri, options))
@@ -32,7 +29,6 @@ module Pact
         end
 
         def honour_consumer_contract consumer_contract, options = {}
-          check_for_active_support_json
           describe_consumer_contract consumer_contract, options.merge({:consumer => consumer_contract.consumer.name})
         end
 

@@ -1,5 +1,4 @@
 require 'pact/logging'
-require 'pact/json_warning'
 require 'pact/something_like'
 require 'pact/symbolize_keys'
 require 'pact/term'
@@ -51,7 +50,6 @@ module Pact
 
     include SymbolizeKeys
     include Logging
-    include JsonWarning
     include FileName
     include ActiveSupportSupport
 
@@ -139,7 +137,6 @@ module Pact
 
     def update_pactfile
       logger.debug "Updating pact file for #{provider.name} at #{pactfile_path}"
-      check_for_active_support_json
       File.open(pactfile_path, 'w') do |f|
         f.write JSON.pretty_generate(self)
       end

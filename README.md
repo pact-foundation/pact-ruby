@@ -252,6 +252,29 @@ Sure, you've checked that your client deserialises the HTTP response into the ob
 
 It should run with all your other tests. If an integration is broken, you want to know about it *before* you check in.
 
+### Load your app from the config.ru file
+
+Your config.ru file may load your app at a specified path. e.g.
+
+```
+run Rack::URLMap.new( '/some-path' => MyServiceProvider::API )
+```
+
+To avoid duplicating this code, and potentially getting out of sync with the config.ru file, you can parse it and use the returned app in your service provider definition. e.g.
+
+```
+def app_in_config_ru
+  app, options = Rack::Builder.parse_file('config.ru')
+  app
+end
+
+Pact.service_provider "My Service Provider" do
+  app { app_in_config_ru }
+end
+```
+
+Be aware that the Rack::Builder.parse_file seems to require files even if they have already been required, so make sure your boot files are idempotent.
+
 ### Publish your pacts as artifacts on your CI machine
 
 Configure the pact_uri in the Pact.service_provider block with the pact artifact URL of your last successful build. This way you're only verifying green builds. No point verifying a broken one.

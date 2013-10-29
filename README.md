@@ -284,9 +284,9 @@ end
 
 Be aware that the Rack::Builder.parse_file seems to require files even if they have already been required, so make sure your boot files are idempotent.
 
-#### Use your real database
+#### Use the real database
 
-Do not stub your database calls for pact:verify .This is the best time for you to test your database integration. If you stub your database calls, you are getting little more assurance that the real end-to-end will work than if you'd used a unit test. It's the appropriate time to incur the overhead of a database call.
+Do not stub your database calls for pact:verify. This is the best time for you to test your database integration. If you stub your database calls, you are getting little more assurance that the real end-to-end will work than if you'd used a unit test. It's the appropriate time to incur the overhead of a database call.
 
 ## Advanced
 

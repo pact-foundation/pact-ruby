@@ -236,23 +236,32 @@ The pact.uri may be a local file system path or a remote URL.
 
 ## Pact best practices
 
-### Ensure all calls to the provider go through your provider client class
+### In your consumer project
+
+#### Publish your pacts as artifacts on your CI machine
+
+This makes the pact available via URL, which your provider build can then use when it runs pact:verify.
+
+#### Ensure all calls to the provider go through your provider client class
 
 Do not hand create any HTTP requests in your consumer app or specs. Testing through your provider client class gives you the assurance that your consumer app will be creating exactly the HTTP requests that you think it should.
 
-### Do not stub your database calls in the provider project
-
-This is the best time for you to test your database integration. If you stub your database calls, you are getting little more assurance that the real end-to-end will work than if you'd used a unit test. It's the appropriate time to incur the overhead of a database call.
-
-### Use factories to create your expected models in your consumer project
+#### Use factories to create your expected models
 
 Sure, you've checked that your client deserialises the HTTP response into the object you expect, but then you need to make sure in your other tests where you stub your client that you're stubbing it with a valid object. The best way to do this is to use factories for all your tests.
 
-### Add pact:verify to your default rake task
+### In your provider project
+
+#### Use the pact artifact published by your consumer's CI build to verify the provider
+
+Configure the pact_uri in the Pact.service_provider block with the pact artifact URL of your last successful build. This way you're only verifying green builds. No point verifying a broken one.
+(Watch this space - pact-broker coming soon, so we don't have to use messy build box artifact URLs)
+
+#### Add pact:verify to your default rake task
 
 It should run with all your other tests. If an integration is broken, you want to know about it *before* you check in.
 
-### Load your app from the config.ru file for pact:verify
+#### Load your app from the config.ru file
 
 Your config.ru file may mount your app at a specified path. e.g.
 
@@ -275,11 +284,9 @@ end
 
 Be aware that the Rack::Builder.parse_file seems to require files even if they have already been required, so make sure your boot files are idempotent.
 
-### Publish your pacts as artifacts on your CI machine
+#### Do not stub your database calls in the provider project
 
-Configure the pact_uri in the Pact.service_provider block with the pact artifact URL of your last successful build. This way you're only verifying green builds. No point verifying a broken one.
-(Watch this space - pact-broker coming soon, so we don't have to use messy build box artifact URLs)
-
+This is the best time for you to test your database integration. If you stub your database calls, you are getting little more assurance that the real end-to-end will work than if you'd used a unit test. It's the appropriate time to incur the overhead of a database call.
 
 ## Advanced
 

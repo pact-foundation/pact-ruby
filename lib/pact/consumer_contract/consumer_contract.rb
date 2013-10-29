@@ -10,6 +10,7 @@ require_relative 'service_consumer'
 require_relative 'service_provider'
 require_relative 'interaction'
 require_relative 'request'
+require_relative 'active_support_support'
 
 
 
@@ -52,6 +53,7 @@ module Pact
     include Logging
     include JsonWarning
     include FileName
+    include ActiveSupportSupport
 
     attr_accessor :interactions
     attr_accessor :consumer
@@ -63,7 +65,7 @@ module Pact
       @provider = attributes[:provider]
     end
 
-    def as_json(options = {})
+    def to_hash
       {
         provider: @provider.as_json,
         consumer: @consumer.as_json,
@@ -74,6 +76,10 @@ module Pact
           }
         }
       }
+    end
+
+    def as_json(options = {})
+      fix_all_the_things to_hash
     end
 
     def to_json(options = {})

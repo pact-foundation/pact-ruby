@@ -28,7 +28,7 @@ module Pact
         context "by description" do
           context "when the interaction matches" do
             it "returns true" do
-              expect(subject.matches_criteria?(:description => /request.*food/)).to be_true 
+              expect(subject.matches_criteria?(:description => /request.*food/)).to be_true
             end
           end
           context "when the interaction does not match" do
@@ -52,10 +52,10 @@ module Pact
 
         let(:response) do
           { baz: /qux/, wiffle: Term.new(generate: 'wiffle', matcher: /iff/) }
-        end        
+        end
 
         let(:parsed_result) do
-          JSON.load(JSON.dump(subject))
+          JSON.load(subject.to_json)
         end
 
         subject { Interaction.from_hash('response' => response, 'request' => request) }

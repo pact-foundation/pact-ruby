@@ -13,8 +13,12 @@ module Pact
       name
     end
 
-    def as_json options = {}
+    def to_hash
       {name: name}
+    end
+
+    def as_json options = {}
+      to_hash
     end
 
     def self.from_hash hash

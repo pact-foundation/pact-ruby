@@ -12,13 +12,17 @@ module Pact::Provider
       @output = options[:output]
     end
 
-    def as_json
+    def to_hash
       {
         :consumer => @consumer,
         :provider => @provider,
         :result => @result,
         :output => @output
       }
+    end
+
+    def as_json options = {}
+      to_hash
     end
 
     def to_json(options = {})

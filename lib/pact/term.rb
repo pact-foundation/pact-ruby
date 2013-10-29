@@ -1,5 +1,9 @@
+require 'pact/consumer_contract/active_support_support'
+
 module Pact
   class Term
+
+    include Pact::ActiveSupportSupport
 
     attr_reader :generate, :matcher
 
@@ -15,8 +19,17 @@ module Pact
       raise "Value to generate \"#{@generate}\" does not match regular expression #{@matcher}" unless @generate =~ @matcher
     end
 
+    def to_hash
+      { json_class: self.class.name, data: { generate: generate, matcher: fix_regexp(matcher)} }
+    end
+
+    def as_json(options = {})
+      to_hash
+    end
+
+
     def to_json(options = {})
-      { json_class: self.class.name, data: { generate: generate, matcher: matcher} }.to_json(options)
+      as_json.to_json(options)
     end
 
     def match(literal)

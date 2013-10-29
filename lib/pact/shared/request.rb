@@ -24,7 +24,11 @@ module Pact
         as_json.to_json(options)
       end
 
-      def as_json
+      def as_json options = {}
+        to_hash
+      end
+
+      def to_hash
         base_json = {
           method: method,
           path: path,
@@ -57,9 +61,9 @@ module Pact
 
       def self.key_not_found
         raise NotImplementedError
-      end      
+      end
 
-      def as_json_without_body
+      def to_hash_without_body
         keep_keys = [:method, :path, :headers, :query]
         as_json.reject{ |key, value| !keep_keys.include? key }
       end

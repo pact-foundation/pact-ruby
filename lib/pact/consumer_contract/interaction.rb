@@ -1,8 +1,10 @@
 require 'pact/consumer_contract/request'
 require 'pact/symbolize_keys'
+require 'pact/consumer_contract/active_support_support'
 
 module Pact
    class Interaction
+    include ActiveSupportSupport
       include SymbolizeKeys
 
       attr_accessor :description, :request, :response, :provider_state
@@ -19,10 +21,14 @@ module Pact
         new(symbolize_keys(hash).merge({request: request}))
       end
 
-      def as_json
+      def to_hash
         hash = { :description => @description }
         hash[:provider_state] = @provider_state if @provider_state #Easier to read when provider state at top
         hash.merge(:request => @request.as_json, :response => @response)
+      end
+
+      def as_json options = {}
+        fix_all_the_things to_hash
       end
 
       def to_json(options = {})

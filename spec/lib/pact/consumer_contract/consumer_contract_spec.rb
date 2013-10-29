@@ -191,7 +191,7 @@ eos
       end
 
       it "should write the interactions to the file" do
-        File.read(expected_pact_path).should eql expected_pact_string.strip
+        File.read(expected_pact_path).gsub(/\s+/, '').should eql expected_pact_string.strip.gsub(/\s+/, '')
       end
     end
   end

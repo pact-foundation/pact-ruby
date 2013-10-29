@@ -13,11 +13,15 @@ module Pact
       @contents = contents
     end
 
-    def as_json
+    def to_hash
       {
         :json_class => self.class.name,
         :contents => contents
       }
+    end
+
+    def as_json
+      to_hash
     end
 
     def to_json opts = {}

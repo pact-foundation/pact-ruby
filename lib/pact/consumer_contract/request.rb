@@ -35,7 +35,7 @@ module Pact
       end
 
       def difference(actual_request)
-        request_diff = diff(as_json_without_body, actual_request.as_json_without_body)
+        request_diff = diff(to_hash_without_body, actual_request.to_hash_without_body)
         unless body.is_a? NullExpectation
           request_diff.merge(body_difference(actual_request.body))
         else
@@ -51,7 +51,7 @@ module Pact
 
       private
 
-      # Options is a dirty hack to allow Condor to send extra keys in the request, 
+      # Options is a dirty hack to allow Condor to send extra keys in the request,
       # as it's too much work to set up an exactly matching expectation.
       # Need to implement a proper matching strategy and remove this.
       # Do not rely on it!

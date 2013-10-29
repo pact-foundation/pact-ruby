@@ -1,3 +1,4 @@
+require 'spec_helper'
 require 'net/http'
 require 'pact/consumer'
 require 'pact/consumer/rspec'

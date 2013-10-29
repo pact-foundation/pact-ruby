@@ -61,8 +61,8 @@ module Pact
           relevant_handler = @handlers.detect { |handler| handler.match? env }
           response = relevant_handler.respond env
         rescue Exception => e
-          @logger.ap 'Error ocurred in mock service:'
-          @logger.ap e
+          @logger.error 'Error ocurred in mock service:'
+          @logger.ap e, :error
           @logger.ap e.backtrace
           raise e
         end

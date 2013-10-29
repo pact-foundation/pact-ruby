@@ -38,6 +38,15 @@ describe Pact::Matchers do
     end
   end
 
+  describe "expecting a string matching a regexp and not finding key" do
+    let(:expected) { {a: /b/} }
+    let(:actual) { {} }
+    let(:difference) { {:a=>{:expected=>/b/, :actual=> Pact::KeyNotFound.new }} }
+    it "returns the diff" do
+      expect(diff(expected, actual)).to eq difference
+    end
+  end
+
   describe 'structure_diff' do
     let(:expected) {
       {a: 'a string', b: 1, c: nil, d: [{e: 'thing'}], f: {g: 10}, h: false}
@@ -153,7 +162,7 @@ describe Pact::Matchers do
       let(:difference) { [Pact::Matchers::NO_DIFF_INDICATOR, {expected: Pact::UnexpectedIndex.new , actual: 2}] }
       it 'returns the diff' do
         expect(diff(subject, actual)).to eq(difference)
-      end      
+      end
     end
 
     context 'where an expected value is a non-empty string' do

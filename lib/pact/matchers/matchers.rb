@@ -31,7 +31,7 @@ module Pact
     end
 
     def regexp_diff regexp, actual, options
-      if actual != nil && regexp.match(actual)
+      if actual.is_a?(String) && regexp.match(actual)
         {}
       else
         {expected: regexp, actual: actual}

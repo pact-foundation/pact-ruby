@@ -1,4 +1,5 @@
 require 'pact/consumer_contract/active_support_support'
+require 'json/add/regexp'
 
 module Pact
   class Term

@@ -2,7 +2,19 @@ Do this to generate your change history
 
     git log --date=relative --pretty=format:'  * %h - %s (%an, %ad)'
 
-### 1.10.16 (28 October 2013)
+### 1.0.17 (29 October 2013)
+
+* 74bdf09 - Added missing require for Regexp json deserialisation (Beth, 3 minutes ago)
+ * d69482e - Removed JsonWarning for ActiveSupport JSON. (Beth, 3 hours ago)
+ * 5f72720 - Fixing ALL THE REGEXPS that ActiveSupport JSON broke. The pact gem should now serialise and deserialise its own JSON properly even when ActiveSupport is loaded by the call
+ * c3e6430 - Added config.ru parsing to best practices. (Beth, 9 hours ago)
+ * ae3a70f - DRYing up pact file reading code. (Beth, 11 hours ago)
+ * dc83557 - Fixing VerificationTask spec (Beth, 11 hours ago)
+ * bae379c - Added consumer name, provider name and request method to output of rspec. (Beth, 12 hours ago)
+ * 89c2620 - Adding spec filtering using PACT_DESCRIPTION and PACT_PROVIDER_STATE to pact:verify and pact:verify:at tasks. (Beth, 28 hours ago)
+ * 7ab43a9 - Adding puts to show when pact:verify specs are being filtered. (Beth, 28 hours ago)
+
+### 1.0.16 (28 October 2013)
 
 * ce0d102 - Fixing specs after adding pact_helper and changing producer_state to provider_state. There is no producer here any more! Naughty producer. (Beth, 71 seconds ago)
 * 90f7203 - Fixing bug where RSpec world was not cleared between pact:verify tasks. (Beth, 16 minutes ago)

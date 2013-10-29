@@ -2,6 +2,10 @@ Do this to generate your change history
 
     git log --date=relative --pretty=format:'  * %h - %s (%an, %ad)'
 
+### 1.0.18 (29 October 2013)
+
+* f2892d4 - Fixed bug where an exception is thrown when a key is not found and is attempted to be matched to a regexp (Beth, 60 seconds ago)
+
 ### 1.0.17 (29 October 2013)
 
 * 74bdf09 - Added missing require for Regexp json deserialisation (Beth, 3 minutes ago)

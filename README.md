@@ -252,15 +252,15 @@ Sure, you've checked that your client deserialises the HTTP response into the ob
 
 It should run with all your other tests. If an integration is broken, you want to know about it *before* you check in.
 
-### Load your app from the config.ru file
+### Load your app from the config.ru file for pact:verify
 
-Your config.ru file may load your app at a specified path. e.g.
+Your config.ru file may mount your app at a specified path. e.g.
 
 ```
 run Rack::URLMap.new( '/some-path' => MyServiceProvider::API )
 ```
 
-To avoid duplicating this code, and potentially getting out of sync with the config.ru file, you can parse it and use the returned app in your service provider definition. e.g.
+To avoid duplicating this code, and potentially letting your tests get out of sync with the config.ru file, you can parse the config.ru file and use the returned app in your service provider definition. e.g.
 
 ```
 def app_in_config_ru

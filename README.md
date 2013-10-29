@@ -290,7 +290,14 @@ This is the best time for you to test your database integration. If you stub you
 
 ## Advanced
 
+### Filtering the pact:verify specs
+
+To execute a subset of the specs when running any of the pact verification tasks, define the environment variables PACT_DESCRIPTION and/or PACT_PROVIDER_STATE.
+
+    $ PACT_DESCRIPTION="a request for something" PACT_PROVIDER_STATE="something exists" rake pact:verify
+
 ### Running a standalone mock server
+
 A pact service can be run locally and is really useful for debugging purposes.
 
     $ bundle exec pact service -p <port-num>

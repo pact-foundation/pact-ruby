@@ -36,7 +36,7 @@ module Pact
             if key.match(/CONTENT.TYPE/)
               request_headers['CONTENT_TYPE'] = value
             else
-              request_headers['HTTP_' + key.to_s] = value
+              request_headers[formatted_request_header_key(key)] = value
             end
           end
           request_headers
@@ -52,6 +52,10 @@ module Pact
           else
             JSON.dump(rb)
           end
+        end
+
+        def formatted_request_header_key(key)
+          'HTTP_' + key.to_s.gsub('-', '_')
         end
       end      
     end

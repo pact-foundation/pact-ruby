@@ -39,5 +39,20 @@ module Pact
         expect(json).to include("{\"json_class\":\"Regexp\",\"o\":0,\"s\":\"alligator\"}")
       end
     end
+
+    describe "fix_json_formatting" do
+      let(:active_support_affected_pretty_generated_json) { "{\"json_class\":\"Regexp\",\"o\":0,\"s\":\"a*b\"}" }
+      let(:pretty_generated_json) do
+'{
+  "json_class": "Regexp",
+  "o": 0,
+  "s": "a*b"
+}'
+      end
+
+      it "pretty formats the json that has been not pretty formatted because of ActiveSupport" do
+        expect(fix_json_formatting(active_support_affected_pretty_generated_json)).to eq (pretty_generated_json.strip)
+      end
+    end
   end
 end

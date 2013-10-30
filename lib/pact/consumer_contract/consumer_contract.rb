@@ -139,7 +139,7 @@ module Pact
     def update_pactfile
       logger.debug "Updating pact file for #{provider.name} at #{pactfile_path}"
       File.open(pactfile_path, 'w') do |f|
-        f.write JSON.pretty_generate(self)
+        f.write fix_json_formatting(JSON.pretty_generate(self))
       end
     end
   end

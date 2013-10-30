@@ -18,11 +18,29 @@ module Pact
       thing
     end
 
+    # ActiveSupport JSON overwrites (i.e. TRAMPLES) the json methods of the Regexp class directly
+    # (beneath its destructive hooves of destruction).
+    # This does not seem to be able to be undone without affecting the JSON serialisation in the
+    # calling project, so the best way I've found to fix this issue is to reattach the
+    # original as_json to the Regexp instances in the ConsumerContract before we write them to the
+    # pact file. If anyone can find a better way, please submit a pull request ASAP!
     def fix_regexp regexp
       def regexp.as_json options = {}
         {:json_class => 'Regexp', "o" => self.options, "s" => self.source }
       end
       regexp
+    end
+
+    # Having Active Support JSON loaded somehow kills the formatting of pretty_generate for objects.
+    # Don't ask me why, but it still seems to work for hashes, so the hacky work around is to
+    # reparse the generated JSON into a hash and pretty_generate that... sigh...
+    # Oh ActiveSupport, why....
+    def fix_json_formatting json
+      if json.include?("\n")
+        json
+      else
+        JSON.pretty_generate(JSON.parse(json, create_additions: false))
+      end
     end
 
   end

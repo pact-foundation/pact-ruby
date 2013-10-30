@@ -1,7 +1,7 @@
 PATH
   remote: .
   specs:
-    pact (1.0.18)
+    pact (1.0.19)
       awesome_print (~> 1.1.0)
       find_a_port (~> 1.0.1)
       json

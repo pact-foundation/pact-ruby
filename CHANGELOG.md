@@ -2,13 +2,17 @@ Do this to generate your change history
 
     git log --date=relative --pretty=format:'  * %h - %s (%an, %ad)'
 
+### 1.0.19 (29 October 2013)
+ * e4b990e - Gsub '-' to '_' in request headers. (Sebastian Glazebrook, 4 minutes ago)
+ * 52ac8f8 - Added documentation for PACT_DESCRIPTION and PACT_PROVIDER_STATE to README. (Beth, 13 hours ago)
+
 ### 1.0.18 (29 October 2013)
 
-* f2892d4 - Fixed bug where an exception is thrown when a key is not found and is attempted to be matched to a regexp (Beth, 60 seconds ago)
+ * f2892d4 - Fixed bug where an exception is thrown when a key is not found and is attempted to be matched to a regexp (Beth, 60 seconds ago)
 
 ### 1.0.17 (29 October 2013)
 
-* 74bdf09 - Added missing require for Regexp json deserialisation (Beth, 3 minutes ago)
+ * 74bdf09 - Added missing require for Regexp json deserialisation (Beth, 3 minutes ago)
  * d69482e - Removed JsonWarning for ActiveSupport JSON. (Beth, 3 hours ago)
  * 5f72720 - Fixing ALL THE REGEXPS that ActiveSupport JSON broke. The pact gem should now serialise and deserialise its own JSON properly even when ActiveSupport is loaded by the call
  * c3e6430 - Added config.ru parsing to best practices. (Beth, 9 hours ago)

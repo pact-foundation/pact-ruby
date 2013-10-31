@@ -39,21 +39,10 @@ end
 
 #### Create a Consumer Driven Contract (pact file) using the spec for your client class
 
+Imagine a model class that looks something like this
+
 ```ruby
-
-# Imagine a service provider client class that looks something like this
-
-class MyServiceProviderClient
-  include HTTParty
-  base_uri 'http://my-service'
-
-  def get_something
-    name = JSON.parse(self.class.get("/something").body)['name']
-    Something.new(name)
-  end
-end
-
-class Something
+class SomethingModel
   attr_reader :name
 
   def intialize name
@@ -64,12 +53,27 @@ class Something
     other.is_a?(Something) && other.name == name
   end
 end
+```
+
+Imagine a service provider client class that looks something like this
+```ruby
+
+class MyServiceProviderClient
+  include HTTParty
+  base_uri 'http://my-service'
+
+  def get_something
+    # Yet to be implemented because we're doing Test First Development...
+  end
+end
+
+```
+
+The following code will create a mock service on localhost:1234 which will respond to your application's queries over HTTP as if it were the real "My Service Provider" app. It also creats a mock service provider object which you will use to set up your expectations. The method name to access the mock service provider will be what ever name you give as the service argument - in this case "my_service_provider"
 
 
-# The following code creates a service on localhost:1234 which will respond to your application's queries
-# over HTTP as if it were the real "My Service Provider" app. It also creats a mock service provider object
-# which you will use to set up your expectations. The method name to access the mock service provider
-# will be what ever name you give as the service argument - in this case "my_service_provider"
+```ruby
+# In /spec/service_providers/pact_helper.rb
 
 require 'pact/consumer/rspec'
 
@@ -80,9 +84,12 @@ Pact.service_consumer "My Service Consumer" do
     end
   end
 end
+```
+
+```ruby
+# In /spec/service_providers/my_service_provider_client_spec.rb
 
 # Use the :pact => true describe metadata to include all the pact generation functionality in your spec.
-
 describe MyServiceProviderClient, :pact => true do
 
   before do
@@ -104,7 +111,7 @@ describe MyServiceProviderClient, :pact => true do
     end
 
     it "returns a Something" do
-      expect(MyServiceProviderClient.get_something).to eq(Something.new('A small something'))
+      expect(MyServiceProviderClient.get_something).to eq(SomethingModel.new('A small something'))
     end
 
   end
@@ -116,13 +123,20 @@ end
 Running the consumer spec will generate a pact file in the configured pact dir (spec/pacts by default).
 Logs will be output to the configured log dir that can be useful when diagnosing problems.
 
-To run your consumer app as a process during your test (eg for a Capybara test):
+Of course, the above specs will fail because the client method is not implemented, so next, implement your client methods.
 
 ```ruby
-Pact.service_consumer "My Consumer" do
-  app my_consumer_rack_app
-  port 4321
+
+class MyServiceProviderClient
+  include HTTParty
+  base_uri 'http://my-service'
+
+  def get_something
+    name = JSON.parse(self.class.get("/something").body)['name']
+    SomethingModel.new(name)
+  end
 end
+
 ```
 
 ### Service Provider project
@@ -304,6 +318,17 @@ A pact service can be run locally and is really useful for debugging purposes.
 
 The service prints messages it recieves to stdout which can be really useful
 when diagnosing issues with pacts.
+
+### To run your consumer app as a process during your consumer specs
+
+Eg. for Capybara tests
+
+```ruby
+Pact.service_consumer "My Consumer" do
+  app my_consumer_rack_app
+  port 4321
+end
+```
 
 ### Pact file write mode
 

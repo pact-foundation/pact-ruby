@@ -27,7 +27,9 @@ Put it in your Gemfile. You know how.
 
 #### Create a Consumer Driven Contract (pact file) using the spec for your client class
 
-Imagine a model class that looks something like this
+##### 1. Start with you model
+
+Imagine a model class that looks something like this. The attributes for a SomethingModel live on a remote server, and will need to be retrieved by an HTTP call.
 
 ```ruby
 class SomethingModel
@@ -43,7 +45,10 @@ class SomethingModel
 end
 ```
 
-Imagine a service provider client class that looks something like this
+##### 2. Create a skeleton client class
+
+Imagine a service provider client class that looks something like this.
+
 ```ruby
 
 class MyServiceProviderClient
@@ -56,6 +61,7 @@ class MyServiceProviderClient
 end
 
 ```
+##### 3. Configure the mock server
 
 The following code will create a mock service on localhost:1234 which will respond to your application's queries over HTTP as if it were the real "My Service Provider" app. It also creats a mock service provider object which you will use to set up your expectations. The method name to access the mock service provider will be what ever name you give as the service argument - in this case "my_service_provider"
 
@@ -73,6 +79,8 @@ Pact.service_consumer "My Service Consumer" do
   end
 end
 ```
+
+##### 4. Write a failing spec
 
 ```ruby
 # In /spec/service_providers/my_service_provider_client_spec.rb
@@ -108,10 +116,14 @@ end
 
 ```
 
+##### 5. Run the specs
+
 Running the consumer spec will generate a pact file in the configured pact dir (spec/pacts by default).
 Logs will be output to the configured log dir that can be useful when diagnosing problems.
 
 Of course, the above specs will fail because the client method is not implemented, so next, implement your client methods.
+
+##### 6. Implement the client methods
 
 ```ruby
 
@@ -126,6 +138,10 @@ class MyServiceProviderClient
 end
 
 ```
+
+##### 7. Run the specs again.
+
+Green! You now have a pact file that can be used to verify your expectations in the provider project.
 
 ### Service Provider project
 

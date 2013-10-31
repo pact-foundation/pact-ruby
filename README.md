@@ -25,9 +25,7 @@ Put it in your Gemfile. You know how.
 
 ### Service Consumer project
 
-#### Create a Consumer Driven Contract (pact file) using the spec for your client class
-
-##### 1. Start with you model
+#### 1. Start with you model
 
 Imagine a model class that looks something like this. The attributes for a SomethingModel live on a remote server, and will need to be retrieved by an HTTP call.
 
@@ -45,7 +43,7 @@ class SomethingModel
 end
 ```
 
-##### 2. Create a skeleton client class
+#### 2. Create a skeleton client class
 
 Imagine a service provider client class that looks something like this.
 
@@ -61,7 +59,7 @@ class MyServiceProviderClient
 end
 
 ```
-##### 3. Configure the mock server
+#### 3. Configure the mock server
 
 The following code will create a mock service on localhost:1234 which will respond to your application's queries over HTTP as if it were the real "My Service Provider" app. It also creats a mock service provider object which you will use to set up your expectations. The method name to access the mock service provider will be what ever name you give as the service argument - in this case "my_service_provider"
 
@@ -80,7 +78,7 @@ Pact.service_consumer "My Service Consumer" do
 end
 ```
 
-##### 4. Write a failing spec
+#### 4. Write a failing spec for the client
 
 ```ruby
 # In /spec/service_providers/my_service_provider_client_spec.rb
@@ -116,14 +114,14 @@ end
 
 ```
 
-##### 5. Run the specs
+#### 5. Run the specs
 
 Running the consumer spec will generate a pact file in the configured pact dir (spec/pacts by default).
 Logs will be output to the configured log dir that can be useful when diagnosing problems.
 
 Of course, the above specs will fail because the client method is not implemented, so next, implement your client methods.
 
-##### 6. Implement the client methods
+#### 6. Implement the client methods
 
 ```ruby
 
@@ -139,13 +137,13 @@ end
 
 ```
 
-##### 7. Run the specs again.
+#### 7. Run the specs again.
 
 Green! You now have a pact file that can be used to verify your expectations in the provider project.
 
 ### Service Provider project
 
-#### 1. Create the skeleton API
+#### 1. Create the skeleton API classes
 
 Create your API class using the framework of your choice (e.g. Sinatra, Grape) - leave the methods unimplemented, we're doing Test First Develoment, remember?
 
@@ -155,7 +153,6 @@ Create a `pact_helper.rb` in your service provider project. The file must be cal
 
 ```ruby
 require 'my_app' # Require the boot files for your app
-require 'provider_states_for_my_consumer' # See next section on setting up provider states
 
 Pact.service_provider "My Service Provider" do
   app { MyApp.new }
@@ -169,8 +166,31 @@ Pact.service_provider "My Service Provider" do
 end
 
 ```
+Require "pact/tasks" in your Rakefile. If the pact gem is in the test/development section of your Gemfile, you may want to put an env check around this so it doesn't load the pact tasks in prod.
 
-#### 3. Set up the service provider states
+```ruby
+# In Rakefile
+
+require 'pact/tasks'
+```
+
+#### 3. Run your failing specs
+
+    $ rake pact:verify
+
+Congratulations! You now have a failing spec to develop against.
+
+#### 4. Implement your service provider
+
+At this stage, you'll probably want to be able to run your specs one at a time. Define the environment variables PACT_DESCRIPTION and/or PACT_PROVIDER_STATE as so:
+
+    $ PACT_DESCRIPTION="a request for something" PACT_PROVIDER_STATE="something exists" rake pact:verify
+
+#### 5. Keep going til you're green
+
+You can now have reasonably confidence that your consumer and provider will play nicely together.
+
+### Using provider states
 
 Having different service provider states allows you to test the same request with different expected responses.
 
@@ -183,6 +203,8 @@ my_service.
         with(method: 'get', path: '/thing').
           will_respond_with(status: 200, :body => {thing: "yay!"} )
 
+...
+
 my_service.
   given("a thing does not exist").
    upon_receiving("a request for a thing").
@@ -190,13 +212,11 @@ my_service.
         will_respond_with(status: 404, :body => {error: "There is no thing :("} )
 ```
 
-To define service provider states that create the right data for "a thing exists" and "a thing does not exist", write the following in the service provider project.
+To define service provider states that create the right data for "a thing exists" and "a thing does not exist", write the following in the service provider project. (The consumer name here must match the name of the consumer configured in your consumer project for it to correctly find these provider states.)
 
 
 ```ruby
-# The consumer name here must match the name of the consumer configured in your consumer project
-# for it to correctly find these provider states.
-# Make sure the provider states are included in or required by your pact_helper.rb file.
+# In /spec/service_consumers/provider_states_for_my_service_consumer.rb
 
 Pact.provider_states_for 'My Service Consumer' do
   provider_state "a thing exists" do
@@ -216,44 +236,34 @@ end
 
 ```
 
+```ruby
+# In /spec/service_consumers/pact_helper.rb
+
+require_relative 'provider_states_for_my_service_consumer.rb'
+```
+
 If a state should be used for all consumers, the top level Pact.with_consumer can be skipped, and a global Pact.provider_state can be defined on its own.
 
-#### 4. Verify that the service provider honours the pact
+
+### Verifying pacts
+
+You can verify a pact at an arbitrary local or remote URL
+
+    $ rake pact:verify:at[../path-to-your-consumer-project/specs/pacts/my_consumer-my_provider.json]
+    $ rake pact:verify:at[http://build-box/MyConsumerBuild/latestSuccessful/artifacts/my_consumer-my_provider.json]
+
+To make a shortcut task for pact at an arbitrary URL, add the following to your Rakefile. The pact.uri may be a local file system path or a remote URL.
 
 ```ruby
-  # In your Rakefile
-  # If the pact gem is in the test/development section of your Gemfile, you may want to put an env check around this so it doesn't load the pact tasks in prod.
-  require 'pact/tasks'
-```
+# In Rakefile or /tasks/pact.rake
 
-```
-  $ rake -T
-  rake pact:verify               # Verifies the pact files configured in the pact_helper.rb against this service provider.
-  rake pact:verify:at[pact_uri]  # Verifies the pact at the given URI against this service provider.
-  $ rake pact:verify
-```
-
-#### Verification using arbitrary pact files
-
-```
-# Local URI
-$ rake pact:verify:at[../path-to-your-consumer-project/specs/pacts/my_consumer-my_provider.json]
-
-# Remote URI
-$ rake pact:verify:at[http://build-box/MyConsumerBuild/latestSuccessful/artifacts/my_consumer-my_provider.json]
-```
-
-To make a shortcut task for pact at an arbitrary URI, add the following to your Rakefile.
-
-```ruby
 # This creates a rake task that can be executed by running
-# $rake pact:verify:dev
+# $ rake pact:verify:dev
+
 Pact::VerificationTask.new(:dev) do | pact |
   pact.uri '../path-to-your-consumer-project/specs/pacts/my_consumer-my_provider.json'
 end
 ```
-
-The pact.uri may be a local file system path or a remote URL.
 
 ### Configuration
 

@@ -23,18 +23,6 @@ Put it in your Gemfile. You know how.
 
 ## Usage
 
-### Configuration
-
-```ruby
-Pact.configure do | config |
-  config.pact_dir = "???" # Optional, default is ./spec/pacts
-  config.log_dir = "???" # Optional, default is ./log
-  config.logger = "??" # Optional, defaults to a file logger to the configured log_dir.
-  config.logger.level = Logger::DEBUG #By default this is INFO, bump this up to debug for more detailed logs
-  config.pactfile_write_mode = :ovewrite / :update / :smart # Optional. The default pactfile_write_mode is :overwrite. See notes in Advanced section for further information.
-end
-```
-
 ### Service Consumer project
 
 #### Create a Consumer Driven Contract (pact file) using the spec for your client class
@@ -247,6 +235,17 @@ end
 
 The pact.uri may be a local file system path or a remote URL.
 
+### Configuration
+
+```ruby
+Pact.configure do | config |
+  config.pact_dir = "???" # Optional, default is ./spec/pacts
+  config.log_dir = "???" # Optional, default is ./log
+  config.logger = "??" # Optional, defaults to a file logger to the configured log_dir.
+  config.logger.level = Logger::DEBUG #By default this is INFO, bump this up to debug for more detailed logs
+  config.pactfile_write_mode = :ovewrite / :update / :smart # Optional. The default pactfile_write_mode is :overwrite. See notes in Advanced section for further information.
+end
+```
 
 ## Pact best practices
 

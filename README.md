@@ -182,13 +182,13 @@ Congratulations! You now have a failing spec to develop against.
 
 #### 4. Implement your service provider
 
-At this stage, you'll probably want to be able to run your specs one at a time. Define the environment variables PACT_DESCRIPTION and/or PACT_PROVIDER_STATE as so:
+At this stage, you'll probably want to be able to run your specs one at a time while you implement. Define the environment variables PACT_DESCRIPTION and/or PACT_PROVIDER_STATE as so:
 
     $ PACT_DESCRIPTION="a request for something" PACT_PROVIDER_STATE="something exists" rake pact:verify
 
 #### 5. Keep going til you're green
 
-You can now have reasonably confidence that your consumer and provider will play nicely together.
+Yay! Your provider now honours the pact it has with your consumer. You can now have confidence that your consumer and provider will play nicely together.
 
 ### Using provider states
 

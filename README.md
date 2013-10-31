@@ -145,9 +145,13 @@ Green! You now have a pact file that can be used to verify your expectations in 
 
 ### Service Provider project
 
-#### Configure your service provider
+#### 1. Create the skeleton API
 
-Create a `pact_helper.rb` in your service provider project. The file must be called pact_helper.rb, however there is some flexibility in where it can be stored. The recommended place is `specs/service_providers/pact_helper.rb`.
+Create your API class using the framework of your choice (e.g. Sinatra, Grape) - leave the methods unimplemented, we're doing Test First Develoment, remember?
+
+#### 2. Tell your provider that it needs to honour the pact file you made earlier
+
+Create a `pact_helper.rb` in your service provider project. The file must be called pact_helper.rb, however there is some flexibility in where it can be stored. The recommended place is `specs/service_consumers/pact_helper.rb`.
 
 ```ruby
 require 'my_app' # Require the boot files for your app
@@ -166,7 +170,7 @@ end
 
 ```
 
-#### Set up the service provider states
+#### 3. Set up the service provider states
 
 Having different service provider states allows you to test the same request with different expected responses.
 
@@ -214,7 +218,7 @@ end
 
 If a state should be used for all consumers, the top level Pact.with_consumer can be skipped, and a global Pact.provider_state can be defined on its own.
 
-#### Verify that the service provider honours the pact
+#### 4. Verify that the service provider honours the pact
 
 ```ruby
   # In your Rakefile

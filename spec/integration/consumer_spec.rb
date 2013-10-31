@@ -129,6 +129,40 @@ describe "A service consumer side of a pact", :pact => true  do
     end
   end
 
+  context "with multiple headers" do
+    before do
+      Pact.clear_configuration
+      Pact.service_consumer "Consumer" do
+        has_pact_with "Multi Headers Service" do
+          mock_service :multi_headers_service do
+            verify true
+            port 1240
+          end
+        end
+      end
+
+      multi_headers_service.
+        given("there are multiple headers").
+        upon_receiving("a request with multiple headers").
+        with(method: :get, path: '/something', headers: {'X-Something' => "1, 2"}).
+        will_respond_with(status: 200)
+    end
+
+    it "handles multiple headers with the same name in a comma separated list" do
+        interactions = Pact::ConsumerContract.from_json(File.read(multi_headers_service.consumer_contract.pactfile_path)).interactions
+        expect(interactions.first.request.headers['X-Something']).to eq("1, 2")
+
+        uri = URI('http://localhost:1240/something')
+        post_req = Net::HTTP::Get.new(uri.path)
+        post_req.add_field('X-Something', '1')
+        post_req.add_field('X-Something', '2')
+        response = Net::HTTP.start(uri.hostname, uri.port) do |http|
+          http.request post_req
+        end
+    end
+
+  end
+
   context "with a async interaction with provider" do
     before do
       Pact.clear_configuration

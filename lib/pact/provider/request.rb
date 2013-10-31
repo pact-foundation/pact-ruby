@@ -7,6 +7,9 @@ module Pact
     module Request
       class Replayable
 
+        # See https://github.com/rack/rack/blob/e7d741c6282ca4cf4e01506f5681e6e6b14c0b32/SPEC#L87-89
+        NO_HTTP_PREFIX = ["CONTENT-TYPE", "CONTENT-LENGTH"]
+
         def initialize expected_request
           @expected_request = expected_request
         end
@@ -32,12 +35,7 @@ module Pact
           request_headers = {}
           return request_headers if expected_request.headers.is_a?(Pact::NullExpectation)
           expected_request.headers.each do |key, value|
-            key = key.upcase
-            if key.match(/CONTENT.TYPE/)
-              request_headers['CONTENT_TYPE'] = value
-            else
-              request_headers[formatted_request_header_key(key)] = value
-            end
+            request_headers[rack_request_header_for(key)] = value
           end
           request_headers
         end
@@ -54,10 +52,19 @@ module Pact
           end
         end
 
-        def formatted_request_header_key(key)
-          'HTTP_' + key.to_s.gsub('-', '_')
+        def rack_request_header_for header
+          with_http_prefix(header.to_s.upcase).gsub('-', '_')
         end
-      end      
+
+        def rack_request_value_for value
+          Array(value).join("\n")
+        end
+
+        def with_http_prefix header
+          NO_HTTP_PREFIX.include?(header) ? header : "HTTP_#{header}"
+        end
+
+      end
     end
   end
 end

@@ -27,6 +27,7 @@ module Pact::Consumer
                 "HTTP_ACCEPT" => "text/plain",
             "HTTP_USER_AGENT" => "Ruby",
                   "HTTP_HOST" => "localhost:4321",
+           "HTTP_X_SOMETHING" => "1, 2",
                "rack.version" => [1, 2 ],
                  "rack.input" => StringIO.new(body),
                 "rack.errors" => nil,
@@ -39,6 +40,9 @@ module Pact::Consumer
       }
      }
 
+     let(:content_type) { "" }
+     let(:body) { '' }
+
     subject { TestSubject.new }
 
     let(:expected_request) {
@@ -49,10 +53,12 @@ module Pact::Consumer
              :path => "/donuts",
           :headers => {
               "Content-Type" => content_type,
+              "Content-Length" => "16",
                     "Accept" => "text/plain",
                 "User-Agent" => "Ruby",
                       "Host" => "localhost:4321",
-                   "Version" => "HTTP/1.1"
+                   "Version" => "HTTP/1.1",
+                   "X-Something" => "1, 2"
           }
       }
     }

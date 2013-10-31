@@ -6,10 +6,10 @@ describe Pact::Provider::Request::Replayable do
   let(:path) { '/path?something' }
   let(:body) { {a: 'body'} }
   let(:headers) { {} }
-  let(:expected_request) do 
-    instance_double('Pact::Request::Expected', 
-      :method => 'post', 
-      :full_path => path, 
+  let(:expected_request) do
+    instance_double('Pact::Request::Expected',
+      :method => 'post',
+      :full_path => path,
       :body => body,
       :headers => headers)
   end
@@ -62,8 +62,8 @@ describe Pact::Provider::Request::Replayable do
 
   describe "headers" do
     context "when headers are expected" do
-      let(:headers) { {"Content-Type" => "text/plain", "Accept" => "application/json", "Access-Control-Request-Method" => "POST"} }
-      let(:expected_headers) { {"CONTENT_TYPE" => "text/plain", "HTTP_ACCEPT" => "application/json", "HTTP_ACCESS_CONTROL_REQUEST_METHOD" => "POST"} }
+      let(:headers) { {"Content-Type" => "text/plain", "Content-Length" => "123", "X-Content-Type" => "special", "Access-Control-Request-Method" => "POST"} }
+      let(:expected_headers) { {"CONTENT_TYPE" => "text/plain", "CONTENT_LENGTH" => "123", "HTTP_ACCESS_CONTROL_REQUEST_METHOD" => "POST", "HTTP_X_CONTENT_TYPE" => "special"} }
       it "transforms the headers into Rack format" do
         expect(subject.headers).to eq( expected_headers )
       end

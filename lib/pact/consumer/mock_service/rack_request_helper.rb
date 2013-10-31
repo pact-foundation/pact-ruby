@@ -36,7 +36,7 @@ module Pact
       private
 
       def headers_from env
-        headers = env.reject{ |key, value| !(key.start_with?("HTTP") || key == 'CONTENT_TYPE')}
+        headers = env.reject{ |key, value| !(key.start_with?("HTTP") || key == 'CONTENT_TYPE' || key == 'CONTENT_LENGTH')}
         headers.inject({}) do | hash, header |
           hash[standardise_header(header.first)] = header.last
           hash

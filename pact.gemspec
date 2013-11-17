@@ -8,8 +8,8 @@ Gem::Specification.new do |gem|
   gem.version       = Pact::VERSION
   gem.authors       = ["James Fraser", "Sergei Matheson", "Brent Snook", "Ronald Holshausen", "Bethany Skurrie"]
   gem.email         = ["james.fraser@alumni.swinburne.edu", "sergei.matheson@gmail.com", "brent@fuglylogic.com", "uglyog@gmail.com", "bskurrie@dius.com.au"]
-  gem.description   = %q{Define a pact between service consumers and providers}
-  gem.summary       = %q{Define a pact between service consumers and providers}
+  gem.description   = %q{Enables consumer driven contract testing, providing a mock service and DSL for the consumer project, and interaction playback and verification for the service provider project.}
+  gem.summary       = %q{Enables consumer driven contract testing, providing a mock service and DSL for the consumer project, and interaction playback and verification for the service provider project.}
   gem.homepage      = "https://github.com/uglyog/pact.git"
 
   gem.files         = `git ls-files`.split($/)

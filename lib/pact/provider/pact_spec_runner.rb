@@ -49,7 +49,6 @@ module Pact
           $stderr.puts SUPPORT_FILE_DEPRECATION_MESSAGE
           require spec_definition[:support_file]
         else
-          puts "Requiring #{Pact::Provider::PactHelperLocater.pact_helper_path}"
           require 'pact/provider/client_project_pact_helper'
         end
       end

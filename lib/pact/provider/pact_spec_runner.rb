@@ -42,10 +42,10 @@ module Pact
 
       def require_pact_helper spec_definition
         if spec_definition[:pact_helper]
-          puts "Requiring #{spec_definition[:pact_helper]}"
+          puts "Using #{spec_definition[:pact_helper]}"
           require spec_definition[:pact_helper]
         elsif spec_definition[:support_file]
-          puts "Requiring #{spec_definition[:support_file]}"
+          puts "Using #{spec_definition[:support_file]}"
           $stderr.puts SUPPORT_FILE_DEPRECATION_MESSAGE
           require spec_definition[:support_file]
         else

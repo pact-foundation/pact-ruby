@@ -26,6 +26,7 @@ Gem::Specification.new do |gem|
   gem.add_runtime_dependency 'thor'
   gem.add_runtime_dependency 'json' #Not locking down a version because buncher gem requires 1.6, while other projects use 1.7.
   gem.add_runtime_dependency 'webrick'
+  gem.add_runtime_dependency 'rubysl-thwait', '~> 2.0' if RbConfig::CONFIG['ruby_install_name'] == 'rbx'
 
   gem.add_development_dependency 'rake', '~> 10.0.3'
   gem.add_development_dependency 'webmock', '~> 1.9.3'

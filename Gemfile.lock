@@ -24,16 +24,9 @@ GEM
     atomic (1.1.14)
     awesome_print (1.1.0)
     coderay (1.0.9)
-    columnize (0.3.6)
     crack (0.4.1)
       safe_yaml (~> 0.9.0)
     daemons (1.1.9)
-    debugger (1.6.2)
-      columnize (>= 0.3.1)
-      debugger-linecache (~> 1.2.0)
-      debugger-ruby_core_source (~> 1.2.3)
-    debugger-linecache (1.2.0)
-    debugger-ruby_core_source (1.2.3)
     diff-lcs (1.2.4)
     eventmachine (1.0.3)
     fakefs (0.4.2)
@@ -82,7 +75,6 @@ PLATFORMS
 
 DEPENDENCIES
   activesupport
-  debugger
   fakefs (~> 0.4)
   hashie (~> 2.0)
   pact!

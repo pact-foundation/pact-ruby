@@ -2,6 +2,12 @@ Do this to generate your change history
 
     git log --date=relative --pretty=format:'  * %h - %s (%an, %ad)'
 
+### 1.0.22 (25 November 2013)
+
+* f742833 - Updating README (Beth Skurrie, 36 seconds ago)
+* ec0d9e2 - Refactor config_ru lambda (Beth Skurrie, 8 minutes ago)
+* 5cb5702 - Added code to use app in config.ru if non is specified as per https://github.com/uglyog/pact/issues/9 (Beth Skurrie, 10 minutes ago)
+
 ### 1.0.21 (25 November 2013)
 
 * f810795 - add jruby 2.0 to travis (Ronald Holshausen, 4 days ago)

@@ -2,6 +2,28 @@ Do this to generate your change history
 
     git log --date=relative --pretty=format:'  * %h - %s (%an, %ad)'
 
+### 1.0.21 (25 November 2013)
+
+* f810795 - add jruby 2.0 to travis (Ronald Holshausen, 4 days ago)
+* 65e0ea2 - dropped rbx as it was failing in a crazy way (Ronald Holshausen, 4 days ago)
+* 1403594 - added ruby 2 to travis (Ronald Holshausen, 4 days ago)
+* c72662e - rbx requires the rubysl-thwait gem (Ronald Holshausen, 4 days ago)
+* 70745dc - require webrick (Ronald Holshausen, 4 days ago)
+* 43110ad - removed thin as a runtime dependancy as it is not supported on all rubies (Ronald Holshausen, 4 days ago)
+* d4eea58 - dropped all rubies < 1.9.3 (Ronald Holshausen, 4 days ago)
+* cb312b5 - removed debugger as a development dependancy as it will not build on all rubies (Ronald Holshausen, 4 days ago)
+* 872c649 - removed ruby 1.9.2 as active support does not active support it (Ronald Holshausen, 4 days ago)
+* 1930269 - added travis CI for the uglyog repo (Ronald Holshausen, 4 days ago)
+* 7750ee1 - added travis build status image (Ronald Holshausen, 5 days ago)
+* 9f72b31 - added travis build status image (Ronald Holshausen, 5 days ago)
+* d9be65b - Added .travis.yml (Beth, 6 days ago)
+* e7a7e7b - Refactoring pact_helper loading. (Beth, 6 days ago)
+* 0224d36 - Only log loading of pact_helper once https://github.com/uglyog/pact/issues/8 (Beth, 6 days ago)
+* 0123207 - Updating gemspec description (Beth, 7 days ago)
+* 697cbdc - Updating README.md (Beth, 4 weeks ago)
+* ca79968 - Investigating Rack and HTTP headers in response to https://github.com/uglyog/pact/issues/6. Updated tests and README with info on multiple headers with the same name. (B
+* 01f0b9a - Updating README (Beth, 4 weeks ago)
+
 ### 1.0.20 (29 October 2013)
 
   * c03f34f - Fixed the pretty generation of JSON when active support is loaded. It is both a sad and a happy moment. (Beth, 7 minutes ago)

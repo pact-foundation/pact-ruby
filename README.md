@@ -154,15 +154,23 @@ Create your API class using the framework of your choice (e.g. Sinatra, Grape) -
 Create a `pact_helper.rb` in your service provider project. The file must be called pact_helper.rb, however there is some flexibility in where it can be stored. The recommended place is `specs/service_consumers/pact_helper.rb`.
 
 ```ruby
-require 'my_app' # Require the boot files for your app
+require 'pact/provider/rspec'
+# If you wish to use the same spec_helper file as your unit tests, require it here.
+# Otherwise, you can set up a separate RSpec configuration in this file just for pact:verify.
+require './spec_helper'
 
 Pact.service_provider "My Service Provider" do
+  # If you have a config.ru file, the app will be loaded from it automatically and you can skip the app config.
+  # Otherwise, set your rack app here as you would when using Rack::Test::Methods
+
   app { MyApp.new }
 
   honours_pact_with 'My Service Consumer' do
+
     # This example points to a local file, however, on a real project with a continuous
     # integration box, you would publish your pacts as artifacts,
     # and point the pact_uri to the pact published by the last successful build.
+
     pact_uri '../path-to-your-consumer-project/specs/pacts/my_consumer-my_provider.json'
   end
 end
@@ -306,32 +314,13 @@ Configure the pact_uri in the Pact.service_provider block with the pact artifact
 
 It should run with all your other tests. If an integration is broken, you want to know about it *before* you check in.
 
-#### Load your app from the config.ru file
-
-Your config.ru file may mount your app at a specified path. e.g.
-
-```
-run Rack::URLMap.new( '/some-path' => MyServiceProvider::API )
-```
-
-To avoid duplicating this code, and potentially letting your tests get out of sync with the config.ru file, you can parse the config.ru file and use the returned app in your service provider definition. e.g.
-
-```
-def app_in_config_ru
-  app, options = Rack::Builder.parse_file('config.ru')
-  app
-end
-
-Pact.service_provider "My Service Provider" do
-  app { app_in_config_ru }
-end
-```
-
-Be aware that the Rack::Builder.parse_file seems to require files even if they have already been required, so make sure your boot files are idempotent.
-
 #### Use the real database
 
 Do not stub your database calls for pact:verify. This is the best time for you to test your database integration. If you stub your database calls, you are getting little more assurance that the real end-to-end will work than if you'd used a unit test. It's the appropriate time to incur the overhead of a database call.
+
+## Gotchas
+
+* Be aware when using the app from the config.ru file is used (the default option) that the Rack::Builder.parse_file seems to require files even if they have already been required, so make sure your boot files are idempotent.
 
 ## Advanced
 
@@ -398,8 +387,6 @@ See https://www.relishapp.com/rspec/rspec-core/docs/hooks/filters for more infor
 
 Short term:
 - FIX EXAMPLE!!!
-- Make a pact-broker to store and return all the pacts, removing dependency on the CI box URLs.
-- Provide a better work around for ActiveSupport JSON rubygems hell.
 
 Long term:
 - Provide more flexible matching (eg the keys should match, and the classes of the values should match, but the values of each key do not need to be equal). This is to make the pact verification less brittle.

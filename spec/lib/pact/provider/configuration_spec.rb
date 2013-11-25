@@ -26,6 +26,16 @@ module Pact::Provider::Configuration
         expect{ Pact.configuration.provider }.to raise_error(/Please configure your provider/)
       end
     end
+
+    context "when a provider is configured without an app" do
+      before do
+        Pact.service_provider "Fred" do
+        end
+      end
+      it "uses the app from config.ru" do
+        expect( Pact.configuration.provider.app ).to be(AppForConfigRu)
+      end
+    end
   end
 
   describe PactVerification do
@@ -99,15 +109,6 @@ module Pact::Provider::Configuration
         end
         it "raises an error" do
           expect{ subject.send(:validate)}.to raise_error("Please provide a name for the Provider")
-        end
-      end
-      context "when no app is provided" do
-        subject do
-          ServiceProviderDSL.new 'Blah' do
-          end
-        end
-        it "raises an error" do
-          expect{ subject.send(:validate) }.to raise_error("Please configure an app for the Provider")
         end
       end
     end

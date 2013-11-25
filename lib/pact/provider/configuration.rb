@@ -34,6 +34,14 @@ module Pact
         def pact_verifications
           @pact_verifications ||= []
         end
+
+        def config_ru_path
+          @config_ru_path ||= './config.ru'
+        end
+
+        def config_ru_path= config_ru_path
+          @config_ru_path = config_ru_path
+        end
       end
 
       Pact::Configuration.send(:include, ConfigurationExtension)
@@ -89,9 +97,14 @@ module Pact
 
         attr_accessor :name, :app_block
 
+        CONFIG_RU_APP = lambda {
+            app, options = Rack::Builder.parse_file(Pact.configuration.config_ru_path)
+            app
+          }
+
         def initialize name
           @name = name
-          @app_block = nil
+          @app_block = CONFIG_RU_APP
         end
 
         dsl do
@@ -117,7 +130,6 @@ module Pact
 
         def validate
           raise "Please provide a name for the Provider" unless name && !name.strip.empty?
-          raise "Please configure an app for the Provider" unless app_block
         end
 
         def create_service_provider

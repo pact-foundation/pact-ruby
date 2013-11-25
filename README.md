@@ -1,11 +1,10 @@
 # Pact
 
-Define a pact between service consumers and providers.
+Define a pact between service consumers and providers, enabling "consumer driven contract" testing.
 
+Pact provides an RSpec DSL for service consumers to define the requests they will make to a service provider and the responses they expect back. These expectations are used in the consumers specs to provide a mock service provider. The interactions are recorded, and played back in the service provider specs to ensure the service provider actually does provide the response the consumer expects.
 
-Pact provides an RSpec DSL for service consumers to define the request they will make to a service service provider and the response they expect back. This expectation is used in the consumers specs to provide a mock service provider, and is also played back in the service provider specs to ensure the service provider actually does provide the response the consumer expects.
-
-This allows you to test both sides of an integration point using fast unit tests.
+This allows testing of both sides of an integration point using fast unit tests.
 
 This gem is inspired by the concept of "Consumer driven contracts". See http://martinfowler.com/articles/consumerDrivenContracts.html for more information.
 
@@ -15,9 +14,10 @@ Travis CI Status: [![travis-ci.org Build Status](https://travis-ci.org/uglyog/pa
 * A services is mocked using an actual process running on a specified port, so javascript clients can be tested as easily as backend clients.
 * "Provider states" (similar to fixtures) allow the same request to be made with a different expected response.
 * Consumers specify only the fields they are interested in, allowing a provider to return more fields without breaking the pact. This allows a provider to have a different pact with a different consumer, and know which fields each cares about in a given response.
-* Expected interactions are verified to have actually occurred.
-* A rake verification task allows a pact at any URI to be checked against a given service provider codebase.
-* Different versions of a consumer/provider pair can be easily tested against each other, allowing confidence when deploying new versions of each.
+* Expected interactions are verified to have actually occurred in the consumer specs.
+* The mocked responses are verified to be valid by replaying the interactions against the provider codebase.
+* Rake verification tasks allow a pacts at one or more URIs to be checked against a given service provider codebase.
+* Different versions of a consumer/provider pair can be easily tested against each other, allowing confidence when deploying new versions of each (see the pact_broker and pact_broker-client gems).
 
 ## Installation
 

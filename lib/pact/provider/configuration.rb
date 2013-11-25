@@ -97,10 +97,7 @@ module Pact
 
         attr_accessor :name, :app_block
 
-        CONFIG_RU_APP = lambda {
-            app, options = Rack::Builder.parse_file(Pact.configuration.config_ru_path)
-            app
-          }
+        CONFIG_RU_APP = lambda { Rack::Builder.parse_file(Pact.configuration.config_ru_path).first }
 
         def initialize name
           @name = name

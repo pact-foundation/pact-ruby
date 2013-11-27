@@ -1,5 +1,6 @@
 require 'pact/matchers'
 require 'pact/consumer/mock_service/rack_request_helper'
+require 'pact/consumer/mock_service/interaction_mismatch'
 
 module Pact
   module Consumer
@@ -70,11 +71,8 @@ module Pact
         multiple_interactions_found_response actual_request, matching_interactions
       end
 
-      def interaction_diffs actual_request, candidate_interactions
-        candidate_interactions.collect do | candidate_interaction |
-          diff = candidate_interaction.request.difference(actual_request)
-          diff_summary_for candidate_interaction, diff
-        end
+      def interaction_mismatch actual_request, candidate_interactions
+        InteractionMismatch.new(candidate_interactions, actual_request)
       end
 
       def diff_summary_for interaction, diff
@@ -90,25 +88,29 @@ module Pact
         summary
       end
 
-      def unrecognised_request_response actual_request, interaction_diffs
+      def unrecognised_request_response interaction_mismatch
         response = {
-          message: "No interaction found for #{actual_request.method_and_path}",
-          interaction_diffs:  interaction_diffs
+          message: "No interaction found for #{interaction_mismatch.actual_request.method_and_path}",
+          interaction_diffs:  interaction_mismatch.diffs
         }
         [500, {'Content-Type' => 'application/json'}, [response.to_json]]
       end
 
-      def log_unrecognised_request_and_interaction_diff actual_request, interaction_diffs, candidate_interactions
-        logger.error "No interaction found on #{name} for #{actual_request.method_and_path}"
+      def log_unrecognised_request_and_interaction_diff interaction_mismatch
+        logger.error "No interaction found on #{name} for #{interaction_mismatch.actual_request.method_and_path}"
         logger.error 'Interaction diffs for that route:'
-        logger.ap(interaction_diffs, :error)
+        logger.ap(interaction_mismatch.diffs, :error)
       end
 
       def handle_unrecognised_request actual_request, candidate_interactions
-        interaction_list.register_unexpected_request actual_request
-        interaction_diffs = interaction_diffs(actual_request, candidate_interactions)
-        log_unrecognised_request_and_interaction_diff actual_request, interaction_diffs, candidate_interactions
-        unrecognised_request_response actual_request, interaction_diffs
+        interaction_mismatch = interaction_mismatch(actual_request, candidate_interactions)
+        if candidate_interactions.any?
+          interaction_list.register_interaction_mismatch interaction_mismatch
+        else
+          interaction_list.register_unexpected_request actual_request
+        end
+        log_unrecognised_request_and_interaction_diff interaction_mismatch
+        unrecognised_request_response interaction_mismatch
       end
 
       def response_from response

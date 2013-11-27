@@ -12,7 +12,7 @@ module Pact
 
       def verify example_description
         response = http.request_get("/verify?example_description=#{URI.encode(example_description)}", MOCK_SERVICE_ADMINISTRATON_HEADERS)
-        raise response.body unless response.is_a? Net::HTTPSuccess
+        raise "\e[31m#{response.body}\e[m" unless response.is_a? Net::HTTPSuccess
       end
 
       def log msg

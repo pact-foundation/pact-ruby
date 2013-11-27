@@ -4,6 +4,7 @@ module Pact
 
       attr_reader :interactions
       attr_reader :unexpected_requests
+      attr_reader :interaction_mismatches
 
       def initialize
         clear
@@ -13,6 +14,7 @@ module Pact
       def clear
         @interactions = []
         @matched_interactions = []
+        @interaction_mismatches = []
         @unexpected_requests = []
       end
 
@@ -28,18 +30,35 @@ module Pact
         @unexpected_requests << request
       end
 
+      def register_interaction_mismatch interaction_mismatch
+        @interaction_mismatches << interaction_mismatch
+      end
+
       def all_matched?
         interaction_diffs.empty?
       end
 
       def missing_interactions
-        @interactions - @matched_interactions
+        @interactions - @matched_interactions - @interaction_mismatches.collect(&:candidate_interactions).flatten
+      end
+
+      def missing_interactions_summaries
+        missing_interactions.collect(&:request).collect(&:method_and_path)
+      end
+
+      def interaction_mismatches_summaries
+        interaction_mismatches.collect(&:short_summary)
+      end
+
+      def unexpected_requests_summaries
+        unexpected_requests.collect(&:method_and_path)
       end
 
       def interaction_diffs
         {
-          :missing_interactions => missing_interactions.collect(&:as_json),
-          :unexpected_requests => unexpected_requests.collect(&:as_json)
+          :missing_interactions => missing_interactions_summaries,
+          :interaction_mismatches => interaction_mismatches_summaries,
+          :unexpected_requests => unexpected_requests_summaries
         }.inject({}) do | hash, pair |
           hash[pair.first] = pair.last if pair.last.any?
           hash
@@ -49,9 +68,9 @@ module Pact
       def find_candidate_interactions actual_request
         interactions.select do | interaction |
           interaction.request.matches_route? actual_request
-        end        
-      end      
+        end
+      end
 
-    end    
+    end
   end
 end

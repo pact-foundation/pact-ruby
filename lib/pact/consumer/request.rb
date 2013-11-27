@@ -20,8 +20,8 @@ module Pact
 
         def self.key_not_found
           nil
-        end       
-      end      
+        end
+      end
     end
   end
 end

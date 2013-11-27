@@ -76,7 +76,7 @@ class RequestFactory
    deep_merge(DEFAULTS, overrides)
   end
 
-  def self.create_actual
-    Pact::Consumer::Request::Actual.from_hash(create_hash)
+  def self.create_actual overrides = {}
+    Pact::Consumer::Request::Actual.from_hash(create_hash(overrides))
   end
 end

@@ -26,9 +26,19 @@ module Pact
           logger.info "Verifying - interactions matched for example \"#{example_description(env)}\""
           [200, {}, ['Interactions matched']]
         else
-          logger.warn "Verifying - actual interactions do not match expected interactions for example \"#{example_description(env)}\". Interaction diffs:"
-          logger.ap interaction_list.interaction_diffs, :warn
-          [500, {}, ["Actual interactions do not match expected interactions for mock #{name}. See #{log_description} for details."]]
+
+          missing_interactions_summaries = interaction_list.missing_interactions_summaries
+          interaction_mismatches_summaries = interaction_list.interaction_mismatches_summaries
+          unexpected_requests_summaries = interaction_list.unexpected_requests_summaries
+          error_message = "Missing requests:
+  #{missing_interactions_summaries.join("\n  ")}
+Incorrect requests:
+  #{interaction_mismatches_summaries.join("\n  ")}
+Unexpected requests:
+  #{unexpected_requests_summaries.join("\n  ")}"
+logger.warn "Verifying - actual interactions do not match expected interactions for example \"#{example_description(env)}\". \n#{error_message}"
+logger.warn error_message
+          [500, {}, ["Actual interactions do not match expected interactions for mock #{name}.\n#{error_message}\nSee #{log_description} for details."]]
         end
       end
 

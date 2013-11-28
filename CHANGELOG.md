@@ -2,6 +2,10 @@ Do this to generate your change history
 
     git log --date=relative --pretty=format:'  * %h - %s (%an, %ad)'
 
+### 1.0.23 (29 November 2013)
+
+* a978654 - Improving the display of verification errors in the consumer project. (Beth Skurrie, 2 days ago)
+
 ### 1.0.22 (25 November 2013)
 
 * f742833 - Updating README (Beth Skurrie, 36 seconds ago)

@@ -2,6 +2,14 @@ Do this to generate your change history
 
     git log --date=relative --pretty=format:'  * %h - %s (%an, %ad)'
 
+### 1.0.24 (4 December 2013)
+
+* fd30d36 - Merge branch 'master' of github.com:uglyog/pact (Beth, 13 minutes ago)
+* 45430b1 - Whoops; use actual latest ruby p484, not p448 (Daniel Heath, 18 hours ago)
+* 9a999ad - Specify a non-compromised version of ruby in .ruby-version (Daniel Heath, 18 hours ago)
+* bb8d4d9 - Merge pull request #13 from stevenfarlie/update-awesome-print (Ronald Holshausen, 20 hours ago)
+* 6582d15 - Allow newer awesome_print versions (Steven Farlie, 2 days ago)
+
 ### 1.0.23 (29 November 2013)
 
 * a978654 - Improving the display of verification errors in the consumer project. (Beth Skurrie, 2 days ago)

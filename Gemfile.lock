@@ -2,7 +2,7 @@ PATH
   remote: .
   specs:
     pact (1.0.23)
-      awesome_print (~> 1.1.0)
+      awesome_print (~> 1.1)
       find_a_port (~> 1.0.1)
       json
       rack-test (~> 0.6.2)
@@ -22,7 +22,7 @@ GEM
       tzinfo (~> 0.3.37)
     addressable (2.3.5)
     atomic (1.1.14)
-    awesome_print (1.1.0)
+    awesome_print (1.2.0)
     coderay (1.0.9)
     crack (0.4.1)
       safe_yaml (~> 0.9.0)

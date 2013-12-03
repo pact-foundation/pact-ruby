@@ -2,6 +2,10 @@ Do this to generate your change history
 
     git log --date=relative --pretty=format:'  * %h - %s (%an, %ad)'
 
+### 1.0.25 (4 December 2013)
+
+* 20dd5fa - Updated the homepage in gemspec (Beth, 4 minutes ago)
+
 ### 1.0.24 (4 December 2013)
 
 * fd30d36 - Merge branch 'master' of github.com:uglyog/pact (Beth, 13 minutes ago)

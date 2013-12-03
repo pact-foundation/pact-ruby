@@ -11,7 +11,7 @@ This gem is inspired by the concept of "Consumer driven contracts". See http://m
 Travis CI Status: [![travis-ci.org Build Status](https://travis-ci.org/uglyog/pact.png)](https://travis-ci.org/uglyog/pact)
 
 ## Features
-* A services is mocked using an actual process running on a specified port, so javascript clients can be tested as easily as backend clients.
+* A service is mocked using an actual process running on a specified port, so javascript clients can be tested as easily as backend clients.
 * "Provider states" (similar to fixtures) allow the same request to be made with a different expected response.
 * Consumers specify only the fields they are interested in, allowing a provider to return more fields without breaking the pact. This allows a provider to have a different pact with a different consumer, and know which fields each cares about in a given response.
 * Expected interactions are verified to have actually occurred in the consumer specs.
@@ -142,6 +142,7 @@ end
 #### 7. Run the specs again.
 
 Green! You now have a pact file that can be used to verify your expectations in the provider project.
+Now, rinse and repeat for ALL the likely status codes that may be returned (recommend 400, 404, 500 and 401/403 if there is authorisation.)
 
 ### Service Provider project
 

@@ -8,7 +8,7 @@ This allows testing of both sides of an integration point using fast unit tests.
 
 This gem is inspired by the concept of "Consumer driven contracts". See http://martinfowler.com/articles/consumerDrivenContracts.html for more information.
 
-Travis CI Status: [![travis-ci.org Build Status](https://travis-ci.org/uglyog/pact.png)](https://travis-ci.org/uglyog/pact)
+Travis CI Status: [![travis-ci.org Build Status](https://travis-ci.org/realestate-com-au/pact.png)](https://travis-ci.org/realestate-com-au/pact)
 
 ## Features
 * A service is mocked using an actual process running on a specified port, so javascript clients can be tested as easily as backend clients.

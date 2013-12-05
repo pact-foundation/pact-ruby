@@ -72,6 +72,7 @@ module Pact
         config.extend Pact::Provider::RSpec::ClassMethods
         config.include Pact::Provider::RSpec::InstanceMethods
         config.include Pact::Provider::TestMethods
+        config.backtrace_inclusion_patterns = [/pact\/provider\/rspec/]
 
         config.before :each, :pact => :verify do | example |
           example_description = "#{example.example.example_group.description} #{example.example.description}"

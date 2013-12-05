@@ -2,6 +2,12 @@ Do this to generate your change history
 
     git log --date=relative --pretty=format:'  * %h - %s (%an, %ad)'
 
+### 1.0.26 (5 December 2013)
+
+* e4be654 - BEST COMMIT TO PACT EVER since the introduction of pact:verify. Got rid of the horrific backtraces. (Beth, 5 hours ago)
+* 2810db7 - Updated README to point to realestate-com-au travis CI build (Ronald Holshausen, 28 hours ago)
+* bfa357a - Update README.md (bethesque, 30 hours ago)
+
 ### 1.0.25 (4 December 2013)
 
 * 20dd5fa - Updated the homepage in gemspec (Beth, 4 minutes ago)

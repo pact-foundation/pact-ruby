@@ -30,7 +30,7 @@ module Pact
 
         context "when the state does not exist" do
 
-        let(:provider_state) { nil }
+          let(:provider_state) { nil }
 
           it "raises an error" do
             expect { subject }.to raise_error /Could not find.*some state.*consumer.*/

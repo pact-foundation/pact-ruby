@@ -10,16 +10,15 @@ module Pact
 
       def get name, options = {}
         unless provider_state = ProviderState.get(name, options)
-          consumer = options[:for]
-          register_missing_provider_state name, consumer
-          raise text name, consumer
+          register_missing_provider_state name, options[:for]
+          raise error_message name, options[:for]
         end
         provider_state
       end
 
       private
 
-      def text name, consumer
+      def error_message name, consumer
         ERB.new(template_string).result(binding)
       end
 

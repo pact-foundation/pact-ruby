@@ -6,10 +6,12 @@ module Pact
     describe ProviderStateProxy do
 
       let(:provider_state_proxy) { ProviderStateProxy.new }
+
       describe "get" do
         let(:name) { "some state" }
         let(:options) { { :for => 'some consumer'} }
         let(:provider_state) { double("provider_state")}
+
         subject { provider_state_proxy.get name, options }
 
         before do
@@ -31,19 +33,26 @@ module Pact
         context "when the state does not exist" do
 
           let(:provider_state) { nil }
+          let(:expected_missing_provider_states) { {"some consumer" => ["some state"]} }
 
           it "raises an error" do
             expect { subject }.to raise_error /Could not find.*some state.*consumer.*/
           end
 
           it "records the provider state as missing" do
-            begin
-              subject
-            rescue
+            subject rescue nil
+            expect(provider_state_proxy.missing_provider_states).to eq expected_missing_provider_states
+          end
+
+          context "when the same missing provider state is requested" do
+            it "ensures the list only contains unique entries" do
+              subject rescue nil
+              subject rescue nil
+              expect(provider_state_proxy.missing_provider_states['some consumer'].size).to eq 1
             end
-            expect(provider_state_proxy.missing_provider_states).to eq({"some consumer" => ["some state"]})
           end
         end
+
 
       end
     end

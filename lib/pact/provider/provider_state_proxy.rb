@@ -19,16 +19,11 @@ module Pact
       private
 
       def error_message name, consumer
-        ERB.new(template_string).result(binding)
+        "Could not find provider state \"#{name}\" for consumer #{consumer}"
       end
-
-      def template_string
-        File.read(File.expand_path( '../../templates/provider_state.erb', __FILE__))
-      end
-
 
       def register_missing_provider_state name, consumer
-        missing_states_for(consumer) << name
+        missing_states_for(consumer) << name unless missing_states_for(consumer).include?(name)
       end
 
       def missing_states_for consumer

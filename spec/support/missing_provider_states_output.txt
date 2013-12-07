@@ -1,0 +1,25 @@
+Pact.provider_states_for "Consumer 1" do
+
+  provider_state "state1" do
+    set_up do
+      # Your set up code goes here
+    end
+  end
+
+  provider_state "state2" do
+    set_up do
+      # Your set up code goes here
+    end
+  end
+
+end
+
+Pact.provider_states_for "Consumer 2" do
+
+  provider_state "state3" do
+    set_up do
+      # Your set up code goes here
+    end
+  end
+
+end

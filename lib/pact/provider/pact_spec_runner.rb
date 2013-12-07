@@ -4,6 +4,7 @@ require 'rspec/core'
 require 'rspec/core/formatters/documentation_formatter'
 require 'rspec/core/formatters/json_formatter'
 require 'pact/provider/pact_helper_locator'
+require 'pact/provider/print_missing_provider_states'
 require_relative 'rspec'
 
 
@@ -101,6 +102,7 @@ module Pact
             config.run_hook(:after, :suite)
           end
         end
+        PrintMissingProviderStates.call Pact.world.provider_states.missing_provider_states
         @output = @json_formatter.output_hash
         exit_code
       end

@@ -1,19 +1,18 @@
 module Pact
+
+  def self.world
+    @world ||= Pact::Provider::World.new
+  end
+
   module Provider
     class World
 
-      def initialize configuration = Pact.configuration
-        @configuration = configuration
+      def initialize
       end
 
       def provider_states
-        @provider_states_proxy ||= Pact::Provider::ProviderStateProxy.new(Pact::Provider::ProviderState)
+        @provider_states_proxy ||= Pact::Provider::ProviderStateProxy.new
       end
-
-
-      private
-
-      attr_reader :configuration
 
     end
   end

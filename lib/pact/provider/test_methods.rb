@@ -4,6 +4,7 @@ require 'pact/consumer_contract/interaction'
 require 'pact/provider/provider_state'
 require 'pact/provider/provider_state_proxy'
 require 'pact/provider/request'
+require 'pact/provider/world'
 
 module Pact
   module Provider
@@ -45,7 +46,7 @@ module Pact
       end
 
       def get_provider_state provider_state_name, consumer
-        ProviderStateProxy.new.get(provider_state_name, :for => consumer)
+        Pact.world.provider_states.get(provider_state_name, :for => consumer)
       end
     end
   end

@@ -10,6 +10,34 @@ require 'pact/matchers/index_not_found'
 module Pact
   module Matchers
 
+    class Difference
+      attr_reader :expected, :actual
+      def initialize expected, actual
+        @expected = expected
+        @actual = actual
+      end
+
+      def any?
+        true
+      end
+
+      def to_hash
+        {expected: expected, actual: actual}
+      end
+
+      def to_json options = {}
+        to_hash.to_json(options)
+      end
+
+      def to_s
+        to_hash.to_s
+      end
+
+      def == other
+        other.is_a?(Difference) && other.expected == expected && other.actual == actual
+      end
+    end
+
     NO_DIFF_INDICATOR = 'no difference here!'
     #UnexpectedKey.new = '<key not to be present>'
     DEFAULT_OPTIONS = {allow_unexpected_keys: true, structure: false}.freeze
@@ -34,7 +62,7 @@ module Pact
       if actual.is_a?(String) && regexp.match(actual)
         {}
       else
-        {expected: regexp, actual: actual}
+        Difference.new regexp, actual
       end
     end
 
@@ -42,7 +70,7 @@ module Pact
       if actual.is_a? Array
         actual_array_diff expected, actual, options
       else
-        {expected: expected, actual: actual}
+        Difference.new expected, actual
       end
     end
 
@@ -78,7 +106,7 @@ module Pact
         {}
       else
         (actual.keys - expected.keys).inject({}) do | diff, key |
-          diff[key] = {:expected => UnexpectedKey.new, :actual => actual[key]}
+          diff[key] = Difference.new(UnexpectedKey.new, actual[key])
           diff
         end
       end
@@ -88,7 +116,7 @@ module Pact
       if actual.is_a? Hash
         actual_hash_diff expected, actual, options
       else
-        {expected: expected, actual: actual}
+        Difference.new expected, actual
       end
     end
 
@@ -96,7 +124,7 @@ module Pact
       if classes_match? expected, actual
         {}
       else
-        {:expected => structure_diff_expected_display(expected), :actual => structure_diff_actual_display(actual)}
+        Difference.new structure_diff_expected_display(expected), structure_diff_actual_display(actual)
       end
     end
 
@@ -118,7 +146,7 @@ module Pact
     def object_diff expected, actual, options
       return class_diff(expected, actual) if options[:structure]
       if expected != actual
-        {:expected => expected, :actual => actual}
+        Difference.new expected, actual
       else
         {}
       end

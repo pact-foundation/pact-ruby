@@ -57,8 +57,8 @@ describe "A service consumer side of a pact", :pact => true  do
           "provider_state" => "something",
           "body"=>{
             "a"=>{
-              "expected"=>"some body",
-              "actual"=>"not matching body"
+              "EXPECTED"=>"some body",
+              "ACTUAL"=>"not matching body"
             }
           }
         }]

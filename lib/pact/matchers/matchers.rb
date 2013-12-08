@@ -22,7 +22,7 @@ module Pact
       end
 
       def to_hash
-        {expected: expected, actual: actual}
+        {:EXPECTED => expected, :ACTUAL => actual}
       end
 
       def to_json options = {}
@@ -38,7 +38,22 @@ module Pact
       end
     end
 
-    NO_DIFF_INDICATOR = 'no difference here!'
+    class NoDiffIndicator
+
+      def to_json
+        to_s
+      end
+
+      def to_s
+        'no difference here!'
+      end
+
+      def == other
+        other.is_a? NoDiffIndicator
+      end
+    end
+
+    NO_DIFF_INDICATOR = NoDiffIndicator.new
     #UnexpectedKey.new = '<key not to be present>'
     DEFAULT_OPTIONS = {allow_unexpected_keys: true, structure: false}.freeze
 

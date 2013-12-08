@@ -29,8 +29,24 @@ Need a way to specify a literal empty hash, rather than a hash that matches anyt
 {:something => actual({}) }
 {:something => empty_hash }
 
-Slightly unintuitive behaviour: {} matches any hash, but [] only matches an empty array (or does now we've changed the code). Should [] match any array? How do we then specify an empty array?
+# Slightly unintuitive behaviour: {} matches any hash, but [] only matches an empty array (or does now we've changed the code). Should [] match any array? How do we then specify an empty array?
 
 {:something => literal([]) }
 {:something => actual([]) }
 {:something => empty_array }
+
+
+Pact.build do
+   {
+      status: 200,
+      headers: exactly({
+
+         }),
+      body: including({
+         age: literal('12'),
+         phoneNumber: example("0415 134 234", /\d{4} \d{3} \d{3}/),
+         favouriteColors:
+      })
+   }
+
+end

@@ -56,6 +56,10 @@ module Pact
         self == other
       end
 
+      def description_with_provider_state_quoted
+        provider_state ? "\"#{description}\" given \"#{provider_state}\"" : "\"#{description}\""
+      end
+
       def to_s
         JSON.pretty_generate(self)
       end

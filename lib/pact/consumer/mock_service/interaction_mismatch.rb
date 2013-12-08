@@ -1,3 +1,5 @@
+require 'pact/matchers/diff_decorator'
+
 module Pact
   module Consumer
     class InteractionMismatch
@@ -12,8 +14,12 @@ module Pact
         @candiate_diffs = candidate_interactions.collect{ | candidate_interaction| CandidateDiff.new(candidate_interaction, actual_request)}
       end
 
-      def diffs
-        candiate_diffs.collect(&:diff_summary)
+      def to_hash
+        candiate_diffs.collect(&:to_hash)
+      end
+
+      def to_s
+        candiate_diffs.collect(&:to_s).join("\n")
       end
 
       def short_summary
@@ -36,10 +42,17 @@ module Pact
           diff.keys
         end
 
-        def diff_summary
+        def to_hash
           summary = {:description => candidate_interaction.description}
           summary[:provider_state] = candidate_interaction.provider_state if candidate_interaction.provider_state
           summary.merge(diff)
+        end
+
+        def to_s
+          [
+            "Diff with interaction: #{candidate_interaction.description_with_provider_state_quoted}",
+            Pact::Matchers::DiffDecorator.new(diff).to_s
+          ].join("\n")
         end
 
         def diff

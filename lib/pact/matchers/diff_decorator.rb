@@ -13,66 +13,66 @@ module Pact
       end
 
       def to_s
-        description(diff).join("\n")
+        diff_descriptions(diff).join("\n")
       end
 
-      def description obj, path = [], messages = []
+      def diff_descriptions obj, path = [], descriptions = []
         case obj
-        when Hash then handle_hash obj, path, messages
-        when Array then handle_array obj, path, messages
-        when Difference then handle_difference obj, path, messages
+        when Hash then handle_hash obj, path, descriptions
+        when Array then handle_array obj, path, descriptions
+        when Difference then handle_difference obj, path, descriptions
         when NoDiffIndicator then nil
         else
-          raise "Invalid diff, expected Hash, Array or Difference, found #{obj}"
+          raise "Invalid diff, expected Hash, Array, NoDiffIndicator or Difference, found #{obj}"
         end
-        messages
+        descriptions
       end
 
-      def handle_hash hash, path, messages
+      def handle_hash hash, path, descriptions
         hash.each_pair do | key, value |
-          description value, path + [key.inspect], messages
+          diff_descriptions value, path + [key.inspect], descriptions
         end
       end
 
-      def handle_array array, path, messages
+      def handle_array array, path, descriptions
         array.each_with_index do | obj, index |
-          description obj, path + [index], messages
+          diff_descriptions obj, path + [index], descriptions
         end
       end
 
-      def handle_difference difference, path, messages
+      def handle_difference difference, path, descriptions
 
         case difference.actual
-        when Pact::KeyNotFound then handle_key_not_found(difference, path, messages)
-        when Pact::IndexNotFound then handle_index_not_found(difference, path, messages)
+        when Pact::KeyNotFound then handle_key_not_found(difference, path, descriptions)
+        when Pact::IndexNotFound then handle_index_not_found(difference, path, descriptions)
         else
           case difference.expected
-          when Pact::UnexpectedKey then handle_unexpected_key(difference, path, messages)
-          when Pact::UnexpectedIndex then handle_unexpected_index(difference, path, messages)
+          when Pact::UnexpectedKey then handle_unexpected_key(difference, path, descriptions)
+          when Pact::UnexpectedIndex then handle_unexpected_index(difference, path, descriptions)
           else
-            handle_mismatched_value(difference, path, messages)
+            handle_mismatched_value(difference, path, descriptions)
           end
         end
       end
 
-      def handle_unexpected_index difference, path, messages
-        messages << "At #{path_to_s(path)}\nArray contained unexpected item: #{difference.actual.ai}"
+      def handle_unexpected_index difference, path, descriptions
+        descriptions << "\tAt:\n\t\t#{path_to_s(path)}\n\tArray contained unexpected item:\n\t\t#{difference.actual.ai}"
       end
 
-      def handle_mismatched_value difference, path, messages
-        messages << "At #{path_to_s(path)}\nExpected: #{difference.expected.ai}\nActual: #{difference.actual.ai}"
+      def handle_mismatched_value difference, path, descriptions
+        descriptions << "\tAt:\n\t\t#{path_to_s(path)}\n\tExpected:\n\t\t#{difference.expected.ai}\n\tActual:\n\t\t#{difference.actual.ai}"
       end
 
-      def handle_index_not_found difference, path, messages
-        messages << "At #{path_to_s(path)}\nMissing: #{difference.expected.ai}"
+      def handle_index_not_found difference, path, descriptions
+        descriptions << "\tAt:\n\t\t#{path_to_s(path)}\n\tMissing index with value:\n\t\t#{difference.expected.ai}"
       end
 
-      def handle_key_not_found difference, path, messages
-        messages << "At #{path_to_s(path)}\nMissing: #{difference.expected.ai}"
+      def handle_key_not_found difference, path, descriptions
+        descriptions << "\tAt:\n\t\t#{path_to_s(path)}\n\tMissing key with value:\n\t\t#{difference.expected.ai}"
       end
 
-      def handle_unexpected_key difference, path, messages
-        messages << "At #{path_to_s(path)}\nHash contained unexpected key with value: #{difference.actual.ai}"
+      def handle_unexpected_key difference, path, descriptions
+        descriptions << "\tAt:\n\t\t#{path_to_s(path)}\n\tHash contained unexpected key with value:\n\t\t#{difference.actual.ai}"
       end
 
       def path_to_s path

@@ -14,14 +14,14 @@ module Pact
           let(:expected_output) { ""}
 
           it "includes the expected value" do
-            expect(subject.to_s).to include('Expected: "alphabet"')
+            expect(subject.to_s).to match(/Expected:.*"alphabet"/m)
           end
           it "includes the actual value" do
-            expect(subject.to_s).to include('Actual: "woozle"')
+            expect(subject.to_s).to match(/Actual:.*"woozle"/m)
           end
 
           it "includes the path" do
-            expect(subject.to_s).to include('At [:root]["blah"][1]')
+            expect(subject.to_s).to include('[:root]["blah"][1]')
           end
         end
 
@@ -31,34 +31,34 @@ module Pact
           let(:expected_output) { ""}
 
           it "includes the expected value" do
-            expect(subject.to_s).to include("Missing: {")
+            expect(subject.to_s).to match(/Missing key with value\:.*\{/m)
           end
 
           it "includes the path" do
-            expect(subject.to_s).to include('At [:root]["blah"][1]')
+            expect(subject.to_s).to include('[:root]["blah"][1]')
           end
         end
 
         context "when there is a missing index" do
           let(:diff) { [NoDiffIndicator.new, Difference.new(1, IndexNotFound.new )]}
           it "includes the expected value" do
-            expect(subject.to_s).to include("Missing: 1")
+            expect(subject.to_s).to match(/Missing.*1/m)
           end
 
           it "includes the path" do
-            expect(subject.to_s).to include('At [1]')
+            expect(subject.to_s).to include('[1]')
           end
         end
 
         context "when there is an unexpected index" do
           let(:diff) { [NoDiffIndicator.new, Difference.new(UnexpectedIndex.new, 2), Difference.new(UnexpectedIndex.new, "b")]}
           it "includes the unexpected value" do
-            expect(subject.to_s).to include("Array contained unexpected item: ")
+            expect(subject.to_s).to include("Array contained unexpected item:")
           end
 
           it "includes the path" do
-            expect(subject.to_s).to include('At [1]')
-            expect(subject.to_s).to include('At [2]')
+            expect(subject.to_s).to include('[1]')
+            expect(subject.to_s).to include('[2]')
           end
         end
 
@@ -69,7 +69,7 @@ module Pact
           end
 
           it "includes the path" do
-            expect(subject.to_s).to include('At ["blah"]')
+            expect(subject.to_s).to include('["blah"]')
           end
         end
 

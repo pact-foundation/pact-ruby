@@ -75,12 +75,6 @@ module Pact
         InteractionMismatch.new(candidate_interactions, actual_request)
       end
 
-      def diff_summary_for interaction, diff
-        summary = {:description => interaction.description}
-        summary[:provider_state] = interaction.provider_state if interaction.provider_state
-        summary.merge(diff)
-      end
-
       def request_summary_for interaction
         summary = {:description => interaction.description}
         summary[:provider_state] if interaction.provider_state
@@ -91,7 +85,7 @@ module Pact
       def unrecognised_request_response interaction_mismatch
         response = {
           message: "No interaction found for #{interaction_mismatch.actual_request.method_and_path}",
-          interaction_diffs:  interaction_mismatch.diffs
+          interaction_diffs:  interaction_mismatch.to_hash
         }
         [500, {'Content-Type' => 'application/json'}, [response.to_json]]
       end
@@ -99,7 +93,8 @@ module Pact
       def log_unrecognised_request_and_interaction_diff interaction_mismatch
         logger.error "No interaction found on #{name} for #{interaction_mismatch.actual_request.method_and_path}"
         logger.error 'Interaction diffs for that route:'
-        logger.ap(interaction_mismatch.diffs, :error)
+        logger.ap(interaction_mismatch.to_hash, :error)
+        logger.error("Interaction diffs for that route in text format:\n#{interaction_mismatch.to_s}")
       end
 
       def handle_unrecognised_request actual_request, candidate_interactions

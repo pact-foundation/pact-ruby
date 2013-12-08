@@ -161,10 +161,8 @@ require 'pact/provider/rspec'
 require './spec_helper'
 
 Pact.service_provider "My Service Provider" do
-  # If you have a config.ru file, the app will be loaded from it automatically and you can skip the app config.
-  # Otherwise, set your rack app here as you would when using Rack::Test::Methods
 
-  app { MyApp.new }
+  app { MyApp.new } # Optional, loads app from config.ru by default
 
   honours_pact_with 'My Service Consumer' do
 

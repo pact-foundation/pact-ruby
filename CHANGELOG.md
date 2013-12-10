@@ -2,6 +2,20 @@ Do this to generate your change history
 
     git log --date=relative --pretty=format:'  * %h - %s (%an, %ad)'
 
+### 1.0.26 (10 December 2013)
+
+* 388fc7b - Changing provider set up and tear down to run before :all rather than before :each (Beth, 13 minutes ago)
+* 06b5626 - Updating TODO list in the README. (Beth, 25 hours ago)
+* 823f306 - Update README.md (bethesque, 32 hours ago)
+* 7d96017 - Improving layout of text diff message (Beth Skurrie, 2 days ago)
+* 9c88c3a - Working on a new way to display the diff between an expected and actual request/response (Beth Skurrie, 2 days ago)
+* ff2c448 - Added a Difference class instead of a hash with :expected and :actual (Beth Skurrie, 2 days ago)
+* b34457c - Moved all missing provider state templates into the one message at the end of the test so it's easier to digest and can be copied directly into a file. (Beth Skurrie, 2
+* 1729887 - Moving ProviderStateProxy on to Pact World (Beth Skurrie, 3 days ago)
+* c53cb4d - Starting to add Pact::World (Beth, 4 days ago)
+* f7af9e2 - Recording missing provider states (Beth, 4 days ago)
+* 4caa171 - Starting work on ProviderStateProxy - intent is for it to record missing and unused states to report at the end of the pact:verify (Beth, 4 days ago)
+
 ### 1.0.26 (5 December 2013)
 
 * e4be654 - BEST COMMIT TO PACT EVER since the introduction of pact:verify. Got rid of the horrific backtraces. (Beth, 5 hours ago)

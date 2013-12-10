@@ -62,12 +62,12 @@ module Pact
 
           describe description_for(interaction), :pact => :verify do
 
-            before do
+            before :all do
               set_up_provider_state interaction.provider_state, options[:consumer]
               replay_interaction interaction
             end
 
-            after do
+            after :all do
               tear_down_provider_state interaction.provider_state, options[:consumer]
             end
 

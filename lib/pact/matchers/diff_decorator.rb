@@ -9,11 +9,11 @@ module Pact
       end
 
       def to_hash
-        diff
+        diff.to
       end
 
       def to_s
-        diff_descriptions(diff).join("\n")
+        diff_descriptions(diff).join("\n").tap{ | it | puts it}
       end
 
       def diff_descriptions obj, path = [], descriptions = []
@@ -36,7 +36,7 @@ module Pact
 
       def handle_array array, path, descriptions
         array.each_with_index do | obj, index |
-          diff_descriptions obj, path + [index], descriptions
+          diff_descriptions obj, path + [ArrayIndex.new(index)], descriptions
         end
       end
 
@@ -56,27 +56,51 @@ module Pact
       end
 
       def handle_unexpected_index difference, path, descriptions
-        descriptions << "\tAt:\n\t\t#{path_to_s(path)}\n\tArray contained unexpected item:\n\t\t#{difference.actual.ai}"
+        descriptions << "\tIn array at:\n\t\t#{path_to_s(path)}\n\tArray contained unexpected item at index #{path.last}:\n\t\t#{tabify(difference.actual.ai, 2)}"
       end
 
       def handle_mismatched_value difference, path, descriptions
-        descriptions << "\tAt:\n\t\t#{path_to_s(path)}\n\tExpected:\n\t\t#{difference.expected.ai}\n\tActual:\n\t\t#{difference.actual.ai}"
+        if path.last.is_a?(ArrayIndex)
+          descriptions << "\tIn array at:\n\t\t#{path_to_s(path)}\n\tExpected index #{path.last} to have value:\n\t\t#{difference.expected.ai}\n\tActual value:\n\t\t#{tabify(difference.actual.ai, 2)}"
+        else
+          descriptions << "\tIn hash at:\n\t\t#{path_to_s(path)}\n\tExpected key #{path.last} to have value:\n\t\t#{difference.expected.ai}\n\tActual value:\n\t\t#{tabify(difference.actual.ai, 2)}"
+        end
       end
 
       def handle_index_not_found difference, path, descriptions
-        descriptions << "\tAt:\n\t\t#{path_to_s(path)}\n\tMissing index with value:\n\t\t#{difference.expected.ai}"
+        descriptions << "\tIn array at:\n\t\t#{path_to_s(path)}\n\tMissing item at index #{path.last} with value:\n\t\t#{tabify(difference.expected.ai, 2)}"
       end
 
       def handle_key_not_found difference, path, descriptions
-        descriptions << "\tAt:\n\t\t#{path_to_s(path)}\n\tMissing key with value:\n\t\t#{difference.expected.ai}"
+        descriptions << "\tIn hash at:\n\t\t#{path_to_s(path)}\n\tMissing key #{path.last} with value:\n\t\t#{tabify(difference.expected.ai, 2)}"
       end
 
       def handle_unexpected_key difference, path, descriptions
-        descriptions << "\tAt:\n\t\t#{path_to_s(path)}\n\tHash contained unexpected key with value:\n\t\t#{difference.actual.ai}"
+        descriptions << "\tIn hash at:\n\t\t#{path_to_s(path)}\n\tHash contained unexpected key #{path.last} with value:\n\t\t#{tabify(difference.actual.ai, 2)}"
       end
 
       def path_to_s path
-        "[" + path.join("][") + "]"
+        "[" + path[0..-2].join("][") + "]"
+      end
+
+      def tabify string, tab_count
+        tabs = "\t" * tab_count
+        string.gsub(/\n/, "\n#{tabs}")
+      end
+
+      class ArrayIndex
+        attr_reader :index
+        def initialize index
+          @index = index
+        end
+
+        def inspect
+          index.inspect
+        end
+
+        def to_s
+          index.to_s
+        end
       end
 
     end

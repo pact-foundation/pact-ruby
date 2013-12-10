@@ -30,7 +30,7 @@ module Pact
       end
 
       def to_s
-        to_hash.to_s
+        to_hash.ai
       end
 
       def == other

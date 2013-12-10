@@ -15,12 +15,12 @@ module Pact
         subject { provider_state_proxy.get name, options }
 
         before do
-          ProviderState.stub(:get).and_return(provider_state)
+          ProviderStates.stub(:get).and_return(provider_state)
         end
         context "when the provider state exists" do
 
           it "retrieves the provider state from ProviderState" do
-            ProviderState.should_receive(:get).with(name, options).and_return(provider_state)
+            ProviderStates.should_receive(:get).with(name, options).and_return(provider_state)
             subject
           end
 

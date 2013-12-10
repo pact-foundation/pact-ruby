@@ -9,7 +9,7 @@ module Pact
       end
 
       def get name, options = {}
-        unless provider_state = ProviderState.get(name, options)
+        unless provider_state = ProviderStates.get(name, options)
           register_missing_provider_state name, options[:for]
           raise error_message name, options[:for]
         end

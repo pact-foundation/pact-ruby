@@ -25,7 +25,7 @@ module Pact
         MESSAGES.clear
       end
 
-      subject { ProviderState.get('no_alligators') }
+      subject { ProviderStates.get('no_alligators') }
 
       describe 'set_up' do
         it 'should call the block passed to set_up' do
@@ -44,12 +44,12 @@ module Pact
       describe '.get' do
         context 'when the name is a matching symbol' do
           it 'will return the ProviderState' do
-            ProviderState.get('no_alligators').should_not be_nil
+            ProviderStates.get('no_alligators').should_not be_nil
           end
         end
         context 'when the name is a matching string' do
           it 'will return the ProviderState' do
-            ProviderState.get('some alligators').should_not be_nil
+            ProviderStates.get('some alligators').should_not be_nil
           end
         end
       end
@@ -61,8 +61,8 @@ module Pact
           Pact.provider_state 'with_no_op' do
             no_op
           end
-          ProviderState.get('with_no_op').set_up
-          ProviderState.get('with_no_op').tear_down
+          ProviderStates.get('with_no_op').set_up
+          ProviderStates.get('with_no_op').tear_down
         end
       end
       context "when a no_op is defined with a set_up" do
@@ -118,11 +118,11 @@ module Pact
       describe '.get' do
         context 'for a consumer' do
           it 'has a namespaced name' do
-            ProviderState.get('the weather is sunny', :for => 'a consumer').should_not be_nil
+            ProviderStates.get('the weather is sunny', :for => 'a consumer').should_not be_nil
           end
 
           it 'falls back to a global state of the same name if one is not found for the specified consumer' do
-            ProviderState.get('the weather is cloudy', :for => 'a consumer').should_not be_nil
+            ProviderStates.get('the weather is cloudy', :for => 'a consumer').should_not be_nil
           end
         end
 
@@ -131,7 +131,7 @@ module Pact
       describe 'set_up' do
         context 'for a consumer' do
           it 'runs its own setup' do
-            ProviderState.get('the weather is sunny', :for => 'a consumer').set_up
+            ProviderStates.get('the weather is sunny', :for => 'a consumer').set_up
             NAMESPACED_MESSAGES.should eq ['sunny!']
           end
         end

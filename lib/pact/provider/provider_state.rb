@@ -3,21 +3,17 @@ module Pact
 
     module DSL
       def provider_state name, &block
-        ProviderState.provider_state(name, &block).register
+        ProviderStates.provider_state(name, &block).register
       end
 
       def provider_states_for name, &block
-        ProviderState.current_namespaces << name
+        ProviderStates.current_namespaces << name
         instance_eval(&block)
-        ProviderState.current_namespaces.pop
+        ProviderStates.current_namespaces.pop
       end
     end
 
-    class ProviderState
-
-      attr_accessor :name
-      attr_accessor :namespace
-
+    class ProviderStates
       def self.provider_state name, &block
         ProviderState.new(name, current_namespaces.join('.'), &block)
       end
@@ -38,9 +34,16 @@ module Pact
         fullname = options[:for] ? "#{options[:for]}.#{name}" : name
         (provider_states[fullname] || provider_states[fullname.to_sym]) || provider_states[name]
       end
+    end
+
+    class ProviderState
+
+      attr_accessor :name
+      attr_accessor :namespace
+
 
       def register
-        self.class.register(namespaced(name), self)
+        ProviderStates.register(namespaced(name), self)
       end
 
       def initialize name, namespace, &block

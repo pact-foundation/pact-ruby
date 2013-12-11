@@ -62,25 +62,32 @@ module Pact
 
           describe description_for(interaction), :pact => :verify do
 
+            interaction_context = InteractionContext.new
+
             before do
-              set_up_provider_state interaction.provider_state, options[:consumer]
-              replay_interaction interaction
+              interaction_context.run_once :before do
+                set_up_provider_state interaction.provider_state, options[:consumer]
+                replay_interaction interaction
+                interaction_context.last_response = last_response
+              end
             end
 
             after do
-              tear_down_provider_state interaction.provider_state, options[:consumer]
+              interaction_context.run_once :after do
+                tear_down_provider_state interaction.provider_state, options[:consumer]
+              end
             end
 
-            describe_response interaction.response
+            describe_response interaction.response, interaction_context
           end
 
         end
 
-        def describe_response response
+        def describe_response response, interaction_context
           describe "returns a response which" do
             if response['status']
               it "has status code #{response['status']}" do
-                expect(last_response.status).to eql response['status']
+                expect(interaction_context.last_response.status).to eql response['status']
               end
             end
 
@@ -88,7 +95,7 @@ module Pact
               describe "includes headers" do
                 response['headers'].each do |name, value|
                   it "\"#{name}\" with value \"#{value}\"" do
-                    expect(last_response.headers[name]).to match_term value
+                    expect(interaction_context.last_response.headers[name]).to match_term value
                   end
                 end
               end
@@ -96,7 +103,7 @@ module Pact
 
             if response['body']
               it "has a matching body" do
-                expect(parse_body_from_response(last_response)).to match_term response['body']
+                expect(parse_body_from_response(interaction_context.last_response)).to match_term response['body']
               end
             end
           end
@@ -108,6 +115,30 @@ module Pact
 
         def read_pact_from uri, options = {}
           Pact::PactFile.read(uri, options)
+        end
+
+      end
+
+      # The "arrange" and "act" parts of the test really only need to be run once,
+      # however, stubbing is not supported in before :all, so this is a
+      # wee hack to enable before :all like functionality using before :each.
+      # In an ideal world, the test setup and execution should be quick enough for
+      # the difference between :all and :each to be unnoticable, but the annoying
+      # reality is, sometimes it does make a difference. This is for you, V!
+
+      class InteractionContext
+
+        attr_accessor :last_response
+
+        def initialize
+          @already_run = []
+        end
+
+        def run_once id
+          unless @already_run.include?(id)
+            yield
+            @already_run << id
+          end
         end
 
       end

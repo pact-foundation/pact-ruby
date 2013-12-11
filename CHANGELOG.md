@@ -2,7 +2,13 @@ Do this to generate your change history
 
     git log --date=relative --pretty=format:'  * %h - %s (%an, %ad)'
 
-### 1.0.26 (10 December 2013)
+### 1.0.28 (11 December 2013)
+
+* 24f9ea0 - Changed provider set up and tear down back to running in before :each, as rspec stubbing is not supported in before :all (Beth, 15 seconds ago)
+* 825e787 - Fixing failing tests (Beth, 4 hours ago)
+* fb6a1c8 - Moving ProviderState collection into its own class (Beth, 6 hours ago)
+
+### 1.0.27 (10 December 2013)
 
 * 388fc7b - Changing provider set up and tear down to run before :all rather than before :each (Beth, 13 minutes ago)
 * 06b5626 - Updating TODO list in the README. (Beth, 25 hours ago)

@@ -75,7 +75,7 @@ module Pact::Provider
     }
     EOS
 
-    before do
+    before :all do
         Pact.service_provider "My Provider" do
             app { ServiceUnderTest.new }
         end
@@ -109,7 +109,7 @@ module Pact::Provider
         }
         EOS
 
-        before do
+        before :all do
             Pact.service_provider "My Provider" do
                 app { ServiceUnderTestWithFixture.new }
             end
@@ -141,7 +141,7 @@ module Pact::Provider
         }
         EOS
 
-        before do
+        before :all do
             Pact.service_provider "ServiceUnderTestWithFixture" do
                 app { ServiceUnderTestWithFixture.new }
             end

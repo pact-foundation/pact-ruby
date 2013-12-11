@@ -2,6 +2,11 @@ Do this to generate your change history
 
     git log --date=relative --pretty=format:'  * %h - %s (%an, %ad)'
 
+### 1.0.29 (12 December 2013)
+
+* 8ffde69 - Providing before :all like functionality using before :each to get the dual benefits of faster tests and the ability to use stubbing (Beth, 53 seconds ago)
+* d30a78b - Added test to ensure rspec stubbing always works (Beth Skurrie, 15 hours ago)
+
 ### 1.0.28 (11 December 2013)
 
 * 24f9ea0 - Changed provider set up and tear down back to running in before :each, as rspec stubbing is not supported in before :all (Beth, 15 seconds ago)

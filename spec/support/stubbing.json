@@ -1,0 +1,22 @@
+{
+    "consumer": {
+        "name": "Consumer"
+    },
+    "provider": {
+        "name": "Provider"
+    },
+    "interactions": [
+        {
+            "description": "A test request",
+            "request": {
+                "method": "get",
+                "path": "/"
+            },
+            "response": {
+                "status": 200,
+                "body": "stubbing works"
+            },
+            "provider_state": "something is stubbed"
+        }
+    ]
+}

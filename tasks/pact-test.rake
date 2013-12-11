@@ -1,8 +1,13 @@
+require 'pact/tasks'
+
+Pact::VerificationTask.new(:stubbing) do | pact |
+	pact.uri './spec/support/stubbing.json', :pact_helper => './spec/support/stubbing.rb'
+end
 
 namespace :pact do
 
 	desc 'Runs pact tests against a sample application, testing failure and success.'
-	task :tests do
+	task :tests => ['pact:verify:stubbing'] do
 
 		require 'pact/provider/pact_spec_runner'
 		require 'open3'

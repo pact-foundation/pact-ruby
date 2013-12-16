@@ -333,6 +333,17 @@ To execute a subset of the specs when running any of the pact verification tasks
 
 A pact service can be run locally and is really useful for debugging purposes.
 
+```ruby
+Pact.service_consumer "My Service Consumer" do
+  has_pact_with "My Service Provider" do
+    mock_service :my_service_provider do
+      port <port-num>
+      standalone true
+    end
+  end
+end
+```
+
     $ bundle exec pact service -p <port-num>
 
 The service prints messages it recieves to stdout which can be really useful

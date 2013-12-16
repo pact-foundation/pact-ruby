@@ -2,6 +2,10 @@ Do this to generate your change history
 
     git log --date=relative --pretty=format:'  * %h - %s (%an, %ad)'
 
+### 1.0.30 (17 December 2013)
+
+* c8278c7 - Added thin into the gemspec for pact standalone mock server (Beth Skurrie, 2 minutes ago)
+
 ### 1.0.29 (12 December 2013)
 
 * 8ffde69 - Providing before :all like functionality using before :each to get the dual benefits of faster tests and the ability to use stubbing (Beth, 53 seconds ago)

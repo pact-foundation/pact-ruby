@@ -331,7 +331,7 @@ To execute a subset of the specs when running any of the pact verification tasks
 
 ### Running a standalone mock server
 
-A pact service can be run locally and is really useful for debugging purposes.
+A mock service can be run locally and is really useful for debugging purposes.
 
 ```ruby
 Pact.service_consumer "My Service Consumer" do

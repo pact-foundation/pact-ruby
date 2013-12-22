@@ -1,12 +1,22 @@
-Pact.provider_states_for "Zoo App" do
-  provider_state "there are alligators" do
-    set_up do
-      #AlligatorRepo.save(Alligator.name("Mary"))
-    end
+require 'sequel'
+require 'animal_service/db'
+require 'animal_service/animal_repository'
 
+Pact.provider_states_for "Zoo App" do
+
+  provider_state "there is an alligator named Mary" do
+    set_up do
+      AnimalService::DATABASE[:animals].insert(name: 'Mary')
+    end
   end
 
   provider_state "there is not an alligator named Mary" do
     no_op
+  end
+
+  provider_state "an error occurs retrieving an alligator" do
+    set_up do
+      AnimalService::AnimalRepository.stub(:find_alligator_by_name).and_raise("Argh!!!")
+    end
   end
 end

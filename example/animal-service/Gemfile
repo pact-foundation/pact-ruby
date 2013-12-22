@@ -1,7 +1,5 @@
 source 'https://rubygems.org'
 
-gem 'bundler', '~> 1.3.0'
-
 group :development, :test do
   gem 'rspec'
   gem 'pact', path: '../../'
@@ -10,5 +8,7 @@ end
 
 gem 'rake'
 gem 'rack', '~>1.5.2'
-gem 'json', '~>1.6.8'
-gem 'httparty'
+gem 'json', '~>1.6'
+gem 'sqlite3'
+gem 'sequel'
+gem 'sinatra'

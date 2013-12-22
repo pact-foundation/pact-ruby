@@ -7,50 +7,8 @@
   },
   "interactions": [
     {
-      "description": "a request for animals",
-      "request": {
-        "method": "get",
-        "path": "/animals"
-      },
-      "response": {
-        "status": 200,
-        "headers": {
-          "Content-Type": "application/json"
-        },
-        "body": {
-          "alligators": [
-            {
-              "name": "Bob"
-            }
-          ]
-        }
-      },
-      "provider_state": "there are alligators"
-    },
-    {
-      "description": "a request for alligators",
-      "request": {
-        "method": "get",
-        "path": "/alligators",
-        "headers": {
-          "Accept": "application/json"
-        }
-      },
-      "response": {
-        "status": 200,
-        "headers": {
-          "Content-Type": "application/json"
-        },
-        "body": [
-          {
-            "name": "Bob"
-          }
-        ]
-      },
-      "provider_state": "there are alligators"
-    },
-    {
-      "description": "a request for alligator Mary",
+      "description": "a request for an alligator",
+      "provider_state": "there is an alligator named Mary",
       "request": {
         "method": "get",
         "path": "/alligators/Mary",
@@ -61,19 +19,33 @@
       "response": {
         "status": 200,
         "headers": {
-          "Content-Type": "application/json"
+          "Content-Type": "application/json;charset=utf-8"
         },
         "body": {
           "name": "Mary"
         }
-      },
-      "provider_state": "there is an alligator named Mary"
+      }
     },
     {
-      "description": "a request for alligators",
+      "description": "a request for an alligator",
+      "provider_state": "there is not an alligator named Mary",
       "request": {
         "method": "get",
-        "path": "/alligators",
+        "path": "/alligators/Mary",
+        "headers": {
+          "Accept": "application/json"
+        }
+      },
+      "response": {
+        "status": 404
+      }
+    },
+    {
+      "description": "a request for an alligator",
+      "provider_state": "an error occurs retrieving an alligator",
+      "request": {
+        "method": "get",
+        "path": "/alligators/Mary",
         "headers": {
           "Accept": "application/json"
         }
@@ -81,35 +53,17 @@
       "response": {
         "status": 500,
         "headers": {
-          "Content-Type": "application/json"
+          "Content-Type": "application/json;charset=utf-8"
         },
         "body": {
           "error": "Argh!!!"
         }
-      },
-      "provider_state": "an error has occurred"
-    },
-    {
-      "description": "a request for alligator Mary",
-      "request": {
-        "method": "get",
-        "path": "/alligators/Mary",
-        "headers": {
-          "Accept": "application/json"
-        }
-      },
-      "response": {
-        "status": 404,
-        "headers": {
-          "Content-Type": "application/json"
-        }
-      },
-      "provider_state": "there is not an alligator named Mary"
+      }
     }
   ],
   "metadata": {
     "pact_gem": {
-      "version": "1.0.9"
+      "version": "1.0.30"
     }
   }
 }

@@ -11,7 +11,7 @@ module Pact
 
       include Pact::Logging
 
-      attr_reader :consumer_contract
+      attr_reader :consumer_contract, :mock_service_base_url
 
       def initialize(attributes)
         @interaction_builder = nil
@@ -22,6 +22,7 @@ module Pact
           )
         @consumer_contract.interactions = interactions_for_new_consumer_contract(attributes[:pactfile_write_mode])
         @interactions_filter = filter(@consumer_contract.interactions, attributes[:pactfile_write_mode])
+        @mock_service_base_url = "http://localhost:#{attributes[:port]}"
       end
 
       def given(provider_state)

@@ -5,7 +5,7 @@ module ZooApp
   describe AnimalServiceClient, :pact => true do
 
     before do
-      AnimalServiceClient.base_uri 'localhost:1234'
+      AnimalServiceClient.base_uri animal_service.mock_service_base_url
     end
 
     describe ".find_alligator_by_name" do

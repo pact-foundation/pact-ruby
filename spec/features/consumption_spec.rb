@@ -4,6 +4,9 @@ require 'pact/consumer/rspec'
 
 describe "A service consumer side of a pact", :pact => true  do
 
+  describe "blah" do
+    describe "thing" do
+
   it "goes a little something like this" do
     Pact.clear_configuration
 
@@ -100,5 +103,7 @@ describe "A service consumer side of a pact", :pact => true  do
     expect{ bob_service.verify('goes a little something like this') }.to raise_error /do not match/
   end
 
+end
+end
 end
 

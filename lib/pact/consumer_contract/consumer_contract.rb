@@ -11,41 +11,12 @@ require_relative 'service_provider'
 require_relative 'interaction'
 require_relative 'request'
 require_relative 'active_support_support'
+require_relative 'pact_file'
+require_relative 'file_name'
 
 
 
 module Pact
-
-  module PactFile
-    extend self
-    def read uri, options = {}
-      pact = open(uri) { | file | file.read }
-      if options[:save_pactfile_to_tmp]
-        save_pactfile_to_tmp pact, ::File.basename(uri)
-      end
-      pact
-    rescue StandardError => e
-      $stderr.puts "Error reading file from #{uri}"
-      $stderr.puts "#{e.to_s} #{e.backtrace.join("\n")}"
-      raise e
-    end
-
-    def save_pactfile_to_tmp pact, name
-      ::FileUtils.mkdir_p Pact.configuration.tmp_dir
-      ::File.open(Pact.configuration.tmp_dir + "/#{name}", "w") { |file|  file << pact}
-    end
-  end
-
-  #TODO move to external file for reuse
-  module FileName
-    def file_name consumer_name, provider_name
-      "#{filenamify(consumer_name)}-#{filenamify(provider_name)}.json"
-    end
-
-    def filenamify name
-      name.downcase.gsub(/\s/, '_')
-    end
-  end
 
   class ConsumerContract
 

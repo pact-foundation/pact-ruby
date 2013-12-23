@@ -1,3 +1,10 @@
+#
+# When running in pactfile_write_mode :overwrite, all interactions are cleared from the
+# pact file, and all new interactions should be distinct (unique description and provider state).
+# When running in pactfile_write_mode :update, an interaction with the same description
+# and provider state as an existing one will just overwrite that one interaction.
+#
+
 module Pact
    module Consumer
 

@@ -27,3 +27,4 @@ spec/pacts
 .ruby-version
 log
 .idea
+reports

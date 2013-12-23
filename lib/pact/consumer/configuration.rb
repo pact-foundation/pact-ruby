@@ -44,7 +44,7 @@ module Pact::Consumer
         def has_pact_with service_provider_name, &block
           ServiceProvider.build(service_provider_name, name, &block)
         end
-      end   
+      end
 
       def finalize
         validate
@@ -76,7 +76,7 @@ module Pact::Consumer
         @consumer_name = consumer_name
       end
 
-      dsl do          
+      dsl do
         def mock_service name, &block
           self.service = MockService.build(name, consumer_name, self.name, &block)
         end

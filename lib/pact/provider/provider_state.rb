@@ -1,3 +1,5 @@
+require 'pact/shared/dsl'
+
 module Pact
   module Provider
 
@@ -15,7 +17,7 @@ module Pact
 
     class ProviderStates
       def self.provider_state name, &block
-        ProviderState.new(name, current_namespaces.join('.'), &block)
+        ProviderState.build(name, current_namespaces.join('.'), &block)
       end
 
       def self.register name, provider_state
@@ -41,10 +43,7 @@ module Pact
       attr_accessor :name
       attr_accessor :namespace
 
-
-      def register
-        ProviderStates.register(namespaced(name), self)
-      end
+      extend Pact::DSL
 
       def initialize name, namespace, &block
         @name = name
@@ -52,30 +51,54 @@ module Pact
         @set_up_defined = false
         @tear_down_defined = false
         @no_op_defined = false
-        instance_eval(&block)
+      end
+
+      dsl do
+        def set_up &block
+          self.register_set_up &block
+        end
+
+        def tear_down &block
+          self.register_tear_down &block
+        end
+
+        def no_op
+          self.register_no_op
+        end
+      end
+
+      def register
+        ProviderStates.register(namespaced(name), self)
+      end
+
+      def finalize
         validate
       end
 
-      def set_up &block
-        if block_given?
-          @set_up_block = block
-          @set_up_defined = true
-        elsif @set_up_block
+      def register_set_up &block
+        @set_up_block = block
+        @set_up_defined = true
+      end
+
+      def register_tear_down &block
+        @tear_down_block = block
+        @tear_down_defined = true
+      end
+
+      def register_no_op
+        @no_op_defined = true
+      end
+
+      def set_up
+        if @set_up_block
           instance_eval &@set_up_block
         end
       end
 
-      def tear_down &block
-        if block_given?
-          @tear_down_block = block
-          @tear_down_defined = true
-        elsif @tear_down_block
+      def tear_down
+        if @tear_down_block
           instance_eval &@tear_down_block
         end
-      end
-
-      def no_op
-        @no_op_defined = true
       end
 
       private

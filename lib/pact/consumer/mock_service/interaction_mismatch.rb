@@ -24,7 +24,7 @@ module Pact
 
       def short_summary
         mismatched_attributes = candiate_diffs.collect(&:mismatched_attributes).flatten.uniq.join(", ").reverse.sub(",", "dna ").reverse #OMG what a hack!
-        actual_request.method_and_path + " (#{mismatched_attributes} did not match)"
+        actual_request.method_and_path + " (request #{mismatched_attributes} did not match)"
       end
 
       private

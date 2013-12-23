@@ -27,20 +27,20 @@ module Pact
           let(:diff_1) { {body: nil} }
 
           it "returns a message indicating that the body does not match" do
-            expect(subject.short_summary).to include "(body did not match)"
+            expect(subject.short_summary).to include "(request body did not match)"
           end
         end
         context "when the headers do not match" do
           let(:diff_1) { {headers: nil} }
           it "returns a message indicating that the body does not match" do
-            expect(subject.short_summary).to include "(headers did not match)"
+            expect(subject.short_summary).to include "(request headers did not match)"
           end
         end
         context "when the headers and body do not match" do
           let(:diff_1) { {body: nil, headers: nil} }
           let(:diff_2) { {body: nil, headers: nil} }
           it "returns a message indicating that the headers and body do not match" do
-            expect(subject.short_summary).to include "(body and headers did not match)"
+            expect(subject.short_summary).to include "(request body and headers did not match)"
           end
         end
       end

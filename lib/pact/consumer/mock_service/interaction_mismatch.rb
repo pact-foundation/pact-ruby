@@ -2,6 +2,11 @@ require 'pact/matchers/diff_decorator'
 
 module Pact
   module Consumer
+
+    # Presents the differences between an actual request, and a list of
+    # expected interactions where the methods and paths match the actual request.
+    # This is used to display a helpful message to the user when a request
+    # comes in that doesn't match any of the expected interactions.
     class InteractionMismatch
 
       attr_accessor :candidate_interactions, :actual_request

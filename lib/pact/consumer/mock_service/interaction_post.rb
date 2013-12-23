@@ -24,7 +24,7 @@ module Pact
         interaction_list.add interaction
         logger.info "Registered expected interaction #{interaction.request.method_and_path} for #{name}"
         logger.ap interaction.as_json
-        [200, {}, ['Added interactions']]
+        [200, {}, ['Added interaction']]
       end
     end
   end

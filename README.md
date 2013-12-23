@@ -405,6 +405,7 @@ https://github.com/bethesque/pact_broker-client - Contains rake tasks for publis
 
 Short term:
 - FIX EXAMPLE!!!
+- Support hash of query params
 
 Long term:
 - Provide more flexible matching (eg the keys should match, and the classes of the values should match, but the values of each key do not need to be equal). This is to make the pact verification less brittle.

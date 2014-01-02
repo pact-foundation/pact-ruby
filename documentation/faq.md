@@ -1,5 +1,15 @@
 # Frequently asked questions
 
+## How can I verify a pact against a non-ruby provider?
+
+You can verify a pact against any running server, regardless of language, using [pact-provider-proxy](https://github.com/bethesque/pact-provider-proxy).
+
+There is also a JVM version of pact under development. Have a look at [pact-author-jvm](https://github.com/DiUS/pact-author-jvm), the equivalent of pact/consumer, and [pact-runner-jvm](https://github.com/DiUS/pact-runner-jvm), the equivalent of pact/provider.
+
+### How can I create a pact for a consumer that is not ruby or on the JVM?
+
+Become famous, and write a pact-consumer library yourself! Then let us know about it so we can put a link to it in the documentation.
+
 ### How can I specify hooks to be executed before/after all examples for pact:verify?
 
 The pact:verify RSpec examples have the metadata `{:pact => :verify}` defined. You can add RSpec hooks using a filter as shown here:

@@ -2,7 +2,7 @@
 
 Define a pact between service consumers and providers, enabling "consumer driven contract" testing.
 
-Pact provides an RSpec DSL for service consumers to define the requests they will make to a service provider and the responses they expect back. These expectations are used in the consumers specs to provide a mock service provider. The interactions are recorded, and played back in the service provider specs to ensure the service provider actually does provide the response the consumer expects.
+Pact provides an RSpec DSL for service consumers to define the HTTP requests they will make to a service provider and the HTTP responses they expect back. These expectations are used in the consumers specs to provide a mock service provider. The interactions are recorded, and played back in the service provider specs to ensure the service provider actually does provide the response the consumer expects.
 
 This allows testing of both sides of an integration point using fast unit tests.
 
@@ -18,6 +18,12 @@ Travis CI Status: [![travis-ci.org Build Status](https://travis-ci.org/realestat
 * The mocked responses are verified to be valid by replaying the interactions against the provider codebase.
 * Rake verification tasks allow a pacts at one or more URIs to be checked against a given service provider codebase.
 * Different versions of a consumer/provider pair can be easily tested against each other, allowing confidence when deploying new versions of each (see the pact_broker and pact_broker-client gems).
+
+## How does it work?
+
+1. In the specs for the provider facing code in the consumer project, expectations are set up on a mock service provider.
+1. When the specs are run, the requests, and their expected responses, are written to a "pact" file.
+1. The requests in the pact file are replayed against the provider, and the actual responses are checked to make sure they match the expected responses.
 
 ## Installation
 
@@ -329,69 +335,8 @@ To execute a subset of the specs when running any of the pact verification tasks
 
     $ PACT_DESCRIPTION="a request for something" PACT_PROVIDER_STATE="something exists" rake pact:verify
 
-### Running a standalone mock server
+See [Frequently Asked Questions](https://github.com/realestate-com-au/pact/blob/master/documentation/faq.md) and [Rarely Asked Questions](https://github.com/realestate-com-au/pact/blob/master/documentation/raq.md) for more information.
 
-A mock service can be run locally and is really useful for debugging purposes.
-
-```ruby
-Pact.service_consumer "My Service Consumer" do
-  has_pact_with "My Service Provider" do
-    mock_service :my_service_provider do
-      port <port-num>
-      standalone true
-    end
-  end
-end
-```
-
-    $ bundle exec pact service -p <port-num>
-
-The service prints messages it recieves to stdout which can be really useful
-when diagnosing issues with pacts.
-
-### To run your consumer app as a process during your consumer specs
-
-Eg. for Capybara tests
-
-```ruby
-Pact.service_consumer "My Consumer" do
-  app my_consumer_rack_app
-  port 4321
-end
-```
-
-### Handling multiple headers with the same name
-
-RFC 2616 states that two headers with the same name can interpreted as a single header with two comma-separated values. This is the safest way to specify multiple headers with the same name, as Rack will only pass the last value through when they are defined separately (see https://github.com/rack/rack/issues/436).
-
-```ruby
-my_service_provider.
-  .given("it is RFC 2616 compliant")
-  .upon_receiving("a request with a header with commas separated values")
-  .with( method: :get, path: '/', headers: {'X-Request-Multival' => "A, B"} )
-  .will_respond_with(
-    status: 200, headers: {'X-Response-Multival' => "C, D"}
-  )
-
-```
-
-### Pact file write mode
-
-By default, the pact file will be overwritten (started from scratch) every time any rspec runs any spec using pacts. This means that if there are interactions that haven't been executed in the most recent rspec run, they are effectively removed from the pact file. If you have long running pact specs (e.g. they are generated using the browser with Capybara) and you are developing both consumer and provider in parallel, or trying to fix a broken interaction, it can be tedius to run all the specs at once. In this scenario, you can set the pactfile_write_mode to :update. This will keep all existing interactions, and update only the changed ones, identified by description and provider state. The down side of this is that if either of those fields change, the old interactions will not be removed from the pact file. As a middle path, you can set pactfile_write_mode to :smart. This will use :overwrite mode when running rake (as determined by a call to system using 'ps') and :update when running an individual spec.
-
-### To use RSpec hooks for pact:verify
-
-The pact:verify RSpec examples have the metadata `{:pact => :verify}` defined. You can add RSpec hooks using a filter as shown here:
-
-```ruby
-RSpec.configure do | config |
-  config.before :each, :pact => :verify do
-    # Your code here
-  end
-end
-```
-
-See https://www.relishapp.com/rspec/rspec-core/docs/hooks/filters for more information.
 
 ## Related Gems
 

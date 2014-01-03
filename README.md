@@ -23,7 +23,15 @@ Travis CI Status: [![travis-ci.org Build Status](https://travis-ci.org/realestat
 
 1. In the specs for the provider facing code in the consumer project, expectations are set up on a mock service provider.
 1. When the specs are run, the requests, and their expected responses, are written to a "pact" file.
-1. The requests in the pact file are replayed against the provider, and the actual responses are checked to make sure they match the expected responses.
+1. The requests in the pact file are later replayed against the provider, and the actual responses are checked to make sure they match the expected responses.
+
+## Why is developing and testing with pacts better than using integration tests?
+
+* Faster execution.
+* No need to manage starting and stopping multiple processes.
+* Reliable responses from mock service provider reduce likelihood of flakey tests.
+* Only one component is being tested at a time, making the causes of test failures easier to identify.
+* Design of service provider is improved by considering first how the data is actually going to be used, rather than how it is most easily retrieved and serialised.
 
 ## Installation
 
@@ -335,7 +343,7 @@ To execute a subset of the specs when running any of the pact verification tasks
 
     $ PACT_DESCRIPTION="a request for something" PACT_PROVIDER_STATE="something exists" rake pact:verify
 
-See [Frequently Asked Questions](https://github.com/realestate-com-au/pact/blob/master/documentation/faq.md) and [Rarely Asked Questions](https://github.com/realestate-com-au/pact/blob/master/documentation/raq.md) for more information.
+See [Frequently Asked Questions](https://github.com/realestate-com-au/pact/blob/master/documentation/faq.md) and [Rarely Asked Questions](https://github.com/realestate-com-au/pact/blob/master/documentation/raq.md) and [Terminology](https://github.com/realestate-com-au/pact/blob/master/documentation/terminology.md) for more information.
 
 
 ## Related Gems

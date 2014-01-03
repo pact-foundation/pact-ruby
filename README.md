@@ -348,11 +348,11 @@ See [Frequently Asked Questions](https://github.com/realestate-com-au/pact/blob/
 
 ## Related Gems
 
-https://github.com/bethesque/pact-provider-proxy - Verify a pact against a running server, allowing you to use pacts with a non-ruby provider, or a ruby provider for which you do not have access to the code base.
+[Pact Provider Proxy](https://github.com/bethesque/pact-provider-proxy) - Verify a pact against a running server, allowing you to use pacts with a non-ruby provider, or a ruby provider for which you do not have access to the code base.
 
-https://github.com/bethesque/pact_broker - A pact repository. Provides endpoints to access published pacts, meaning you don't need to use messy CI URLs in your codebase. Enables cross testing of prod/head versions of your consumer and provider, allowing you to determine whether the head version of one is compatible with the production version of the other. Helps you to answer that ever so important question, "can I deploy without breaking all the things?"
+[Pact Broker](https://github.com/bethesque/pact_broker) - A pact repository. Provides endpoints to access published pacts, meaning you don't need to use messy CI URLs in your codebase. Enables cross testing of prod/head versions of your consumer and provider, allowing you to determine whether the head version of one is compatible with the production version of the other. Helps you to answer that ever so important question, "can I deploy without breaking all the things?"
 
-https://github.com/bethesque/pact_broker-client - Contains rake tasks for publishing pacts to the pact_broker.
+[Pact Broker Client](https://github.com/bethesque/pact_broker-client) - Contains rake tasks for publishing pacts to the pact_broker.
 
 ## TODO
 

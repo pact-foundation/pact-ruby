@@ -215,7 +215,7 @@ Yay! Your provider now honours the pact it has with your consumer. You can now h
 
 ### Using provider states
 
-Having different service provider states allows you to test the same request with different expected responses.
+Provider states allow different fixtures to be loaded on the provider to allow you to test the same request with different expected responses.
 
 For example, some code that creates the pact in a consumer project might look like this:
 
@@ -232,8 +232,18 @@ my_service.
   given("a thing does not exist").
    upon_receiving("a request for a thing").
       with(method: 'get', path: '/thing').
-        will_respond_with(status: 404, :body => {error: "There is no thing :("} )
+        will_respond_with(status: 404)
+
+        ...
+
+my_service.
+  given("an error occurs while retrieving a thing").
+   upon_receiving("a request for a thing").
+      with(method: 'get', path: '/thing').
+        will_respond_with(status: 500, :body => {message: "An error occurred"}, :headers => { 'Content-Type' => 'application/json'} )
 ```
+
+
 
 To define service provider states that create the right data for "a thing exists" and "a thing does not exist", write the following in the service provider project. (The consumer name here must match the name of the consumer configured in your consumer project for it to correctly find these provider states.)
 
@@ -254,6 +264,12 @@ Pact.provider_states_for 'My Service Consumer' do
 
   provider_state "a thing does not exist" do
     no_op # If there's nothing to do because the state name is more for documentation purposes, you can use no_op to imply this.
+  end
+
+  provider_state "an error occurs while retrieving a thing" do
+    set_up do
+      ThingRepository.stub(:find).and_raise("An error occurred!")
+    end
   end
 end
 

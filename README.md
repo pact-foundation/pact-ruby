@@ -49,12 +49,12 @@ Imagine a model class that looks something like this. The attributes for a Somet
 class SomethingModel
   attr_reader :name
 
-  def intialize name
+  def initialize name
     @name = name
   end
 
   def == other
-    other.is_a?(Something) && other.name == name
+    other.is_a?(SomethingModel) && other.name == name
   end
 end
 ```

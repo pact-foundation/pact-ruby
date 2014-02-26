@@ -372,6 +372,12 @@ See [Frequently Asked Questions](https://github.com/realestate-com-au/pact/blob/
 
 [Pact Broker Client](https://github.com/bethesque/pact_broker-client) - Contains rake tasks for publishing pacts to the pact_broker.
 
+[Shokkenki](https://github.com/brentsnook/shokkenki) - Another Consumer Driven Contract gem written by one of Pact's original authors, Brent Snook.
+
+## Google group
+
+https://groups.google.com/forum/#!forum/pact-support
+
 ## TODO
 
 Short term:

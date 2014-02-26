@@ -106,6 +106,8 @@ describe MyServiceProviderClient, :pact => true do
     # Configure your client to point to the stub service on localhost using the port you have specified
     MyServiceProviderClient.base_uri 'localhost:1234'
   end
+  
+  subject { MyServiceProviderClient.new }
 
   describe "get_something" do
     before do
@@ -121,7 +123,7 @@ describe MyServiceProviderClient, :pact => true do
     end
 
     it "returns a Something" do
-      expect(MyServiceProviderClient.get_something).to eq(SomethingModel.new('A small something'))
+      expect(subject.get_something).to eq(SomethingModel.new('A small something'))
     end
 
   end

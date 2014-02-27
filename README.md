@@ -33,6 +33,10 @@ Travis CI Status: [![travis-ci.org Build Status](https://travis-ci.org/realestat
 * Only one component is being tested at a time, making the causes of test failures easier to identify.
 * Design of service provider is improved by considering first how the data is actually going to be used, rather than how it is most easily retrieved and serialised.
 
+## Google users group
+
+https://groups.google.com/forum/#!forum/pact-support
+
 ## Installation
 
 Put it in your Gemfile. You know how.
@@ -373,10 +377,6 @@ See [Frequently Asked Questions](https://github.com/realestate-com-au/pact/blob/
 [Pact Broker Client](https://github.com/bethesque/pact_broker-client) - Contains rake tasks for publishing pacts to the pact_broker.
 
 [Shokkenki](https://github.com/brentsnook/shokkenki) - Another Consumer Driven Contract gem written by one of Pact's original authors, Brent Snook.
-
-## Google group
-
-https://groups.google.com/forum/#!forum/pact-support
 
 ## TODO
 

@@ -17,7 +17,7 @@ Travis CI Status: [![travis-ci.org Build Status](https://travis-ci.org/realestat
 * Expected interactions are verified to have actually occurred in the consumer specs.
 * The mocked responses are verified to be valid by replaying the interactions against the provider codebase.
 * Rake verification tasks allow a pacts at one or more URIs to be checked against a given service provider codebase.
-* Different versions of a consumer/provider pair can be easily tested against each other, allowing confidence when deploying new versions of each (see the pact_broker and pact_broker-client gems).
+* Different versions of a consumer/provider pairs can be easily tested against each other, allowing confidence when deploying new versions of each (see the pact_broker and pact_broker-client gems).
 
 ## How does it work?
 

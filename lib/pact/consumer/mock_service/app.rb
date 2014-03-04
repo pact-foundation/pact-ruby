@@ -39,7 +39,7 @@ module Pact
       end
 
       def configure_logger options
-        options = {log_file: STDOUT}.merge options
+        options = {log_file: $stdout}.merge options
         log_stream = options[:log_file]
         @logger = Logger.new log_stream
         @logger.level = Pact.configuration.logger.level
@@ -60,8 +60,13 @@ module Pact
         begin
           relevant_handler = @handlers.detect { |handler| handler.match? env }
           response = relevant_handler.respond env
-        rescue Exception => e
+        rescue StandardError => e
           @logger.error 'Error ocurred in mock service:'
+          @logger.ap e, :error
+          @logger.ap e.backtrace
+          response = [500, {'Content-Type' => 'application/json'}, [{message: e.message, backtrace: e.backtrace}.to_json]]
+        rescue Exception => e
+          @logger.error 'Exception ocurred in mock service:'
           @logger.ap e, :error
           @logger.ap e.backtrace
           raise e

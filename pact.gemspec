@@ -19,7 +19,7 @@ Gem::Specification.new do |gem|
   gem.license       = 'MIT'
 
   gem.add_runtime_dependency 'randexp', '~> 0.1.7'
-  gem.add_runtime_dependency 'thin'
+  gem.add_runtime_dependency 'puma'
   gem.add_runtime_dependency 'rspec', '~> 2.12'
   gem.add_runtime_dependency 'find_a_port', '~> 1.0.1'
   gem.add_runtime_dependency 'rack-test', '~> 0.6.2'

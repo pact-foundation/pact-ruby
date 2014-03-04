@@ -4,7 +4,7 @@
 
 You can verify a pact against any running server, regardless of language, using [pact-provider-proxy](https://github.com/bethesque/pact-provider-proxy).
 
-There is also a JVM version of pact under development. Have a look at [pact-author-jvm](https://github.com/DiUS/pact-author-jvm), the equivalent of pact/consumer, and [pact-runner-jvm](https://github.com/DiUS/pact-runner-jvm), the equivalent of pact/provider.
+There is also a JVM version of pact under development. Have a look at [pact-jvm](https://github.com/DiUS/pact-jvm), the that contains the equivalent of pact/consumer and pact/provider.
 
 ### How can I create a pact for a consumer that is not ruby or on the JVM?
 

@@ -4,7 +4,7 @@ module Pact
     module RackRequestHelper
       REQUEST_KEYS = {
         'REQUEST_METHOD' => :method,
-        'REQUEST_PATH' => :path,
+        'PATH_INFO' => :path,
         'QUERY_STRING' => :query,
         'rack.input' => :body
       }

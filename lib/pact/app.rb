@@ -1,8 +1,8 @@
 require 'find_a_port'
 require 'thor'
-require 'thin'
 require 'thwait'
 require 'pact/consumer'
+require 'rack/handler/webrick'
 
 module Pact
   class App < Thor
@@ -19,9 +19,11 @@ module Pact
         log.sync = true
         service_options[:log_file] = log
       end
+
       port = options[:port] || FindAPort.available_port
       mock_service = Consumer::MockService.new(service_options)
-      Thin::Server.start("0.0.0.0", port, mock_service)
+      trap(:INT) { Rack::Handler::WEBrick.shutdown }
+      Rack::Handler::WEBrick.run(mock_service, :Port => port, :AccessLog => [])
     end
 
     private

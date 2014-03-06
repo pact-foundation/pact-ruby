@@ -1,0 +1,5 @@
+Given <%= interaction.provider_state %>
+Upon receiving <%= interaction.description %> from <%= pact.consumer.name %>,
+With <%= interaction.request.to_json %>
+<%= pact.provider.name %> will respond with
+<%= interaction.response.to_json %>

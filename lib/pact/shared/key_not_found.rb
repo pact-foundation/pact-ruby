@@ -12,6 +12,10 @@ module Pact
       "<key not found>"
     end
 
+    def as_json options={}
+      to_s
+    end
+
     def to_json options = {}
       to_s
     end
@@ -19,6 +23,6 @@ module Pact
     def empty?
       true
     end
-  end  
+  end
 
 end

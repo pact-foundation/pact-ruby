@@ -12,9 +12,13 @@ module Pact
       to_s
     end
 
+    def as_json options = {}
+      to_s
+    end
+
     def empty?
       true
     end
-  end  
+  end
 
 end

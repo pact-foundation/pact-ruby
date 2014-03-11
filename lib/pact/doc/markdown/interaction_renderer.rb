@@ -11,16 +11,24 @@ module Pact
           @interaction = InteractionViewModel.new(interaction, pact)
         end
 
-        def render
-          ERB.new(template_string).result(binding)
+        def render_summary
+          render('/interaction_summary.erb')
         end
 
-        def template_string
-          File.read( template_file )
+        def render_full_interaction
+          render('/interaction.erb')
         end
 
-        def template_file
-          File.dirname(__FILE__) + '/interaction.erb'
+        def render template_file
+          ERB.new(template_string(template_file)).result(binding)
+        end
+
+        def template_string(template_file)
+          File.read( template_contents(template_file) )
+        end
+
+        def template_contents(template_file)
+          File.dirname(__FILE__) + template_file
         end
       end
     end

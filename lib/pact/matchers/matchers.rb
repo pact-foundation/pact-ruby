@@ -40,7 +40,7 @@ module Pact
 
     class NoDiffIndicator
 
-      def to_json
+      def to_json options = {}
         to_s
       end
 
@@ -67,7 +67,7 @@ module Pact
       when Regexp then regexp_diff(expected, actual, options)
       when Pact::SomethingLike then diff(expected.contents, actual, options.merge(:structure => true))
       else object_diff(expected, actual, options)
-      end.tap{ |it| puts it.to_json}
+      end
     end
 
     def structure_diff expected, actual

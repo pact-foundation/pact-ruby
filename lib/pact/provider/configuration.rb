@@ -15,6 +15,7 @@ module Pact
     module Configuration
 
       module ConfigurationExtension
+
         def provider= provider
           @provider = provider
         end
@@ -41,6 +42,15 @@ module Pact
 
         def config_ru_path= config_ru_path
           @config_ru_path = config_ru_path
+        end
+
+        def color_enabled
+          # Can't use ||= when the variable might be false, it will execute the expression if it's false
+          defined?(@color_enabled) ? @color_enabled : true
+        end
+
+        def color_enabled= color_enabled
+          @color_enabled = color_enabled
         end
       end
 

@@ -9,7 +9,15 @@ module Pact::Provider::Configuration
       Pact.clear_configuration
     end
 
-    let(:mock_config) { MockConfig.new }
+    it "allows configuration of colour_enabled" do
+      Pact.configuration.color_enabled = false
+      expect(Pact.configuration.color_enabled).to be_false
+    end
+
+    it "sets color_enabled to be true by default" do
+      expect(Pact.configuration.color_enabled).to be_true
+    end
+
     context "when a provider is configured" do
       before do
         Pact.service_provider "Fred" do

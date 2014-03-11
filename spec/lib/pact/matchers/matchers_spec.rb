@@ -49,6 +49,16 @@ module Pact::Matchers
       end
     end
 
+    context "when a boolean is expected" do
+      let(:expected) { {opportunity: { displayAdvertising: true }} }
+      let(:actual) { {opportunity: {displayAdvertising: {}} }}
+      let(:difference) { {} }
+
+      it "returns the diff" do
+        expect(diff(expected, actual)).to eq difference
+      end
+    end
+
     describe 'structure_diff' do
       let(:expected) {
         {a: 'a string', b: 1, c: nil, d: [{e: 'thing'}], f: {g: 10}, h: false}

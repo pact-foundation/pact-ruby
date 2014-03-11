@@ -1,17 +1,18 @@
 require 'pact/term'
-require 'pact/consumer_contract/active_support_support'
 require 'awesome_print'
 require 'pact/matchers'
 require 'awesome_print'
 require 'rspec'
+require 'pact/matchers/nested_json_diff_decorator'
+require 'pact/matchers/diff_decorator'
 
 RSpec::Matchers.define :match_term do |expected|
   include Pact::Matchers
-  include Pact::ActiveSupportSupport
+
 
   match do |actual|
     if (difference = diff(expected, actual)).any?
-      @message = difference
+      @diff_decorator = Pact::Matchers::NestedJsonDiffDecorator.new(difference)
       false
     else
       true
@@ -19,7 +20,7 @@ RSpec::Matchers.define :match_term do |expected|
   end
 
   failure_message_for_should do | actual |
-    fix_json_formatting @message.to_json
+    @diff_decorator.to_s
   end
 
 end

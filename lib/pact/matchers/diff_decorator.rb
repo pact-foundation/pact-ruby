@@ -13,7 +13,7 @@ module Pact
       end
 
       def to_s
-        diff_descriptions(diff).join("\n")
+        diff_descriptions(diff).join("\n").tap{|s| puts s}
       end
 
       def diff_descriptions obj, path = [], descriptions = []

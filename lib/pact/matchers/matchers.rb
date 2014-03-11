@@ -22,7 +22,7 @@ module Pact
       end
 
       def to_hash
-        {:EXPECTED => expected, :ACTUAL => actual}
+        {:expected => expected, :actual => actual}
       end
 
       def to_json options = {}
@@ -58,6 +58,7 @@ module Pact
     DEFAULT_OPTIONS = {allow_unexpected_keys: true, structure: false}.freeze
 
     def diff expected, actual, opts = {}
+      # require 'pry'; pry(binding);
       options = DEFAULT_OPTIONS.merge(opts)
       case expected
       when Hash then hash_diff(expected, actual, options)
@@ -66,7 +67,7 @@ module Pact
       when Regexp then regexp_diff(expected, actual, options)
       when Pact::SomethingLike then diff(expected.contents, actual, options.merge(:structure => true))
       else object_diff(expected, actual, options)
-      end
+      end.tap{ |it| puts it.to_json}
     end
 
     def structure_diff expected, actual

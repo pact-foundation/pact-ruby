@@ -9,6 +9,10 @@ module Pact
 
         subject { PlusMinusDiffDecorator.new(diff).to_s }
 
+        context "with class based matching" do
+          xit "displays nicely"
+        end
+
         context "with an incorrect value in a hash" do
           let(:diff) { {thing: {alligator: Difference.new({name: 'Mary'}, "Joe" )}} }
 
@@ -34,6 +38,24 @@ module Pact
           it "doesn't display the no difference indicator as a change" do
             expect(subject).to match(/^\s+no difference here!,$/)
           end
+        end
+
+        context "with a regular expression that was not matched" do
+          let(:regexp) { %r{http://.*/thing/1234} }
+          let(:diff) { {thing: Difference.new(regexp, "pear")} }
+
+          it "displays the regular expression" do
+            expect(subject).to include(regexp.inspect)
+            expect(subject).to include(regexp.inspect)
+            expect(subject).to match /\-.*thing/
+            expect(subject).to match /\+.*pear/
+          end
+
+          it "does not put quotes around the regular expression" do
+            expect(subject).to match /\/$/
+            expect(subject).to match /: \//
+          end
+
         end
 
         context "with a missing key" do

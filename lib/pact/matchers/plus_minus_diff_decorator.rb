@@ -50,14 +50,33 @@ module Pact
 
       def copy_diff difference, target
         if target == :actual
-          difference.actual
+          copy_object difference.actual, target
         else
-          difference.expected
+          copy_object difference.expected, target
         end
       end
 
       def copy_object object, target
-        object
+        if Regexp === object
+          RegexpDecorator.new(object)
+        else
+          object
+        end
+      end
+
+      class RegexpDecorator
+
+        def initialize regexp
+          @regexp = regexp
+        end
+
+        def to_json options={}
+          @regexp.inspect
+        end
+
+        def as_json
+          @regexp.inspect
+        end
       end
 
       attr_reader :diff

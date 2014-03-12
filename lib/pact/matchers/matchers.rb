@@ -22,7 +22,7 @@ module Pact
       end
 
       def to_hash
-        {:expected => expected, :actual => actual}
+        {:EXPECTED => expected, :ACTUAL => actual}
       end
 
       def to_json options = {}

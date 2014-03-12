@@ -13,7 +13,7 @@ module Pact
     end
 
     def as_json options = {}
-      to_s
+      as_json.to_json
     end
 
     def empty?

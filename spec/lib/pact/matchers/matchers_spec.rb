@@ -49,16 +49,6 @@ module Pact::Matchers
       end
     end
 
-    context "when a boolean is expected" do
-      let(:expected) { {opportunity: { displayAdvertising: true }} }
-      let(:actual) { {opportunity: {displayAdvertising: {}} }}
-      let(:difference) { {} }
-
-      it "returns the diff" do
-        expect(diff(expected, actual)).to eq difference
-      end
-    end
-
     describe 'structure_diff' do
       let(:expected) {
         {a: 'a string', b: 1, c: nil, d: [{e: 'thing'}], f: {g: 10}, h: false}
@@ -163,6 +153,15 @@ module Pact::Matchers
         subject { [1,2,3] }
         let(:actual) { [1,2]}
         let(:difference) { [Pact::Matchers::NO_DIFF_INDICATOR, Pact::Matchers::NO_DIFF_INDICATOR, Difference.new(3, Pact::IndexNotFound.new)] }
+        it 'returns the diff' do
+          expect(diff(subject, actual)).to eq(difference)
+        end
+      end
+
+      context "when the different index is in the middle of an array" do
+        subject { [1,2,3] }
+        let(:actual) { [1,7,3]}
+        let(:difference) { [Pact::Matchers::NO_DIFF_INDICATOR, Difference.new(2, 7), Pact::Matchers::NO_DIFF_INDICATOR] }
         it 'returns the diff' do
           expect(diff(subject, actual)).to eq(difference)
         end

@@ -6,10 +6,10 @@ module Pact
 
       include Pact::ActiveSupportSupport
 
-      EXPECTED = '"expected"'
-      EXPECTED_GREEN = '"' + "expected".green + '"'
-      ACTUAL = '"actual"'
-      ACTUAL_RED =  '"' + "actual".red + '"'
+      EXPECTED = '"EXPECTED"'
+      EXPECTED_GREEN = '"' + "EXPECTED".green + '"'
+      ACTUAL = '"ACTUAL"'
+      ACTUAL_RED =  '"' + "ACTUAL".red + '"'
 
       attr_reader :diff
 

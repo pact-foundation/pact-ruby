@@ -1,4 +1,5 @@
 require 'pact/shared/dsl'
+require 'pact/provider/provider_state_configured_modules'
 
 module Pact
   module Provider
@@ -51,6 +52,8 @@ module Pact
         @set_up_defined = false
         @tear_down_defined = false
         @no_op_defined = false
+        #not sure why but using include doesn't bring in the configured module methods
+        self.extend ProviderStateConfiguredModules
       end
 
       dsl do

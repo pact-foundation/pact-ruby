@@ -1,5 +1,7 @@
 require 'pact/provider/pact_verification'
 require 'pact/shared/dsl'
+require 'pact/provider/provider_state_configured_modules'
+
 module Pact
 
   module Provider
@@ -42,6 +44,13 @@ module Pact
         def config_ru_path= config_ru_path
           @config_ru_path = config_ru_path
         end
+
+        def include mod
+          Pact::Provider::ProviderStateConfiguredModules.instance_eval do
+            include mod
+          end
+        end
+
       end
 
       Pact::Configuration.send(:include, ConfigurationExtension)

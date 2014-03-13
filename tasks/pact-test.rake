@@ -4,10 +4,15 @@ Pact::VerificationTask.new(:stubbing) do | pact |
 	pact.uri './spec/support/stubbing.json', :pact_helper => './spec/support/stubbing.rb'
 end
 
+Pact::VerificationTask.new(:stubbing_using_allow) do | pact |
+	pact.uri './spec/support/stubbing.json', :pact_helper => './spec/support/stubbing_using_allow.rb'
+end
+
+
 namespace :pact do
 
 	desc 'Runs pact tests against a sample application, testing failure and success.'
-	task :tests => ['pact:verify:stubbing'] do
+	task :tests => ['pact:verify:stubbing','pact:verify:stubbing_using_allow'] do
 
 		require 'pact/provider/pact_spec_runner'
 		require 'open3'

@@ -29,7 +29,7 @@ module Pact
       let(:service_consumer) { double('ServiceConsumer', :as_json => {:a => 'consumer'}) }
       let(:service_provider) { double('ServiceProvider', :as_json => {:a => 'provider'}) }
       let(:pact) { ConsumerContract.new({:interactions => [MockInteraction.new], :consumer => service_consumer, :provider => service_provider }) }
-      let(:expected_as_json) { {:provider=>{:a=>"provider"}, :consumer=>{:a=>"consumer"}, :interactions=>[{:mock=>"interaction"}], :metadata=>{:pact_gem=>{:version=>"1.0"}}} }
+      let(:expected_as_json) { {:provider=>{:a=>"provider"}, :consumer=>{:a=>"consumer"}, :interactions=>[{:mock=>"interaction"}], :metadata=>{:pactSpecificationVersion=> "1.0" }} }
 
       it "should return a hash representation of the Pact" do
         pact.as_json.should eq expected_as_json
@@ -168,9 +168,7 @@ module Pact
     "something"
   ],
   "metadata": {
-    "pact_gem": {
-      "version": "#{Pact::VERSION}"
-    }
+    "pactSpecificationVersion": "1.0"
   }
 }
 eos

@@ -27,8 +27,6 @@
     }
   ],
   "metadata": {
-    "pact_gem": {
-      "version": "0.1.24"
-    }
+    "pactSpecificationVersion": "1.0"
   }
 }

@@ -2,10 +2,16 @@ Do this to generate your change history
 
     git log --date=relative --pretty=format:'  * %h - %s (%an, %ad)'
 
+### 1.0.34 (17 March 2013)
+
+* 6c923f4 - In the pact file, replaced $.metadata.pact_gem.version with $.metadata.pactSpecificationVersion as the gem version is irrelevant - it is the serialization format that matters, and that hasn't changed yet. Also, recording the gem version creates extra changes to be committed when the gem is upgraded, and is meaningless for pacts generated/verified by the JVM code. (Beth Skurrie, 5 minutes ago)
+
 ### 1.0.33 (13 March 2013)
+
 * 49456cc - Added the ability to configure modules that can be used in provider state definitions (Beth Skurrie, 75
 
 ### 1.0.32 (11 March 2014)
+
 * 5a7cc36 - Adding as_json methods for diff indicators (index/key not found/unexpected) (Beth Skurrie, 2 days ago)
 
 ### 1.0.31 (11 March 2013)

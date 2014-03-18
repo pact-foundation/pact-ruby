@@ -376,7 +376,7 @@ See [Frequently Asked Questions](https://github.com/realestate-com-au/pact/blob/
 
 [Pact Broker Client](https://github.com/bethesque/pact_broker-client) - Contains rake tasks for publishing pacts to the pact_broker.
 
-[Shokkenki](https://github.com/brentsnook/shokkenki) - Another Consumer Driven Contract gem written by one of Pact's original authors, Brent Snook.
+[Shokkenki](https://github.com/brentsnook/shokkenki) - Another Consumer Driven Contract gem written by one of Pact's original authors, Brent Snook. Shokkenki allows matchers to be composed using jsonpath expressions and allows auto-generation of mock response values based on regular expressions.
 
 ## TODO
 
@@ -386,11 +386,9 @@ Short term:
 
 Long term:
 - Provide more flexible matching (eg the keys should match, and the classes of the values should match, but the values of each key do not need to be equal). This is to make the pact verification less brittle.
-- Add support for verifying pact against running server
 - Add XML support
 - Improve display of interaction diffs
 - Decouple Rspec from Pact and make rspec-pact gem for easy integration
-
 
 ## Contributing
 

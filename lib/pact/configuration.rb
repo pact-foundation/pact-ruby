@@ -64,7 +64,7 @@ module Pact
   def self.default_logger path
     FileUtils::mkdir_p File.dirname(path)
     logger = Logger.new(path)
-    logger.level = Logger::INFO
+    logger.level = Logger::DEBUG
     logger
   end
 

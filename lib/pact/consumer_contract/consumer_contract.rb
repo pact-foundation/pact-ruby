@@ -41,7 +41,7 @@ module Pact
         consumer: @consumer.as_json,
         interactions: @interactions.collect(&:as_json),
         metadata: {
-          pactSpecificationVersion: "1.0"
+          pactSpecificationVersion: "1.0.0"
         }
       }
     end

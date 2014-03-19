@@ -2,11 +2,19 @@ Do this to generate your change history
 
     git log --date=relative --pretty=format:'  * %h - %s (%an, %ad)'
 
-### 1.0.34 (17 March 2013)
+### 1.0.35 (19 March 2014)
+
+* 44c6806 - Updated README.md with new set_up and tear_down instructions (bethesque, 29 seconds ago)
+* 3c426b7 - Added set_up/tear_down to manage base provider state.
+* 697a5be - Changed default logging level to DEBUG (bethesque, 32 minutes ago)
+* 48483b2 - Fixed JSON serialisation of matcher results with active_support loaded (bethesque, 49 minutes ago)
+* 0be5b01 - Updated description of Shokkenki (bethesque, 7 hours ago)
+
+### 1.0.34 (17 March 2014)
 
 * 6c923f4 - In the pact file, replaced $.metadata.pact_gem.version with $.metadata.pactSpecificationVersion as the gem version is irrelevant - it is the serialization format that matters, and that hasn't changed yet. Also, recording the gem version creates extra changes to be committed when the gem is upgraded, and is meaningless for pacts generated/verified by the JVM code. (Beth Skurrie, 5 minutes ago)
 
-### 1.0.33 (13 March 2013)
+### 1.0.33 (13 March 2014)
 
 * 49456cc - Added the ability to configure modules that can be used in provider state definitions (Beth Skurrie, 75
 

@@ -143,10 +143,10 @@ module Pact
           @already_run = []
         end
 
-        def run_once id
-          unless @already_run.include?(id)
+        def run_once hook
+          unless @already_run.include?(hook)
             yield
-            @already_run << id
+            @already_run << hook
           end
         end
 

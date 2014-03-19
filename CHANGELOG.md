@@ -2,6 +2,10 @@ Do this to generate your change history
 
     git log --date=relative --pretty=format:'  * %h - %s (%an, %ad)'
 
+### 1.0.36 (19 March 2014)
+
+* c28de11 - Added patch level to pactSpecificationVersion (bethesque, 37 seconds ago)
+
 ### 1.0.35 (19 March 2014)
 
 * 44c6806 - Updated README.md with new set_up and tear_down instructions (bethesque, 29 seconds ago)

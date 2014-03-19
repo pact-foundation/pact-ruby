@@ -110,7 +110,7 @@ describe MyServiceProviderClient, :pact => true do
     # Configure your client to point to the stub service on localhost using the port you have specified
     MyServiceProviderClient.base_uri 'localhost:1234'
   end
-  
+
   subject { MyServiceProviderClient.new }
 
   describe "get_something" do
@@ -287,8 +287,36 @@ end
 require_relative 'provider_states_for_my_service_consumer.rb'
 ```
 
-If a state should be used for all consumers, the top level Pact.with_consumer can be skipped, and a global Pact.provider_state can be defined on its own.
+To define code that should run before/after each interaction, regardless of whether a provider state is specified or not:
 
+```ruby
+
+  Pact.provider_states_for 'My Service Consumer' do
+
+    set_up do
+      # eg. create API user, start database cleaner transaction
+    end
+
+    tear_down do
+      # eg. clean database
+    end
+  end
+
+```
+
+Or for global set up/tear down for all consumers:
+
+```ruby
+Pact.set_up do
+  # eg. start database cleaner transaction
+  # Avoid using the global set up for creating data as it will make your tests brittle.
+  # You don't want changes to one consumer pact to affect another one.
+end
+
+Pact.tear_down do
+  # eg. clean database
+end
+```
 
 ### Verifying pacts
 

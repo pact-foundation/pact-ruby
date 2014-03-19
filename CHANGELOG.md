@@ -2,6 +2,11 @@ Do this to generate your change history
 
     git log --date=relative --pretty=format:'  * %h - %s (%an, %ad)'
 
+### 1.0.37 (19 March 2014)
+
+* 0e8b80e - Cleaned up pact:verify rspec matcher lines so the output makes more sense to the reader (bethesque, 3 minutes ago)
+* 03e5ea3 - Fixed config.include to ensure ordering of config and provider state declarations does not matter (bethesque, 20 minutes ago)
+
 ### 1.0.36 (19 March 2014)
 
 * c28de11 - Added patch level to pactSpecificationVersion (bethesque, 37 seconds ago)

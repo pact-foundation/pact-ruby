@@ -1,5 +1,5 @@
 module Pact
-  module Provider
+  module Provider::State
     class ProviderStateProxy
 
       attr_reader :missing_provider_states
@@ -14,6 +14,10 @@ module Pact
           raise error_message name, options[:for]
         end
         provider_state
+      end
+
+      def get_base options = {}
+        ProviderStates.get_base options
       end
 
       private

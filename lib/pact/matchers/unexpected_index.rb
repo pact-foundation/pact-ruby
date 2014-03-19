@@ -14,7 +14,7 @@ module Pact
     end
 
     def to_json opts = {}
-      as_json.to_json
+      as_json.to_json options
     end
 
   end

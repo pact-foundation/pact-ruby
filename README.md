@@ -110,7 +110,7 @@ describe MyServiceProviderClient, :pact => true do
     # Configure your client to point to the stub service on localhost using the port you have specified
     MyServiceProviderClient.base_uri 'localhost:1234'
   end
-  
+
   subject { MyServiceProviderClient.new }
 
   describe "get_something" do
@@ -287,8 +287,36 @@ end
 require_relative 'provider_states_for_my_service_consumer.rb'
 ```
 
-If a state should be used for all consumers, the top level Pact.with_consumer can be skipped, and a global Pact.provider_state can be defined on its own.
+To define code that should run before/after each interaction, regardless of whether a provider state is specified or not:
 
+```ruby
+
+  Pact.provider_states_for 'My Service Consumer' do
+
+    set_up do
+      # eg. create API user, start database cleaner transaction
+    end
+
+    tear_down do
+      # eg. clean database
+    end
+  end
+
+```
+
+Or for global set up/tear down for all consumers:
+
+```ruby
+Pact.set_up do
+  # eg. start database cleaner transaction
+  # Avoid using the global set up for creating data as it will make your tests brittle.
+  # You don't want changes to one consumer pact to affect another one.
+end
+
+Pact.tear_down do
+  # eg. clean database
+end
+```
 
 ### Verifying pacts
 
@@ -376,7 +404,7 @@ See [Frequently Asked Questions](https://github.com/realestate-com-au/pact/blob/
 
 [Pact Broker Client](https://github.com/bethesque/pact_broker-client) - Contains rake tasks for publishing pacts to the pact_broker.
 
-[Shokkenki](https://github.com/brentsnook/shokkenki) - Another Consumer Driven Contract gem written by one of Pact's original authors, Brent Snook.
+[Shokkenki](https://github.com/brentsnook/shokkenki) - Another Consumer Driven Contract gem written by one of Pact's original authors, Brent Snook. Shokkenki allows matchers to be composed using jsonpath expressions and allows auto-generation of mock response values based on regular expressions.
 
 ## TODO
 
@@ -386,11 +414,9 @@ Short term:
 
 Long term:
 - Provide more flexible matching (eg the keys should match, and the classes of the values should match, but the values of each key do not need to be equal). This is to make the pact verification less brittle.
-- Add support for verifying pact against running server
 - Add XML support
 - Improve display of interaction diffs
 - Decouple Rspec from Pact and make rspec-pact gem for easy integration
-
 
 ## Contributing
 

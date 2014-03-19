@@ -62,8 +62,6 @@
     }
   ],
   "metadata": {
-    "pact_gem": {
-      "version": "1.0.30"
-    }
+    "pactSpecificationVersion": "1.0"
   }
 }

@@ -83,27 +83,36 @@ module Pact
 
         end
 
-        def describe_response response, interaction_context
+        def describe_response expected_response, interaction_context
+
           describe "returns a response which" do
-            if response['status']
-              it "has status code #{response['status']}" do
-                expect(interaction_context.last_response.status).to eql response['status']
+
+            let(:expected_response_status) { expected_response['status'] }
+            let(:expected_response_body) { expected_response['body'] }
+            let(:response) { interaction_context.last_response }
+            let(:response_status) { response.status }
+            let(:response_body) { parse_body_from_response(response) }
+
+            if expected_response['status']
+              it "has status code #{expected_response['status']}" do
+                expect(response_status).to eql expected_response_status
               end
             end
 
-            if response['headers']
+            if expected_response['headers']
               describe "includes headers" do
-                response['headers'].each do |name, value|
-                  it "\"#{name}\" with value \"#{value}\"" do
-                    expect(interaction_context.last_response.headers[name]).to match_term value
+                expected_response['headers'].each do |name, expected_header_value|
+                  it "\"#{name}\" with value \"#{expected_header_value}\"" do
+                    header_value = response.headers[name]
+                    expect(header_value).to match_term expected_header_value
                   end
                 end
               end
             end
 
-            if response['body']
+            if expected_response['body']
               it "has a matching body" do
-                expect(parse_body_from_response(interaction_context.last_response)).to match_term response['body']
+                expect(response_body).to match_term expected_response_body
               end
             end
           end
@@ -134,10 +143,10 @@ module Pact
           @already_run = []
         end
 
-        def run_once id
-          unless @already_run.include?(id)
+        def run_once hook
+          unless @already_run.include?(hook)
             yield
-            @already_run << id
+            @already_run << hook
           end
         end
 

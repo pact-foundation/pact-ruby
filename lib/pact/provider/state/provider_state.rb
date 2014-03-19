@@ -77,8 +77,6 @@ module Pact
         @set_up_defined = false
         @tear_down_defined = false
         @no_op_defined = false
-        #not sure why but using include doesn't bring in the configured module methods
-        self.extend ProviderStateConfiguredModules
       end
 
       dsl do
@@ -120,12 +118,14 @@ module Pact
 
       def set_up
         if @set_up_block
+          include_provider_state_configured_modules
           instance_eval &@set_up_block
         end
       end
 
       def tear_down
         if @tear_down_block
+          include_provider_state_configured_modules
           instance_eval &@tear_down_block
         end
       end
@@ -154,6 +154,15 @@ module Pact
         else
           "#{namespace}.#{name}"
         end
+      end
+
+      def include_provider_state_configured_modules
+        # Doing this at runtime means the order of the Pact configuration block
+        # and the provider state declarations doesn't matter.
+        # Using include ProviderStateConfiguredModules on the class doesn't seem to work -
+        # modules dynamically added to ProviderStateConfiguredModules don't seem to be
+        # included in the including class.
+        self.extend(ProviderStateConfiguredModules) unless self.singleton_class.ancestors.include?(ProviderStateConfiguredModules)
       end
     end
 

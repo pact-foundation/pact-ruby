@@ -1,22 +1,24 @@
 require 'spec_helper'
-require 'pact/provider/provider_state_proxy'
+require 'pact/provider/state/provider_state_proxy'
 
 module Pact
-  module Provider
+  module Provider::State
     describe ProviderStateProxy do
 
       let(:provider_state_proxy) { ProviderStateProxy.new }
 
+      let(:options) { { :for => 'some consumer'} }
+      let(:provider_state) { double("provider_state")}
+
       describe "get" do
         let(:name) { "some state" }
-        let(:options) { { :for => 'some consumer'} }
-        let(:provider_state) { double("provider_state")}
 
         subject { provider_state_proxy.get name, options }
 
         before do
           ProviderStates.stub(:get).and_return(provider_state)
         end
+
         context "when the provider state exists" do
 
           it "retrieves the provider state from ProviderState" do
@@ -54,6 +56,24 @@ module Pact
         end
 
 
+      end
+
+      describe "get_base" do
+
+        before do
+          ProviderStates.stub(:get_base).and_return(provider_state)
+        end
+
+        subject { provider_state_proxy.get_base options }
+
+        it "calls through to ProviderStates" do
+          ProviderStates.should_receive(:get_base).with(options)
+          subject
+        end
+
+        it "returns the state" do
+          expect(subject).to eq provider_state
+        end
       end
     end
   end

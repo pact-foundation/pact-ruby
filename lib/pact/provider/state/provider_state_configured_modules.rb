@@ -1,5 +1,5 @@
 module Pact
-  module Provider
+  module Provider::State
     module ProviderStateConfiguredModules
       # Placeholder for modules configured using config.include
     end

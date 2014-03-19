@@ -1,6 +1,7 @@
 require 'pact/provider/pact_verification'
 require 'pact/shared/dsl'
-require 'pact/provider/provider_state_configured_modules'
+require 'pact/provider/state/provider_state'
+require 'pact/provider/state/provider_state_configured_modules'
 
 module Pact
 
@@ -13,6 +14,7 @@ module Pact
     end
 
     Pact.send(:extend, Pact::Provider::DSL)
+    Pact.send(:extend, Pact::Provider::State::DSL)
 
     module Configuration
 
@@ -46,7 +48,7 @@ module Pact
         end
 
         def include mod
-          Pact::Provider::ProviderStateConfiguredModules.instance_eval do
+          Pact::Provider::State::ProviderStateConfiguredModules.instance_eval do
             include mod
           end
         end

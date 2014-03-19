@@ -84,6 +84,7 @@ module Pact
         end
 
         def describe_response response, interaction_context
+          # TODO : Hide the interaction_context from the output line as it is confusing
           describe "returns a response which" do
             if response['status']
               it "has status code #{response['status']}" do

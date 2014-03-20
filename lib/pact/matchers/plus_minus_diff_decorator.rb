@@ -8,9 +8,8 @@ module Pact
       end
 
       def to_s
-        #Active support safe this
-        expected = JSON.pretty_generate handle(diff, :expected)
-        actual = JSON.pretty_generate handle(diff, :actual)
+        expected = generate_string(diff, :expected)
+        actual = generate_string(diff, :actual)
 
         RSpec::Expectations::Differ.new.diff_as_string actual, expected
       end
@@ -27,6 +26,16 @@ module Pact
 
       private
 
+      def generate_string diff, target
+        comparable = handle(diff, target)
+        begin
+          # Can't think of an elegant way to check if we can pretty generate other than to try it and maybe fail
+          JSON.pretty_generate(comparable)
+        rescue JSON::GeneratorError
+          comparable.to_s
+        end
+      end
+
       def copy_hash hash, target
         hash.keys.each_with_object({}) do | key, new_hash |
           value = handle hash[key], target
@@ -39,9 +48,6 @@ module Pact
           value = handle array[index], target
           new_array[index] = value unless (UnexpectedIndex === value || IndexNotFound === value)
         end
-      end
-
-      def do_nothing
       end
 
       def copy_no_diff(thing, target)
@@ -82,16 +88,5 @@ module Pact
       attr_reader :diff
     end
 
-    # class NoDiffIndicatorDecorator
-
-    #   def initialize
-    #     @no_diff_indicator = NoDiffIndicator.new
-    #   end
-
-    #   def to_json options = {}
-    #     @no_diff_indicator.to_json + ","
-    #   end
-
-    # end
   end
 end

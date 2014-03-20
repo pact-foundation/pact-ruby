@@ -9,6 +9,8 @@ module Pact
 
         subject { PlusMinusDiffDecorator.new(diff).to_s }
 
+        let(:line_count) { subject.split("\n").size }
+
         context "with class based matching" do
           xit "displays nicely"
         end
@@ -16,11 +18,16 @@ module Pact
         context "with an incorrect value in a hash" do
           let(:diff) { {thing: {alligator: Difference.new({name: 'Mary'}, "Joe" )}} }
 
-          it "does something" do
+          it "displays '+' next to the unexpected value, and '-' next to the missing one" do
             expect(subject).to match /alligator/
             expect(subject).to match /\-.*Mary/
             expect(subject).to match /\+.*Joe/
           end
+
+          it "generates the right number of lines, even with ActiveSupport loaded" do
+            expect(line_count).to eq 10
+          end
+
         end
 
         context "with an incorrect value in an array" do
@@ -38,6 +45,11 @@ module Pact
           it "doesn't display the no difference indicator as a change" do
             expect(subject).to match(/^\s+no difference here!,$/)
           end
+
+          it "generates the right number of lines, even with ActiveSupport loaded" do
+            expect(line_count).to eq 10
+          end
+
         end
 
         context "with a regular expression that was not matched" do
@@ -54,6 +66,10 @@ module Pact
           it "does not put quotes around the regular expression" do
             expect(subject).to match /\/$/
             expect(subject).to match /: \//
+          end
+
+          it "generates the right number of lines, even with ActiveSupport loaded" do
+            expect(line_count).to eq 6
           end
 
         end
@@ -74,6 +90,9 @@ module Pact
             expect(subject).to_not match /\+.*alligator/
           end
 
+          it "generates the right number of lines, even with ActiveSupport loaded" do
+            expect(line_count).to eq 9
+          end
         end
 
         context "with an unexpected key" do
@@ -90,6 +109,11 @@ module Pact
           it "does not display the unexpected key in the expected output" do
             expect(subject).to_not match /\-.*alligator/
           end
+
+          it "generates the right number of lines, even with ActiveSupport loaded" do
+            expect(line_count).to eq 9
+          end
+
         end
 
         context "with a missing index" do
@@ -104,6 +128,11 @@ module Pact
           it "does not display IndexNotFound" do
             expect(subject).to_not match /#{IndexNotFound.new.to_s}/
           end
+
+          it "generates the right number of lines, even with ActiveSupport loaded" do
+            expect(line_count).to eq 9
+          end
+
         end
 
         context "with an unexpected index" do
@@ -125,6 +154,11 @@ module Pact
           it "does not display the UnexpectedIndex" do
             expect(subject).to_not match UnexpectedIndex.new.to_s
           end
+
+          it "generates the right number of lines, even with ActiveSupport loaded" do
+            expect(line_count).to eq 9
+          end
+
         end
 
         context "with 2 unexpected indexes" do
@@ -138,6 +172,11 @@ module Pact
           it "does not display the UnexpectedIndex" do
             expect(subject).to_not match UnexpectedIndex.new.to_s
           end
+
+          it "generates the right number of lines, even with ActiveSupport loaded" do
+            expect(line_count).to eq 12
+          end
+
         end
 
       end

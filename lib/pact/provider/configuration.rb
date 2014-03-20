@@ -2,6 +2,10 @@ require 'pact/provider/pact_verification'
 require 'pact/shared/dsl'
 require 'pact/provider/state/provider_state'
 require 'pact/provider/state/provider_state_configured_modules'
+require 'pact/matchers/plus_minus_diff_decorator'
+require 'pact/matchers/nested_json_diff_decorator'
+
+# TODO break this class up!
 
 module Pact
 
@@ -19,6 +23,11 @@ module Pact
     module Configuration
 
       module ConfigurationExtension
+
+        DIFF_FORMATTERS = {
+          :nested_json => Pact::Matchers::NestedJsonDiffDecorator,
+          :plus_and_minus => Pact::Matchers::PlusMinusDiffDecorator
+        }
 
         def provider= provider
           @provider = provider
@@ -55,6 +64,18 @@ module Pact
 
         def color_enabled= color_enabled
           @color_enabled = color_enabled
+        end
+
+        def diff_format= diff_format
+          @diff_format = diff_format
+        end
+
+        def diff_format
+          @diff_format ||= :nested_json
+        end
+
+        def diff_formatter_class
+          DIFF_FORMATTERS.fetch(diff_format)
         end
 
         def include mod

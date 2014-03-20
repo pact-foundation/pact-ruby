@@ -9,10 +9,9 @@ require 'pact/matchers/diff_decorator'
 RSpec::Matchers.define :match_term do |expected|
   include Pact::Matchers
 
-
   match do |actual|
     if (difference = diff(expected, actual)).any?
-      @diff_decorator = Pact::Matchers::NestedJsonDiffDecorator.new(difference)
+      @diff_decorator = Pact.configuration.diff_formatter_class.new(difference)
       false
     else
       true

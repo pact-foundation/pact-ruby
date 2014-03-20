@@ -15,17 +15,14 @@ module Pact
 
       describe "#to_s" do
 
-        let(:expected_green) { "expected".green }
-        let(:expected_green) { "actual".red }
-
         context "when color_enabled is true" do
           it "returns nicely formatted json" do
             expect(subject.to_s.split("\n").size).to eq 8
           end
 
           it "returns a string displaying the diff in colour" do
-            expect(subject.to_s).to include NestedJsonDiffDecorator::EXPECTED_GREEN
-            expect(subject.to_s).to include NestedJsonDiffDecorator::ACTUAL_RED
+            expect(subject.to_s).to include NestedJsonDiffDecorator::EXPECTED_COLOURED
+            expect(subject.to_s).to include NestedJsonDiffDecorator::ACTUAL_COLOURED
           end
         end
 
@@ -39,8 +36,8 @@ module Pact
           end
 
           it "returns a string displaying the diff without colour" do
-            expect(subject.to_s).to_not include "expected".green
-            expect(subject.to_s).to_not include "actual".red
+            expect(subject.to_s).to_not include NestedJsonDiffDecorator::EXPECTED_COLOURED
+            expect(subject.to_s).to_not include NestedJsonDiffDecorator::ACTUAL_COLOURED
           end
         end
       end

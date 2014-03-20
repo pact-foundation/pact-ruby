@@ -8,9 +8,9 @@ module Pact
       include Pact::ActiveSupportSupport
 
       EXPECTED = '"EXPECTED"'
-      EXPECTED_GREEN = '"' + "EXPECTED".green + '"'
+      EXPECTED_COLOURED = '"' + "expected".red + '"'
       ACTUAL = '"ACTUAL"'
-      ACTUAL_RED =  '"' + "ACTUAL".red + '"'
+      ACTUAL_COLOURED =  '"' + "actual".green + '"'
 
       attr_reader :diff
 
@@ -39,7 +39,7 @@ module Pact
       end
 
       def colourise line
-        line.white.gsub(EXPECTED, EXPECTED_GREEN).gsub(ACTUAL, ACTUAL_RED)
+        line.white.gsub(EXPECTED, EXPECTED_COLOURED).gsub(ACTUAL, ACTUAL_COLOURED)
       end
 
     end

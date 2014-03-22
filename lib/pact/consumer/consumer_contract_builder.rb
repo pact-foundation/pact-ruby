@@ -84,7 +84,7 @@ module Pact
       end
 
       def warn_and_stderr msg
-        $stderr.puts msg
+        Pact.configuration.error_stream.puts msg
         logger.warn msg
       end
 

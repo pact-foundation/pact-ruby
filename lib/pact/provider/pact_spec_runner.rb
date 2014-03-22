@@ -5,6 +5,7 @@ require 'rspec/core/formatters/documentation_formatter'
 require 'rspec/core/formatters/json_formatter'
 require 'pact/provider/pact_helper_locator'
 require 'pact/provider/rspec/formatter'
+require 'pact/provider/rspec/silent_json_formatter'
 require_relative 'rspec'
 
 
@@ -43,11 +44,11 @@ module Pact
 
       def require_pact_helper spec_definition
         if spec_definition[:pact_helper]
-          puts "Using #{spec_definition[:pact_helper]}"
+          Pact.configuration.output_stream.puts "Using #{spec_definition[:pact_helper]}"
           require spec_definition[:pact_helper]
         elsif spec_definition[:support_file]
-          puts "Using #{spec_definition[:support_file]}"
-          $stderr.puts SUPPORT_FILE_DEPRECATION_MESSAGE
+          Pact.configuration.output_stream.puts "Using #{spec_definition[:support_file]}"
+          Pact.configuration.error_stream.puts SUPPORT_FILE_DEPRECATION_MESSAGE
           require spec_definition[:support_file]
         else
           require 'pact/provider/client_project_pact_helper'
@@ -80,15 +81,16 @@ module Pact
           Pact.configuration.logger.info "Running example '#{example_description}'"
         end
 
-        unless options[:silent]
-          config.error_stream = $stderr
-          config.output_stream = $stdout
+        if options[:silent]
+          config.output_stream = StringIO.new
+          config.error_stream = StringIO.new
+        else
+          config.error_stream = Pact.configuration.error_stream
+          config.output_stream = Pact.configuration.output_stream
         end
 
-        formatter = Pact::Provider::RSpec::Formatter.new(config.output)
-        @json_formatter = ::RSpec::Core::Formatters::JsonFormatter.new(StringIO.new)
-        reporter =  ::RSpec::Core::Reporter.new(formatter, @json_formatter)
-        config.instance_variable_set(:@reporter, reporter)
+        config.add_formatter Pact::Provider::RSpec::Formatter
+        config.add_formatter Pact::Provider::RSpec::SilentJsonFormatter
       end
 
       def run_specs
@@ -102,7 +104,7 @@ module Pact
             config.run_hook(:after, :suite)
           end
         end
-        @output = @json_formatter.output_hash
+        @output = Pact.world.json_formatter.output_hash
         exit_code
       end
     end

@@ -27,6 +27,7 @@ namespace :pact do
 		silent = true
 		puts "Running task pact:tests"
 		# Run these specs silently, otherwise expected failures will be written to stdout and look like unexpected failures.
+		Pact.configuration.output_stream = StringIO.new if silent
 
 		result = Pact::Provider::PactSpecRunner.new([{ uri: './spec/support/test_app_pass.json' }], silent: silent).run
 		fail 'Expected pact to pass' unless (result == 0)

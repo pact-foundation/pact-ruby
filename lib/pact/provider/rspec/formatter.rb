@@ -1,4 +1,5 @@
 require 'pact/provider/print_missing_provider_states'
+require 'rspec/core/formatters'
 
 module Pact
   module Provider

@@ -14,6 +14,8 @@ module Pact
   module Provider
     class World
 
+      attr_accessor :json_formatter
+
       def provider_states
         @provider_states_proxy ||= Pact::Provider::State::ProviderStateProxy.new
       end

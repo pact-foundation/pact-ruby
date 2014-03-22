@@ -90,10 +90,6 @@ module Pact
         config.add_formatter Pact::Provider::RSpec::Formatter
         config.add_formatter Pact::Provider::RSpec::SilentJsonFormatter
 
-        config.before :each, :pact => :verify do | example |
-          example_description = "#{example.example.example_group.description} #{example.example.description}"
-          Pact.configuration.logger.info "Running example '#{example_description}'"
-        end
       end
 
       def run_specs

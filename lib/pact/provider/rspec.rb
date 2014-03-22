@@ -70,6 +70,7 @@ module Pact
 
             before do
               interaction_context.run_once :before do
+                Pact.configuration.logger.info "Running example '#{self.example.full_description}'"
                 set_up_provider_state interaction.provider_state, options[:consumer]
                 replay_interaction interaction
                 interaction_context.last_response = last_response

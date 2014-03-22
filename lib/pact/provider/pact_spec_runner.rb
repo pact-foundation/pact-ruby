@@ -97,14 +97,16 @@ module Pact
       end
 
       def run_specs
-        exit_code = ::RSpec::Core::CommandLine.new(NullOptions.new)
+        exit_code = ::RSpec::Core::CommandLine.new(NoConfigurationOptions.new)
           .run(::RSpec.configuration.output_stream, ::RSpec.configuration.error_stream)
         @output = JSON.parse(Pact.world.json_formatter_stream.string, symbolize_keys: true)
         exit_code
       end
 
-      class NullOptions
-        def configure configuration; end
+      class NoConfigurationOptions
+        def method_missing(method, *args, &block)
+          # Do nothing!
+        end
       end
 
     end

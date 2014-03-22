@@ -8,6 +8,13 @@ Pact::VerificationTask.new(:stubbing_using_allow) do | pact |
 	pact.uri './spec/support/stubbing.json', :pact_helper => './spec/support/stubbing_using_allow.rb'
 end
 
+Pact::VerificationTask.new(:pass) do | pact |
+	pact.uri './spec/support/test_app_pass.json'
+end
+
+Pact::VerificationTask.new(:fail) do | pact |
+	pact.uri './spec/support/test_app_fail.json'
+end
 
 namespace :pact do
 

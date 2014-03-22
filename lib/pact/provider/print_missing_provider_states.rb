@@ -3,9 +3,9 @@ module Pact
     class PrintMissingProviderStates
 
       # Hash of consumer names to array of names of missing provider states
-      def self.call missing_provider_states
+      def self.call missing_provider_states, output
         if missing_provider_states.any?
-          puts orangeify(text(missing_provider_states))
+          output.puts orangeify(text(missing_provider_states))
         end
       end
 

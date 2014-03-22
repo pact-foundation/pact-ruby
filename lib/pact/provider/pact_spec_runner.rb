@@ -4,7 +4,7 @@ require 'rspec/core'
 require 'rspec/core/formatters/documentation_formatter'
 require 'rspec/core/formatters/json_formatter'
 require 'pact/provider/pact_helper_locator'
-require 'pact/provider/print_missing_provider_states'
+require 'pact/provider/rspec/formatter'
 require_relative 'rspec'
 
 
@@ -85,7 +85,7 @@ module Pact
           config.output_stream = $stdout
         end
 
-        formatter = ::RSpec::Core::Formatters::DocumentationFormatter.new(config.output)
+        formatter = Pact::Provider::RSpec::Formatter.new(config.output)
         @json_formatter = ::RSpec::Core::Formatters::JsonFormatter.new(StringIO.new)
         reporter =  ::RSpec::Core::Reporter.new(formatter, @json_formatter)
         config.instance_variable_set(:@reporter, reporter)
@@ -102,7 +102,6 @@ module Pact
             config.run_hook(:after, :suite)
           end
         end
-        PrintMissingProviderStates.call Pact.world.provider_states.missing_provider_states
         @output = @json_formatter.output_hash
         exit_code
       end

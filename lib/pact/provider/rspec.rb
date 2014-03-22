@@ -19,9 +19,9 @@ module Pact
         include ::RSpec::Core::DSL
 
         def honour_pactfile pactfile_uri, options = {}
-          puts "Filtering specs by: #{options[:criteria]}" if options[:criteria]
+          puts "Filtering specs by: #{options[:criteria]}" if options[:criteria] && options[:criteria].any?
           consumer_contract = Pact::ConsumerContract.from_json(read_pact_from(pactfile_uri, options))
-          describe "A pact between #{consumer_contract.consumer.name} and #{consumer_contract.provider.name}" do
+          describe "A pact between #{consumer_contract.consumer.name} and #{consumer_contract.provider.name}", :pactfile_uri => pactfile_uri do
             describe "in #{pactfile_uri}" do
               honour_consumer_contract consumer_contract, options
             end
@@ -60,7 +60,13 @@ module Pact
 
         def describe_interaction interaction, options
 
-          describe description_for(interaction), :pact => :verify do
+          metadata = {
+            :pact => :verify,
+            :pact_interaction => interaction,
+            :pact_interaction_example_description => failure_description_for(interaction)
+          }
+
+          describe description_for(interaction), metadata do
 
             interaction_context = InteractionContext.new
 
@@ -120,6 +126,10 @@ module Pact
 
         def description_for interaction
           "#{interaction.description} using #{interaction.request.method.upcase} to #{interaction.request.path}"
+        end
+
+        def failure_description_for interaction
+          description_for(interaction) + ( interaction.provider_state ? " given #{interaction.provider_state}" : "")
         end
 
         def read_pact_from uri, options = {}

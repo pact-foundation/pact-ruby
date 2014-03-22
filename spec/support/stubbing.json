@@ -7,7 +7,7 @@
     },
     "interactions": [
         {
-            "description": "A test request",
+            "description": "a test request",
             "request": {
                 "method": "get",
                 "path": "/"

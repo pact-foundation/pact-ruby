@@ -71,15 +71,12 @@ module Pact
         config = ::RSpec.configuration
 
         config.color = true
+        config.pattern = "pattern which doesn't match any files"
+        config.backtrace_inclusion_patterns = [/pact\/provider\/rspec/]
+
         config.extend Pact::Provider::RSpec::ClassMethods
         config.include Pact::Provider::RSpec::InstanceMethods
         config.include Pact::Provider::TestMethods
-        config.backtrace_inclusion_patterns = [/pact\/provider\/rspec/]
-
-        config.before :each, :pact => :verify do | example |
-          example_description = "#{example.example.example_group.description} #{example.example.description}"
-          Pact.configuration.logger.info "Running example '#{example_description}'"
-        end
 
         if options[:silent]
           config.output_stream = StringIO.new
@@ -91,22 +88,24 @@ module Pact
 
         config.add_formatter Pact::Provider::RSpec::Formatter
         config.add_formatter Pact::Provider::RSpec::SilentJsonFormatter
+
+        config.before :each, :pact => :verify do | example |
+          example_description = "#{example.example.example_group.description} #{example.example.description}"
+          Pact.configuration.logger.info "Running example '#{example_description}'"
+        end
       end
 
       def run_specs
-        config = ::RSpec.configuration
-        world = ::RSpec::world
-        exit_code = config.reporter.report(world.example_count, nil) do |reporter|
-          begin
-            config.run_hook(:before, :suite)
-            world.example_groups.ordered.map {|g| g.run(reporter)}.all? ? 0 : config.failure_exit_code
-          ensure
-            config.run_hook(:after, :suite)
-          end
-        end
+        exit_code = ::RSpec::Core::CommandLine.new(NullOptions.new)
+          .run(::RSpec.configuration.output_stream, ::RSpec.configuration.error_stream)
         @output = Pact.world.json_formatter.output_hash
         exit_code
       end
+
+      class NullOptions
+        def configure configuration; end
+      end
+
     end
   end
 end

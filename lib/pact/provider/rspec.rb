@@ -63,7 +63,7 @@ module Pact
           metadata = {
             :pact => :verify,
             :pact_interaction => interaction,
-            :pact_interaction_example_description => failure_description_for(interaction)
+            :pact_interaction_example_description => interaction_description_for_rerun_command(interaction)
           }
 
           describe description_for(interaction), metadata do
@@ -125,11 +125,12 @@ module Pact
         end
 
         def description_for interaction
-          "#{interaction.description} using #{interaction.request.method.upcase} to #{interaction.request.path}"
+          description = interaction.provider_state ? interaction.description : interaction.description.capitalize
+          "#{description} using #{interaction.request.method.upcase} to #{interaction.request.path}"
         end
 
-        def failure_description_for interaction
-          description_for(interaction) + ( interaction.provider_state ? " given #{interaction.provider_state}" : "")
+        def interaction_description_for_rerun_command interaction
+          description_for(interaction).capitalize + ( interaction.provider_state ? " given #{interaction.provider_state}" : "")
         end
 
         def read_pact_from uri, options = {}

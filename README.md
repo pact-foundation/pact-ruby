@@ -377,9 +377,13 @@ Configure the pact_uri in the Pact.service_provider block with the pact artifact
 
 It should run with all your other tests. If an integration is broken, you want to know about it *before* you check in.
 
-#### Use the real database
+#### Stub calls to downstream systems
 
-Do not stub your database calls for pact:verify. This is the best time for you to test your database integration. If you stub your database calls, you are getting little more assurance that the real end-to-end will work than if you'd used a unit test. It's the appropriate time to incur the overhead of a database call.
+Consider making a separate pact with the downstream system and using shared fixtures.
+
+#### Consider carefully whether to use the real database or stub calls
+
+You may choose not stub your database calls for pact:verify. This can be a good time for you to test your database integration if you have a simple application, however, for a complex one, you might want to carefully choose a point at which to stub calls.
 
 ## Gotchas
 

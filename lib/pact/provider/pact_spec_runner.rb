@@ -37,6 +37,7 @@ module Pact
           run_specs
         ensure
           ::RSpec.reset
+          Pact.clear_world
         end
       end
 
@@ -98,7 +99,7 @@ module Pact
       def run_specs
         exit_code = ::RSpec::Core::CommandLine.new(NullOptions.new)
           .run(::RSpec.configuration.output_stream, ::RSpec.configuration.error_stream)
-        @output = Pact.world.json_formatter.output_hash
+        @output = JSON.parse(Pact.world.json_formatter_stream.string, symbolize_keys: true)
         exit_code
       end
 

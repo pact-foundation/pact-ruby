@@ -21,10 +21,8 @@ module Pact
         def honour_pactfile pactfile_uri, options = {}
           puts "Filtering specs by: #{options[:criteria]}" if options[:criteria] && options[:criteria].any?
           consumer_contract = Pact::ConsumerContract.from_json(read_pact_from(pactfile_uri, options))
-          describe "A pact between #{consumer_contract.consumer.name} and #{consumer_contract.provider.name}", :pactfile_uri => pactfile_uri do
-            describe "in #{pactfile_uri}" do
-              honour_consumer_contract consumer_contract, options
-            end
+          describe "Verifying a pact between #{consumer_contract.consumer.name} and #{consumer_contract.provider.name}", :pactfile_uri => pactfile_uri do
+            honour_consumer_contract consumer_contract, options
           end
         end
 
@@ -125,8 +123,7 @@ module Pact
         end
 
         def description_for interaction
-          description = interaction.provider_state ? interaction.description : interaction.description.capitalize
-          "#{description} using #{interaction.request.method.upcase} to #{interaction.request.path}"
+          interaction.provider_state ? interaction.description : interaction.description.capitalize
         end
 
         def interaction_description_for_rerun_command interaction

@@ -9,6 +9,11 @@ module Pact
 
       EXPECTED = '"EXPECTED"'
       EXPECTED_COLOURED = '"' + "expected".red + '"'
+
+      EXPECTED_REGEXP = '"EXPECTED_TO_MATCH"'
+      EXPECTED_REGEXP_COLOURED = '"' + "expected_to_match".red + '"'
+
+
       ACTUAL = '"ACTUAL"'
       ACTUAL_COLOURED =  '"' + "actual".green + '"'
 
@@ -39,7 +44,7 @@ module Pact
       end
 
       def colourise line
-        line.white.gsub(EXPECTED, EXPECTED_COLOURED).gsub(ACTUAL, ACTUAL_COLOURED)
+        line.white.gsub(EXPECTED, EXPECTED_COLOURED).gsub(ACTUAL, ACTUAL_COLOURED).gsub(EXPECTED_REGEXP, EXPECTED_REGEXP_COLOURED)
       end
 
     end

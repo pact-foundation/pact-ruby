@@ -16,6 +16,10 @@ Pact::VerificationTask.new(:fail) do | pact |
 	pact.uri './spec/support/test_app_fail.json'
 end
 
+Pact::VerificationTask.new(:term) do | pact |
+	pact.uri './spec/support/term.json'
+end
+
 namespace :pact do
 
 	desc 'Runs pact tests against a sample application, testing failure and success.'

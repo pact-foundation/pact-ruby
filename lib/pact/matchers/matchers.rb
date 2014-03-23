@@ -22,7 +22,11 @@ module Pact
       end
 
       def to_hash
-        {:EXPECTED => expected, :ACTUAL => actual}
+        if Regexp === expected
+          {:EXPECTED_TO_MATCH => expected.inspect, :ACTUAL => actual}
+        else
+          {:EXPECTED => expected, :ACTUAL => actual}
+        end
       end
 
       def to_json options = {}

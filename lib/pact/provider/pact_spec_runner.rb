@@ -74,6 +74,7 @@ module Pact
         config.color = true
         config.pattern = "pattern which doesn't match any files"
         config.backtrace_inclusion_patterns = [/pact\/provider\/rspec/]
+        config.backtrace_exclusion_patterns << /pact/
 
         config.extend Pact::Provider::RSpec::ClassMethods
         config.include Pact::Provider::RSpec::InstanceMethods

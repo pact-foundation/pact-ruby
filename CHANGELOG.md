@@ -2,6 +2,15 @@ Do this to generate your change history
 
     git log --date=relative --pretty=format:'  * %h - %s (%an, %ad)'
 
+### 1.0.38 (24 March 2014)
+
+* 7fb2bc3 - Improved readability of pact:verify specs by removing pactfile name and request details from output (bethesque, 23 hours ago)
+* ff1de3c - Improving readability of error messages when pact:verify fails (bethesque, 23 hours ago)
+* 8a08abf - Removed the last RSpec private API usage. I think. (bethesque, 33 hours ago)
+* 6a0be58 - Reducing even more use of RSpec private APIs (bethesque, 33 hours ago)
+* e1fd51c - Reducing use of RSpec private APIs (bethesque, 34 hours ago)
+* 587cb90 - Replaced rspec 'commands to rerun failed examples' with Pact specific commands to rerun failed interactions (bethesque, 2 days ago)
+
 ### 1.0.37 (19 March 2014)
 
 * 0e8b80e - Cleaned up pact:verify rspec matcher lines so the output makes more sense to the reader (bethesque, 3 minutes ago)

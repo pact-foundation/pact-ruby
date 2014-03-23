@@ -10,6 +10,8 @@ module Pact
     attr_accessor :tmp_dir
     attr_accessor :reports_dir
     attr_writer :pactfile_write_mode
+    attr_accessor :error_stream
+    attr_accessor :output_stream
 
     def log_path
       log_dir + "/pact.log"
@@ -54,6 +56,8 @@ module Pact
     c.logger = default_logger c.log_path
     c.pactfile_write_mode = :overwrite
     c.reports_dir = File.expand_path('./reports/pacts')
+    c.output_stream = $stdout
+    c.error_stream = $stderr
     c
   end
 

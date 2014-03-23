@@ -4,7 +4,8 @@ require 'rspec/core'
 require 'rspec/core/formatters/documentation_formatter'
 require 'rspec/core/formatters/json_formatter'
 require 'pact/provider/pact_helper_locator'
-require 'pact/provider/print_missing_provider_states'
+require 'pact/provider/rspec/formatter'
+require 'pact/provider/rspec/silent_json_formatter'
 require_relative 'rspec'
 
 
@@ -36,6 +37,7 @@ module Pact
           run_specs
         ensure
           ::RSpec.reset
+          Pact.clear_world
         end
       end
 
@@ -43,11 +45,11 @@ module Pact
 
       def require_pact_helper spec_definition
         if spec_definition[:pact_helper]
-          puts "Using #{spec_definition[:pact_helper]}"
+          Pact.configuration.output_stream.puts "Using #{spec_definition[:pact_helper]}"
           require spec_definition[:pact_helper]
         elsif spec_definition[:support_file]
-          puts "Using #{spec_definition[:support_file]}"
-          $stderr.puts SUPPORT_FILE_DEPRECATION_MESSAGE
+          Pact.configuration.output_stream.puts "Using #{spec_definition[:support_file]}"
+          Pact.configuration.error_stream.puts SUPPORT_FILE_DEPRECATION_MESSAGE
           require spec_definition[:support_file]
         else
           require 'pact/provider/client_project_pact_helper'
@@ -70,42 +72,39 @@ module Pact
         config = ::RSpec.configuration
 
         config.color = true
+        config.pattern = "pattern which doesn't match any files"
+        config.backtrace_inclusion_patterns = [/pact\/provider\/rspec/]
+
         config.extend Pact::Provider::RSpec::ClassMethods
         config.include Pact::Provider::RSpec::InstanceMethods
         config.include Pact::Provider::TestMethods
-        config.backtrace_inclusion_patterns = [/pact\/provider\/rspec/]
 
-        config.before :each, :pact => :verify do | example |
-          example_description = "#{example.example.example_group.description} #{example.example.description}"
-          Pact.configuration.logger.info "Running example '#{example_description}'"
+        if options[:silent]
+          config.output_stream = StringIO.new
+          config.error_stream = StringIO.new
+        else
+          config.error_stream = Pact.configuration.error_stream
+          config.output_stream = Pact.configuration.output_stream
         end
 
-        unless options[:silent]
-          config.error_stream = $stderr
-          config.output_stream = $stdout
-        end
+        config.add_formatter Pact::Provider::RSpec::Formatter
+        config.add_formatter Pact::Provider::RSpec::SilentJsonFormatter
 
-        formatter = ::RSpec::Core::Formatters::DocumentationFormatter.new(config.output)
-        @json_formatter = ::RSpec::Core::Formatters::JsonFormatter.new(StringIO.new)
-        reporter =  ::RSpec::Core::Reporter.new(formatter, @json_formatter)
-        config.instance_variable_set(:@reporter, reporter)
       end
 
       def run_specs
-        config = ::RSpec.configuration
-        world = ::RSpec::world
-        exit_code = config.reporter.report(world.example_count, nil) do |reporter|
-          begin
-            config.run_hook(:before, :suite)
-            world.example_groups.ordered.map {|g| g.run(reporter)}.all? ? 0 : config.failure_exit_code
-          ensure
-            config.run_hook(:after, :suite)
-          end
-        end
-        PrintMissingProviderStates.call Pact.world.provider_states.missing_provider_states
-        @output = @json_formatter.output_hash
+        exit_code = ::RSpec::Core::CommandLine.new(NoConfigurationOptions.new)
+          .run(::RSpec.configuration.output_stream, ::RSpec.configuration.error_stream)
+        @output = JSON.parse(Pact.world.json_formatter_stream.string, symbolize_keys: true)
         exit_code
       end
+
+      class NoConfigurationOptions
+        def method_missing(method, *args, &block)
+          # Do nothing!
+        end
+      end
+
     end
   end
 end

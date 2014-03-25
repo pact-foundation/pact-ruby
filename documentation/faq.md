@@ -1,6 +1,6 @@
 # Frequently asked questions
 
-## How can I verify a pact against a non-ruby provider?
+### How can I verify a pact against a non-ruby provider?
 
 You can verify a pact against any running server, regardless of language, using [pact-provider-proxy](https://github.com/bethesque/pact-provider-proxy).
 

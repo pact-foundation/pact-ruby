@@ -12,13 +12,20 @@ Become famous, and write a pact-consumer library yourself! Then let us know abou
 
 ### How can I specify hooks to be executed before/after all examples for pact:verify?
 
-The pact:verify RSpec examples have the metadata `{:pact => :verify}` defined. You can add RSpec hooks using a filter as shown here:
+Use the set_up and tear_down hooks in the provider state definition:
 
 ```ruby
-RSpec.configure do | config |
-  config.before :each, :pact => :verify do
-    # Your code here
+
+Pact.provider_states_for "Some Consumer" do
+
+  set_up do
+    # Set up code here 
   end
+
+  tear_down do
+    # tear down code here
+  end
+
 end
 ```
 

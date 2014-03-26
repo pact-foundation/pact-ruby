@@ -33,9 +33,10 @@ Travis CI Status: [![travis-ci.org Build Status](https://travis-ci.org/realestat
 * Only one component is being tested at a time, making the causes of test failures easier to identify.
 * Design of service provider is improved by considering first how the data is actually going to be used, rather than how it is most easily retrieved and serialised.
 
-## Google users group
+## Contact
 
-https://groups.google.com/forum/#!forum/pact-support
+* Twitter: [@pact_up](https://twitter.com/pact_up)
+* Google users group: https://groups.google.com/forum/#!forum/pact-support 
 
 ## Installation
 

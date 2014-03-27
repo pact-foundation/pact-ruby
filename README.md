@@ -28,10 +28,10 @@ Travis CI Status: [![travis-ci.org Build Status](https://travis-ci.org/realestat
 ## Why is developing and testing with pacts better than using integration tests?
 
 * Faster execution.
-* No need to manage starting and stopping multiple processes.
 * Reliable responses from mock service provider reduce likelihood of flakey tests.
 * Only one component is being tested at a time, making the causes of test failures easier to identify.
 * Design of service provider is improved by considering first how the data is actually going to be used, rather than how it is most easily retrieved and serialised.
+* No need to manage starting, stopping and fixture set up for multiple applications during a test run.
 
 ## Contact
 

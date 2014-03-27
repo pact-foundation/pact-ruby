@@ -378,13 +378,13 @@ Configure the pact_uri in the Pact.service_provider block with the pact artifact
 
 It should run with all your other tests. If an integration is broken, you want to know about it *before* you check in.
 
+#### In pact:verify on the provider, only stub layers beneath where contents of the request body are extracted
+
+If you don't _have_ to stub anything in the provider when running pact:verify, then don't. If you do need to stub something, make sure that you only stub the code that gets executed _after_ the contents of the request body have been extracted and/or validated, otherwise, there is no verification that what is included in the body of a request matches what is actually expected.
+
 #### Stub calls to downstream systems
 
 Consider making a separate pact with the downstream system and using shared fixtures.
-
-#### Consider carefully whether to use the real database or stub calls
-
-You may choose not stub your database calls for pact:verify. This can be a good time for you to test your database integration if you have a simple application, however, for a complex one, you might want to carefully choose a point at which to stub calls.
 
 ## Gotchas
 

@@ -210,11 +210,13 @@ require 'pact/tasks'
 
 Congratulations! You now have a failing spec to develop against.
 
-#### 4. Implement your service provider
+At this stage, you'll want to be able to run your specs one at a time while you implement each feature. At the bottom of the failed pact:verify output you will see the commands to rerun each failed interaction individually. A command to run just one interaction will look like this:
 
-At this stage, you'll probably want to be able to run your specs one at a time while you implement. Define the environment variables PACT_DESCRIPTION and/or PACT_PROVIDER_STATE as so:
+    $ rake pact:verify PACT_DESCRIPTION="a request for something" PACT_PROVIDER_STATE="something exists" 
 
-    $ PACT_DESCRIPTION="a request for something" PACT_PROVIDER_STATE="something exists" rake pact:verify
+#### 4. Implement enough to make your first interaction spec pass
+
+Rinse and repeat.
 
 #### 5. Keep going til you're green
 

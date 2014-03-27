@@ -173,13 +173,22 @@ Create your API class using the framework of your choice (e.g. Sinatra, Grape) -
 
 #### 2. Tell your provider that it needs to honour the pact file you made earlier
 
+Require "pact/tasks" in your Rakefile.
+
+```ruby
+# In Rakefile
+
+require 'pact/tasks'
+```
+
 Create a `pact_helper.rb` in your service provider project. The file must be called pact_helper.rb, however there is some flexibility in where it can be stored. The recommended place is `specs/service_consumers/pact_helper.rb`.
 
 ```ruby
+# In specs/service_consumers/pact_helper.rb
+
 require 'pact/provider/rspec'
-# If you wish to use the same spec_helper file as your unit tests, require it here.
+# If you wish to use the same spec_helper file as your unit tests, require it here, but remember that the RSpec
 # Otherwise, you can set up a separate RSpec configuration in this file just for pact:verify.
-require './spec_helper'
 
 Pact.service_provider "My Service Provider" do
 
@@ -196,13 +205,7 @@ Pact.service_provider "My Service Provider" do
 end
 
 ```
-Require "pact/tasks" in your Rakefile. If the pact gem is in the test/development section of your Gemfile, you may want to put an RACK_ENV or RAILS_ENV check around this so it doesn't try load the pact tasks in prod. Not that anyone I know has ever had a problem like that.
 
-```ruby
-# In Rakefile
-
-require 'pact/tasks'
-```
 
 #### 3. Run your failing specs
 

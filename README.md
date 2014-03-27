@@ -196,7 +196,7 @@ Pact.service_provider "My Service Provider" do
 end
 
 ```
-Require "pact/tasks" in your Rakefile. If the pact gem is in the test/development section of your Gemfile, you may want to put an env check around this so it doesn't load the pact tasks in prod.
+Require "pact/tasks" in your Rakefile. If the pact gem is in the test/development section of your Gemfile, you may want to put an RACK_ENV or RAILS_ENV check around this so it doesn't try load the pact tasks in prod. Not that anyone I know has ever had a problem like that.
 
 ```ruby
 # In Rakefile

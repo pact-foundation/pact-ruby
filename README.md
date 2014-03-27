@@ -252,8 +252,6 @@ my_service.
         will_respond_with(status: 500, :body => {message: "An error occurred"}, :headers => { 'Content-Type' => 'application/json'} )
 ```
 
-
-
 To define service provider states that create the right data for "a thing exists" and "a thing does not exist", write the following in the service provider project. (The consumer name here must match the name of the consumer configured in your consumer project for it to correctly find these provider states.)
 
 
@@ -277,6 +275,7 @@ Pact.provider_states_for 'My Service Consumer' do
 
   provider_state "an error occurs while retrieving a thing" do
     set_up do
+      # Stubbing is ususally the easiest way to generate an error with predictable error text.
       ThingRepository.stub(:find).and_raise("An error occurred!")
     end
   end

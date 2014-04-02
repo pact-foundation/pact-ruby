@@ -11,6 +11,13 @@ Pact is like VCR in reverse. VCR records actual provider behaviour, and verifies
 * The ability to immediately see which consumers will be broken if a change is made to the provider API.
 * When using the [Pact Broker](https://github.com/bethesque/pact_broker), the ability to map the relationships between your services.
 
+### How does Pact differ from Webmock?
+
+Unlike Webmock:
+
+* Pact provides verification that the responses that have been stubbed are actually the responses that will be returned in the given conditions.
+* Pact runs a mock server in an actual process, rather than intercepting requests within the Ruby code, allowing Javascript rich UI clients to be tested in a browser.
+
 ### How can I verify a pact against a non-ruby provider?
 
 You can verify a pact against any running server, regardless of language, using [pact-provider-proxy](https://github.com/bethesque/pact-provider-proxy).

@@ -1,5 +1,16 @@
 # Frequently asked questions
 
+### How does Pact differ from VCR?
+
+Pact is like VCR in reverse. VCR records actual provider behaviour, and verifies that the consumer behaves as expected. Pact records consumer behaviour, and verifies that the provider behaves as expected. The advantages Pact provides are:
+
+* The ability to develop the consumer (eg. a Javascript rich client UI) before the provider (eg. the JSON backend API).
+* The ability to drive out the requirements for your provider first, meaning you implement exactly and only what you need in the provider.
+* Well documented use cases ("Given ... a request for ... will return ...") that show exactly how a provider is being used.
+* The ability to see exactly which fields each consumer is interested in, allowing unused fields to be removed, and new fields to be added in the provider API without impacting a consumer. 
+* The ability to immediately see which consumers will be broken if a change is made to the provider API.
+* When using the [Pact Broker](https://github.com/bethesque/pact_broker), the ability to cross test production/head versions of your consumer/provider to ensure that a new version of either will work with the production version of the other.
+
 ### How can I verify a pact against a non-ruby provider?
 
 You can verify a pact against any running server, regardless of language, using [pact-provider-proxy](https://github.com/bethesque/pact-provider-proxy).

@@ -7,8 +7,7 @@ module Pact
       describe InteractionsRenderer do
 
         subject { InteractionsRenderer.new(consumer_contract) }
-        # let(:consumer_contract) { Pact::ConsumerContract.from_uri './spec/support/markdown_pact.json' }
-        let(:consumer_contract) { Pact::ConsumerContract.from_uri '/Users/bethanyskurrie/workspace/rea/biq/condor/spec/pacts/condor-contract_proposals.json' }
+        let(:consumer_contract) { Pact::ConsumerContract.from_uri './spec/support/markdown_pact.json' }
 
         describe "#render" do
 

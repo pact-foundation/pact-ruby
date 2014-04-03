@@ -30,6 +30,10 @@ module Pact
         def template_contents(template_file)
           File.dirname(__FILE__) + template_file
         end
+
+        def <=> other
+          interaction.id <=> other.interaction.id
+        end
       end
     end
   end

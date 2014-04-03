@@ -32,6 +32,23 @@
           }]
         }
       }
+    },{
+      "description": "a request for polar bears",
+      "provider_state": "no polar bears exist",
+      "request": {
+        "method": "get",
+        "path": "/polar-bears",
+        "body" : {
+
+        }
+      },
+      "response": {
+        "headers" : {"Content-Type": "application/json"},
+        "status" : 404,
+        "body" : {
+          "message": "Sorry, due to climate change, the polar bears are currently unavailable."
+        }
+      }
     }
   ],
   "metadata": {

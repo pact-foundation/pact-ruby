@@ -1,6 +1,10 @@
-<a name="<%= interaction.id %>"></a>Given **<%= interaction.provider_state %>**,
-upon receiving **<%= interaction.description %>** from <%= interaction.consumer_name %>,
-with
+<a name="<%= interaction.id %>"></a>
+<%= if interaction.has_provider_state?
+  "Given **#{interaction.provider_state}**, upon receiving"
+   else
+  "Upon receiving"
+   end
+%> **<%= interaction.description %>** from <%= interaction.consumer_name %>, with
 ```json
 <%= interaction.request  %>
 ```

@@ -34,7 +34,7 @@
       }
     },{
       "description": "a request for polar bears",
-      "provider_state": "no polar bears exist",
+      "provider_state": null,
       "request": {
         "method": "get",
         "path": "/polar-bears",

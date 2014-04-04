@@ -9,10 +9,11 @@ module Pact
         subject { InteractionsRenderer.new(consumer_contract) }
         let(:consumer_contract) { Pact::ConsumerContract.from_uri './spec/support/markdown_pact.json' }
 
-        describe "#render" do
+        let(:expected_output) { File.read("./spec/support/generated_markdown.md") }
 
+        describe "#render" do
           it "renders an interaction" do
-            puts subject.render
+            expect(subject.render).to eq(expected_output)
           end
         end
 

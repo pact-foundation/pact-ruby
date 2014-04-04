@@ -1,5 +1,5 @@
-[<%= interaction.description(true) %>](#<%= interaction.id %>)
-<% if interaction.has_provider_state? %>
-,given **<%= interaction.provider_state %>**
-<% end %>
+[<%=
+  interaction.description(true)
+  %>](#<%= interaction.id %>)<%
+  if interaction.has_provider_state? %> given <%= interaction.provider_state %><% end %>
 

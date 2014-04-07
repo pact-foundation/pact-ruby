@@ -1,19 +1,10 @@
+require 'pact/matchers/difference_indicator'
+
 module Pact
-  class IndexNotFound
-    def == other
-      other.is_a? IndexNotFound
-    end
+  class IndexNotFound < Pact::DifferenceIndicator
 
     def to_s
       "<index not found>"
-    end
-
-    def to_json options = {}
-      as_json.to_json options
-    end
-
-    def as_json options = {}
-      to_s
     end
 
     def empty?

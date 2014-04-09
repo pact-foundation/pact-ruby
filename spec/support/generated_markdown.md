@@ -21,10 +21,10 @@ Given **alligators exist**, upon receiving **a request for alligators** from Som
 Some Provider will respond with:
 ```json
 {
+  "status": 200,
   "headers": {
     "Content-Type": "application/json"
   },
-  "status": 200,
   "body": {
     "alligators": [
       {
@@ -48,10 +48,10 @@ Upon receiving **a request for polar bears** from Some Consumer, with
 Some Provider will respond with:
 ```json
 {
+  "status": 404,
   "headers": {
     "Content-Type": "application/json"
   },
-  "status": 404,
   "body": {
     "message": "Sorry, due to climate change, the polar bears are currently unavailable."
   }

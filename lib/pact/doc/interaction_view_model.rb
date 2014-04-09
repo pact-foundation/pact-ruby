@@ -68,16 +68,27 @@ module Pact
       private
 
       def clean_request
-        request = Reification.from_term(@interaction.request).to_hash
-        remove_key_if_empty :headers, request
-        request
+        ordered_clean_hash Reification.from_term(interaction.request).to_hash
       end
 
       def clean_response
-        response = Reification.from_term(@interaction.response)
-        remove_key_if_empty "headers", response
-        remove_key_if_empty "body", response
-        response
+        ordered_clean_hash Reification.from_term(interaction.response)
+      end
+
+      def ordered_clean_hash source
+        ordered_keys.each_with_object({}) do |key, target|
+          if source.key? key
+            target[key] = source[key] unless value_is_an_empty_hash_that_is_not_request_body(source[key], key)
+          end
+        end
+      end
+
+      def value_is_an_empty_hash_that_is_not_request_body value, key
+        value.is_a?(Hash) && value.empty? && key != :body
+      end
+
+      def ordered_keys
+        [:method, :path, :query, :headers, :body, "status", "headers","body"]
       end
 
       def remove_key_if_empty key, hash

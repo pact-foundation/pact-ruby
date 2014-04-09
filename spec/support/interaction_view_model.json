@@ -10,7 +10,8 @@
             "description": "a request with a body and headers",
             "request": {
                 "method": "get",
-                "path": "/",
+                "path": "/path",
+                "query": "some=thing",
                 "headers": {
                     "key": "a header"
                 },
@@ -37,13 +38,13 @@
                 "path": "/"
             },
             "response": {
-                "status": 200,
                 "headers": {
                     "key": "a header"
                 },
                 "body": {
                     "key": "a body"
-                }
+                },
+                "status": 200
             }
         },
         {

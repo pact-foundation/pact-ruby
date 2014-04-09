@@ -1,4 +1,4 @@
-require 'pact/doc/markdown/interaction_view_model'
+require 'pact/doc/interaction_view_model'
 
 module Pact
   module Doc
@@ -12,7 +12,8 @@ module Pact
         end
 
         def render_summary
-          render('/interaction_summary.erb')
+          suffix = interaction.has_provider_state? ? " given #{interaction.provider_state}" : ""
+          "[#{interaction.description(true)}](##{interaction.id})#{suffix}\n\n"
         end
 
         def render_full_interaction

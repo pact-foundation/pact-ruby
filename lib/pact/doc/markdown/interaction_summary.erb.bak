@@ -1,4 +1,0 @@
-<% if interaction.has_provider_state? %>* Given **<%= interaction.provider_state %>**, upon receiving<% else %>Upon receiving<% end %>
-[**<%= interaction.description %>**](#<%= interaction.id %>) to <%= interaction.request_method %> <%= interaction.request_path %>
-<%= interaction.provider_name %> will respond with status <%= interaction.response_status %>
-

@@ -16,7 +16,7 @@ module Pact
         end
 
         def call
-          title + summaries.join + full_interactions.join
+          title + summaries.join + "\n" + full_interactions.join
         end
 
         private

@@ -4,6 +4,7 @@
 
 [A request for polar bears](#a_request_for_polar_bears)
 
+
 <a name="a_request_for_alligators_given_alligators_exist"></a>
 Given **alligators exist**, upon receiving **a request for alligators** from Some Consumer, with
 ```json

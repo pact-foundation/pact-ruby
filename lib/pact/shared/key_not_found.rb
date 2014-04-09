@@ -1,24 +1,15 @@
-module Pact
-  class KeyNotFound
-    def == other
-      other.is_a? KeyNotFound
-    end
+require 'pact/matchers/difference_indicator'
 
-    def eql? other
-      self == other
-    end
+module Pact
+  class KeyNotFound < Pact::DifferenceIndicator
 
     def to_s
       "<key not found>"
     end
 
-    def to_json options = {}
-      to_s
-    end
-
     def empty?
       true
     end
-  end  
+  end
 
 end

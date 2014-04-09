@@ -1,17 +1,11 @@
-module Pact
-  class UnexpectedKey
+require 'pact/matchers/difference_indicator'
 
-    def == other
-      other.is_a? UnexpectedKey
-    end
-     
+module Pact
+  class UnexpectedKey < Pact::DifferenceIndicator
 
     def to_s
       '<key not to exist>'
     end
 
-    def to_json opts = {}
-      to_s
-    end
   end
 end

@@ -1,16 +1,10 @@
-module Pact
-  class UnexpectedIndex
+require 'pact/matchers/difference_indicator'
 
-    def == other
-      other.is_a? UnexpectedIndex
-    end
+module Pact
+  class UnexpectedIndex < Pact::DifferenceIndicator
 
     def to_s
       '<index not to exist>'
-    end
-
-    def to_json opts = {}
-      to_s
     end
 
   end

@@ -5,6 +5,9 @@ require 'pact/doc/markdown/generator'
 module Pact
 
   class Configuration
+
+    DOC_GENERATORS = { markdown: Pact::Doc::Markdown::Generator }
+
     attr_accessor :pact_dir
     attr_accessor :log_dir
     attr_accessor :doc_dir
@@ -14,7 +17,8 @@ module Pact
     attr_writer :pactfile_write_mode
     attr_reader :doc_generator_classes
 
-    DOC_GENERATORS = { markdown: Pact::Doc::Markdown::Generator }
+    attr_accessor :error_stream
+    attr_accessor :output_stream
 
     def log_path
       log_dir + "/pact.log"
@@ -72,6 +76,8 @@ module Pact
     c.pactfile_write_mode = :overwrite
     c.reports_dir = File.expand_path('./reports/pacts')
     c.doc_dir = File.expand_path("./doc")
+    c.output_stream = $stdout
+    c.error_stream = $stderr
     c
   end
 
@@ -82,7 +88,7 @@ module Pact
   def self.default_logger path
     FileUtils::mkdir_p File.dirname(path)
     logger = Logger.new(path)
-    logger.level = Logger::INFO
+    logger.level = Logger::DEBUG
     logger
   end
 

@@ -13,12 +13,18 @@ class App
 end
 
 Pact.provider_states_for 'Consumer' do
-
   provider_state 'something is stubbed' do
     set_up do
-      StubbedThing.stub(:stub_me).and_return("stubbing works")
+      allow(StubbedThing).to receive(:stub_me).and_return("stubbing works")
     end
   end
+end
+
+# Include the ExampleMethods module after the provider states are declared
+# to ensure the ordering doesn't matter
+
+Pact.configure do | config |
+  config.include RSpec::Mocks::ExampleMethods
 end
 
 Pact.service_provider 'Provider' do

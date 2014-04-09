@@ -19,12 +19,10 @@ module Pact
         include ::RSpec::Core::DSL
 
         def honour_pactfile pactfile_uri, options = {}
-          puts "Filtering specs by: #{options[:criteria]}" if options[:criteria]
+          puts "Filtering specs by: #{options[:criteria]}" if options[:criteria] && options[:criteria].any?
           consumer_contract = Pact::ConsumerContract.from_json(read_pact_from(pactfile_uri, options))
-          describe "A pact between #{consumer_contract.consumer.name} and #{consumer_contract.provider.name}" do
-            describe "in #{pactfile_uri}" do
-              honour_consumer_contract consumer_contract, options
-            end
+          describe "Verifying a pact between #{consumer_contract.consumer.name} and #{consumer_contract.provider.name}", :pactfile_uri => pactfile_uri do
+            honour_consumer_contract consumer_contract, options
           end
         end
 
@@ -60,12 +58,19 @@ module Pact
 
         def describe_interaction interaction, options
 
-          describe description_for(interaction), :pact => :verify do
+          metadata = {
+            :pact => :verify,
+            :pact_interaction => interaction,
+            :pact_interaction_example_description => interaction_description_for_rerun_command(interaction)
+          }
+
+          describe description_for(interaction), metadata do
 
             interaction_context = InteractionContext.new
 
             before do
               interaction_context.run_once :before do
+                Pact.configuration.logger.info "Running example '#{self.example.full_description}'"
                 set_up_provider_state interaction.provider_state, options[:consumer]
                 replay_interaction interaction
                 interaction_context.last_response = last_response
@@ -83,34 +88,47 @@ module Pact
 
         end
 
-        def describe_response response, interaction_context
+        def describe_response expected_response, interaction_context
+
           describe "returns a response which" do
-            if response['status']
-              it "has status code #{response['status']}" do
-                expect(interaction_context.last_response.status).to eql response['status']
+
+            let(:expected_response_status) { expected_response['status'] }
+            let(:expected_response_body) { expected_response['body'] }
+            let(:response) { interaction_context.last_response }
+            let(:response_status) { response.status }
+            let(:response_body) { parse_body_from_response(response) }
+
+            if expected_response['status']
+              it "has status code #{expected_response['status']}" do
+                expect(response_status).to eql expected_response_status
               end
             end
 
-            if response['headers']
+            if expected_response['headers']
               describe "includes headers" do
-                response['headers'].each do |name, value|
-                  it "\"#{name}\" with value \"#{value}\"" do
-                    expect(interaction_context.last_response.headers[name]).to match_term value
+                expected_response['headers'].each do |name, expected_header_value|
+                  it "\"#{name}\" with value \"#{expected_header_value}\"" do
+                    header_value = response.headers[name]
+                    expect(header_value).to match_term expected_header_value
                   end
                 end
               end
             end
 
-            if response['body']
+            if expected_response['body']
               it "has a matching body" do
-                expect(parse_body_from_response(interaction_context.last_response)).to match_term response['body']
+                expect(response_body).to match_term expected_response_body
               end
             end
           end
         end
 
         def description_for interaction
-          "#{interaction.description} using #{interaction.request.method.upcase} to #{interaction.request.path}"
+          interaction.provider_state ? interaction.description : interaction.description.capitalize
+        end
+
+        def interaction_description_for_rerun_command interaction
+          description_for(interaction).capitalize + ( interaction.provider_state ? " given #{interaction.provider_state}" : "")
         end
 
         def read_pact_from uri, options = {}
@@ -134,10 +152,10 @@ module Pact
           @already_run = []
         end
 
-        def run_once id
-          unless @already_run.include?(id)
+        def run_once hook
+          unless @already_run.include?(hook)
             yield
-            @already_run << id
+            @already_run << hook
           end
         end
 

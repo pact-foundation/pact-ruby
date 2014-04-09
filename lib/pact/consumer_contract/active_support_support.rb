@@ -43,5 +43,9 @@ module Pact
       end
     end
 
+    def remove_unicode json
+      json.gsub(/\\u([0-9A-Za-z]{4})/) {|s| [$1.to_i(16)].pack("U")}
+    end
+
   end
 end

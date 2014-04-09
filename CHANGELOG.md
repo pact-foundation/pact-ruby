@@ -1,6 +1,74 @@
 Do this to generate your change history
 
-    git log --date=relative --pretty=format:'  * %h - %s (%an, %ad)'
+    git log --pretty=format:'  * %h - %s (%an, %ad)'
+
+### 1.0.39 (8 April 2014)
+
+* a034ab6 - Oh ActiveSupport, why??? Fixing to_json for difference indicators (bethesque, Mon Apr 7 17:26:10 2014 +1000)
+  * 1c7fa0d - Update faq.md (bethesque, Thu Apr 3 09:58:02 2014 +1100)
+  * 8cf5b57 - Update README.md (bethesque, Thu Mar 27 13:38:13 2014 +1100)
+  * 1c5fde9 - Preloading app before suite in pact:verify Ensures consistent behaviour between the first before/after each hooks (bethesque, Thu Mar 27 10:0
+
+### 1.0.38 (24 March 2014)
+
+* 7fb2bc3 - Improved readability of pact:verify specs by removing pactfile name and request details from output (bethesque, 23 hours ago)
+* ff1de3c - Improving readability of error messages when pact:verify fails (bethesque, 23 hours ago)
+* 8a08abf - Removed the last RSpec private API usage. I think. (bethesque, 33 hours ago)
+* 6a0be58 - Reducing even more use of RSpec private APIs (bethesque, 33 hours ago)
+* e1fd51c - Reducing use of RSpec private APIs (bethesque, 34 hours ago)
+* 587cb90 - Replaced rspec 'commands to rerun failed examples' with Pact specific commands to rerun failed interactions (bethesque, 2 days ago)
+
+### 1.0.37 (19 March 2014)
+
+* 0e8b80e - Cleaned up pact:verify rspec matcher lines so the output makes more sense to the reader (bethesque, 3 minutes ago)
+* 03e5ea3 - Fixed config.include to ensure ordering of config and provider state declarations does not matter (bethesque, 20 minutes ago)
+
+### 1.0.36 (19 March 2014)
+
+* c28de11 - Added patch level to pactSpecificationVersion (bethesque, 37 seconds ago)
+
+### 1.0.35 (19 March 2014)
+
+* 44c6806 - Updated README.md with new set_up and tear_down instructions (bethesque, 29 seconds ago)
+* 3c426b7 - Added set_up/tear_down to manage base provider state.
+* 697a5be - Changed default logging level to DEBUG (bethesque, 32 minutes ago)
+* 48483b2 - Fixed JSON serialisation of matcher results with active_support loaded (bethesque, 49 minutes ago)
+* 0be5b01 - Updated description of Shokkenki (bethesque, 7 hours ago)
+
+### 1.0.34 (17 March 2014)
+
+* 6c923f4 - In the pact file, replaced $.metadata.pact_gem.version with $.metadata.pactSpecificationVersion as the gem version is irrelevant - it is the serialization format that matters, and that hasn't changed yet. Also, recording the gem version creates extra changes to be committed when the gem is upgraded, and is meaningless for pacts generated/verified by the JVM code. (Beth Skurrie, 5 minutes ago)
+
+### 1.0.33 (13 March 2014)
+
+* 49456cc - Added the ability to configure modules that can be used in provider state definitions (Beth Skurrie, 75
+
+### 1.0.32 (11 March 2014)
+
+* 5a7cc36 - Adding as_json methods for diff indicators (index/key not found/unexpected) (Beth Skurrie, 2 days ago)
+
+### 1.0.31 (11 March 2013)
+
+* e109722 - Fixed output of pact:verify failures when active_support is loaded (Beth Skurrie, 2 days ago)
+* 90d62fb - Returning a json error with a backtrace when a StandardError occurs in the MockServer, in an at
+* 044cc71 - Using PATH_INFO instead of REQUEST_PATH as recommended by Rack spec - REQUEST_PATH isn't offici
+* e40d785 - Using webrick instead of thin to run pact service as thin does not work on jruby (Beth Skurrie, 9 days
+* ec732de - use puma instead of then as that gem works on JRuby (Ronald Holshausen, 9 days ago)
+* 8720da9 - removed ruby head from travis config as event machine gem is not building on it (Ronald Holshau
+* d46f712 - removed JRuby from Travis.ci config as JRubests can now use the pact-jvm (Ronald Holshausen, 9
+* a1b0796 - Merge pull request #5 from jessedc/patch-1 (Ronald Holshausen, 9 days ago)
+* bd1f9ed - Update link to DiUS repository. (Jesse Collis, 9 days ago)
+* 5cbe40b - Added Shokkenki link and a Google form link. (Beth Skurrie, 2 weeks ago)
+* 284481e - Updating example spec (Beth Skurrie, 2 weeks ago)
+* 346cd57 - Fixed SomethingModel example code. (Beth Skurrie, 2 weeks ago)
+* ac37919 - Adding terminology and 'reasons why pact is good' (Beth Skurrie, 10 weeks ago)
+* 49923c6 - Added FAQ about non ruby codebases. (Beth Skurrie, 2 months ago)
+* cba6409 - Splitting up the REAME into more manageable chunks (Beth Skurrie, 2 months ago)
+* 115e786 - Added diagram to help explain testing with pact (Beth Skurrie, 2 months ago)
+* 8962afe - Using Pact::DSL for provider states (Beth Skurrie, 3 months ago)
+* 77d087f - Added helper method for mock service base URL (Beth Skurrie, 3 months ago)
+* 0e7e249 - Updated example app with latest good practise pact code (Beth Skurrie, 3 months ago)
+* bf225c6 - Added documentation for standalone mock server (Beth Skurrie, 3 months ago)
 
 ### 1.0.30 (17 December 2013)
 
@@ -8,42 +76,42 @@ Do this to generate your change history
 
 ### 1.0.29 (12 December 2013)
 
-* 8ffde69 - Providing before :all like functionality using before :each to get the dual benefits of faster tests and the ability to use stubbing (Beth, 53 seconds ago)
+* 8ffde69 - Providing before :all like functionality using before :each to get the dual benefits of faster tests and the ability to use stubbing (Beth Skurrie, 53 seconds ago)
 * d30a78b - Added test to ensure rspec stubbing always works (Beth Skurrie, 15 hours ago)
 
 ### 1.0.28 (11 December 2013)
 
-* 24f9ea0 - Changed provider set up and tear down back to running in before :each, as rspec stubbing is not supported in before :all (Beth, 15 seconds ago)
-* 825e787 - Fixing failing tests (Beth, 4 hours ago)
-* fb6a1c8 - Moving ProviderState collection into its own class (Beth, 6 hours ago)
+* 24f9ea0 - Changed provider set up and tear down back to running in before :each, as rspec stubbing is not supported in before :all (Beth Skurrie, 15 seconds ago)
+* 825e787 - Fixing failing tests (Beth Skurrie, 4 hours ago)
+* fb6a1c8 - Moving ProviderState collection into its own class (Beth Skurrie, 6 hours ago)
 
 ### 1.0.27 (10 December 2013)
 
-* 388fc7b - Changing provider set up and tear down to run before :all rather than before :each (Beth, 13 minutes ago)
-* 06b5626 - Updating TODO list in the README. (Beth, 25 hours ago)
-* 823f306 - Update README.md (bethesque, 32 hours ago)
+* 388fc7b - Changing provider set up and tear down to run before :all rather than before :each (Beth Skurrie, 13 minutes ago)
+* 06b5626 - Updating TODO list in the README. (Beth Skurrie, 25 hours ago)
+* 823f306 - Update README.md (Beth Skurrie, 32 hours ago)
 * 7d96017 - Improving layout of text diff message (Beth Skurrie, 2 days ago)
 * 9c88c3a - Working on a new way to display the diff between an expected and actual request/response (Beth Skurrie, 2 days ago)
 * ff2c448 - Added a Difference class instead of a hash with :expected and :actual (Beth Skurrie, 2 days ago)
 * b34457c - Moved all missing provider state templates into the one message at the end of the test so it's easier to digest and can be copied directly into a file. (Beth Skurrie, 2
 * 1729887 - Moving ProviderStateProxy on to Pact World (Beth Skurrie, 3 days ago)
-* c53cb4d - Starting to add Pact::World (Beth, 4 days ago)
-* f7af9e2 - Recording missing provider states (Beth, 4 days ago)
-* 4caa171 - Starting work on ProviderStateProxy - intent is for it to record missing and unused states to report at the end of the pact:verify (Beth, 4 days ago)
+* c53cb4d - Starting to add Pact::World (Beth Skurrie, 4 days ago)
+* f7af9e2 - Recording missing provider states (Beth Skurrie, 4 days ago)
+* 4caa171 - Starting work on ProviderStateProxy - intent is for it to record missing and unused states to report at the end of the pact:verify (Beth Skurrie, 4 days ago)
 
 ### 1.0.26 (5 December 2013)
 
-* e4be654 - BEST COMMIT TO PACT EVER since the introduction of pact:verify. Got rid of the horrific backtraces. (Beth, 5 hours ago)
+* e4be654 - BEST COMMIT TO PACT EVER since the introduction of pact:verify. Got rid of the horrific backtraces. (Beth Skurrie, 5 hours ago)
 * 2810db7 - Updated README to point to realestate-com-au travis CI build (Ronald Holshausen, 28 hours ago)
-* bfa357a - Update README.md (bethesque, 30 hours ago)
+* bfa357a - Update README.md (Beth Skurrie, 30 hours ago)
 
 ### 1.0.25 (4 December 2013)
 
-* 20dd5fa - Updated the homepage in gemspec (Beth, 4 minutes ago)
+* 20dd5fa - Updated the homepage in gemspec (Beth Skurrie, 4 minutes ago)
 
 ### 1.0.24 (4 December 2013)
 
-* fd30d36 - Merge branch 'master' of github.com:uglyog/pact (Beth, 13 minutes ago)
+* fd30d36 - Merge branch 'master' of github.com:uglyog/pact (Beth Skurrie, 13 minutes ago)
 * 45430b1 - Whoops; use actual latest ruby p484, not p448 (Daniel Heath, 18 hours ago)
 * 9a999ad - Specify a non-compromised version of ruby in .ruby-version (Daniel Heath, 18 hours ago)
 * bb8d4d9 - Merge pull request #13 from stevenfarlie/update-awesome-print (Ronald Holshausen, 20 hours ago)
@@ -73,65 +141,65 @@ Do this to generate your change history
 * 1930269 - added travis CI for the uglyog repo (Ronald Holshausen, 4 days ago)
 * 7750ee1 - added travis build status image (Ronald Holshausen, 5 days ago)
 * 9f72b31 - added travis build status image (Ronald Holshausen, 5 days ago)
-* d9be65b - Added .travis.yml (Beth, 6 days ago)
-* e7a7e7b - Refactoring pact_helper loading. (Beth, 6 days ago)
-* 0224d36 - Only log loading of pact_helper once https://github.com/uglyog/pact/issues/8 (Beth, 6 days ago)
-* 0123207 - Updating gemspec description (Beth, 7 days ago)
-* 697cbdc - Updating README.md (Beth, 4 weeks ago)
+* d9be65b - Added .travis.yml (Beth Skurrie, 6 days ago)
+* e7a7e7b - Refactoring pact_helper loading. (Beth Skurrie, 6 days ago)
+* 0224d36 - Only log loading of pact_helper once https://github.com/uglyog/pact/issues/8 (Beth Skurrie, 6 days ago)
+* 0123207 - Updating gemspec description (Beth Skurrie, 7 days ago)
+* 697cbdc - Updating README.md (Beth Skurrie, 4 weeks ago)
 * ca79968 - Investigating Rack and HTTP headers in response to https://github.com/uglyog/pact/issues/6. Updated tests and README with info on multiple headers with the same name. (B
-* 01f0b9a - Updating README (Beth, 4 weeks ago)
+* 01f0b9a - Updating README (Beth Skurrie, 4 weeks ago)
 
 ### 1.0.20 (29 October 2013)
 
-  * c03f34f - Fixed the pretty generation of JSON when active support is loaded. It is both a sad and a happy moment. (Beth, 7 minutes ago)
+  * c03f34f - Fixed the pretty generation of JSON when active support is loaded. It is both a sad and a happy moment. (Beth Skurrie, 7 minutes ago)
 
 ### 1.0.19 (29 October 2013)
  * e4b990e - Gsub '-' to '_' in request headers. (Sebastian Glazebrook, 4 minutes ago)
- * 52ac8f8 - Added documentation for PACT_DESCRIPTION and PACT_PROVIDER_STATE to README. (Beth, 13 hours ago)
+ * 52ac8f8 - Added documentation for PACT_DESCRIPTION and PACT_PROVIDER_STATE to README. (Beth Skurrie, 13 hours ago)
 
 ### 1.0.18 (29 October 2013)
 
- * f2892d4 - Fixed bug where an exception is thrown when a key is not found and is attempted to be matched to a regexp (Beth, 60 seconds ago)
+ * f2892d4 - Fixed bug where an exception is thrown when a key is not found and is attempted to be matched to a regexp (Beth Skurrie, 60 seconds ago)
 
 ### 1.0.17 (29 October 2013)
 
- * 74bdf09 - Added missing require for Regexp json deserialisation (Beth, 3 minutes ago)
- * d69482e - Removed JsonWarning for ActiveSupport JSON. (Beth, 3 hours ago)
+ * 74bdf09 - Added missing require for Regexp json deserialisation (Beth Skurrie, 3 minutes ago)
+ * d69482e - Removed JsonWarning for ActiveSupport JSON. (Beth Skurrie, 3 hours ago)
  * 5f72720 - Fixing ALL THE REGEXPS that ActiveSupport JSON broke. The pact gem should now serialise and deserialise its own JSON properly even when ActiveSupport is loaded by the call
- * c3e6430 - Added config.ru parsing to best practices. (Beth, 9 hours ago)
- * ae3a70f - DRYing up pact file reading code. (Beth, 11 hours ago)
- * dc83557 - Fixing VerificationTask spec (Beth, 11 hours ago)
- * bae379c - Added consumer name, provider name and request method to output of rspec. (Beth, 12 hours ago)
- * 89c2620 - Adding spec filtering using PACT_DESCRIPTION and PACT_PROVIDER_STATE to pact:verify and pact:verify:at tasks. (Beth, 28 hours ago)
- * 7ab43a9 - Adding puts to show when pact:verify specs are being filtered. (Beth, 28 hours ago)
+ * c3e6430 - Added config.ru parsing to best practices. (Beth Skurrie, 9 hours ago)
+ * ae3a70f - DRYing up pact file reading code. (Beth Skurrie, 11 hours ago)
+ * dc83557 - Fixing VerificationTask spec (Beth Skurrie, 11 hours ago)
+ * bae379c - Added consumer name, provider name and request method to output of rspec. (Beth Skurrie, 12 hours ago)
+ * 89c2620 - Adding spec filtering using PACT_DESCRIPTION and PACT_PROVIDER_STATE to pact:verify and pact:verify:at tasks. (Beth Skurrie, 28 hours ago)
+ * 7ab43a9 - Adding puts to show when pact:verify specs are being filtered. (Beth Skurrie, 28 hours ago)
 
 ### 1.0.16 (28 October 2013)
 
-* ce0d102 - Fixing specs after adding pact_helper and changing producer_state to provider_state. There is no producer here any more! Naughty producer. (Beth, 71 seconds ago)
-* 90f7203 - Fixing bug where RSpec world was not cleared between pact:verify tasks. (Beth, 16 minutes ago)
-* b323336 - Fixed bug where pact_helper option was not being passed into the PactSpecRunner from the task configuration (Beth, 4 hours ago)
+* ce0d102 - Fixing specs after adding pact_helper and changing producer_state to provider_state. There is no producer here any more! Naughty producer. (Beth Skurrie, 71 seconds ago)
+* 90f7203 - Fixing bug where RSpec world was not cleared between pact:verify tasks. (Beth Skurrie, 16 minutes ago)
+* b323336 - Fixed bug where pact_helper option was not being passed into the PactSpecRunner from the task configuration (Beth Skurrie, 4 hours ago)
 * b1e78f5 - Added environment variable support. (Sergei Matheson, 3 days ago)
 * 2b9f39a - Allow match criteria to be passed through to pact:verify tasks on command line (Sergei Matheson, 3 days ago)
 * 2241f29 - Un-deprecating the support_file functionality after having discovered a valid use for it (project that contains two rack apps that have a pact with each other). Renamed op
-* c94fc13 - Updating example provider state (Beth, 4 days ago)
-* 6900f39 - Updating README with better client class example (Beth, 5 days ago)
+* c94fc13 - Updating example provider state (Beth Skurrie, 4 days ago)
+* 6900f39 - Updating README with better client class example (Beth Skurrie, 5 days ago)
 * e41f755 - Update README.md (bskurrie, 5 days ago)
-* 2abcce4 - Adding to pact best practices. (Beth, 5 days ago)
+* 2abcce4 - Adding to pact best practices. (Beth Skurrie, 5 days ago)
 
 ### 1.0.15 (22 October 2013)
 
- * 6800a58 - Updating README with latest TODOs (Beth, 2 hours ago)
- * 99a6827 - Improving logging in pact:verify. Fixing bug where Pact log level was ignored. (Beth, 3 hours ago)
- * 5434f54 - Updating README with best practice and information on the :pact => :verify metadata. (Beth, 4 hours ago)
- * 16dd2be - Adding :pact => :verify to pact:verify rspec examples for https://github.com/uglyog/pact/issues/3 (Beth, 5 hours ago)
+ * 6800a58 - Updating README with latest TODOs (Beth Skurrie, 2 hours ago)
+ * 99a6827 - Improving logging in pact:verify. Fixing bug where Pact log level was ignored. (Beth Skurrie, 3 hours ago)
+ * 5434f54 - Updating README with best practice and information on the :pact => :verify metadata. (Beth Skurrie, 4 hours ago)
+ * 16dd2be - Adding :pact => :verify to pact:verify rspec examples for https://github.com/uglyog/pact/issues/3 (Beth Skurrie, 5 hours ago)
 
 ### 1.0.14 (22 October 2013)
 
-* 406e746 - Added a template for the provider state when no provider state is found (Beth, 9 minutes ago)
+* 406e746 - Added a template for the provider state when no provider state is found (Beth Skurrie, 9 minutes ago)
 * 1f58be8 - Adding error messages when set_up or tear_down are not defined, and added no_op as a way to avoid having to use an empty set_up block when there is no data to set up (Beth)
 * 78d3999 - Merge pull request #2 from stuliston/json_warning_minor_refactor (Ronald Holshausen, 18 hours ago)
 * be4a466 - Altering JsonWarning so that it only warns once. Added spec to confirm that's the case. (Stuart Liston, 21 hours ago)
-* 3b11b42 - Fixing the issue where a method defined in global scope could not be accessed in the DSL delegation code (Beth, 11 days ago)
+* 3b11b42 - Fixing the issue where a method defined in global scope could not be accessed in the DSL delegation code (Beth Skurrie, 11 days ago)
 
 ### 1.0.13 (10 October 2013)
 

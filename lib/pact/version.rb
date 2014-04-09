@@ -1,3 +1,3 @@
 module Pact
-  VERSION = "1.0.30"
+  VERSION = "1.0.39"
 end

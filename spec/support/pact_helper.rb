@@ -28,12 +28,16 @@ module Pact
 			end
 		end
 
+		Pact.set_up do
+			WEATHER ||= {}
+		end
 
 		#one with a top level consumer
 		Pact.provider_states_for 'some-test-consumer' do
+
 			provider_state "the weather is sunny" do
 				set_up do
-					WEATHER ||= {}
+
 					WEATHER[:current_state] = 'sunny'
 				end
 			end
@@ -42,7 +46,6 @@ module Pact
 		#one without a top level consumer
 		Pact.provider_state "the weather is cloudy" do
 			set_up do
-				WEATHER ||= {}
 				WEATHER[:current_state] = 'cloudy'
 			end
 		end

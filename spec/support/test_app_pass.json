@@ -4,10 +4,10 @@
     },
     "provider": {
         "name": "an unknown provider"
-    },     
+    },
     "interactions": [
         {
-            "description": "A test request",
+            "description": "a test request",
             "request": {
                 "method": "get",
                 "path": "/weather",
@@ -21,7 +21,7 @@
             "provider_state": "the weather is sunny"
         },
         {
-            "description": "A test request for text",
+            "description": "a test request for text",
             "request": {
                 "method": "get",
                 "path": "/sometext",
@@ -33,6 +33,6 @@
                 "headers" : {"Content-type": "text/plain"},
                 "body": "some text"
             }
-        }        
+        }
     ]
 }

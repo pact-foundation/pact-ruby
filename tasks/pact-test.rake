@@ -4,10 +4,22 @@ Pact::VerificationTask.new(:stubbing) do | pact |
 	pact.uri './spec/support/stubbing.json', :pact_helper => './spec/support/stubbing.rb'
 end
 
+Pact::VerificationTask.new(:stubbing_using_allow) do | pact |
+	pact.uri './spec/support/stubbing.json', :pact_helper => './spec/support/stubbing_using_allow.rb'
+end
+
+Pact::VerificationTask.new(:pass) do | pact |
+	pact.uri './spec/support/test_app_pass.json'
+end
+
+Pact::VerificationTask.new(:fail) do | pact |
+	pact.uri './spec/support/test_app_fail.json'
+end
+
 namespace :pact do
 
 	desc 'Runs pact tests against a sample application, testing failure and success.'
-	task :tests => ['pact:verify:stubbing'] do
+	task :tests => ['pact:verify:stubbing','pact:verify:stubbing_using_allow'] do
 
 		require 'pact/provider/pact_spec_runner'
 		require 'open3'
@@ -15,6 +27,7 @@ namespace :pact do
 		silent = true
 		puts "Running task pact:tests"
 		# Run these specs silently, otherwise expected failures will be written to stdout and look like unexpected failures.
+		Pact.configuration.output_stream = StringIO.new if silent
 
 		result = Pact::Provider::PactSpecRunner.new([{ uri: './spec/support/test_app_pass.json' }], silent: silent).run
 		fail 'Expected pact to pass' unless (result == 0)

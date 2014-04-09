@@ -28,14 +28,15 @@ Travis CI Status: [![travis-ci.org Build Status](https://travis-ci.org/realestat
 ## Why is developing and testing with pacts better than using integration tests?
 
 * Faster execution.
-* No need to manage starting and stopping multiple processes.
 * Reliable responses from mock service provider reduce likelihood of flakey tests.
 * Only one component is being tested at a time, making the causes of test failures easier to identify.
 * Design of service provider is improved by considering first how the data is actually going to be used, rather than how it is most easily retrieved and serialised.
+* No need to manage starting, stopping and fixture set up for multiple applications during a test run.
 
-## Google users group
+## Contact
 
-https://groups.google.com/forum/#!forum/pact-support
+* Twitter: [@pact_up](https://twitter.com/pact_up)
+* Google users group: https://groups.google.com/forum/#!forum/pact-support 
 
 ## Installation
 
@@ -110,7 +111,7 @@ describe MyServiceProviderClient, :pact => true do
     # Configure your client to point to the stub service on localhost using the port you have specified
     MyServiceProviderClient.base_uri 'localhost:1234'
   end
-  
+
   subject { MyServiceProviderClient.new }
 
   describe "get_something" do
@@ -172,13 +173,22 @@ Create your API class using the framework of your choice (e.g. Sinatra, Grape) -
 
 #### 2. Tell your provider that it needs to honour the pact file you made earlier
 
+Require "pact/tasks" in your Rakefile.
+
+```ruby
+# In Rakefile
+
+require 'pact/tasks'
+```
+
 Create a `pact_helper.rb` in your service provider project. The file must be called pact_helper.rb, however there is some flexibility in where it can be stored. The recommended place is `specs/service_consumers/pact_helper.rb`.
 
 ```ruby
+# In specs/service_consumers/pact_helper.rb
+
 require 'pact/provider/rspec'
-# If you wish to use the same spec_helper file as your unit tests, require it here.
+# If you wish to use the same spec_helper file as your unit tests, require it here, but remember that the RSpec
 # Otherwise, you can set up a separate RSpec configuration in this file just for pact:verify.
-require './spec_helper'
 
 Pact.service_provider "My Service Provider" do
 
@@ -195,13 +205,7 @@ Pact.service_provider "My Service Provider" do
 end
 
 ```
-Require "pact/tasks" in your Rakefile. If the pact gem is in the test/development section of your Gemfile, you may want to put an env check around this so it doesn't load the pact tasks in prod.
 
-```ruby
-# In Rakefile
-
-require 'pact/tasks'
-```
 
 #### 3. Run your failing specs
 
@@ -209,11 +213,13 @@ require 'pact/tasks'
 
 Congratulations! You now have a failing spec to develop against.
 
-#### 4. Implement your service provider
+At this stage, you'll want to be able to run your specs one at a time while you implement each feature. At the bottom of the failed pact:verify output you will see the commands to rerun each failed interaction individually. A command to run just one interaction will look like this:
 
-At this stage, you'll probably want to be able to run your specs one at a time while you implement. Define the environment variables PACT_DESCRIPTION and/or PACT_PROVIDER_STATE as so:
+    $ rake pact:verify PACT_DESCRIPTION="a request for something" PACT_PROVIDER_STATE="something exists" 
 
-    $ PACT_DESCRIPTION="a request for something" PACT_PROVIDER_STATE="something exists" rake pact:verify
+#### 4. Implement enough to make your first interaction spec pass
+
+Rinse and repeat.
 
 #### 5. Keep going til you're green
 
@@ -249,8 +255,6 @@ my_service.
         will_respond_with(status: 500, :body => {message: "An error occurred"}, :headers => { 'Content-Type' => 'application/json'} )
 ```
 
-
-
 To define service provider states that create the right data for "a thing exists" and "a thing does not exist", write the following in the service provider project. (The consumer name here must match the name of the consumer configured in your consumer project for it to correctly find these provider states.)
 
 
@@ -274,6 +278,7 @@ Pact.provider_states_for 'My Service Consumer' do
 
   provider_state "an error occurs while retrieving a thing" do
     set_up do
+      # Stubbing is ususally the easiest way to generate an error with predictable error text.
       ThingRepository.stub(:find).and_raise("An error occurred!")
     end
   end
@@ -287,8 +292,36 @@ end
 require_relative 'provider_states_for_my_service_consumer.rb'
 ```
 
-If a state should be used for all consumers, the top level Pact.with_consumer can be skipped, and a global Pact.provider_state can be defined on its own.
+To define code that should run before/after each interaction, regardless of whether a provider state is specified or not:
 
+```ruby
+
+  Pact.provider_states_for 'My Service Consumer' do
+
+    set_up do
+      # eg. create API user, start database cleaner transaction
+    end
+
+    tear_down do
+      # eg. clean database
+    end
+  end
+
+```
+
+Or for global set up/tear down for all consumers:
+
+```ruby
+Pact.set_up do
+  # eg. start database cleaner transaction
+  # Avoid using the global set up for creating data as it will make your tests brittle.
+  # You don't want changes to one consumer pact to affect another one.
+end
+
+Pact.tear_down do
+  # eg. clean database
+end
+```
 
 ### Verifying pacts
 
@@ -349,9 +382,13 @@ Configure the pact_uri in the Pact.service_provider block with the pact artifact
 
 It should run with all your other tests. If an integration is broken, you want to know about it *before* you check in.
 
-#### Use the real database
+#### In pact:verify on the provider, only stub layers beneath where contents of the request body are extracted
 
-Do not stub your database calls for pact:verify. This is the best time for you to test your database integration. If you stub your database calls, you are getting little more assurance that the real end-to-end will work than if you'd used a unit test. It's the appropriate time to incur the overhead of a database call.
+If you don't _have_ to stub anything in the provider when running pact:verify, then don't. If you do need to stub something, make sure that you only stub the code that gets executed _after_ the contents of the request body have been extracted and/or validated, otherwise, there is no verification that what is included in the body of a request matches what is actually expected.
+
+#### Stub calls to downstream systems
+
+Consider making a separate pact with the downstream system and using shared fixtures.
 
 ## Gotchas
 
@@ -376,7 +413,7 @@ See [Frequently Asked Questions](https://github.com/realestate-com-au/pact/blob/
 
 [Pact Broker Client](https://github.com/bethesque/pact_broker-client) - Contains rake tasks for publishing pacts to the pact_broker.
 
-[Shokkenki](https://github.com/brentsnook/shokkenki) - Another Consumer Driven Contract gem written by one of Pact's original authors, Brent Snook.
+[Shokkenki](https://github.com/brentsnook/shokkenki) - Another Consumer Driven Contract gem written by one of Pact's original authors, Brent Snook. Shokkenki allows matchers to be composed using jsonpath expressions and allows auto-generation of mock response values based on regular expressions.
 
 ## TODO
 
@@ -386,11 +423,9 @@ Short term:
 
 Long term:
 - Provide more flexible matching (eg the keys should match, and the classes of the values should match, but the values of each key do not need to be equal). This is to make the pact verification less brittle.
-- Add support for verifying pact against running server
 - Add XML support
 - Improve display of interaction diffs
 - Decouple Rspec from Pact and make rspec-pact gem for easy integration
-
 
 ## Contributing
 

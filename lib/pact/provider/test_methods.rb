@@ -1,10 +1,11 @@
 require 'pact/logging'
 require 'rack/test'
 require 'pact/consumer_contract/interaction'
-require 'pact/provider/provider_state'
-require 'pact/provider/provider_state_proxy'
+require 'pact/provider/state/provider_state'
+require 'pact/provider/state/provider_state_proxy'
 require 'pact/provider/request'
 require 'pact/provider/world'
+require 'pact/provider/state/provider_state_manager'
 
 module Pact
   module Provider
@@ -34,20 +35,13 @@ module Pact
       end
 
       def set_up_provider_state provider_state_name, consumer
-        if provider_state_name
-          get_provider_state(provider_state_name, consumer).set_up
-        end
+        State::ProviderStateManager.new(provider_state_name, consumer).set_up_provider_state
       end
 
       def tear_down_provider_state provider_state_name, consumer
-        if provider_state_name
-          get_provider_state(provider_state_name, consumer).tear_down
-        end
+        State::ProviderStateManager.new(provider_state_name, consumer).tear_down_provider_state
       end
 
-      def get_provider_state provider_state_name, consumer
-        Pact.world.provider_states.get(provider_state_name, :for => consumer)
-      end
     end
   end
 end

@@ -20,11 +20,11 @@ module Pact
 
       def call
         ensure_target_dir_exists
-        create_index if consumer_contracts.any?
+        write_index if consumer_contracts.any?
         write_doc_files
       end
 
-      def create_index
+      def write_index
         File.open(index_file_path, "w") { |io|  io << index_file_contents }
       end
 

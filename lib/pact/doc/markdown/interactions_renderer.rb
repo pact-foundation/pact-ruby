@@ -16,7 +16,7 @@ module Pact
         end
 
         def call
-          title + summaries.join + "\n" + full_interactions.join
+          title + summaries_title + summaries.join + interactions_title + full_interactions.join
         end
 
         private
@@ -27,6 +27,14 @@ module Pact
 
         def interaction_renderers
           @interaction_renderers ||= consumer_contract.interactions.collect{|interaction| InteractionRenderer.new interaction, @consumer_contract}.sort
+        end
+
+        def summaries_title
+          "#### Requests from #{consumer_contract.consumer.name} to #{consumer_contract.provider.name}\n\n"
+        end
+
+        def interactions_title
+          "#### Interactions\n\n"
         end
 
         def summaries

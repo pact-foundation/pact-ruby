@@ -13,7 +13,7 @@ module Pact
 
         def render_summary
           suffix = interaction.has_provider_state? ? " given #{interaction.provider_state}" : ""
-          "[#{interaction.description(true)}](##{interaction.id})#{suffix}\n\n"
+          "* [#{interaction.description(true)}](##{interaction.id})#{suffix}\n\n"
         end
 
         def render_full_interaction

@@ -14,13 +14,18 @@ module Pact
         File.open(path, "w") { |io|  io << doc_file_contents }
       end
 
-      private
-
-      attr_reader :dir, :consumer_contract, :interactions_renderer, :file_extension
+      def title
+        consumer_contract.consumer.name
+      end
 
       def name
         "#{consumer_contract.consumer.name} - #{consumer_contract.provider.name}#{file_extension}"
       end
+
+      private
+
+      attr_reader :dir, :consumer_contract, :interactions_renderer, :file_extension
+
 
       def path
         File.join(dir, name)

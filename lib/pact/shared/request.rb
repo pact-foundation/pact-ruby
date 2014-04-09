@@ -29,15 +29,15 @@ module Pact
       end
 
       def to_hash
-        base_json = {
+        hash = {
           method: method,
           path: path,
         }
 
-        base_json.merge!(body: body) unless body.is_a? self.class.key_not_found.class
-        base_json.merge!(headers: headers) unless headers.is_a? self.class.key_not_found.class
-        base_json.merge!(query: query) unless query.is_a? self.class.key_not_found.class
-        base_json
+        hash.merge!(query: query) unless query.is_a? self.class.key_not_found.class
+        hash.merge!(headers: headers) unless headers.is_a? self.class.key_not_found.class
+        hash.merge!(body: body) unless body.is_a? self.class.key_not_found.class
+        hash
       end
 
       def method_and_path

@@ -58,17 +58,17 @@ module Pact
       end
 
       def write_doc_files
-        Dir.glob("#{pact_dir}/**") do |file|
-          write_doc_file file
-        end
+        doc_files.each(&:write)
       end
 
       def index_file_contents
 
       end
 
-      def write_doc_file file
-        DocFile.new(consumer_contract_from(file), target_dir, @interactions_renderer_class, @file_extension).write
+      def doc_files
+        Dir.glob("#{pact_dir}/**").collect do |file|
+          DocFile.new(consumer_contract_from(file), target_dir, @interactions_renderer_class, @file_extension)
+        end
       end
 
       def consumer_contract_from file

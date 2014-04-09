@@ -11,9 +11,15 @@ module Pact
 
         let(:expected_output) { File.read("./spec/support/generated_markdown.md") }
 
-        describe "#render" do
+        describe "#call" do
           it "renders an interaction" do
             expect(subject.call).to eq(expected_output)
+          end
+        end
+
+        describe ".call" do
+          it "renders an interaction" do
+            expect(InteractionsRenderer.call consumer_contract).to eq(expected_output)
           end
         end
 

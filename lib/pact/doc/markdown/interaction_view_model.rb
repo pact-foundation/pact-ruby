@@ -1,7 +1,11 @@
+require 'pact/consumer_contract/active_support_support'
+
 module Pact
   module Doc
     module Markdown
       class InteractionViewModel
+
+        include Pact::ActiveSupportSupport
 
         def initialize interaction, consumer_contract
           @interaction = interaction
@@ -51,11 +55,11 @@ module Pact
         end
 
         def request
-          JSON.pretty_generate(Reification.from_term(@interaction.request))
+          fix_json_formatting JSON.pretty_generate(Reification.from_term(@interaction.request))
         end
 
         def response
-          JSON.pretty_generate(Reification.from_term(@interaction.response))
+          fix_json_formatting JSON.pretty_generate(Reification.from_term(@interaction.response))
         end
 
         def sortable_id

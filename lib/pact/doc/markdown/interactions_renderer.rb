@@ -5,10 +5,14 @@ module Pact
     module Markdown
       class InteractionsRenderer
 
-        attr_reader :pact
+        attr_reader :consumer_contract
 
-        def initialize pact
-          @pact = pact
+        def initialize consumer_contract
+          @consumer_contract = consumer_contract
+        end
+
+        def self.call consumer_contract
+          new(consumer_contract).call
         end
 
         def call
@@ -18,11 +22,11 @@ module Pact
         private
 
         def title
-          "### A pact between #{pact.consumer.name} and #{pact.provider.name}\n\n"
+          "### A pact between #{consumer_contract.consumer.name} and #{consumer_contract.provider.name}\n\n"
         end
 
         def interaction_renderers
-          @interaction_renderers ||= pact.interactions.collect{|interaction| InteractionRenderer.new interaction, @pact}.sort
+          @interaction_renderers ||= consumer_contract.interactions.collect{|interaction| InteractionRenderer.new interaction, @consumer_contract}.sort
         end
 
         def summaries

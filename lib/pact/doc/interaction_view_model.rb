@@ -54,11 +54,11 @@ module Pact
       end
 
       def request
-        fix_json_formatting JSON.pretty_generate(Reification.from_term(@interaction.request))
+        fix_json_formatting JSON.pretty_generate(clean_request)
       end
 
       def response
-        fix_json_formatting JSON.pretty_generate(Reification.from_term(@interaction.response))
+        fix_json_formatting JSON.pretty_generate(clean_response)
       end
 
       def sortable_id
@@ -66,6 +66,23 @@ module Pact
       end
 
       private
+
+      def clean_request
+        request = Reification.from_term(@interaction.request).to_hash
+        remove_key_if_empty :headers, request
+        request
+      end
+
+      def clean_response
+        response = Reification.from_term(@interaction.response)
+        remove_key_if_empty "headers", response
+        remove_key_if_empty "body", response
+        response
+      end
+
+      def remove_key_if_empty key, hash
+        hash.delete(key) if hash[key].is_a?(Hash) && hash[key].empty?
+      end
 
       def apply_capitals string, start_of_sentence = false
         start_of_sentence ? capitalize_first_letter(string) : lowercase_first_letter(string)

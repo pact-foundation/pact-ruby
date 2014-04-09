@@ -1,0 +1,62 @@
+{
+    "provider": {
+        "name": "a provider"
+    },
+    "consumer": {
+        "name": "a consumer"
+    },
+    "interactions": [
+        {
+            "description": "a request with a body and headers",
+            "request": {
+                "method": "get",
+                "path": "/",
+                "headers": {
+                    "key": "a header"
+                },
+                "body": {
+                    "key": "a body"
+                }
+            },
+            "response": {}
+        },
+        {
+            "description": "a request with an empty body and empty headers",
+            "request": {
+                "method": "get",
+                "path": "/",
+                "headers": {},
+                "body": {}
+            },
+            "response": {}
+        },
+        {
+            "description": "a response with a body and headers",
+            "request": {
+                "method": "get",
+                "path": "/"
+            },
+            "response": {
+                "status": 200,
+                "headers": {
+                    "key": "a header"
+                },
+                "body": {
+                    "key": "a body"
+                }
+            }
+        },
+        {
+            "description": "a response with an empty body and empty headers",
+            "request": {
+                "method": "get",
+                "path": "/"
+            },
+            "response": {
+                "status": 200,
+                "headers": {},
+                "body": {}
+            }
+        }
+    ]
+}

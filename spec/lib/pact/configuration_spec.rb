@@ -19,6 +19,11 @@ describe Pact do
         expect(Pact.configuration.send(key)).to eql(value)
       end
     end
+
+    it "allows configuration of doc_generators" do
+      Pact.configuration.doc_generator = :markdown
+      expect(Pact.configuration.doc_generators).to eq [Pact::Doc::Markdown::Generator.new(Pact.configuration.doc_dir, Pact.configuration.pact_dir)]
+    end
   end
 
   describe Pact::Configuration do

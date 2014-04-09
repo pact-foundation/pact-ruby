@@ -58,6 +58,10 @@ module Pact
           JSON.pretty_generate(Reification.from_term(@interaction.response))
         end
 
+        def sortable_id
+          @sortable_id ||= "#{interaction.description.downcase} #{interaction.response['status']} #{(interaction.provider_state || '').downcase}"
+        end
+
         private
 
         def apply_capitals string, start_of_sentence = false

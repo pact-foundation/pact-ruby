@@ -13,7 +13,7 @@ module Pact
 
         describe "#render" do
           it "renders an interaction" do
-            expect(subject.render).to eq(expected_output)
+            expect(subject.call).to eq(expected_output)
           end
         end
 

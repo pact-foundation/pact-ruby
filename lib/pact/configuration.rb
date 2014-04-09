@@ -1,15 +1,20 @@
 require 'ostruct'
 require 'logger'
+require 'pact/doc/markdown/generator'
 
 module Pact
 
   class Configuration
     attr_accessor :pact_dir
     attr_accessor :log_dir
+    attr_accessor :doc_dir
+    attr_accessor :reports_dir
     attr_accessor :logger
     attr_accessor :tmp_dir
-    attr_accessor :reports_dir
     attr_writer :pactfile_write_mode
+    attr_reader :doc_generator_classes
+
+    DOC_GENERATORS = { markdown: Pact::Doc::Markdown::Generator }
 
     def log_path
       log_dir + "/pact.log"
@@ -23,7 +28,19 @@ module Pact
       end
     end
 
+    def doc_generator= doc_generator
+      doc_generator_classes << DOC_GENERATORS.fetch(doc_generator)
+    end
+
+    def doc_generators
+      doc_generator_classes.collect{ | c | c.new(doc_dir, pact_dir)}
+    end
+
     private
+
+    def doc_generator_classes
+      @doc_generator_classes ||= []
+    end
 
     #Would love a better way of determining this! It sure won't work on windows.
     def is_rake_running?
@@ -54,6 +71,7 @@ module Pact
     c.logger = default_logger c.log_path
     c.pactfile_write_mode = :overwrite
     c.reports_dir = File.expand_path('./reports/pacts')
+    c.doc_dir = File.expand_path("./doc")
     c
   end
 

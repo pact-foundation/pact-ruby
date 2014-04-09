@@ -32,7 +32,7 @@ module Pact
         end
 
         def <=> other
-          interaction.id <=> other.interaction.id
+          interaction.sortable_id <=> other.interaction.sortable_id
         end
       end
     end

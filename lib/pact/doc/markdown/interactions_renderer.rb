@@ -11,9 +11,11 @@ module Pact
           @pact = pact
         end
 
-        def render
+        def call
           title + summaries.join + full_interactions.join
         end
+
+        private
 
         def title
           "### A pact between #{pact.consumer.name} and #{pact.provider.name}\n\n"

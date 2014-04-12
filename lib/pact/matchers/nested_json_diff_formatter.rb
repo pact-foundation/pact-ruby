@@ -1,21 +1,22 @@
 require 'pact/shared/active_support_support'
-require 'colored'
+require 'term/ansicolor'
 
 module Pact
   module Matchers
     class NestedJsonDiffFormatter
 
       include Pact::ActiveSupportSupport
+      C = ::Term::ANSIColor
+
 
       EXPECTED = '"EXPECTED"'
-      EXPECTED_COLOURED = '"' + "expected".red + '"'
+      EXPECTED_COLOURED = '"' + C.red("expected") + '"'
 
       EXPECTED_REGEXP = '"EXPECTED_TO_MATCH"'
-      EXPECTED_REGEXP_COLOURED = '"' + "expected_to_match".red + '"'
-
+      EXPECTED_REGEXP_COLOURED = '"' + C.red("expected_to_match") + '"'
 
       ACTUAL = '"ACTUAL"'
-      ACTUAL_COLOURED =  '"' + "actual".green + '"'
+      ACTUAL_COLOURED =  '"' + C.green("actual") + '"'
 
       attr_reader :diff, :colour
 

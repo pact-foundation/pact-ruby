@@ -1,12 +1,13 @@
 require 'pact/provider/print_missing_provider_states'
 require 'rspec/core/formatters'
-require 'colored'
+require 'term/ansicolor'
 
 module Pact
   module Provider
     module RSpec
       class Formatter < ::RSpec::Core::Formatters::DocumentationFormatter
 
+        C = ::Term::ANSIColor
 
         def dump_commands_to_rerun_failed_examples
           return if failed_examples.empty?
@@ -17,9 +18,11 @@ module Pact
 
         end
 
+        private
+
         def print_rerun_commands
           output.puts("\n")
-          interaction_failure_messages.each do | message |
+          interaction_rerun_commands.each do | message |
             output.puts(message)
           end
         end
@@ -28,13 +31,13 @@ module Pact
           PrintMissingProviderStates.call Pact.world.provider_states.missing_provider_states, output
         end
 
-        def interaction_failure_messages
+        def interaction_rerun_commands
           failed_examples.collect do |example|
-            interaction_failure_message_for example
+            interaction_rerun_command_for example
           end.uniq
         end
 
-        def interaction_failure_message_for example
+        def interaction_rerun_command_for example
           provider_state = example.metadata[:pact_interaction].provider_state
           description = example.metadata[:pact_interaction].description
           pactfile_uri = example.metadata[:pactfile_uri]
@@ -47,8 +50,7 @@ module Pact
         end
 
         def failure_message
-
-          "\n" + "For assistance debugging failures, please note:".underline.yellow + "\n\n" +
+          "\n" +  C.underline(C.yellow("For assistance debugging failures, please note:")) + "\n\n" +
           "The pact files have been stored locally in the following temp directory:\n #{Pact.configuration.tmp_dir}\n\n" +
           "The requests and responses are logged in the following log file:\n #{Pact.configuration.log_path}\n\n"
         end

@@ -1,12 +1,21 @@
 require 'ostruct'
 require 'logger'
 require 'pact/doc/markdown/generator'
+require 'pact/matchers/plus_minus_diff_decorator'
+require 'pact/matchers/nested_json_diff_formatter'
+require 'pact/matchers/list_of_paths_diff_formatter'
 
 module Pact
 
   class Configuration
 
     DOC_GENERATORS = { markdown: Pact::Doc::Markdown::Generator }
+
+    DIFF_FORMATTERS = {
+      :nested_json => Pact::Matchers::NestedJsonDiffFormatter,
+      :plus_and_minus => Pact::Matchers::PlusMinusDiffDecorator,
+      :list_of_paths => Pact::Matchers::ListOfPathsDiffFormatter
+    }
 
     attr_accessor :pact_dir
     attr_accessor :log_dir
@@ -45,6 +54,22 @@ module Pact
 
     def doc_generators
       @doc_generators  ||= []
+    end
+
+    def diff_formatter
+      @diff_formatter ||= DIFF_FORMATTERS[:nested_json]
+    end
+
+    def diff_formatter= diff_formatter
+      @diff_formatter = begin
+        if DIFF_FORMATTERS[diff_formatter]
+          DIFF_FORMATTERS[diff_formatter]
+        elsif diff_formatter.respond_to?(:call)
+          diff_formatter
+        else
+          raise "Pact.configuration.diff_formatter needs to respond to call, or be in the preconfigured list: #{DIFF_FORMATTERS.keys}"
+        end
+      end
     end
 
     private

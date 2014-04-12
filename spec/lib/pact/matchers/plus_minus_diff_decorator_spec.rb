@@ -7,7 +7,7 @@ module Pact
 
       describe ".call" do
 
-        subject { PlusMinusDiffDecorator.call(diff) }
+        subject { PlusMinusDiffDecorator.call(diff, {}) }
 
         let(:line_count) { subject.split("\n").size }
 

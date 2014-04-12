@@ -19,13 +19,13 @@ module Pact
 
       attr_reader :diff, :colour
 
-      def initialize diff, colour
+      def initialize diff, options = {}
         @diff = diff
-        @colour = colour
+        @colour = options.fetch(:colour, false)
       end
 
-      def self.call diff, colour = Pact.configuration.color_enabled
-        new(diff, colour).call
+      def self.call diff, options = {colour: Pact.configuration.color_enabled}
+        new(diff, options).call
       end
 
       def call

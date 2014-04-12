@@ -37,7 +37,9 @@ module Pact
       attr_accessor :candiate_diffs
 
       class CandidateDiff
+
         attr_accessor :candidate_interaction, :actual_request
+
         def initialize candidate_interaction, actual_request
           @candidate_interaction = candidate_interaction
           @actual_request = actual_request
@@ -56,7 +58,7 @@ module Pact
         def to_s
           [
             "Diff with interaction: #{candidate_interaction.description_with_provider_state_quoted}",
-            Pact::Matchers::NestedJsonDiffFormatter.call(diff, false)
+            Pact.configuration.diff_formatter.call(diff, {colour: false})
           ].join("\n")
         end
 

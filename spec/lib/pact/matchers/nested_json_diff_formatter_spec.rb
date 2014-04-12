@@ -11,9 +11,13 @@ module Pact
         }
       end
 
-      subject { NestedJsonDiffFormatter.call(diff) }
+      subject { NestedJsonDiffFormatter.call(diff, options) }
+
+      let(:options) { { colour: colour }}
 
       describe ".call" do
+
+        let(:colour) { true }
 
         context "when color_enabled is true" do
           it "returns nicely formatted json" do
@@ -27,9 +31,8 @@ module Pact
         end
 
         context "when color_enabled is false" do
-          before do
-            Pact.configuration.stub(:color_enabled).and_return(false)
-          end
+
+          let(:colour) { false }
 
           it "returns nicely formatted json" do
             expect(subject.split("\n").size).to eq 8
@@ -39,6 +42,27 @@ module Pact
             expect(subject).to_not include NestedJsonDiffFormatter::EXPECTED_COLOURED
             expect(subject).to_not include NestedJsonDiffFormatter::ACTUAL_COLOURED
           end
+        end
+
+        context "when no options are specified" do
+          subject { NestedJsonDiffFormatter.call(diff) }
+
+          context "when Pact.configuration.color_enabled is true" do
+            it "returns a string displaying the diff in colour" do
+              expect(Pact.configuration).to receive(:color_enabled).and_return(true)
+              expect(subject).to include NestedJsonDiffFormatter::EXPECTED_COLOURED
+              expect(subject).to include NestedJsonDiffFormatter::ACTUAL_COLOURED
+            end
+          end
+
+          context "when Pact.configuration.color_enabled is false" do
+            it "returns a string displaying the diff without colour" do
+              expect(Pact.configuration).to receive(:color_enabled).and_return(false)
+              expect(subject).to_not include NestedJsonDiffFormatter::EXPECTED_COLOURED
+              expect(subject).to_not include NestedJsonDiffFormatter::ACTUAL_COLOURED
+            end
+          end
+
         end
       end
 

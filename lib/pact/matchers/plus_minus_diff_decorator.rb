@@ -3,12 +3,12 @@ module Pact
 
     class PlusMinusDiffDecorator
 
-      def initialize diff
+      def initialize diff, options = {}
         @diff = diff
       end
 
-      def self.call diff
-        new(diff).call
+      def self.call diff, options = {}
+        new(diff, options).call
       end
 
       def call

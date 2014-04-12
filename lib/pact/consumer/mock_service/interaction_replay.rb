@@ -93,8 +93,7 @@ module Pact
       def log_unrecognised_request_and_interaction_diff interaction_mismatch
         logger.error "No interaction found on #{name} for #{interaction_mismatch.actual_request.method_and_path}"
         logger.error 'Interaction diffs for that route:'
-        logger.ap(interaction_mismatch.to_hash, :error)
-        logger.error("Interaction diffs for that route in text format:\n#{interaction_mismatch.to_s}")
+        logger.error(interaction_mismatch.to_s)
       end
 
       def handle_unrecognised_request actual_request, candidate_interactions

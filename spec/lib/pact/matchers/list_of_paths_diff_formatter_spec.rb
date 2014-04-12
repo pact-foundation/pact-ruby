@@ -7,7 +7,7 @@ module Pact
     describe ListOfPathsDiffFormatter do
 
       describe ".call" do
-        subject{ ListOfPathsDiffFormatter.call(diff) }
+        subject{ ListOfPathsDiffFormatter.call(diff, {}) }
 
         context "when there is a mismatched value" do
           let(:diff) { {root: {"blah" => { 1 => Difference.new("alphabet", "woozle")}}} }

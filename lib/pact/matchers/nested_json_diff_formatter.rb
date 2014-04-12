@@ -3,7 +3,7 @@ require 'colored'
 
 module Pact
   module Matchers
-    class NestedJsonDiffDecorator
+    class NestedJsonDiffFormatter
 
       include Pact::ActiveSupportSupport
 
@@ -17,10 +17,19 @@ module Pact
       ACTUAL = '"ACTUAL"'
       ACTUAL_COLOURED =  '"' + "actual".green + '"'
 
-      attr_reader :diff
+      attr_reader :diff, :colour
 
-      def initialize diff
+      def initialize diff, colour
         @diff = diff
+        @colour = colour
+      end
+
+      def self.call diff, colour = Pact.configuration.color_enabled
+        new(diff, colour).call
+      end
+
+      def call
+        to_s
       end
 
       def to_hash
@@ -32,7 +41,7 @@ module Pact
       end
 
       def colourise_message_if_configured message
-        if Pact.configuration.color_enabled
+        if colour
           colourise_message message
         else
           message

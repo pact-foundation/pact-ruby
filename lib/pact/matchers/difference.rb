@@ -13,6 +13,10 @@ module Pact
         true
       end
 
+      def empty?
+        false
+      end
+
       def to_hash
         if Regexp === expected
           {:EXPECTED_TO_MATCH => expected.inspect, :ACTUAL => actual}

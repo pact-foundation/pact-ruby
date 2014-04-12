@@ -3,23 +3,16 @@ require 'awesome_print'
 require 'pact/matchers'
 require 'awesome_print'
 require 'rspec'
-require 'pact/matchers/nested_json_diff_decorator'
-require 'pact/matchers/diff_decorator'
 
 RSpec::Matchers.define :match_term do |expected|
   include Pact::Matchers
 
   match do |actual|
-    if (difference = diff(expected, actual)).any?
-      @diff_decorator = Pact.configuration.diff_formatter_class.new(difference)
-      false
-    else
-      true
-    end
+    (@difference = diff(expected, actual)).empty?
   end
 
   failure_message_for_should do | actual |
-    @diff_decorator.to_s
+    Pact.configuration.diff_formatter.call(@difference)
   end
 
 end

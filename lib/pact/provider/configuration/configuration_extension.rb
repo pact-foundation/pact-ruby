@@ -1,7 +1,8 @@
 require 'pact/provider/state/provider_state'
 require 'pact/provider/state/provider_state_configured_modules'
 require 'pact/matchers/plus_minus_diff_decorator'
-require 'pact/matchers/nested_json_diff_decorator'
+require 'pact/matchers/nested_json_diff_formatter'
+require 'pact/matchers/list_of_paths_diff_formatter'
 
 module Pact
 
@@ -12,8 +13,9 @@ module Pact
       module ConfigurationExtension
 
         DIFF_FORMATTERS = {
-          :nested_json => Pact::Matchers::NestedJsonDiffDecorator,
-          :plus_and_minus => Pact::Matchers::PlusMinusDiffDecorator
+          :nested_json => Pact::Matchers::NestedJsonDiffFormatter,
+          :plus_and_minus => Pact::Matchers::PlusMinusDiffDecorator,
+          :list_of_paths => Pact::Matchers::ListOfPathsDiffFormatter
         }
 
         def provider= provider
@@ -61,7 +63,7 @@ module Pact
           @diff_format ||= :nested_json
         end
 
-        def diff_formatter_class
+        def diff_formatter
           DIFF_FORMATTERS.fetch(diff_format)
         end
 

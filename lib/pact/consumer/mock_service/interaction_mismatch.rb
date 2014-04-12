@@ -1,4 +1,4 @@
-require 'pact/matchers/diff_decorator'
+require 'pact/matchers/nested_json_diff_formatter'
 
 module Pact
   module Consumer
@@ -56,7 +56,7 @@ module Pact
         def to_s
           [
             "Diff with interaction: #{candidate_interaction.description_with_provider_state_quoted}",
-            Pact::Matchers::DiffDecorator.new(diff).to_s
+            Pact::Matchers::NestedJsonDiffFormatter.call(diff, false)
           ].join("\n")
         end
 

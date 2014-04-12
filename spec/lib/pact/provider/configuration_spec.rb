@@ -9,16 +9,16 @@ module Pact::Provider::Configuration
       Pact.clear_configuration
     end
 
-    describe "diff_formatter_class" do
+    describe "diff_formatter" do
 
-      it "returns the Pact::Matchers::NestedJsonDiffDecorator by default" do
-        expect(Pact.configuration.diff_formatter_class).to eq(Pact::Matchers::NestedJsonDiffDecorator)
+      it "returns the Pact::Matchers::NestedJsonDiffFormatter by default" do
+        expect(Pact.configuration.diff_formatter).to eq(Pact::Matchers::NestedJsonDiffFormatter)
       end
 
       context "when plus_and_minus formatter is configured" do
         it "returns the Pact::Matchers::PlusMinusDiffDecorator" do
           Pact.configuration.diff_format = :plus_and_minus
-          expect(Pact.configuration.diff_formatter_class).to eq(Pact::Matchers::PlusMinusDiffDecorator)
+          expect(Pact.configuration.diff_formatter).to eq(Pact::Matchers::PlusMinusDiffDecorator)
         end
       end
 

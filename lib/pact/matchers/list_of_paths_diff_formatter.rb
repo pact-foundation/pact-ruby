@@ -1,6 +1,6 @@
 module Pact
   module Matchers
-    class DiffDecorator
+    class ListOfPathsDiffFormatter
 
       attr_reader :diff
 
@@ -8,12 +8,20 @@ module Pact
         @diff = diff
       end
 
+      def self.call diff
+        new(diff).call
+      end
+
       def to_hash
         diff
       end
 
+      def call
+        to_s
+      end
+
       def to_s
-        diff_descriptions(diff).join("\n")
+        diff_descriptions(diff).join("\n").tap{|s| puts s}
       end
 
       def diff_descriptions obj, path = [], descriptions = []

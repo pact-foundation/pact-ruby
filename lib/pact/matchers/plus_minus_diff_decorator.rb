@@ -7,12 +7,22 @@ module Pact
         @diff = diff
       end
 
+      def self.call diff
+        new(diff).call
+      end
+
+      def call
+        to_s
+      end
+
       def to_s
         expected = generate_string(diff, :expected)
         actual = generate_string(diff, :actual)
 
         RSpec::Expectations::Differ.new.diff_as_string actual, expected
       end
+
+      private
 
       def handle thing, target
         case thing
@@ -23,8 +33,6 @@ module Pact
         else copy_object(thing, target)
         end
       end
-
-      private
 
       def generate_string diff, target
         comparable = handle(diff, target)

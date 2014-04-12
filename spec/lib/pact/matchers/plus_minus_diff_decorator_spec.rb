@@ -5,9 +5,9 @@ module Pact
   module Matchers
     describe PlusMinusDiffDecorator do
 
-      describe "#to_s" do
+      describe ".call" do
 
-        subject { PlusMinusDiffDecorator.new(diff).to_s }
+        subject { PlusMinusDiffDecorator.call(diff) }
 
         let(:line_count) { subject.split("\n").size }
 

@@ -9,27 +9,12 @@ require 'pact/matchers/index_not_found'
 require 'pact/matchers/difference'
 require 'pact/matchers/expected_type'
 require 'pact/matchers/actual_type'
+require 'pact/matchers/no_diff_indicator'
 
 module Pact
   module Matchers
 
-    class NoDiffIndicator
-
-      def to_json options = {}
-        to_s
-      end
-
-      def to_s
-        'no difference here!'
-      end
-
-      def == other
-        other.is_a? NoDiffIndicator
-      end
-    end
-
     NO_DIFF_INDICATOR = NoDiffIndicator.new
-    #UnexpectedKey.new = '<key not to be present>'
     DEFAULT_OPTIONS = {allow_unexpected_keys: true, structure: false}.freeze
 
     def diff expected, actual, opts = {}
@@ -124,7 +109,6 @@ module Pact
 
     def structure_diff_expected_display expected
       ExpectedType.new(expected)
-      #(expected.nil?) ? expected : {:class => expected.class, eg: expected}
     end
 
     def classes_match? expected, actual

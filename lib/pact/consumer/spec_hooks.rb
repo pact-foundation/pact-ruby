@@ -1,3 +1,5 @@
+require 'pact/doc/generate'
+
 module Pact
   module Consumer
     class SpecHooks
@@ -22,6 +24,7 @@ module Pact
       end
 
       def after_suite
+        Pact::Doc::Generate.call
         Pact.configuration.logger.info "After suite"
         Pact::Consumer::AppManager.instance.kill_all
         Pact::Consumer::AppManager.instance.clear_all

@@ -1,15 +1,21 @@
 require 'ostruct'
 require 'logger'
+require 'pact/doc/markdown/generator'
 
 module Pact
 
   class Configuration
+
+    DOC_GENERATORS = { markdown: Pact::Doc::Markdown::Generator }
+
     attr_accessor :pact_dir
     attr_accessor :log_dir
+    attr_accessor :doc_dir
+    attr_accessor :reports_dir
     attr_accessor :logger
     attr_accessor :tmp_dir
-    attr_accessor :reports_dir
     attr_writer :pactfile_write_mode
+
     attr_accessor :error_stream
     attr_accessor :output_stream
 
@@ -23,6 +29,22 @@ module Pact
       else
         @pactfile_write_mode
       end
+    end
+
+    def doc_generator= doc_generator
+      doc_generators << begin
+        if DOC_GENERATORS[doc_generator]
+          DOC_GENERATORS[doc_generator]
+        elsif doc_generator.respond_to?(:call)
+          doc_generator
+        else
+          raise "Pact.configuration.doc_generator needs to respond to call, or be in the preconfigured list: #{DOC_GENERATORS.keys}"
+        end
+      end
+    end
+
+    def doc_generators
+      @doc_generators  ||= []
     end
 
     private
@@ -56,6 +78,7 @@ module Pact
     c.logger = default_logger c.log_path
     c.pactfile_write_mode = :overwrite
     c.reports_dir = File.expand_path('./reports/pacts')
+    c.doc_dir = File.expand_path("./doc")
     c.output_stream = $stdout
     c.error_stream = $stderr
     c

@@ -91,6 +91,14 @@ module Pact
         config.add_formatter Pact::Provider::RSpec::Formatter
         config.add_formatter Pact::Provider::RSpec::SilentJsonFormatter
 
+        config.before(:suite) do
+          # Preload app before suite so the classes loaded in memory are consistent for
+          # before :each and after :each hooks.
+          # Otherwise the app and all its dependencies are loaded between the first before :each
+          # and the first after :each, leading to inconsistent behaviour
+          # (eg. with database_cleaner transactions)
+          Pact.configuration.provider.app
+        end
       end
 
       def run_specs

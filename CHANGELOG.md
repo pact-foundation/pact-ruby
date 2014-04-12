@@ -1,6 +1,13 @@
 Do this to generate your change history
 
-    git log --date=relative --pretty=format:'  * %h - %s (%an, %ad)'
+    git log --pretty=format:'  * %h - %s (%an, %ad)'
+
+### 1.0.39 (8 April 2014)
+
+* a034ab6 - Oh ActiveSupport, why??? Fixing to_json for difference indicators (bethesque, Mon Apr 7 17:26:10 2014 +1000)
+  * 1c7fa0d - Update faq.md (bethesque, Thu Apr 3 09:58:02 2014 +1100)
+  * 8cf5b57 - Update README.md (bethesque, Thu Mar 27 13:38:13 2014 +1100)
+  * 1c5fde9 - Preloading app before suite in pact:verify Ensures consistent behaviour between the first before/after each hooks (bethesque, Thu Mar 27 10:0
 
 ### 1.0.38 (24 March 2014)
 

@@ -19,6 +19,6 @@ module Pact
           expect{subject}.to raise_error KeyError
         end
       end
-    end      
+    end
   end
 end

@@ -1,0 +1,54 @@
+{
+  "provider": {
+    "name": "Some Provider"
+  },
+  "consumer": {
+    "name": "Some Consumer"
+  },
+  "interactions": [
+    {
+      "description": "a request for alligators",
+      "provider_state": "alligators exist",
+      "request": {
+        "method": "get",
+        "path": "/alligators",
+        "body" : {
+
+        }
+      },
+      "response": {
+        "headers" : {"Content-Type": "application/json"},
+        "status" : 200,
+        "body" : {
+          "alligators": [{
+            "name": "Bob",
+            "phoneNumber" : {
+              "json_class": "Pact::Term",
+              "data": {
+                "generate": "12345678",
+                "matcher": {"json_class":"Regexp","o":0,"s":"\\d+"}
+              }
+            }
+          }]
+        }
+      }
+    },{
+      "description": "a request for polar bears",
+      "provider_state": null,
+      "request": {
+        "method": "get",
+        "path": "/polar-bears",
+        "body" : {
+
+        }
+      },
+      "response": {
+        "headers" : {"Content-Type": "application/json"},
+        "status" : 404,
+        "body" : {
+          "message": "Sorry, due to climate change, the polar bears are currently unavailable."
+        }
+      }
+    }
+  ]
+}

@@ -1,0 +1,14 @@
+<a name="<%= interaction.id %>"></a>
+<%= if interaction.has_provider_state?
+  "Given **#{interaction.provider_state}**, upon receiving"
+   else
+  "Upon receiving"
+   end
+%> **<%= interaction.description %>** from <%= interaction.consumer_name %>, with
+```json
+<%= interaction.request  %>
+```
+<%= interaction.provider_name %> will respond with:
+```json
+<%= interaction.response %>
+```

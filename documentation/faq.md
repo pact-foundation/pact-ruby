@@ -1,6 +1,24 @@
 # Frequently asked questions
 
-## How can I verify a pact against a non-ruby provider?
+### How does Pact differ from VCR?
+
+Pact is like VCR in reverse. VCR records actual provider behaviour, and verifies that the consumer behaves as expected. Pact records consumer behaviour, and verifies that the provider behaves as expected. The advantages Pact provides are:
+
+* The ability to develop the consumer (eg. a Javascript rich client UI) before the provider (eg. the JSON backend API).
+* The ability to drive out the requirements for your provider first, meaning you implement exactly and only what you need in the provider.
+* Well documented use cases ("Given ... a request for ... will return ...") that show exactly how a provider is being used.
+* The ability to see exactly which fields each consumer is interested in, allowing unused fields to be removed, and new fields to be added in the provider API without impacting a consumer. 
+* The ability to immediately see which consumers will be broken if a change is made to the provider API.
+* When using the [Pact Broker](https://github.com/bethesque/pact_broker), the ability to map the relationships between your services.
+
+### How does Pact differ from Webmock?
+
+Unlike Webmock:
+
+* Pact provides verification that the responses that have been stubbed are actually the responses that will be returned in the given conditions.
+* Pact runs a mock server in an actual process, rather than intercepting requests within the Ruby code, allowing Javascript rich UI clients to be tested in a browser.
+
+### How can I verify a pact against a non-ruby provider?
 
 You can verify a pact against any running server, regardless of language, using [pact-provider-proxy](https://github.com/bethesque/pact-provider-proxy).
 
@@ -12,13 +30,20 @@ Become famous, and write a pact-consumer library yourself! Then let us know abou
 
 ### How can I specify hooks to be executed before/after all examples for pact:verify?
 
-The pact:verify RSpec examples have the metadata `{:pact => :verify}` defined. You can add RSpec hooks using a filter as shown here:
+Use the set_up and tear_down hooks in the provider state definition:
 
 ```ruby
-RSpec.configure do | config |
-  config.before :each, :pact => :verify do
-    # Your code here
+
+Pact.provider_states_for "Some Consumer" do
+
+  set_up do
+    # Set up code here 
   end
+
+  tear_down do
+    # tear down code here
+  end
+
 end
 ```
 
@@ -41,5 +66,10 @@ This is a hotly debated issue.
 
 The pact authors' experience with using pacts to test microservices has been that using the set_up hooks to populate the database, and running pact:verify with all the real provider code has worked very well, and gives us full confidence that the end to end scenario will work in the deployed code.
 
-However, if you have a large and complex provider, you might decide to stub some of your application code. If you do, remember to add your own "verification" of your stubbed methods - write another test that will break if the behaviour of the stubbed methods changes.
+However, if you have a large and complex provider, you might decide to stub some of your application code. You will definitly need to stub calls to downstream systems. Make sure, when you stub, that you don't stub the code that actually parses the requests, because otherwise the consumer could be sending absolute rubbish, and you won't be checking it.
 
+### Why are the pacts generated and not hand coded?
+
+* Maintainability: Pact is "contract by example", and the examples may involve large quantities of JSON. Maintaining the JSON files by hand would be both time consuming and error prone. By dynamically creating the pacts, you have the option to keep your expectations in fixture files, or to generate them from your domain (the recommended approach, as it ensures your domain objects and their JSON representations in the pacts can never get out of sync).
+
+* Provider states: Dynamically setting expectations on the mock server allows the use of provider states, meaning you can make the same request more than once, with different expected responses, allowing you to properly test all your code paths.

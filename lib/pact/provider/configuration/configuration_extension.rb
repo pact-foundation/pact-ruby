@@ -55,16 +55,20 @@ module Pact
           @color_enabled = color_enabled
         end
 
-        def diff_format= diff_format
-          @diff_format = diff_format
-        end
-
-        def diff_format
-          @diff_format ||= :nested_json
-        end
-
         def diff_formatter
-          DIFF_FORMATTERS.fetch(diff_format)
+          @diff_formatter ||= DIFF_FORMATTERS[:nested_json]
+        end
+
+        def diff_formatter= diff_formatter
+          @diff_formatter = begin
+            if DIFF_FORMATTERS[diff_formatter]
+              DIFF_FORMATTERS[diff_formatter]
+            elsif diff_formatter.respond_to?(:call)
+              diff_formatter
+            else
+              raise "Pact.configuration.diff_formatter needs to respond to call, or be in the preconfigured list: #{DIFF_FORMATTERS.keys}"
+            end
+          end
         end
 
         def include mod

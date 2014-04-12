@@ -31,7 +31,6 @@ module Pact
     DEFAULT_OPTIONS = {allow_unexpected_keys: true, structure: false}.freeze
 
     def diff expected, actual, opts = {}
-      # require 'pry'; pry(binding);
       options = DEFAULT_OPTIONS.merge(opts)
       case expected
       when Hash then hash_diff(expected, actual, options)

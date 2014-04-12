@@ -1,6 +1,6 @@
 require 'pact/consumer_contract/request'
 require 'pact/symbolize_keys'
-require 'pact/consumer_contract/active_support_support'
+require 'pact/shared/active_support_support'
 
 module Pact
    class Interaction

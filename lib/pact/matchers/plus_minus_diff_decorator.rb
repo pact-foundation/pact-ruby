@@ -1,7 +1,11 @@
+require 'pact/shared/jruby_support'
+
 module Pact
   module Matchers
 
     class PlusMinusDiffDecorator
+
+      include JRubySupport
 
       def initialize diff, options = {}
         @diff = diff
@@ -18,7 +22,6 @@ module Pact
       def to_s
         expected = generate_string(diff, :expected)
         actual = generate_string(diff, :actual)
-
         RSpec::Expectations::Differ.new.diff_as_string actual, expected
       end
 
@@ -38,7 +41,7 @@ module Pact
         comparable = handle(diff, target)
         begin
           # Can't think of an elegant way to check if we can pretty generate other than to try it and maybe fail
-          JSON.pretty_generate(comparable)
+          fix_blank_lines_in_empty_hashes JSON.pretty_generate(comparable)
         rescue JSON::GeneratorError
           comparable.to_s
         end

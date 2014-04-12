@@ -1,4 +1,4 @@
-require 'pact/consumer_contract/active_support_support'
+require 'pact/shared/active_support_support'
 
 module Pact
   module Doc

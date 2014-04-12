@@ -9,7 +9,7 @@ module Pact
       let(:doc_root_dir) { './tmp/doc' }
       let(:pact_dir) { './tmp/pacts' }
       let(:file_name) { "Some Consumer - Some Provider#{file_extension}" }
-      let(:interaction_renderer) { double("InteractionsRenderer", :call => doc_content) }
+      let(:interactions_renderer) { double("InteractionsRenderer", :call => doc_content) }
       let(:doc_content) { "doc_content" }
       let(:index_content) { "index_content" }
       let(:expected_doc_path) { "#{doc_root_dir}/#{doc_type}/#{file_name}" }
@@ -29,7 +29,7 @@ module Pact
         FileUtils.cp './spec/support/markdown_pact.json', pact_dir
       end
 
-      subject { Generator.new(pact_dir, doc_root_dir, interaction_renderer, doc_type, file_extension, index_renderer, index_name) }
+      subject { Generator.new(pact_dir, doc_root_dir, interactions_renderer: interactions_renderer, doc_type: doc_type, file_extension: file_extension, index_renderer: index_renderer, index_name: index_name) }
 
       it "creates an index" do
         subject.call

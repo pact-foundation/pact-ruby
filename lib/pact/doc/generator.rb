@@ -8,14 +8,14 @@ module Pact
 
       attr_reader :doc_root_dir, :pact_dir, :interactions_renderer, :doc_type, :file_extension, :index_renderer
 
-      def initialize pact_dir, doc_root_dir, interactions_renderer, doc_type, file_extension, index_renderer, index_name
+      def initialize pact_dir, doc_root_dir, options
         @doc_root_dir = doc_root_dir
         @pact_dir = pact_dir
-        @interactions_renderer = interactions_renderer
-        @doc_type = doc_type
-        @file_extension = file_extension
-        @index_renderer = index_renderer
-        @index_name = index_name
+        @interactions_renderer = options[:interactions_renderer]
+        @doc_type = options[:doc_type]
+        @file_extension = options[:file_extension]
+        @index_renderer = options[:index_renderer]
+        @index_name = options[:index_name]
       end
 
       def call
@@ -70,10 +70,6 @@ module Pact
 
       def target_dir
         File.join(doc_root_dir, doc_type)
-      end
-
-      def == other
-        other.is_a?(self.class) && other.doc_root_dir == doc_root_dir && other.pact_dir == pact_dir
       end
 
     end

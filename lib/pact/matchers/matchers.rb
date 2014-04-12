@@ -15,23 +15,31 @@ module Pact
   module Matchers
 
     NO_DIFF_INDICATOR = NoDiffIndicator.new
-    DEFAULT_OPTIONS = {allow_unexpected_keys: true, structure: false}.freeze
+    DEFAULT_OPTIONS = {allow_unexpected_keys: true, type: false}.freeze
 
     def diff expected, actual, opts = {}
+      calculate_diff(expected, actual, DEFAULT_OPTIONS.merge(opts))
+    end
+
+    def type_diff expected, actual, opts = {}
+      calculate_diff expected, actual, DEFAULT_OPTIONS.merge(opts).merge(type: true)
+    end
+
+    private
+
+    def calculate_diff expected, actual, opts = {}
       options = DEFAULT_OPTIONS.merge(opts)
       case expected
       when Hash then hash_diff(expected, actual, options)
       when Array then array_diff(expected, actual, options)
-      when Pact::Term then diff(expected.matcher, actual, options)
+      when Pact::Term then calculate_diff(expected.matcher, actual, options)
       when Regexp then regexp_diff(expected, actual, options)
-      when Pact::SomethingLike then diff(expected.contents, actual, options.merge(:structure => true))
+      when Pact::SomethingLike then calculate_diff(expected.contents, actual, options.merge(:type => true))
       else object_diff(expected, actual, options)
       end
     end
 
-    def structure_diff expected, actual
-      diff expected, actual, {structure: true}
-    end
+    alias_method :structure_diff, :type_diff # Backwards compatibility
 
     def regexp_diff regexp, actual, options
       if actual.is_a?(String) && regexp.match(actual)
@@ -56,7 +64,7 @@ module Pact
       length.times do | index|
         expected_item = expected.fetch(index, Pact::UnexpectedIndex.new)
         actual_item = actual.fetch(index, Pact::IndexNotFound.new)
-        if (item_diff = diff(expected_item, actual_item, options)).any?
+        if (item_diff = calculate_diff(expected_item, actual_item, options)).any?
           diff_found = true
           difference << item_diff
         else
@@ -67,11 +75,11 @@ module Pact
     end
 
     def actual_hash_diff expected, actual, options
-      difference = expected.keys.inject({}) do |diff, key|
-        if (diff_at_key = diff(expected[key], actual.fetch(key, Pact::KeyNotFound.new), options)).any?
-          diff[key] = diff_at_key
+      difference = expected.keys.inject({}) do |calculate_diff, key|
+        if (diff_at_key = calculate_diff(expected[key], actual.fetch(key, Pact::KeyNotFound.new), options)).any?
+          calculate_diff[key] = diff_at_key
         end
-        diff
+        calculate_diff
       end
       difference.merge(check_for_unexpected_keys(expected, actual, options))
     end
@@ -80,9 +88,9 @@ module Pact
       if options[:allow_unexpected_keys]
         {}
       else
-        (actual.keys - expected.keys).inject({}) do | diff, key |
-          diff[key] = Difference.new(UnexpectedKey.new, actual[key])
-          diff
+        (actual.keys - expected.keys).inject({}) do | calculate_diff, key |
+          calculate_diff[key] = Difference.new(UnexpectedKey.new, actual[key])
+          calculate_diff
         end
       end
     end
@@ -99,15 +107,15 @@ module Pact
       if classes_match? expected, actual
         {}
       else
-        Difference.new structure_diff_expected_display(expected), structure_diff_actual_display(actual)
+        Difference.new type_diff_expected_display(expected), type_diff_actual_display(actual)
       end
     end
 
-    def structure_diff_actual_display actual
+    def type_diff_actual_display actual
       actual.is_a?(KeyNotFound) ?  actual : ActualType.new(actual)
     end
 
-    def structure_diff_expected_display expected
+    def type_diff_expected_display expected
       ExpectedType.new(expected)
     end
 
@@ -119,7 +127,7 @@ module Pact
     end
 
     def object_diff expected, actual, options
-      return class_diff(expected, actual) if options[:structure]
+      return class_diff(expected, actual) if options[:type]
       if expected != actual
         Difference.new expected, actual
       else

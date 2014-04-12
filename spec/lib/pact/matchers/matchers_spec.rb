@@ -49,7 +49,7 @@ module Pact::Matchers
       end
     end
 
-    describe 'structure_diff' do
+    describe 'type_diff' do
       let(:expected) {
         {a: 'a string', b: 1, c: nil, d: [{e: 'thing'}], f: {g: 10}, h: false}
       }
@@ -58,7 +58,7 @@ module Pact::Matchers
         let(:actual) { {a: 'another string', b: 2, c: nil, d: [{e: 'something'}], f: {g: 100}, h: true} }
         let(:difference) { {} }
         it "returns an empty hash" do
-          expect(structure_diff(expected, actual)).to eq difference
+          expect(type_diff(expected, actual)).to eq difference
         end
       end
 
@@ -67,7 +67,7 @@ module Pact::Matchers
         let(:expected) { {b: 'blah'} }
         let(:difference) { {:b=>Difference.new(Pact::ExpectedType.new("blah"), Pact::KeyNotFound.new)} }
         it "returns the difference" do
-          expect(structure_diff(expected, actual)).to eq difference
+          expect(type_diff(expected, actual)).to eq difference
         end
       end
 
@@ -78,28 +78,28 @@ module Pact::Matchers
         context "and a string is found" do
           let(:actual) { {a: 'a string'}}
           it "returns the diff" do
-            expect(structure_diff(expected, actual)).to eq difference
+            expect(type_diff(expected, actual)).to eq difference
           end
         end
         context "and nil is found" do
           let(:actual) { {a: nil}}
           let(:difference ) { {a: Difference.new(Pact::ExpectedType.new(1), Pact::ActualType.new(nil)) } }
           it "returns the diff" do
-            expect(structure_diff(expected, actual)).to eq difference
+            expect(type_diff(expected, actual)).to eq difference
           end
         end
         context "and a hash is found" do
           let(:actual) { {a: {b: 1}} }
           let(:difference) { {:a=>Difference.new(Pact::ExpectedType.new(1), Pact::ActualType.new({:b=>1})) } }
           it "returns the diff" do
-            expect(structure_diff(expected, actual)).to eq difference
+            expect(type_diff(expected, actual)).to eq difference
           end
         end
         context "and an array is found" do
           let(:actual) { {a: [1] } }
           let(:difference) { {:a=>Difference.new(Pact::ExpectedType.new(1), Pact::ActualType.new([1]))}}
           it "returns the diff" do
-            expect(structure_diff(expected, actual)).to eq difference
+            expect(type_diff(expected, actual)).to eq difference
           end
         end
       end
@@ -116,7 +116,7 @@ module Pact::Matchers
             ]
           }
           it "returns the diff" do
-            expect(structure_diff(expected, actual)).to eq difference
+            expect(type_diff(expected, actual)).to eq difference
           end
         end
       end
@@ -128,7 +128,7 @@ module Pact::Matchers
           let(:actual) { {a: 'a string'} }
           let(:difference) { {:a=>Difference.new(Pact::ExpectedType.new(nil), Pact::ActualType.new("a string")) } }
           it "returns the diff" do
-            expect(structure_diff(expected, actual)).to eq difference
+            expect(type_diff(expected, actual)).to eq difference
           end
         end
       end
@@ -139,7 +139,7 @@ module Pact::Matchers
           let(:actual) { {a: 'banana'} }
           let(:difference) { {:a=>Pact::Matchers::Difference.new(/p/,"banana")} }
           it "returns the diff" do
-            expect(structure_diff(expected, actual)).to eq difference
+            expect(type_diff(expected, actual)).to eq difference
           end
         end
       end

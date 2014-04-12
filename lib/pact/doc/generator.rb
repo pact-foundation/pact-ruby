@@ -14,17 +14,19 @@ module Pact
         @file_extension = options[:file_extension]
         @index_renderer = options[:index_renderer]
         @index_name = options[:index_name]
+        @after = options.fetch(:after, lambda{|pact_dir, target_dir, consumer_contracts| })
       end
 
       def call
         ensure_target_dir_exists
         write_index if consumer_contracts.any?
         write_doc_files
+        perform_after_hook
       end
 
       private
 
-      attr_reader :doc_dir, :pact_dir, :interactions_renderer, :doc_type, :file_extension, :index_renderer
+      attr_reader :doc_dir, :pact_dir, :interactions_renderer, :doc_type, :file_extension, :index_renderer, :after
 
       def write_index
         File.open(index_file_path, "w") { |io|  io << index_file_contents }
@@ -60,6 +62,10 @@ module Pact
             Pact::ConsumerContract.from_uri file
           end
         end
+      end
+
+      def perform_after_hook
+        after.call(pact_dir, target_dir, consumer_contracts)
       end
 
       def ensure_target_dir_exists

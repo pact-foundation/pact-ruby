@@ -63,6 +63,8 @@ module Pact
 
       private
 
+      attr_reader :interaction, :consumer_contract
+
       def clean_request
         ordered_clean_hash Reification.from_term(interaction.request).to_hash
       end
@@ -105,8 +107,6 @@ module Pact
       def lowercase_first_letter string
         string[0].downcase + string[1..-1]
       end
-
-      attr_reader :interaction, :consumer_contract
 
     end
   end

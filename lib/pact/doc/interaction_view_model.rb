@@ -71,6 +71,9 @@ module Pact
         ordered_clean_hash Reification.from_term(interaction.response)
       end
 
+      # Remove empty body and headers hashes from response, and empty headers from request,
+      # as an empty hash means "allow anything" - it's more intuitive and cleaner to just
+      # remove the empty hashes from display.
       def ordered_clean_hash source
         ordered_keys.each_with_object({}) do |key, target|
           if source.key? key

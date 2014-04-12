@@ -143,6 +143,24 @@ module Pact::Matchers
           end
         end
       end
+
+      context "when unexpected keys are allowed" do
+        let(:expected) { { a: 'b' } }
+        let(:actual) { {a: 'c', d: 'e'} }
+        let(:difference) { {} }
+        it "returns the diff" do
+          expect(type_diff(expected, actual, allow_unexpected_keys: true)).to eq difference
+        end
+      end
+
+      context "when unexpected keys are not allowed" do
+        let(:expected) { { a: 'b' } }
+        let(:actual) { {a: 'c', d: 'e'} }
+        let(:difference) { {d: Difference.new(Pact::UnexpectedKey.new, 'e')} }
+        it "returns the diff" do
+          expect(type_diff(expected, actual, allow_unexpected_keys: false)).to eq difference
+        end
+      end
     end
 
     describe 'diffing' do

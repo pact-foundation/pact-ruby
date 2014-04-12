@@ -1,6 +1,6 @@
 require 'spec_helper'
 require 'pact/provider/rspec/formatter'
-require '/Users/Beth/Work/rea/biq/pact/spec/support/factories'
+require './spec/support/factories'
 
 module Pact
   module Provider

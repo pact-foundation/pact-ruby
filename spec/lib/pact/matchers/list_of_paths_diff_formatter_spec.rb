@@ -9,6 +9,10 @@ module Pact
       describe ".call" do
         subject{ ListOfPathsDiffFormatter.call(diff, {}) }
 
+        context "when using class based matching" do
+          it "works"
+        end
+
         context "when there is a mismatched value" do
           let(:diff) { {root: {"blah" => { 1 => Difference.new("alphabet", "woozle")}}} }
           let(:expected_output) { ""}

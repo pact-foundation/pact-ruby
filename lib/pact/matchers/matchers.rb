@@ -7,6 +7,8 @@ require 'pact/matchers/unexpected_key'
 require 'pact/matchers/unexpected_index'
 require 'pact/matchers/index_not_found'
 require 'pact/matchers/difference'
+require 'pact/matchers/expected_type'
+require 'pact/matchers/actual_type'
 
 module Pact
   module Matchers
@@ -117,11 +119,12 @@ module Pact
     end
 
     def structure_diff_actual_display actual
-      (actual.nil? || actual.is_a?(KeyNotFound) ) ? actual : {:class => actual.class, :value => actual }
+      actual.is_a?(KeyNotFound) ?  actual : ActualType.new(actual)
     end
 
     def structure_diff_expected_display expected
-      (expected.nil?) ? expected : {:class => expected.class, eg: expected}
+      ExpectedType.new(expected)
+      #(expected.nil?) ? expected : {:class => expected.class, eg: expected}
     end
 
     def classes_match? expected, actual

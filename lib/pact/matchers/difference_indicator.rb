@@ -6,7 +6,7 @@ module Pact
     include ActiveSupportSupport
 
     def == other
-      other.is_a? self.class
+      other.class == self.class
     end
 
     def eql? other

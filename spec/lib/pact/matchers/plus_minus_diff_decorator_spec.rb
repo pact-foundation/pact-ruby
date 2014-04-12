@@ -1,5 +1,7 @@
 require 'spec_helper'
 require 'pact/matchers/plus_minus_diff_decorator'
+require 'pact/matchers/expected_type'
+require 'pact/matchers/actual_type'
 
 module Pact
   module Matchers
@@ -12,7 +14,18 @@ module Pact
         let(:line_count) { subject.split("\n").size }
 
         context "with class based matching" do
-          xit "displays nicely"
+          let(:diff) { {thing: Difference.new(ExpectedType.new("fred"), ActualType.new(1))}}
+          let(:output) { <<-EOF
+ {
+-  "thing": String
++  "thing": Fixnum
+ }
+EOF
+          }
+
+          it "displays nicely" do
+            expect(remove_ansicolor subject).to include output
+          end
         end
 
         context "with an incorrect value in a hash" do

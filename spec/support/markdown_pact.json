@@ -11,10 +11,7 @@
       "provider_state": "alligators exist",
       "request": {
         "method": "get",
-        "path": "/alligators",
-        "body" : {
-
-        }
+        "path": "/alligators"
       },
       "response": {
         "headers" : {"Content-Type": "application/json"},
@@ -37,10 +34,7 @@
       "provider_state": null,
       "request": {
         "method": "get",
-        "path": "/polar-bears",
-        "body" : {
-
-        }
+        "path": "/polar-bears"
       },
       "response": {
         "headers" : {"Content-Type": "application/json"},

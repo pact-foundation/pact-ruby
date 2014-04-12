@@ -13,9 +13,7 @@ Given **alligators exist**, upon receiving **a request for alligators** from Som
 ```json
 {
   "method": "get",
-  "path": "/alligators",
-  "body": {
-  }
+  "path": "/alligators"
 }
 ```
 Some Provider will respond with:
@@ -40,9 +38,7 @@ Upon receiving **a request for polar bears** from Some Consumer, with
 ```json
 {
   "method": "get",
-  "path": "/polar-bears",
-  "body": {
-  }
+  "path": "/polar-bears"
 }
 ```
 Some Provider will respond with:

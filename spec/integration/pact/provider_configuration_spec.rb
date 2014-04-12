@@ -9,11 +9,12 @@ describe "provider side" do
       end
 
       let(:application) { double("App")}
+
       before do
          app_block = ->{ application }
          Pact.service_provider "My Provider" do
             app &app_block
-         end         
+         end
       end
 
       it "makes the app available to the tests" do

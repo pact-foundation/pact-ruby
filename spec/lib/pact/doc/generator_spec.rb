@@ -29,7 +29,7 @@ module Pact
         FileUtils.cp './spec/support/markdown_pact.json', pact_dir
       end
 
-      subject { Generator.new(doc_root_dir, pact_dir, interaction_renderer, doc_type, file_extension, index_renderer, index_name) }
+      subject { Generator.new(pact_dir, doc_root_dir, interaction_renderer, doc_type, file_extension, index_renderer, index_name) }
 
       it "creates an index" do
         subject.call

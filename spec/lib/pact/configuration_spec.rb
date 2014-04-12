@@ -20,14 +20,38 @@ describe Pact do
       end
     end
 
-    it "allows configuration of doc_generators" do
-      Pact.configuration.doc_generator = :markdown
-      expect(Pact.configuration.doc_generators).to eq [Pact::Doc::Markdown::Generator.new(Pact.configuration.doc_dir, Pact.configuration.pact_dir)]
-    end
   end
 
   describe Pact::Configuration do
     let(:configuration) { Pact::Configuration.new }
+
+    describe "doc_generator" do
+
+      context "with a symbol" do
+        it "allows configuration of a doc_generator" do
+          Pact.configuration.doc_generator = :markdown
+          expect(Pact.configuration.doc_generators).to eq [Pact::Doc::Markdown::Generator]
+        end
+      end
+
+      context "with anything that responds to 'call'" do
+
+        it "allows configuration of a doc_generator" do
+          Pact.configuration.doc_generator = lambda { | pact_dir, doc_dir | "doc" }
+          expect(Pact.configuration.doc_generators.size).to be 1
+          expect(Pact.configuration.doc_generators.first.call('doc','pacts')).to eq ("doc")
+        end
+
+      end
+
+      context "with something that does not respond to call and doesn't have a matching doc_generator" do
+        it "raises an error" do
+          expect { Pact.configuration.doc_generator = Object.new }.to raise_error "Pact.configuration.doc_generator needs to respond to call, or be in the preconfigured list: [:markdown]"
+        end
+      end
+
+    end
+
     describe "pactfile_write_mode" do
       context "when @pactfile_write_mode is :overwrite" do
         it 'returns :overwrite' do

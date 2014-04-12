@@ -8,7 +8,7 @@ module Pact
 
       attr_reader :doc_root_dir, :pact_dir, :interactions_renderer, :doc_type, :file_extension, :index_renderer
 
-      def initialize doc_root_dir, pact_dir, interactions_renderer, doc_type, file_extension, index_renderer, index_name
+      def initialize pact_dir, doc_root_dir, interactions_renderer, doc_type, file_extension, index_renderer, index_name
         @doc_root_dir = doc_root_dir
         @pact_dir = pact_dir
         @interactions_renderer = interactions_renderer

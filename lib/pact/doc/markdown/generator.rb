@@ -7,8 +7,12 @@ module Pact
     module Markdown
       class Generator < Pact::Doc::Generator
 
-        def initialize doc_root_dir, pact_dir
-          super(doc_root_dir, pact_dir, InteractionsRenderer, 'markdown', '.md', IndexRenderer, 'README')
+        def initialize pact_dir, doc_root_dir
+          super(pact_dir, doc_root_dir, InteractionsRenderer, 'markdown', '.md', IndexRenderer, 'README')
+        end
+
+        def self.call pact_dir, doc_root_dir
+          new(pact_dir, doc_root_dir).call
         end
 
       end

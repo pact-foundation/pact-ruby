@@ -6,7 +6,7 @@ module Pact
     module Markdown
       describe Generator do
 
-        subject { Generator.new './tmp/doc', './spec/pacts' }
+        subject { Generator.new './spec/pacts', './tmp/doc' }
 
 
         describe "call" do

@@ -9,9 +9,26 @@ module Pact
 
       describe ConfigurationExtension do
 
-        subject { Object.extend(ConfigurationExtension) }
+        subject { Object.new.extend(ConfigurationExtension) }
 
-        describe "#diff_formatter=" do
+        describe "#color_enabled" do
+
+          it "sets color_enabled to be true by default" do
+            expect(subject.color_enabled).to be_true
+          end
+
+          it "allows configuration of colour_enabled" do
+            subject.color_enabled = false
+            expect(subject.color_enabled).to be_false
+          end
+
+        end
+
+        describe "#diff_formatter" do
+
+          it "returns the Pact::Matchers::NestedJsonDiffFormatter by default" do
+            expect(subject.diff_formatter).to eq(Pact::Matchers::NestedJsonDiffFormatter)
+          end
 
           ConfigurationExtension::DIFF_FORMATTERS.each_pair do | key, diff_formatter |
 

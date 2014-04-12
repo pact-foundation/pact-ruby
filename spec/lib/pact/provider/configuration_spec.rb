@@ -9,30 +9,6 @@ module Pact::Provider::Configuration
       Pact.clear_configuration
     end
 
-    describe "diff_formatter" do
-
-      it "returns the Pact::Matchers::NestedJsonDiffFormatter by default" do
-        expect(Pact.configuration.diff_formatter).to eq(Pact::Matchers::NestedJsonDiffFormatter)
-      end
-
-      context "when plus_and_minus formatter is configured" do
-        it "returns the Pact::Matchers::PlusMinusDiffDecorator" do
-          Pact.configuration.diff_format = :plus_and_minus
-          expect(Pact.configuration.diff_formatter).to eq(Pact::Matchers::PlusMinusDiffDecorator)
-        end
-      end
-
-    end
-
-    it "allows configuration of colour_enabled" do
-      Pact.configuration.color_enabled = false
-      expect(Pact.configuration.color_enabled).to be_false
-    end
-
-    it "sets color_enabled to be true by default" do
-      expect(Pact.configuration.color_enabled).to be_true
-    end
-
     describe "service_provider" do
 
       context "when a provider is configured" do

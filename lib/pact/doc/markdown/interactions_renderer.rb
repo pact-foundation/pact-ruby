@@ -1,11 +1,10 @@
 require 'pact/doc/markdown/interaction_renderer'
+require 'pact/doc/sort_interactions'
 
 module Pact
   module Doc
     module Markdown
       class InteractionsRenderer
-
-        attr_reader :consumer_contract
 
         def initialize consumer_contract
           @consumer_contract = consumer_contract
@@ -21,12 +20,14 @@ module Pact
 
         private
 
+        attr_reader :consumer_contract
+
         def title
           "### A pact between #{consumer_contract.consumer.name} and #{consumer_contract.provider.name}\n\n"
         end
 
         def interaction_renderers
-          @interaction_renderers ||= consumer_contract.interactions.collect{|interaction| InteractionRenderer.new interaction, @consumer_contract}.sort
+          @interaction_renderers ||= sorted_interactions.collect{|interaction| InteractionRenderer.new interaction, @consumer_contract}
         end
 
         def summaries_title
@@ -43,6 +44,10 @@ module Pact
 
         def full_interactions
           interaction_renderers.collect(&:render_full_interaction)
+        end
+
+        def sorted_interactions
+          SortInteractions.call(consumer_contract.interactions)
         end
 
       end

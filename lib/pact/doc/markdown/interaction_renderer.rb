@@ -32,9 +32,6 @@ module Pact
           File.dirname(__FILE__) + template_file
         end
 
-        def <=> other
-          interaction.sortable_id <=> other.interaction.sortable_id
-        end
       end
     end
   end

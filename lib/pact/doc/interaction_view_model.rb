@@ -61,10 +61,6 @@ module Pact
         fix_json_formatting JSON.pretty_generate(clean_response)
       end
 
-      def sortable_id
-        @sortable_id ||= "#{interaction.description.downcase} #{interaction.response['status']} #{(interaction.provider_state || '').downcase}"
-      end
-
       private
 
       def clean_request

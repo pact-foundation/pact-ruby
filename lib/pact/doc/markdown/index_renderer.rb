@@ -3,7 +3,8 @@ module Pact
     module Markdown
       class IndexRenderer
 
-        attr_reader :consumer_name, :docs
+        attr_reader :consumer_name
+        attr_reader :docs # Hash of pact title => file_name
 
         def initialize consumer_name, docs
           @consumer_name = consumer_name
@@ -21,8 +22,8 @@ module Pact
         private
 
         def table_of_contents
-          docs.collect do | name, file |
-            item name, file
+          docs.collect do | title, file_name |
+            item title, file_name
           end.join("\n")
         end
 
@@ -30,8 +31,8 @@ module Pact
           "### Pacts for #{consumer_name}"
         end
 
-        def item name, file
-          "* [#{name}](#{file})"
+        def item title, file_name
+          "* [#{title}](#{file_name})"
         end
 
       end

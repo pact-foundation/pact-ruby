@@ -7,6 +7,8 @@ require 'pact/matchers/unexpected_key'
 require 'pact/matchers/unexpected_index'
 require 'pact/matchers/index_not_found'
 require 'pact/matchers/difference'
+require 'pact/matchers/regexp_difference'
+require 'pact/matchers/type_difference'
 require 'pact/matchers/expected_type'
 require 'pact/matchers/actual_type'
 require 'pact/matchers/no_diff_indicator'
@@ -45,7 +47,7 @@ module Pact
       if actual.is_a?(String) && regexp.match(actual)
         {}
       else
-        Difference.new regexp, actual
+        RegexpDifference.new regexp, actual
       end
     end
 
@@ -103,11 +105,11 @@ module Pact
       end
     end
 
-    def class_diff expected, actual
-      if classes_match? expected, actual
+    def type_difference expected, actual
+      if types_match? expected, actual
         {}
       else
-        Difference.new type_diff_expected_display(expected), type_diff_actual_display(actual)
+        TypeDifference.new type_diff_expected_display(expected), type_diff_actual_display(actual)
       end
     end
 
@@ -119,7 +121,7 @@ module Pact
       ExpectedType.new(expected)
     end
 
-    def classes_match? expected, actual
+    def types_match? expected, actual
       #There must be a more elegant way to do this
       expected.class == actual.class ||
         (expected.is_a?(TrueClass) && actual.is_a?(FalseClass)) ||
@@ -127,7 +129,7 @@ module Pact
     end
 
     def object_diff expected, actual, options
-      return class_diff(expected, actual) if options[:type]
+      return type_difference(expected, actual) if options[:type]
       if expected != actual
         Difference.new expected, actual
       else

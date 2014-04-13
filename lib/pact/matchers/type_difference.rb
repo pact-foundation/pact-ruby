@@ -2,10 +2,10 @@ require 'pact/matchers/base_difference'
 
 module Pact
   module Matchers
-    class Difference < BaseDifference
+    class TypeDifference < BaseDifference
 
       def as_json options = {}
-        {:EXPECTED => expected, :ACTUAL => actual}
+        {:EXPECTED_TYPE => expected.as_json, :ACTUAL_TYPE => actual.as_json }
       end
 
     end

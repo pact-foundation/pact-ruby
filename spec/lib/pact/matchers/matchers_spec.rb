@@ -43,7 +43,7 @@ module Pact::Matchers
     describe "expecting a string matching a regexp and not finding key" do
       let(:expected) { {a: /b/} }
       let(:actual) { {} }
-      let(:difference) { {:a=> Difference.new(/b/, Pact::KeyNotFound.new) } }
+      let(:difference) { {:a=> RegexpDifference.new(/b/, Pact::KeyNotFound.new) } }
       it "returns the diff" do
         expect(diff(expected, actual)).to eq difference
       end
@@ -65,7 +65,7 @@ module Pact::Matchers
       context "when a key is not found" do
         let(:actual) { {a: 'blah'} }
         let(:expected) { {b: 'blah'} }
-        let(:difference) { {:b=>Difference.new(Pact::ExpectedType.new("blah"), Pact::KeyNotFound.new)} }
+        let(:difference) { {:b=>TypeDifference.new(Pact::ExpectedType.new("blah"), Pact::KeyNotFound.new)} }
         it "returns the difference" do
           expect(type_diff(expected, actual)).to eq difference
         end
@@ -73,7 +73,7 @@ module Pact::Matchers
 
       context "when a number is expected" do
         let(:expected) { {a: 1} }
-        let(:difference) { {a: Difference.new(Pact::ExpectedType.new(1) , Pact::ActualType.new('a string'))}  }
+        let(:difference) { {a: TypeDifference.new(Pact::ExpectedType.new(1) , Pact::ActualType.new('a string'))}  }
 
         context "and a string is found" do
           let(:actual) { {a: 'a string'}}
@@ -83,21 +83,21 @@ module Pact::Matchers
         end
         context "and nil is found" do
           let(:actual) { {a: nil}}
-          let(:difference ) { {a: Difference.new(Pact::ExpectedType.new(1), Pact::ActualType.new(nil)) } }
+          let(:difference ) { {a: TypeDifference.new(Pact::ExpectedType.new(1), Pact::ActualType.new(nil)) } }
           it "returns the diff" do
             expect(type_diff(expected, actual)).to eq difference
           end
         end
         context "and a hash is found" do
           let(:actual) { {a: {b: 1}} }
-          let(:difference) { {:a=>Difference.new(Pact::ExpectedType.new(1), Pact::ActualType.new({:b=>1})) } }
+          let(:difference) { {:a=>TypeDifference.new(Pact::ExpectedType.new(1), Pact::ActualType.new({:b=>1})) } }
           it "returns the diff" do
             expect(type_diff(expected, actual)).to eq difference
           end
         end
         context "and an array is found" do
           let(:actual) { {a: [1] } }
-          let(:difference) { {:a=>Difference.new(Pact::ExpectedType.new(1), Pact::ActualType.new([1]))}}
+          let(:difference) { {:a=>TypeDifference.new(Pact::ExpectedType.new(1), Pact::ActualType.new([1]))}}
           it "returns the diff" do
             expect(type_diff(expected, actual)).to eq difference
           end
@@ -111,7 +111,7 @@ module Pact::Matchers
           let(:difference) { [
             Pact::Matchers::NO_DIFF_INDICATOR,
              {:name =>
-                  Difference.new(Pact::ExpectedType.new("Mary"), Pact::ActualType.new(1))
+                  TypeDifference.new(Pact::ExpectedType.new("Mary"), Pact::ActualType.new(1))
               }
             ]
           }
@@ -126,7 +126,7 @@ module Pact::Matchers
         let(:expected) { {a: nil} }
         context "and a string is found" do
           let(:actual) { {a: 'a string'} }
-          let(:difference) { {:a=>Difference.new(Pact::ExpectedType.new(nil), Pact::ActualType.new("a string")) } }
+          let(:difference) { {:a=>TypeDifference.new(Pact::ExpectedType.new(nil), Pact::ActualType.new("a string")) } }
           it "returns the diff" do
             expect(type_diff(expected, actual)).to eq difference
           end
@@ -137,7 +137,7 @@ module Pact::Matchers
         let(:expected) { {a: Pact::Term.new(:matcher => /p/, :generate => 'apple')} }
         context "and a non matching string is found" do
           let(:actual) { {a: 'banana'} }
-          let(:difference) { {:a=>Pact::Matchers::Difference.new(/p/,"banana")} }
+          let(:difference) { {:a=>Pact::Matchers::RegexpDifference.new(/p/,"banana")} }
           it "returns the diff" do
             expect(type_diff(expected, actual)).to eq difference
           end
@@ -383,7 +383,7 @@ module Pact::Matchers
       context "a deep mismatch" do
         subject { {a:  {b: { c: [1,2]}, d: { e: Pact::Term.new(matcher: /a/, generate: 'apple')}}, f: 1, g: {h: 99}} }
         let(:actual) { {a:  {b: { c: [1,2]}, d: { e: 'food'}}, f: "thing"} }
-        let(:difference) { {:a=>{:d=>{:e=> Difference.new(/a/, "food")}},
+        let(:difference) { {:a=>{:d=>{:e=> RegexpDifference.new(/a/, "food")}},
           :f=> Difference.new(1, "thing"),
           :g=>Difference.new({:h=>99}, Pact::KeyNotFound.new)} }
 

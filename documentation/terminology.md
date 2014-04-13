@@ -20,6 +20,6 @@ A file containing the JSON serialised requests and responses that were defined i
 
 To verify a pact, the requests contained in a pact file are replayed against the provider code, and the responses returned are checked to ensure they match those expected in the pact file.
 
-## Provider state
+### Provider state
 
 A name describing a "state" (like a fixture) that the provider should be in when a given request is replayed against it. Eg. "there is an alligator called Mary" or "there are no alligators". A provider state name is specified when writing the consumer specs, then, when the pact verification is set up in the provider, the same name will be used to identify the set up code block that should be run before the request is executed.

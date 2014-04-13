@@ -1,6 +1,6 @@
 ### Pact Documentation
 
-* Step by Step instructions for setting up testing with pact can be found in the project [README.md](/README.md#usage)
+* Step by step instructions for getting started with pacts can be found in the project [README.md](/README.md#usage)
 * [Terminology](terminology.md)
 * [Frequently asked questions](faq.md)
 * [Rarely asked questions](raq.md)

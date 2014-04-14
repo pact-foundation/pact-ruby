@@ -73,11 +73,11 @@ module Pact
       end
 
       def handle_mismatched_regexp difference, path, descriptions
-        descriptions << "\tAt:\n\t\t#{path_to_s(path)}\n\tExpected to match:\n\t\t#{difference.expected.ai}\n\tActual:\n\t\t#{difference.actual.ai}"
+        descriptions << "\tAt:\n\t\t#{path_to_s(path)}\n\tExpected to match:\n\t\t#{difference.expected.inspect}\n\tActual:\n\t\t#{difference.actual.ai}"
       end
 
       def handle_mismatched_type difference, path, descriptions
-        descriptions << "\tAt:\n\t\t#{path_to_s(path)}\n\tExpected type:\n\t\t#{difference.expected.ai}\n\tActual type:\n\t\t#{difference.actual.ai}"
+        descriptions << "\tAt:\n\t\t#{path_to_s(path)}\n\tExpected type:\n\t\t#{difference.expected}\n\tActual type:\n\t\t#{difference.actual}"
       end
 
       def handle_index_not_found difference, path, descriptions

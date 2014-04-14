@@ -17,8 +17,8 @@ module Pact
       subject { NestedJsonDiffFormatter.call(diff, options) }
 
       let(:options) { { colour: colour }}
-      let(:expected_coloured) { '"' + NestedJsonDiffFormatter::C.red("expected_type") + '":'}
-      let(:actual_coloured) { '"' + NestedJsonDiffFormatter::C.green("actual_type") + '":'}
+      let(:expected_coloured) { '"' + ::Term::ANSIColor.red("expected_type") + '":'}
+      let(:actual_coloured) { '"' + ::Term::ANSIColor.green("actual_type") + '":'}
 
       describe ".call" do
 

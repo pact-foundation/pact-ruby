@@ -49,7 +49,7 @@ module Pact
       end
 
       def colourise line
-        line.white.gsub(EXPECTED){|match| coloured_key match, :red }.gsub(ACTUAL){ | match | coloured_key match, :green }
+        line.gsub(EXPECTED){|match| coloured_key match, :red }.gsub(ACTUAL){ | match | coloured_key match, :green }
       end
 
       def coloured_key match, colour

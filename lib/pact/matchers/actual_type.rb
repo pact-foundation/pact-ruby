@@ -9,7 +9,7 @@ module Pact
     end
 
     def to_s
-      "actual: #{type} value: #{@value}"
+      type
     end
 
   end

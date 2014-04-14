@@ -1,5 +1,8 @@
 require 'spec_helper'
 require 'pact/matchers/nested_json_diff_formatter'
+require 'pact/matchers/type_difference'
+require 'pact/matchers/expected_type'
+require 'pact/matchers/actual_type'
 
 module Pact
   module Matchers
@@ -7,13 +10,15 @@ module Pact
 
       let(:diff) do
         {
-          :something => Difference.new({name: 'Fred'}, KeyNotFound.new)
+          :something => TypeDifference.new(ExpectedType.new("Fred"), ActualType.new(1))
         }
       end
 
       subject { NestedJsonDiffFormatter.call(diff, options) }
 
       let(:options) { { colour: colour }}
+      let(:expected_coloured) { '"' + NestedJsonDiffFormatter::C.red("expected_type") + '":'}
+      let(:actual_coloured) { '"' + NestedJsonDiffFormatter::C.green("actual_type") + '":'}
 
       describe ".call" do
 
@@ -21,12 +26,12 @@ module Pact
 
         context "when color_enabled is true" do
           it "returns nicely formatted json" do
-            expect(subject.split("\n").size).to eq 8
+            expect(subject.split("\n").size).to eq 6
           end
 
           it "returns a string displaying the diff in colour" do
-            expect(subject).to include NestedJsonDiffFormatter::EXPECTED_COLOURED
-            expect(subject).to include NestedJsonDiffFormatter::ACTUAL_COLOURED
+            expect(subject).to include expected_coloured
+            expect(subject).to include actual_coloured
           end
         end
 
@@ -35,12 +40,12 @@ module Pact
           let(:colour) { false }
 
           it "returns nicely formatted json" do
-            expect(subject.split("\n").size).to eq 8
+            expect(subject.split("\n").size).to eq 6
           end
 
           it "returns a string displaying the diff without colour" do
-            expect(subject).to_not include NestedJsonDiffFormatter::EXPECTED_COLOURED
-            expect(subject).to_not include NestedJsonDiffFormatter::ACTUAL_COLOURED
+            expect(subject).to_not include expected_coloured
+            expect(subject).to_not include actual_coloured
           end
         end
 
@@ -50,16 +55,16 @@ module Pact
           context "when Pact.configuration.color_enabled is true" do
             it "returns a string displaying the diff in colour" do
               expect(Pact.configuration).to receive(:color_enabled).and_return(true)
-              expect(subject).to include NestedJsonDiffFormatter::EXPECTED_COLOURED
-              expect(subject).to include NestedJsonDiffFormatter::ACTUAL_COLOURED
+              expect(subject).to include expected_coloured
+              expect(subject).to include actual_coloured
             end
           end
 
           context "when Pact.configuration.color_enabled is false" do
             it "returns a string displaying the diff without colour" do
               expect(Pact.configuration).to receive(:color_enabled).and_return(false)
-              expect(subject).to_not include NestedJsonDiffFormatter::EXPECTED_COLOURED
-              expect(subject).to_not include NestedJsonDiffFormatter::ACTUAL_COLOURED
+              expect(subject).to_not include expected_coloured
+              expect(subject).to_not include actual_coloured
             end
           end
 

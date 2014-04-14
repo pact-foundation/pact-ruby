@@ -14,7 +14,7 @@ module Pact
         let(:line_count) { subject.split("\n").size }
 
         context "with class based matching" do
-          let(:diff) { {thing: Difference.new(ExpectedType.new("fred"), ActualType.new(1))}}
+          let(:diff) { {thing: TypeDifference.new(ExpectedType.new("fred"), ActualType.new(1))}}
           let(:output) { <<-EOF
  {
 -  "thing": String
@@ -67,7 +67,7 @@ EOF
 
         context "with a regular expression that was not matched" do
           let(:regexp) { %r{http://.*/thing/1234} }
-          let(:diff) { {thing: Difference.new(regexp, "pear")} }
+          let(:diff) { {thing: RegexpDifference.new(regexp, "pear")} }
 
           it "displays the regular expression" do
             expect(subject).to include(regexp.inspect)

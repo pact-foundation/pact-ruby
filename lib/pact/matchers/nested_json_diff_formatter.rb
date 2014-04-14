@@ -9,14 +9,9 @@ module Pact
       C = ::Term::ANSIColor
 
 
-      EXPECTED = '"EXPECTED"'
-      EXPECTED_COLOURED = '"' + C.red("expected") + '"'
+      EXPECTED = /"EXPECTED([A-Z_]*)":/
 
-      EXPECTED_REGEXP = '"EXPECTED_TO_MATCH"'
-      EXPECTED_REGEXP_COLOURED = '"' + C.red("expected_to_match") + '"'
-
-      ACTUAL = '"ACTUAL"'
-      ACTUAL_COLOURED =  '"' + C.green("actual") + '"'
+      ACTUAL = /"ACTUAL([A-Z_]*)":/
 
       attr_reader :diff, :colour
 
@@ -54,7 +49,11 @@ module Pact
       end
 
       def colourise line
-        line.white.gsub(EXPECTED, EXPECTED_COLOURED).gsub(ACTUAL, ACTUAL_COLOURED).gsub(EXPECTED_REGEXP, EXPECTED_REGEXP_COLOURED)
+        line.white.gsub(EXPECTED){|match| coloured_key match, :red }.gsub(ACTUAL){ | match | coloured_key match, :green }
+      end
+
+      def coloured_key match, colour
+        '"' + C.color(colour, match.downcase.gsub(/^"|":$/,'')) + '":'
       end
 
     end

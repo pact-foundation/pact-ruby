@@ -15,6 +15,10 @@ module Pact
       type
     end
 
+    def as_json options = {}
+      type
+    end
+
     def eq? other
       self.class == other.class && other.type == type
     end
@@ -24,7 +28,7 @@ module Pact
     end
 
     def to_s
-      "expected: #{type} eg: #{@value}"
+      type
     end
 
   end

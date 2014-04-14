@@ -29,7 +29,16 @@
             },
             "response": {
                 "status": 200,
-                "headers" : {"Content-type": "application/json"},
+                "headers" : {
+                    "Content-type": {
+                      "json_class": "Pact::Term",
+                      "data": {
+                        "generate": "application/hal+json",
+                        "matcher": {"json_class":"Regexp","o":0,"s":"hal"}
+                      }
+                    },
+                    "X-Special-Header": "something"
+                },
                 "body": {"message" : "this is not the weather you are looking for"}
 
             }

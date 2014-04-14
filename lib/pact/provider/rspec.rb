@@ -109,7 +109,7 @@ module Pact
                 expected_response['headers'].each do |name, expected_header_value|
                   it "\"#{name}\" with value \"#{expected_header_value}\"" do
                     header_value = response.headers[name]
-                    expect(header_value).to match_term expected_header_value
+                    expect(header_value).to match_header(name, expected_header_value)
                   end
                 end
               end

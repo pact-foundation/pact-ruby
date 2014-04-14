@@ -1,28 +1,33 @@
 require 'rspec'
 require 'pact/matchers'
-require 'term/ansicolor'
+require 'pact/provider/matchers/messages'
 
 RSpec::Matchers.define :match_term do |expected|
 
   include Pact::Matchers
+  include Pact::Matchers::Messages
 
   match do |actual|
     (@difference = diff(expected, actual)).empty?
   end
 
   failure_message_for_should do | actual |
+    match_term_failure_message @difference, ::RSpec.configuration.color_enabled
+  end
 
-    # RSpec wraps each line in the failure message with failure_color, turning it red.
-    # To ensure the lines in the diff that should be white, stay white, put an
-    # ANSI reset at the start of each line.
+end
 
-    message = Pact.configuration.diff_formatter.call(@difference)
+RSpec::Matchers.define :match_header do |header_name, expected|
 
-    if ::RSpec.configuration.color_enabled
-      message.split("\n").collect{ |line| ::Term::ANSIColor.reset + line }.join("\n")
-    else
-      message
-    end
+  include Pact::Matchers
+  include Pact::Matchers::Messages
+
+  match do |actual|
+    diff(expected, actual).empty?
+  end
+
+  failure_message_for_should do | actual |
+    match_header_failure_message header_name, expected, actual
   end
 
 end

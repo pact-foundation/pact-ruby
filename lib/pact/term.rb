@@ -43,7 +43,7 @@ module Pact
     end
 
     def to_s
-      "Pact::Term matcher: #{matcher.to_s}" + (generate.nil? ? "" : " generate: \"#{generate}\"")
+      "Pact::Term matcher: #{matcher.inspect}" + (generate.nil? ? "" : " generate: \"#{generate}\"")
     end
 
     def diff_with_actual(actual)

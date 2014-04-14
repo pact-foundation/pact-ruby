@@ -10,7 +10,37 @@ module Pact
         subject{ ListOfPathsDiffFormatter.call(diff, {}) }
 
         context "when using class based matching" do
-          it "works"
+          let(:diff) { {root: TypeDifference.new(ExpectedType.new("Fred"), ActualType.new(1)) } }
+          let(:expected_output) { <<-EOS
+\tAt:
+\t\t[:root]
+\tExpected type:
+\t\tString
+\tActual type:
+\t\tFixnum
+EOS
+          }
+
+          it "shows the expected and actual classes" do
+            expect(subject + "\n").to eq(expected_output)
+          end
+
+        end
+
+        context "when there is an unmatched regexp" do
+          let(:diff) { {root: RegexpDifference.new(/fr.*ed/, "mary") } }
+          let(:expected_output) { <<-EOS
+\tAt:
+\t\t[:root]
+\tExpected to match:
+\t\t/fr.*ed/
+\tActual:
+\t\t"mary"
+EOS
+          }
+          it "shows the expected regexp" do
+            expect(subject + "\n").to eq(expected_output)
+          end
         end
 
         context "when there is a mismatched value" do

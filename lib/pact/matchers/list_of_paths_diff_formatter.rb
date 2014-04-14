@@ -29,9 +29,11 @@ module Pact
         when Hash then handle_hash obj, path, descriptions
         when Array then handle_array obj, path, descriptions
         when Difference then handle_difference obj, path, descriptions
+        when TypeDifference then handle_mismatched_type obj, path, descriptions
+        when RegexpDifference then handle_mismatched_regexp obj, path, descriptions
         when NoDiffIndicator then nil
         else
-          raise "Invalid diff, expected Hash, Array, NoDiffIndicator or Difference, found #{obj}"
+          raise "Invalid diff, expected Hash, Array, NoDiffIndicator or Difference, found #{obj.class}"
         end
         descriptions
       end
@@ -49,14 +51,13 @@ module Pact
       end
 
       def handle_difference difference, path, descriptions
-
-        case difference.actual
-        when Pact::KeyNotFound then handle_key_not_found(difference, path, descriptions)
-        when Pact::IndexNotFound then handle_index_not_found(difference, path, descriptions)
+        case difference.expected
+        when Pact::UnexpectedKey then handle_unexpected_key(difference, path, descriptions)
+        when Pact::UnexpectedIndex then handle_unexpected_index(difference, path, descriptions)
         else
-          case difference.expected
-          when Pact::UnexpectedKey then handle_unexpected_key(difference, path, descriptions)
-          when Pact::UnexpectedIndex then handle_unexpected_index(difference, path, descriptions)
+          case difference.actual
+          when Pact::KeyNotFound then handle_key_not_found(difference, path, descriptions)
+          when Pact::IndexNotFound then handle_index_not_found(difference, path, descriptions)
           else
             handle_mismatched_value(difference, path, descriptions)
           end
@@ -69,6 +70,14 @@ module Pact
 
       def handle_mismatched_value difference, path, descriptions
         descriptions << "\tAt:\n\t\t#{path_to_s(path)}\n\tExpected:\n\t\t#{difference.expected.ai}\n\tActual:\n\t\t#{difference.actual.ai}"
+      end
+
+      def handle_mismatched_regexp difference, path, descriptions
+        descriptions << "\tAt:\n\t\t#{path_to_s(path)}\n\tExpected to match:\n\t\t#{difference.expected.ai}\n\tActual:\n\t\t#{difference.actual.ai}"
+      end
+
+      def handle_mismatched_type difference, path, descriptions
+        descriptions << "\tAt:\n\t\t#{path_to_s(path)}\n\tExpected type:\n\t\t#{difference.expected.ai}\n\tActual type:\n\t\t#{difference.actual.ai}"
       end
 
       def handle_index_not_found difference, path, descriptions

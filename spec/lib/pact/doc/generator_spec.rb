@@ -35,6 +35,7 @@ module Pact
       subject { Generator.new(pact_dir, doc_dir, options) }
 
       it "creates an index" do
+        expect(index_renderer).to receive(:call).with("Some Consumer", {"Some Provider"=>"Some Consumer - Some Provider.md"})
         subject.call
         expect(actual_index_contents).to eq(index_content)
       end

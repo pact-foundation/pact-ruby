@@ -15,7 +15,7 @@ module Pact
       end
 
       def title
-        consumer_contract.consumer.name
+        consumer_contract.provider.name
       end
 
       def name

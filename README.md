@@ -359,9 +359,9 @@ end
 
 ### In your consumer project
 
-#### Publish your pacts as artifacts on your CI machine
+#### Publish your pacts as artifacts on your CI machine or use a [Pact Broker](https://github.com/bethesque/pact_broker)
 
-This makes the pact available via URL, which your provider build can then use when it runs pact:verify.
+This makes the pact available via URL, which your provider build can then use when it runs pact:verify. This means your provider will always be verified against the latest pact from your consumer.
 
 #### Ensure all calls to the provider go through your provider client class
 

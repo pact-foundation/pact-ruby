@@ -15,11 +15,11 @@ end
 
 #### :list
 
-<img src="diff_formatter_list.png" width="600">
+<img src="diff_formatter_list.png" width="700">
 
 #### :embedded
 
-<img src="diff_formatter_embedded.png">
+<img src="diff_formatter_embedded.png" style="width: 700px">
 
 #### :unix
 <img src="diff_formatter_unix.png">

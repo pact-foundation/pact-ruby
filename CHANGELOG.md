@@ -2,6 +2,28 @@ Do this to generate your change history
 
     git log --pretty=format:'  * %h - %s (%an, %ad)'
 
+### 1.1.0.rc3 (22 April 2014)
+
+    * def8afd - Merge branch 'master' into release-1.1.0 (bethesque, Tue Apr 22 09:13:41 2014 +1000)
+    * 789a471 - Added generated docs to zoo-app (bethesque, Tue Apr 15 17:20:08 2014 +1000)
+    * f5da7ab - Improved header match failure message (bethesque, Tue Apr 15 09:39:12 2014 +1000)
+    * 1179489 - Stopped RSpec turning failure message lines that should be white to red (bethesque, Mon Apr 14 21:41:55 2014 +1000)
+    * ddad510 - Added type and regexp matching output to ListOfPathsFormatter (bethesque, Mon Apr 14 13:43:08 2014 +1000)
+    * b007248 - Added class based matching output to plus_and_minus diff formatter (bethesque, Sat Apr 12 21:20:43 2014 +1000)
+    * f7910a1 - Swapped colored for term-ansicolor, as the colored mixins clash with other gems (bethesque, Sat Apr 12 20:37:57 2014 +1000)
+    * 93bfbdb - Fixing failing tests caused by JRuby inserting a blank line between the braces of an empty hash. Moved ActiveSupportSupport into shared
+    * da16f95 - Added after hook to allow customisation of Doc::Generator (bethesque, Sat Apr 12 18:46:04 2014 +1000)
+    * 85a6fe3 - Breaking up configuration files into separate files (bethesque, Sat Apr 12 11:21:56 2014 +1000)
+    * 7515360 - Merge branch 'doc' into release-1.1.0 (bethesque, Sat Apr 12 10:37:51 2014 +1000)
+    * 1200481 - Removed pact_gem key from pact fixtures (bethesque, Wed Apr 9 22:19:02 2014 +1000)
+    * 72d791b - Ordered rendering of keys in markdown (bethesque, Wed Apr 9 22:15:01 2014 +1000)
+    * 000b223 - Hiding headers and body from docs when they are empty (bethesque, Wed Apr 9 21:46:02 2014 +1000)
+    * 7f6ed91 - Changing request key ordering so it makes more sense when reading it (bethesque, Wed Apr 9 21:45:31 2014 +1000)
+    * 65054a8 - Added index rendering (bethesque, Wed Apr 9 19:38:55 2014 +1000)
+    * 9426565 - Refactoring generation code. Fixed rendering of interaction in markdown when ActiveSupport is loaded (bethesque, Wed Apr 9 18:20:53 2014 +100
+    * 73d0dbf - WIP refactoring generator code (bethesque, Wed Apr 9 17:03:14 2014 +1000)
+    * 7d1d07b - WIP tests and refactor doc generator (bethesque, Wed Apr 9 13:36:46 2014 +1000)
+
 ### 1.0.39 (8 April 2014)
 
 * a034ab6 - Oh ActiveSupport, why??? Fixing to_json for difference indicators (bethesque, Mon Apr 7 17:26:10 2014 +1000)

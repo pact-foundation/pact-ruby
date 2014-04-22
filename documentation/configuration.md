@@ -6,7 +6,7 @@
 * [diff_formatter](#diff_formatter)
 * [log_dir](#log_dir)
 * [logger](#logger)
-* [logger.level](#logger.level)
+* [logger.level](#loggerlevel)
 
 #### Consumer only configuration options
 * [pact_dir](#pact_dir)
@@ -21,27 +21,46 @@
 
 ### log_dir
 
+```ruby
+Pact.configure do | config |
+  config.log_dir = './log'
+end
+```
+
 Default value: `./log`
 
 ### logger
+
+```ruby
+Pact.configure do | config |
+  config.logger = Logger.new
+end
+```
 
 Default value: file logger to the configured log_dir.
 
 ### logger.level
 
+```ruby
+Pact.configure do | config |
+  config.logger.level = Logger::INFO
+end
+```
+
 Default value: `Logger::DEBUG`
 
 ### diff_formatter
-
-Default value: [:list](#list)
-
-Options: [:list](#list), [:embedded](#embedded), [:unix](#unix), [Custom Diff Formatter](#custom-diff-formatter)
 
 ```ruby
 Pact.configure do | config |
   config.diff_formatter = :list
 end
 ```
+
+Default value: [:list](#list)
+
+Options: [:list](#list), [:embedded](#embedded), [:unix](#unix), [Custom Diff Formatter](#custom-diff-formatter)
+
 
 #### :list
 
@@ -77,19 +96,25 @@ end
 
 ### pact_dir
 
+```ruby
+Pact.configure do | config |
+  config.pact_dir = `./spec/pacts`
+end
+```
+
 Default value: `./spec/pacts`
 
 ### doc_generator
-
-Default value: none
-
-Options: [:markdown](#markdown), [Custom Doc Generator](#custom-doc-generator)
 
 ```ruby
 Pact.configure do | config |
   config.doc_generator = :markdown
 end
 ```
+
+Default value: none
+
+Options: [:markdown](#markdown), [Custom Doc Generator](#custom-doc-generator)
 
 #### :markdown
 
@@ -108,13 +133,14 @@ end
 
 #### doc_dir
 
-Default value: `./doc`
-
 ```ruby
 Pact.configure do | config |
-  config.doc_generator = './documentation'
+  config.doc_dir = './doc'
 end
 ```
+
+Default value: `./doc`
+
 
 ### pactfile_write_mode
 
@@ -129,11 +155,11 @@ Pact uses RSpec and Rack::Test to create dynamic specs based on the pact files. 
 
 ### include
 
-To make modules available in the provider state set_up and tear_down blocks, include them in the configuration as shown below. One common use of this is to include RSpec::Mocks::ExampleMethods to make the `allow()` method available.
-
-
 ```ruby
 Pact.configure do | config |
   config.include RSpec::Mocks::ExampleMethods
 end
 ```
+
+To make modules available in the provider state set_up and tear_down blocks, include them in the configuration as shown below. One common use of this is to include RSpec::Mocks::ExampleMethods to make the `allow()` method available.
+

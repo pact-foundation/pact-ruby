@@ -19,6 +19,10 @@ end
 The service prints messages it recieves to stdout which can be really useful
 when diagnosing issues with pacts.
 
+### Doesn't this break HAL?
+
+Yes.
+
 ### How can I specify multiple headers with the same name?
 
 RFC 2616 states that two headers with the same name can interpreted as a single header with two comma-separated values. This is the safest way to specify multiple headers with the same name, as Rack will only pass the last value through when they are defined separately (see https://github.com/rack/rack/issues/436).

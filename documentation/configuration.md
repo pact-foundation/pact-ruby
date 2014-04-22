@@ -4,7 +4,9 @@
 
 ### diff_formatter
 
-Default value: `:embedded`
+Default value: [:list](:list)
+
+Options: [:list](:list), [:embedded](:embedded), [:unix](:unix) 
 
 ```ruby
 Pact.configure do | config |

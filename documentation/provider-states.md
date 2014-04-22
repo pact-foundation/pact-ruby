@@ -111,7 +111,7 @@ end
 
 ### Testing errors
 
-It's always good to test how your client will handle error responses.
+It is important to test how your client will handle error responses.
 
 ```ruby
 # Consumer codebase
@@ -164,7 +164,7 @@ Pact.configure do | config |
 end
 ```
 
-You can also make modules to assist in data set up available this way.
+You can also include modules to assist in data set up this way.
 
 ```ruby
 Pact.configure do | config |

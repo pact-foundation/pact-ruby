@@ -6,4 +6,5 @@
 * [Provider States](provider-states.md)
 * [Frequently asked questions](faq.md)
 * [Rarely asked questions](raq.md)
+* [Best practices](best-practices.md)
 * [Testing with pact diagram](Testing with pact.png)

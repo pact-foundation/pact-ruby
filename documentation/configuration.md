@@ -15,7 +15,7 @@ end
 
 #### :list
 
-<img src="diff_formatter_list.png" width="920">
+<img src="diff_formatter_list.png" width="600">
 
 #### :embedded
 

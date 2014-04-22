@@ -10,7 +10,7 @@
 * [doc_generator](#doc_generator)
 
 #### Provider only configuration options
-
+* [include](#include)
 
 ## Consumer and Provider
 

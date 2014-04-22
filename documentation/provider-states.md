@@ -12,9 +12,7 @@ describe MyServiceProviderClient do
   subject { MyServiceProviderClient.new }
 
   describe "get_something" do
-
     context "when a thing exists" do
-
       before do
         my_service.given("a thing exists").
           upon_receiving("a request for a thing").with(method: 'get', path: '/thing').
@@ -26,7 +24,6 @@ describe MyServiceProviderClient do
       it "returns a thing" do
         expect(subject.get_something).to eq(SomethingModel.new('A small something'))
       end
-
     end
 
     context "when a thing does not exist" do
@@ -40,7 +37,6 @@ describe MyServiceProviderClient do
         expect(subject.get_something).to be_nil
       end
     end
-
   end
 end
 ```
@@ -50,46 +46,51 @@ end
 To define service provider states that create the right data for the provider states described above, write the following in the service provider project. (The consumer name here must match the name of the consumer configured in your consumer project for it to correctly find these provider states.)
 
 ```ruby
-# In /spec/service_consumers/pact_helper.rb
-
-require './spec/service_consumers/provider_states_for_my_service_consumer.rb'
-```
-
-```ruby
 # In /spec/service_consumers/provider_states_for_my_service_consumer.rb
 
 Pact.provider_states_for 'My Service Consumer' do
 
   provider_state "a thing exists" do
     set_up do
-      # Create a thing here using your factory of choice
+      # Create a thing here using your framework of choice
+      # eg. Sequel.sqlite[:somethings].insert(name: "A small something")
     end
 
     tear_down do
-      # Any tear down steps to clean up your code (or use RSpec.after(:each))
+      # Any tear down steps to clean up your code
     end
   end
 
   provider_state "a thing does not exist" do
-    no_op # If there's nothing to do because the state name is more for documentation purposes, you can use no_op to imply this.
+    no_op # If there's nothing to do because the state name is more for documentation purposes,
+          # you can use no_op to imply this.
   end
 
 end
 ```
+Require your provider states file in the `pact_helper.rb`
+
+```ruby
+# In /spec/service_consumers/pact_helper.rb
+
+require './spec/service_consumers/provider_states_for_my_service_consumer.rb'
+```
 
 ### Base state
 
-To define code that should run before/after each interaction for a given consumer, regardless of whether a provider state is specified or not:
+To define code that should run before/after each interaction for a given consumer, regardless of whether a provider state is specified or not, define set_up/tear_down blocks with no wrapping provider_state.
 
 ```ruby
 Pact.provider_states_for 'My Service Consumer' do
 
   set_up do
+    # This will run before the set_up for provider state specified for the interaction.
     # eg. create API user, set the expected basic auth details
   end
 
   tear_down do
     # ...
+    # This will run after the tear_down for the specified provider state.
   end
 end
 ```

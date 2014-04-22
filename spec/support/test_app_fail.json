@@ -16,7 +16,7 @@
             "response": {
                 "status": 200,
                 "headers" : {"Content-type": "application/json"},
-                "body": {"message" : "this is not the weather you are looking for"}
+                "body": {"message" : "this is not the weather you are looking for", "array": [{"foo": "bar"}], "somethingElse" : {"blah" : {"nested" : "that is missing"} }}
 
             },
             "provider_state": "the weather is cloudy"

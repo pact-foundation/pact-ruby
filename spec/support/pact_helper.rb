@@ -7,7 +7,7 @@ module Pact
 		class TestApp
 			def call env
 				if env['PATH_INFO'] == '/weather'
-					[200, {'Content-Type' => 'application/json'}, [{message: WEATHER[:current_state]}.to_json]]
+					[200, {'Content-Type' => 'application/json'}, [{message: WEATHER[:current_state], :array => [{"foo"=> "blah"}]}.to_json]]
 				elsif env['PATH_INFO'] == '/sometext'
 					[200, {'Content-Type' => 'text/plain'}, ['some text']]
 				else
@@ -18,7 +18,7 @@ module Pact
 
 		Pact.configure do | config |
 			config.logger.level = Logger::DEBUG
-			config.diff_formatter = :plus_and_minus
+			config.diff_formatter = :list
 		end
 
 		Pact.service_provider "Some Provider" do

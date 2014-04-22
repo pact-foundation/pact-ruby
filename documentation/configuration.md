@@ -6,7 +6,7 @@
 
 Default value: `:embedded`
 
-```
+```ruby
 Pact.configure do | config |
   config.diff_formatter = :list
 end
@@ -15,14 +15,14 @@ end
 
 #### :list
 
-<a href="diff_formatter_list.png">
+<img src="diff_formatter_list.png">
 
 #### :embedded
 
-<a href="diff_formatter_embedded.png">
+<img src="diff_formatter_embedded.png">
 
 #### :unix
-<a href="diff_formatter_unix.png">
+<img src="diff_formatter_unix.png">
 
 ## Consumer
 

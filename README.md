@@ -68,7 +68,6 @@ end
 Imagine a service provider client class that looks something like this.
 
 ```ruby
-
 class MyServiceProviderClient
   include HTTParty
   base_uri 'http://my-service'
@@ -77,7 +76,6 @@ class MyServiceProviderClient
     # Yet to be implemented because we're doing Test First Development...
   end
 end
-
 ```
 #### 3. Configure the mock server
 
@@ -131,7 +129,6 @@ describe MyServiceProviderClient, :pact => true do
   end
 
 end
-
 ```
 
 #### 5. Run the specs
@@ -144,7 +141,6 @@ Of course, the above specs will fail because the client method is not implemente
 #### 6. Implement the client methods
 
 ```ruby
-
 class MyServiceProviderClient
   include HTTParty
   base_uri 'http://my-service'
@@ -154,13 +150,12 @@ class MyServiceProviderClient
     Something.new(name)
   end
 end
-
 ```
 
 #### 7. Run the specs again.
 
 Green! You now have a pact file that can be used to verify your expectations in the provider project.
-Now, rinse and repeat for ALL the likely status codes that may be returned (we recommend 400, 404, 500 and 401/403 if there is authorisation.)
+Now, rinse and repeat for ALL the likely status codes that may be returned (we recommend 404, 500 and 401/403 if there is authorisation.)
 
 ### Service Provider project
 
@@ -174,13 +169,12 @@ Require "pact/tasks" in your Rakefile.
 
 ```ruby
 # In Rakefile
-
 require 'pact/tasks'
 ```
 
 Create a `pact_helper.rb` in your service provider project. The file must be called pact_helper.rb, however there is some flexibility in where it can be stored. The recommended place is `specs/service_consumers/pact_helper.rb`.
 
-See the [Provider][/documentation.md#provider] section of the Configuration documentation for more information.
+See the [Provider](/documentation.md#provider) section of the Configuration documentation for more information.
 
 ```ruby
 # In specs/service_consumers/pact_helper.rb
@@ -200,7 +194,6 @@ Pact.service_provider "My Service Provider" do
     pact_uri '../path-to-your-consumer-project/specs/pacts/my_consumer-my_provider.json'
   end
 end
-
 ```
 
 #### 3. Run your failing specs
@@ -249,62 +242,16 @@ end
 
 ### Configuration
 
-```ruby
-Pact.configure do | config |
-  config.pact_dir = "???" # Optional, default is ./spec/pacts
-  config.log_dir = "???" # Optional, default is ./log
-  config.logger = "??" # Optional, defaults to a file logger to the configured log_dir.
-  config.logger.level = Logger::DEBUG #By default this is INFO, bump this up to debug for more detailed logs
-  config.pactfile_write_mode = :ovewrite / :update / :smart # Optional. The default pactfile_write_mode is :overwrite. See notes in Advanced section for further information.
-end
-```
+See the [Configuration](/documentation/configuration.md) section of the documentation for options relating to thing like logging, diff formatting, and documentation generation.
 
 ## Pact best practices
 
-### In your consumer project
-
-#### Publish your pacts as artifacts on your CI machine or use a [Pact Broker](https://github.com/bethesque/pact_broker)
-
-This makes the pact available via URL, which your provider build can then use when it runs pact:verify. This means your provider will always be verified against the latest pact from your consumer.
-
-#### Ensure all calls to the provider go through your provider client class
-
-Do not hand create any HTTP requests in your consumer app or specs. Testing through your provider client class gives you the assurance that your consumer app will be creating exactly the HTTP requests that you think it should.
-
-#### Use factories to create your expected models
-
-Sure, you've checked that your client deserialises the HTTP response into the object you expect, but then you need to make sure in your other tests where you stub your client that you're stubbing it with a valid object. The best way to do this is to use factories for all your tests.
-
-### In your provider project
-
-#### Use the pact artifact published by your consumer's CI build to verify the provider
-
-Configure the pact_uri in the Pact.service_provider block with the pact artifact URL of your last successful build. This way you're only verifying green builds. No point verifying a broken one.
-(Watch this space - pact-broker coming soon, so we don't have to use messy build box artifact URLs)
-
-#### Add pact:verify to your default rake task
-
-It should run with all your other tests. If an integration is broken, you want to know about it *before* you check in.
-
-#### In pact:verify on the provider, only stub layers beneath where contents of the request body are extracted
-
-If you don't _have_ to stub anything in the provider when running pact:verify, then don't. If you do need to stub something, make sure that you only stub the code that gets executed _after_ the contents of the request body have been extracted and/or validated, otherwise, there is no verification that what is included in the body of a request matches what is actually expected.
-
-#### Stub calls to downstream systems
-
-Consider making a separate pact with the downstream system and using shared fixtures.
+As in all things, there are good ways to implement Pacts, and there are not so good ways. Check out the [Best practices](/documentation/best-practices.md) section of the documentation to make sure you're not Pacting it Wrong.
 
 ## Gotchas
 
 * Be aware when using the app from the config.ru file is used (the default option) that the Rack::Builder.parse_file seems to require files even if they have already been required, so make sure your boot files are idempotent.
 
-## Advanced
-
-### Filtering the pact:verify specs
-
-To execute a subset of the specs when running any of the pact verification tasks, define the environment variables PACT_DESCRIPTION and/or PACT_PROVIDER_STATE.
-
-    $ PACT_DESCRIPTION="a request for something" PACT_PROVIDER_STATE="something exists" rake pact:verify
 
 See [Frequently Asked Questions](https://github.com/realestate-com-au/pact/blob/master/documentation/faq.md) and [Rarely Asked Questions](https://github.com/realestate-com-au/pact/blob/master/documentation/raq.md) and [Terminology](https://github.com/realestate-com-au/pact/blob/master/documentation/terminology.md) for more information.
 

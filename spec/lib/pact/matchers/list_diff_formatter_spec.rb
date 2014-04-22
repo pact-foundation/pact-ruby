@@ -1,13 +1,13 @@
 require 'spec_helper'
-require 'pact/matchers/list_of_paths_diff_formatter'
+require 'pact/matchers/list_diff_formatter'
 require 'pact/matchers/matchers'
 
 module Pact
   module Matchers
-    describe ListOfPathsDiffFormatter do
+    describe ListDiffFormatter do
 
       describe ".call" do
-        subject{ ListOfPathsDiffFormatter.call(diff, {}) }
+        subject{ ListDiffFormatter.call(diff, {}) }
 
         context "when using class based matching" do
           let(:diff) { {root: TypeDifference.new(ExpectedType.new("Fred"), ActualType.new(1)) } }

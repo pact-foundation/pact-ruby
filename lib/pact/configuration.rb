@@ -3,7 +3,7 @@ require 'logger'
 require 'pact/doc/markdown/generator'
 require 'pact/matchers/plus_minus_diff_decorator'
 require 'pact/matchers/embedded_diff_formatter'
-require 'pact/matchers/list_of_paths_diff_formatter'
+require 'pact/matchers/list_diff_formatter'
 
 module Pact
 
@@ -14,7 +14,7 @@ module Pact
     DIFF_FORMATTERS = {
       :embedded => Pact::Matchers::EmbeddedDiffFormatter,
       :unix => Pact::Matchers::PlusMinusDiffDecorator,
-      :list => Pact::Matchers::ListOfPathsDiffFormatter
+      :list => Pact::Matchers::ListDiffFormatter
     }
 
     attr_accessor :pact_dir

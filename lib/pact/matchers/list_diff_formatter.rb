@@ -1,6 +1,6 @@
 module Pact
   module Matchers
-    class ListOfPathsDiffFormatter
+    class ListDiffFormatter
 
       attr_reader :diff
 

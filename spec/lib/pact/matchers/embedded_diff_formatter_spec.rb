@@ -1,12 +1,12 @@
 require 'spec_helper'
-require 'pact/matchers/nested_json_diff_formatter'
+require 'pact/matchers/embedded_diff_formatter'
 require 'pact/matchers/type_difference'
 require 'pact/matchers/expected_type'
 require 'pact/matchers/actual_type'
 
 module Pact
   module Matchers
-    describe NestedJsonDiffFormatter do
+    describe EmbeddedDiffFormatter do
 
       let(:diff) do
         {
@@ -14,7 +14,7 @@ module Pact
         }
       end
 
-      subject { NestedJsonDiffFormatter.call(diff, options) }
+      subject { EmbeddedDiffFormatter.call(diff, options) }
 
       let(:options) { { colour: colour }}
       let(:expected_coloured) { '"' + ::Term::ANSIColor.red("expected_type") + '":'}
@@ -50,7 +50,7 @@ module Pact
         end
 
         context "when no options are specified" do
-          subject { NestedJsonDiffFormatter.call(diff) }
+          subject { EmbeddedDiffFormatter.call(diff) }
 
           context "when Pact.configuration.color_enabled is true" do
             it "returns a string displaying the diff in colour" do

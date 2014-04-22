@@ -56,8 +56,8 @@ describe Pact do
 
       let(:subject) { Pact::Configuration.new }
 
-      it "returns the Pact::Matchers::NestedJsonDiffFormatter by default" do
-        expect(subject.diff_formatter).to eq(Pact::Matchers::NestedJsonDiffFormatter)
+      it "returns the Pact::Matchers::EmbeddedDiffFormatter by default" do
+        expect(subject.diff_formatter).to eq(Pact::Matchers::EmbeddedDiffFormatter)
       end
 
       Pact::Configuration::DIFF_FORMATTERS.each_pair do | key, diff_formatter |
@@ -90,7 +90,7 @@ describe Pact do
 
       context "when set to an object that does not respond to call and isn't a known default option" do
         it "raises an error" do
-          expect { subject.diff_formatter = Object.new }.to raise_error "Pact.configuration.diff_formatter needs to respond to call, or be in the preconfigured list: [:nested_json, :plus_and_minus, :list_of_paths]"
+          expect { subject.diff_formatter = Object.new }.to raise_error "Pact.configuration.diff_formatter needs to respond to call, or be in the preconfigured list: [:embedded, :unix, :list]"
         end
       end
 

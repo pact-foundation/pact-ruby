@@ -2,7 +2,7 @@ require 'ostruct'
 require 'logger'
 require 'pact/doc/markdown/generator'
 require 'pact/matchers/plus_minus_diff_decorator'
-require 'pact/matchers/nested_json_diff_formatter'
+require 'pact/matchers/embedded_diff_formatter'
 require 'pact/matchers/list_of_paths_diff_formatter'
 
 module Pact
@@ -12,9 +12,9 @@ module Pact
     DOC_GENERATORS = { markdown: Pact::Doc::Markdown::Generator }
 
     DIFF_FORMATTERS = {
-      :nested_json => Pact::Matchers::NestedJsonDiffFormatter,
-      :plus_and_minus => Pact::Matchers::PlusMinusDiffDecorator,
-      :list_of_paths => Pact::Matchers::ListOfPathsDiffFormatter
+      :embedded => Pact::Matchers::EmbeddedDiffFormatter,
+      :unix => Pact::Matchers::PlusMinusDiffDecorator,
+      :list => Pact::Matchers::ListOfPathsDiffFormatter
     }
 
     attr_accessor :pact_dir
@@ -57,7 +57,7 @@ module Pact
     end
 
     def diff_formatter
-      @diff_formatter ||= DIFF_FORMATTERS[:nested_json]
+      @diff_formatter ||= DIFF_FORMATTERS[:embedded]
     end
 
     def diff_formatter= diff_formatter

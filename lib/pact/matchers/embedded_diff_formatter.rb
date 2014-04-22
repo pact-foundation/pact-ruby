@@ -3,7 +3,7 @@ require 'term/ansicolor'
 
 module Pact
   module Matchers
-    class NestedJsonDiffFormatter
+    class EmbeddedDiffFormatter
 
       include Pact::ActiveSupportSupport
       C = ::Term::ANSIColor

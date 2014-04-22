@@ -1,5 +1,3 @@
-require 'pact/matchers/nested_json_diff_formatter'
-
 module Pact
   module Consumer
 

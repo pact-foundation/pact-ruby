@@ -1,8 +1,18 @@
 # Configuration
 
-## Consumer and Provider
+## Menu
 
+#### Consumer and Provider configuration options
 * [diff_formatter](#diff_formatter)
+
+#### Consumer only configuration options
+* [doc_dir](#doc_dir)
+* [doc_generator](#doc_generator)
+
+#### Provider only configuration options
+
+
+## Consumer and Provider
 
 ### diff_formatter
 
@@ -47,9 +57,6 @@ end
 
 
 ## Consumer
-
-* [doc_generator](#doc_generator)
-* [doc_dir](#doc_dir)
 
 ### doc_generator
 

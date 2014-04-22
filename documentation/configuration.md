@@ -19,10 +19,10 @@ end
 
 #### :embedded
 
-<img src="diff_formatter_embedded.png" style="width: 700px">
+<img src="diff_formatter_embedded.png" width="700">
 
 #### :unix
-<img src="diff_formatter_unix.png">
+<img src="diff_formatter_unix.png" width="700">
 
 ## Consumer
 

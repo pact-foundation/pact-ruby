@@ -4,7 +4,7 @@ Provider states allow you to set up data on the provider before the interaction 
 
 ### Consumer codebase
 
-For example, some code that creates the pact in a consumer project might look like this:
+For example, some code that creates a pact in a consumer project might look like this:
 
 ```ruby
 describe MyServiceProviderClient do
@@ -109,7 +109,7 @@ Pact.tear_down do
 end
 ```
 
-### Testing errors
+### Testing error responses
 
 It is important to test how your client will handle error responses.
 
@@ -154,7 +154,7 @@ Pact.provider_states_for 'My Service Consumer' do
 end
 ```
 
-### Including modules
+### Including modules for use in set_up and tear_down
 
 To use RSpec's `allow()` syntax, include `RSpec::Mocks::ExampleMethods` in the configuration.
 
@@ -164,7 +164,7 @@ Pact.configure do | config |
 end
 ```
 
-You can also include modules to assist in data set up this way.
+Any modules included this way will be available in the set_up and tear_down blocks eg. test data helper methods.
 
 ```ruby
 Pact.configure do | config |

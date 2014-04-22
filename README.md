@@ -240,7 +240,7 @@ Pact::VerificationTask.new(:dev) do | pact |
 end
 ```
 
-### Configuration
+## Configuration
 
 See the [Configuration](/documentation/configuration.md) section of the documentation for options relating to thing like logging, diff formatting, and documentation generation.
 

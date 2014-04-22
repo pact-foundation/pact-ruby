@@ -4,15 +4,15 @@
 
 #### Consumer and Provider configuration options
 * [diff_formatter](#diff_formatter)
-# [log_dir](#log_dir)
-# [logger](#logger)
-# [logger.level](#logger.level)
+* [log_dir](#log_dir)
+* [logger](#logger)
+* [logger.level](#logger.level)
 
 #### Consumer only configuration options
 * [pact_dir](#pact_dir)
 * [doc_dir](#doc_dir)
 * [doc_generator](#doc_generator)
-# [pactfile_write_mode](#pactfile_write_mode)
+* [pactfile_write_mode](#pactfile_write_mode)
 
 #### Provider only configuration options
 * [include](#include)

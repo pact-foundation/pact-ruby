@@ -2,6 +2,8 @@
 
 ## Consumer and Provider
 
+* [diff_formatter](#diff_formatter)
+
 ### diff_formatter
 
 Default value: [:list](#list)
@@ -46,6 +48,9 @@ end
 
 ## Consumer
 
+* [doc_generator](#doc_generator)
+* [doc_dir](#doc_dir)
+
 ### doc_generator
 
 Default value: none
@@ -73,5 +78,14 @@ end
 
 ```
 
+#### doc_dir
+
+Default value: `./doc`
+
+```ruby
+Pact.configure do | config |
+  config.doc_generator = './documentation'
+end
+```
 
 ## Provider

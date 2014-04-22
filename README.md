@@ -48,10 +48,10 @@ Put it in your Gemfile. You know how.
 
 #### 1. Start with you model
 
-Imagine a model class that looks something like this. The attributes for a SomethingModel live on a remote server, and will need to be retrieved by an HTTP call.
+Imagine a model class that looks something like this. The attributes for a Something live on a remote server, and will need to be retrieved by an HTTP call.
 
 ```ruby
-class SomethingModel
+class Something
   attr_reader :name
 
   def initialize name
@@ -59,7 +59,7 @@ class SomethingModel
   end
 
   def == other
-    other.is_a?(SomethingModel) && other.name == name
+    other.is_a?(Something) && other.name == name
   end
 end
 ```
@@ -115,20 +115,18 @@ describe MyServiceProviderClient, :pact => true do
   subject { MyServiceProviderClient.new }
 
   describe "get_something" do
+
     before do
-      my_service_provider.
-        .given("something exists")
-        .upon_receiving("a request for something")
-        .with( method: :get, path: '/something' )
-        .will_respond_with(
+      my_service_provider.given("something exists").
+        upon_receiving("a request for something").with(method: :get, path: '/something').
+        will_respond_with(
           status: 200,
-          headers: { 'Content-Type' => 'application/json' },
-          body: {name: 'A small something'}
-        )
+          headers: {'Content-Type' => 'application/json'},
+          body: {name: 'A small something'} )
     end
 
     it "returns a Something" do
-      expect(subject.get_something).to eq(SomethingModel.new('A small something'))
+      expect(subject.get_something).to eq(Something.new('A small something'))
     end
 
   end
@@ -154,7 +152,7 @@ class MyServiceProviderClient
 
   def get_something
     name = JSON.parse(self.class.get("/something").body)['name']
-    SomethingModel.new(name)
+    Something.new(name)
   end
 end
 
@@ -163,13 +161,13 @@ end
 #### 7. Run the specs again.
 
 Green! You now have a pact file that can be used to verify your expectations in the provider project.
-Now, rinse and repeat for ALL the likely status codes that may be returned (recommend 400, 404, 500 and 401/403 if there is authorisation.)
+Now, rinse and repeat for ALL the likely status codes that may be returned (we recommend 400, 404, 500 and 401/403 if there is authorisation.)
 
 ### Service Provider project
 
 #### 1. Create the skeleton API classes
 
-Create your API class using the framework of your choice (e.g. Sinatra, Grape) - leave the methods unimplemented, we're doing Test First Develoment, remember?
+Create your API class using the framework of your choice - leave the methods unimplemented, we're doing Test First Develoment, remember?
 
 #### 2. Tell your provider that it needs to honour the pact file you made earlier
 
@@ -183,12 +181,12 @@ require 'pact/tasks'
 
 Create a `pact_helper.rb` in your service provider project. The file must be called pact_helper.rb, however there is some flexibility in where it can be stored. The recommended place is `specs/service_consumers/pact_helper.rb`.
 
+See the [Provider][/documentation.md#provider] section of the Configuration documentation for more information.
+
 ```ruby
 # In specs/service_consumers/pact_helper.rb
 
 require 'pact/provider/rspec'
-# If you wish to use the same spec_helper file as your unit tests, require it here, but remember that the RSpec
-# Otherwise, you can set up a separate RSpec configuration in this file just for pact:verify.
 
 Pact.service_provider "My Service Provider" do
 
@@ -205,7 +203,6 @@ Pact.service_provider "My Service Provider" do
 end
 
 ```
-
 
 #### 3. Run your failing specs
 

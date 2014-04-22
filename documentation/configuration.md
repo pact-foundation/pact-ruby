@@ -96,3 +96,17 @@ end
 ```
 
 ## Provider
+
+Pact uses RSpec and Rack::Test to create dynamic specs based on the pact files. RSpec configuration can be used to modify test behaviour if there is not an appropriate Pact feature. If you wish to use the same spec_helper.rb file as your unit tests, require it in the pact_helper.rb, but remember that the RSpec configurations for your unit tests may or may not be what you want for your pact verification tests.
+
+### include
+
+To make modules available in the provider state set_up and tear_down blocks, include them in the configuration as shown below. One common use of this is to include RSpec::Mocks::ExampleMethods to make the `allow()` method available.
+
+
+```ruby
+Pact.configure do | config |
+  config.include RSpec::Mocks::ExampleMethods
+end
+```
+

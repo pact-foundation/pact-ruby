@@ -8,7 +8,7 @@ module Pact
     #
     #   }
     # }
-    # This screws up the PlusMinusDiffDecorator, so we need to remove the blank lines.
+    # This screws up the UnixDiffFormatter, so we need to remove the blank lines.
 
     def fix_blank_lines_in_empty_hashes json
       json.gsub(/({\n)\n(\s*})/,'\1\2')

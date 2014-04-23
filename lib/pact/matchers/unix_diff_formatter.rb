@@ -3,7 +3,7 @@ require 'pact/shared/jruby_support'
 module Pact
   module Matchers
 
-    class PlusMinusDiffDecorator
+    class UnixDiffFormatter
 
       include JRubySupport
 

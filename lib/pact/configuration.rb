@@ -1,7 +1,7 @@
 require 'ostruct'
 require 'logger'
 require 'pact/doc/markdown/generator'
-require 'pact/matchers/plus_minus_diff_decorator'
+require 'pact/matchers/unix_diff_formatter'
 require 'pact/matchers/embedded_diff_formatter'
 require 'pact/matchers/list_diff_formatter'
 
@@ -13,7 +13,7 @@ module Pact
 
     DIFF_FORMATTERS = {
       :embedded => Pact::Matchers::EmbeddedDiffFormatter,
-      :unix => Pact::Matchers::PlusMinusDiffDecorator,
+      :unix => Pact::Matchers::UnixDiffFormatter,
       :list => Pact::Matchers::ListDiffFormatter
     }
 
@@ -57,7 +57,7 @@ module Pact
     end
 
     def diff_formatter
-      @diff_formatter ||= DIFF_FORMATTERS[:embedded]
+      @diff_formatter ||= DIFF_FORMATTERS[:unix]
     end
 
     def diff_formatter= diff_formatter

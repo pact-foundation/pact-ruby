@@ -1,15 +1,15 @@
 require 'spec_helper'
-require 'pact/matchers/plus_minus_diff_decorator'
+require 'pact/matchers/unix_diff_formatter'
 require 'pact/matchers/expected_type'
 require 'pact/matchers/actual_type'
 
 module Pact
   module Matchers
-    describe PlusMinusDiffDecorator do
+    describe UnixDiffFormatter do
 
       describe ".call" do
 
-        subject { PlusMinusDiffDecorator.call(diff, {}) }
+        subject { UnixDiffFormatter.call(diff, {}) }
 
         let(:line_count) { subject.split("\n").size }
 

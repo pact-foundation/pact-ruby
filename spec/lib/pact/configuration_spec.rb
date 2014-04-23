@@ -56,8 +56,8 @@ describe Pact do
 
       let(:subject) { Pact::Configuration.new }
 
-      it "returns the Pact::Matchers::EmbeddedDiffFormatter by default" do
-        expect(subject.diff_formatter).to eq(Pact::Matchers::EmbeddedDiffFormatter)
+      it "returns the Pact::Matchers::UnixDiffFormatter by default" do
+        expect(subject.diff_formatter).to eq(Pact::Matchers::UnixDiffFormatter)
       end
 
       Pact::Configuration::DIFF_FORMATTERS.each_pair do | key, diff_formatter |

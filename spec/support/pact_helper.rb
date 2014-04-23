@@ -18,7 +18,7 @@ module Pact
 
 		Pact.configure do | config |
 			config.logger.level = Logger::DEBUG
-			config.diff_formatter = :list
+			config.diff_formatter = :unix
 		end
 
 		Pact.service_provider "Some Provider" do

@@ -9,9 +9,25 @@ module Pact
 
       describe ".call" do
 
-        subject { UnixDiffFormatter.call(diff, {}) }
+        let(:colour) { false }
+        subject { UnixDiffFormatter.call(diff, {colour: colour}) }
 
         let(:line_count) { subject.split("\n").size }
+
+        context "when colour = false" do
+          let(:diff) { {thing: {alligator: Difference.new({name: 'Mary'}, "Joe" )}} }
+          it "does not include colour" do
+            expect(subject).to_not include("[0m")
+          end
+        end
+
+        context "when colour = true" do
+          let(:colour) { true }
+          let(:diff) { {thing: {alligator: Difference.new({name: 'Mary'}, "Joe" )}} }
+          it "uses colour" do
+            expect(subject).to include("[0m")
+          end
+        end
 
         context "with class based matching" do
           let(:diff) { {thing: TypeDifference.new(ExpectedType.new("fred"), ActualType.new(1))}}

@@ -1,4 +1,5 @@
 require 'pact/shared/jruby_support'
+require 'pact/matchers/differ'
 
 module Pact
   module Matchers
@@ -9,9 +10,10 @@ module Pact
 
       def initialize diff, options = {}
         @diff = diff
+        @colour = options.fetch(:colour, false)
       end
 
-      def self.call diff, options = {}
+      def self.call diff, options = {colour: Pact.configuration.color_enabled}
         new(diff, options).call
       end
 
@@ -22,7 +24,7 @@ module Pact
       def to_s
         expected = generate_string(diff, :expected)
         actual = generate_string(diff, :actual)
-        RSpec::Expectations::Differ.new.diff_as_string actual, expected
+        Pact::Matchers::Differ.new(@colour).diff_as_string actual, expected
       end
 
       private

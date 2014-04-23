@@ -275,7 +275,6 @@ Short term:
 Long term:
 - Provide more flexible matching (eg the keys should match, and the classes of the values should match, but the values of each key do not need to be equal). This is to make the pact verification less brittle.
 - Add XML support
-- Improve display of interaction diffs
 - Decouple Rspec from Pact and make rspec-pact gem for easy integration
 
 ## Contributing

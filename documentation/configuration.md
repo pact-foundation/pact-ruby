@@ -59,8 +59,11 @@ end
 
 Default value: [:list](#list)
 
-Options: [:list](#list), [:embedded](#embedded), [:unix](#unix), [Custom Diff Formatter](#custom-diff-formatter)
+Options: [:unix](#unix), [:list](#list), [:embedded](#embedded), [Custom Diff Formatter](#custom-diff-formatter)
 
+
+#### :unix
+<img src="diff_formatter_unix.png" width="700">
 
 #### :list
 
@@ -70,8 +73,6 @@ Options: [:list](#list), [:embedded](#embedded), [:unix](#unix), [Custom Diff Fo
 
 <img src="diff_formatter_embedded.png" width="700">
 
-#### :unix
-<img src="diff_formatter_unix.png" width="700">
 
 #### Custom Diff Formatter
 

@@ -20,6 +20,14 @@ Pact::VerificationTask.new(:term) do | pact |
 	pact.uri './spec/support/term.json'
 end
 
+RSpec::Core::RakeTask.new('spec:standalone:fail') do | task |
+	task.pattern = FileList["spec/standalone/**/*_fail_test.rb"]
+end
+
+RSpec::Core::RakeTask.new('spec:standalone:pass') do | task |
+	task.pattern = FileList["spec/standalone/**/*_pass_test.rb"]
+end
+
 namespace :pact do
 
 	desc 'Runs pact tests against a sample application, testing failure and success.'
@@ -42,6 +50,7 @@ namespace :pact do
 		expect_to_pass "bundle exec rake pact:verify"
 		expect_to_pass "bundle exec rake pact:verify:at[./spec/support/test_app_pass.json]"
 		expect_to_fail "bundle exec rake pact:verify:at[./spec/support/test_app_fail.json]"
+		expect_to_fail "bundle exec rake spec:standalone:fail"
 
 		puts "Task pact:tests completed succesfully."
 	end

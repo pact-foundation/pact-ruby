@@ -5,5 +5,5 @@ Dir.glob('lib/tasks/**/*.rake').each { |task| load task }
 Dir.glob('tasks/**/*.rake').each { |task| load task }
 RSpec::Core::RakeTask.new(:spec)
 
-task :default => [:spec, :spec_with_active_support, 'pact:tests']
+task :default => [:spec, :spec_with_active_support, 'spec:standalone:pass', 'pact:tests']
 

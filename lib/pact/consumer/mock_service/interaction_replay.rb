@@ -30,7 +30,7 @@ module Pact
       def find_response request_hash
         actual_request = Request::Actual.from_hash(request_hash)
         logger.info "#{name} received request #{actual_request.method_and_path}"
-        logger.ap actual_request.as_json
+        logger.debug JSON.pretty_generate actual_request
         candidate_interactions = interaction_list.find_candidate_interactions actual_request
         matching_interactions = find_matching_interactions actual_request, from: candidate_interactions
 
@@ -91,7 +91,7 @@ module Pact
       end
 
       def log_unrecognised_request_and_interaction_diff interaction_mismatch
-        logger.error "No interaction found on #{name} for #{interaction_mismatch.actual_request.method_and_path}"
+        logger.error "No matching interaction found on #{name} for #{interaction_mismatch.actual_request.method_and_path}"
         logger.error 'Interaction diffs for that route:'
         logger.error(interaction_mismatch.to_s)
       end

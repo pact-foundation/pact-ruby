@@ -29,15 +29,20 @@ end
 
 describe StandaloneClient, pact: true do
 
-  subject { StandaloneClient.new("http://localhost:1237") }
+  subject { StandaloneClient.new("http://localhost:1238") }
 
   describe "call" do
 
     let(:expected_body) { {a: "body"} }
+    let(:expected_headers) { {'Content-Type' => "application/hal+json"} }
 
     before do
       standalone_service.
-        upon_receiving("a request to create something").with(method: 'post', path: '/something', body: expected_body).
+        upon_receiving("a request to create something").with(method: 'post', path: '/something', headers: expected_headers, body: expected_body).
+        will_respond_with(status: 200, headers: {}, body: {a: 'response body'})
+
+      standalone_service.
+        upon_receiving("a request to create something else").with(method: 'post', path: '/something-else', headers: expected_headers, body: expected_body).
         will_respond_with(status: 200, headers: {}, body: {a: 'response body'})
     end
 

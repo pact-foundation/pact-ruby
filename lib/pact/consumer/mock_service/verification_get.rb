@@ -30,7 +30,7 @@ module Pact
           error_message = FailureMessage.new(interaction_list).to_s
           logger.warn "Verifying - actual interactions do not match expected interactions for example \"#{example_description(env)}\". \n#{error_message}"
           logger.warn error_message
-          [500, {'Content-Type' => 'text/plain'}, ["Actual interactions do not match expected interactions for mock #{name}.\n#{error_message}\nSee #{log_description} for details."]]
+          [500, {'Content-Type' => 'text/plain'}, ["Actual interactions do not match expected interactions for mock #{name}.\n\n#{error_message}See #{log_description} for details."]]
         end
       end
 
@@ -48,12 +48,20 @@ module Pact
           missing_interactions_summaries = interaction_list.missing_interactions_summaries
           interaction_mismatches_summaries = interaction_list.interaction_mismatches_summaries
           unexpected_requests_summaries = interaction_list.unexpected_requests_summaries
-          error_message = "Missing requests:
-  #{missing_interactions_summaries.join("\n  ")}
-Incorrect requests:
-  #{interaction_mismatches_summaries.join("\n  ")}
-Unexpected requests:
-  #{unexpected_requests_summaries.join("\n  ")}"
+          error_message = ""
+
+          if missing_interactions_summaries.any?
+            error_message << "Missing requests:\n\t#{missing_interactions_summaries.join("\n  ")}\n\n"
+          end
+
+          if interaction_mismatches_summaries.any?
+            error_message << "Incorrect requests:\n\t#{interaction_mismatches_summaries.join("\n  ")}\n\n"
+          end
+
+          if unexpected_requests_summaries.any?
+            error_message << "Unexpected requests:\n\t#{unexpected_requests_summaries.join("\n  ")}\n\n"
+          end
+          error_message
         end
 
         private

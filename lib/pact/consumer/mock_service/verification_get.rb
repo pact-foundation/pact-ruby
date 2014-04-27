@@ -45,28 +45,23 @@ module Pact
         end
 
         def to_s
-          missing_interactions_summaries = interaction_list.missing_interactions_summaries
-          interaction_mismatches_summaries = interaction_list.interaction_mismatches_summaries
-          unexpected_requests_summaries = interaction_list.unexpected_requests_summaries
-          error_message = ""
+          titles_and_summaries.collect do | title, summaries |
+            "#{title}:\n\t#{summaries.join("\n  ")}\n\n" if summaries.any?
+          end.compact.join
 
-          if missing_interactions_summaries.any?
-            error_message << "Missing requests:\n\t#{missing_interactions_summaries.join("\n  ")}\n\n"
-          end
-
-          if interaction_mismatches_summaries.any?
-            error_message << "Incorrect requests:\n\t#{interaction_mismatches_summaries.join("\n  ")}\n\n"
-          end
-
-          if unexpected_requests_summaries.any?
-            error_message << "Unexpected requests:\n\t#{unexpected_requests_summaries.join("\n  ")}\n\n"
-          end
-          error_message
         end
 
         private
 
         attr_reader :interaction_list
+
+        def titles_and_summaries
+          {
+            "Missing requests" => interaction_list.missing_interactions_summaries,
+            "Incorrect requests" => interaction_list.interaction_mismatches_summaries,
+            "Unexpected requests" => interaction_list.unexpected_requests_summaries,
+          }
+        end
 
       end
     end

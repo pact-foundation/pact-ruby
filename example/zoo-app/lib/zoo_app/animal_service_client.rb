@@ -18,12 +18,12 @@ module ZooApp
 
     def self.find_alligator_by_name name
       response = get("/alligators/#{name}", :headers => {'Accept' => 'application/json'})
-      handle_response response do
+      when_successful(response) do
         ZooApp::Animals::Alligator.new(parse_body(response))
       end
     end
 
-    def self.handle_response response
+    def self.when_successful response
       if response.success?
         yield
       elsif response.code == 404

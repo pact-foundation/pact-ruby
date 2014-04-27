@@ -12,7 +12,7 @@ module AnimalService
       e = env['sinatra.error']
       content_type :json
       status 500
-      {:error => e.message, :backtrace => e.backtrace}.to_json
+      {error: e.message, backtrace: e.backtrace}.to_json
     end
 
     get '/alligators/:name' do

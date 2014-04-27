@@ -269,7 +269,6 @@ See [Frequently Asked Questions](https://github.com/realestate-com-au/pact/blob/
 ## TODO
 
 Short term:
-- FIX EXAMPLE!!!
 - Support hash of query params
 
 Long term:

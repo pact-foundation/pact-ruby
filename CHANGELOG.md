@@ -2,8 +2,24 @@ Do this to generate your change history
 
     git log --pretty=format:'  * %h - %s (%an, %ad)'
 
-### 1.1.0.rc3 (22 April 2014)
+### 1.1.0.rc3 (28 April 2014)
 
+    * 41fa409 - Cleaned up consumer after spec failure message (Beth, Sun Apr 27 22:18:03 2014 +1000)
+    * 8593fa9 - Updated zoo-app example (Beth, Sun Apr 27 20:54:51 2014 +1000)
+    * 716e3a8 - Added standalone consumer spec and spec for VerificationGet (Beth, Thu Apr 24 10:15:17 2014 +1000)
+    * c0f9bc6 - Copied RSpec::Expectations::Differ to Pact::Matchers::Differ - safer than trying to override behaviour (Beth, Thu Apr 24 09:17:58 2014 +
+    * 0eeb032 - Changing default diff_formatter to unix (Beth, Thu Apr 24 08:19:15 2014 +1000)
+    * ace5d4d - Update README.md (bethesque, Wed Apr 23 20:59:24 2014 +1000)
+    * 24efef6 - Update configuration.md (bethesque, Wed Apr 23 20:51:00 2014 +1000)
+    * 2d862b7 - Update best-practices.md (bethesque, Wed Apr 23 07:33:01 2014 +1000)
+    * ff8dfd2 - Updated doco (Beth, Tue Apr 22 21:45:17 2014 +1000)
+    * 88e4572 - Moving best practices into its own file (Beth, Tue Apr 22 21:28:36 2014 +1000)
+    * 5a3b92c - Moving provider state documentation out of main README into it's own file. (Beth, Tue Apr 22 19:59:48 2014 +1000)
+    * 1d568c4 - Updated configuration documentation (Beth, Tue Apr 22 13:06:47 2014 +1000)
+    * be1412e - Added configuration documentation (Beth, Tue Apr 22 13:04:33 2014 +1000)
+    * 9f9d178 - Added HAL raq (Beth, Tue Apr 22 12:51:42 2014 +1000)
+    * d9b6479 - Renamed ListOfPathsFormatter to ListDiffFormatter (Beth, Tue Apr 22 12:48:57 2014 +1000)
+    * 6b82402 - Renamed NestedJsonDiffFormatter to EmbeddedDiffFormatter (Beth, Tue Apr 22 12:45:50 2014 +1000)
     * def8afd - Merge branch 'master' into release-1.1.0 (bethesque, Tue Apr 22 09:13:41 2014 +1000)
     * 789a471 - Added generated docs to zoo-app (bethesque, Tue Apr 15 17:20:08 2014 +1000)
     * f5da7ab - Improved header match failure message (bethesque, Tue Apr 15 09:39:12 2014 +1000)

@@ -46,7 +46,7 @@ module Pact
 
         def to_s
           titles_and_summaries.collect do | title, summaries |
-            "#{title}:\n\t#{summaries.join("\n  ")}\n\n" if summaries.any?
+            "#{title}:\n\t#{summaries.join("\n\t")}\n\n" if summaries.any?
           end.compact.join
 
         end
@@ -57,8 +57,8 @@ module Pact
 
         def titles_and_summaries
           {
-            "Missing requests" => interaction_list.missing_interactions_summaries,
             "Incorrect requests" => interaction_list.interaction_mismatches_summaries,
+            "Missing requests" => interaction_list.missing_interactions_summaries,
             "Unexpected requests" => interaction_list.unexpected_requests_summaries,
           }
         end

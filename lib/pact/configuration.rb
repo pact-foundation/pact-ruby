@@ -35,7 +35,7 @@ module Pact
       c.log_dir = default_log_dir
       c.pactfile_write_mode = :overwrite
       c.reports_dir = File.expand_path('./reports/pacts')
-      c.doc_dir = File.expand_path("./doc")
+      c.doc_dir = File.expand_path("./doc/pacts")
       c.output_stream = $stdout
       c.error_stream = $stderr
       c

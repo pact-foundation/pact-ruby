@@ -45,6 +45,17 @@ describe Pact do
       end
     end
 
+    describe "doc_dir" do
+      it "defaults to ./doc/pacts" do
+        expect(Pact.configuration.doc_dir).to eq File.expand_path("./doc/pacts")
+      end
+
+      it "can be changed" do
+        Pact.configuration.doc_dir = "newdir"
+        expect(Pact.configuration.doc_dir).to eq "newdir"
+      end
+    end
+
     describe "doc_generator" do
 
       context "with a symbol" do

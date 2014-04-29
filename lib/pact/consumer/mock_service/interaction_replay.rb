@@ -29,8 +29,8 @@ module Pact
 
       def find_response request_hash
         actual_request = Request::Actual.from_hash(request_hash)
-        logger.info "#{name} received request #{actual_request.method_and_path}"
-        logger.debug JSON.pretty_generate actual_request
+        logger.info "Received request #{actual_request.method_and_path}"
+        logger.debug pretty_generate actual_request
         candidate_interactions = interaction_list.find_candidate_interactions actual_request
         matching_interactions = find_matching_interactions actual_request, from: candidate_interactions
 
@@ -52,8 +52,8 @@ module Pact
       def handle_matched_interaction interaction
         interaction_list.register_matched interaction
         response = response_from(interaction.response)
-        logger.info "Found matching response on #{name}:"
-        logger.ap interaction.response
+        logger.info "Found matching response for #{interaction.request.method_and_path}"
+        logger.debug pretty_generate(interaction.response)
         response
       end
 
@@ -66,8 +66,10 @@ module Pact
       end
 
       def handle_more_than_one_matching_interaction actual_request, matching_interactions
-        logger.error "Multiple interactions found on #{name}:"
-        logger.ap matching_interactions.collect(&:as_json)
+        logger.error "Multiple interactions found for #{actual_request.method_and_path}:"
+        matching_interactions.each do | interaction |
+          logger.debug pretty_generate(interaction)
+        end
         multiple_interactions_found_response actual_request, matching_interactions
       end
 
@@ -118,6 +120,11 @@ module Pact
 
       def logger_info_ap msg
         logger.info msg
+      end
+
+      #Doesn't seem to reliably pretty generate unless we go to JSON and back again :(
+      def pretty_generate object
+        JSON.pretty_generate(JSON.parse(object.to_json))
       end
     end
   end

@@ -34,6 +34,22 @@ module Pact
 
       subject { Generator.new(pact_dir, doc_dir, options) }
 
+      context "when there are existing files" do
+        let(:existing_doc_file_path) { File.join(doc_dir, doc_type, "leftover") }
+
+        before do
+          FileUtils.mkdir_p File.dirname(existing_doc_file_path)
+          FileUtils.touch existing_doc_file_path
+        end
+
+        it "clears the existing files" do
+          expect(File.exist?(existing_doc_file_path)).to be_true
+          subject.call
+          expect(File.exist?(existing_doc_file_path)).to be_false
+        end
+      end
+
+
       it "creates an index" do
         expect(index_renderer).to receive(:call).with("Some Consumer", {"Some Provider"=>"Some Consumer - Some Provider.md"})
         subject.call
@@ -62,7 +78,6 @@ module Pact
         end
 
       end
-
 
     end
   end

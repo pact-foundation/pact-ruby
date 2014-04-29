@@ -18,7 +18,7 @@ module Pact
       end
 
       def call
-        ensure_target_dir_exists
+        ensure_target_dir_exists_and_is_clean
         write_index if consumer_contracts.any?
         write_doc_files
         perform_after_hook
@@ -68,7 +68,8 @@ module Pact
         after.call(pact_dir, target_dir, consumer_contracts)
       end
 
-      def ensure_target_dir_exists
+      def ensure_target_dir_exists_and_is_clean
+        FileUtils.rm_rf target_dir
         FileUtils.mkdir_p target_dir
       end
 

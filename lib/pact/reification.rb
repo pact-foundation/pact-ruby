@@ -17,6 +17,8 @@ module Pact
           mem << from_term(term)
           mem
         end
+      when term.is_a?(Pact::Request::Base)
+        from_term(term.to_hash)
       else
         term
       end

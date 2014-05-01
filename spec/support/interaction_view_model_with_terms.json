@@ -1,0 +1,50 @@
+{
+    "provider": {
+        "name": "a provider"
+    },
+    "consumer": {
+        "name": "a consumer"
+    },
+    "interactions": [
+        {
+            "description": "an interaction with terms",
+            "request": {
+                "method": "post",
+                "path": "/path",
+                "query": "some=thing",
+                "headers": {
+                    "key": "a header"
+                },
+                "body": {
+                    "term": {
+                      "json_class": "Pact::Term",
+                      "data": {
+                        "generate": "sunny",
+                        "matcher": {
+                          "json_class": "Regexp",
+                          "o": 0,
+                          "s": "sun"
+                        }
+                      }
+                    }
+                }
+            },
+            "response": {
+                "status": 200,
+                "body": {
+                    "term": {
+                      "json_class": "Pact::Term",
+                      "data": {
+                        "generate": "rainy",
+                        "matcher": {
+                          "json_class": "Regexp",
+                          "o": 0,
+                          "s": "rain"
+                        }
+                      }
+                    }
+                }
+            }
+        }
+    ]
+}

@@ -66,7 +66,7 @@ module Pact
       attr_reader :interaction, :consumer_contract
 
       def clean_request
-        ordered_clean_hash Reification.from_term(interaction.request).to_hash
+        ordered_clean_hash Reification.from_term(interaction.request)
       end
 
       def clean_response

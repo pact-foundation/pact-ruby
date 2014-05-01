@@ -64,6 +64,16 @@ module Pact
             expect(subject.request).to_not include("headers")
           end
         end
+
+        context "when a Pact::Term is present" do
+          let(:consumer_contract) { Pact::ConsumerContract.from_uri './spec/support/interaction_view_model_with_terms.json'}
+          let(:interaction) { consumer_contract.interactions.first }
+
+          it "uses the generated value" do
+            expect(subject.request).to_not include("Term")
+            expect(subject.request).to include("sunny")
+          end
+        end
       end
 
       describe "response" do
@@ -102,6 +112,16 @@ module Pact
 
           it "does not include the headers" do
             expect(subject.response).to_not include("headers")
+          end
+        end
+
+        context "when a Pact::Term is present" do
+          let(:consumer_contract) { Pact::ConsumerContract.from_uri './spec/support/interaction_view_model_with_terms.json'}
+          let(:interaction) { consumer_contract.interactions.first }
+
+          it "uses the generated value" do
+            expect(subject.response).to_not include("Term")
+            expect(subject.response).to include("rainy")
           end
         end
       end

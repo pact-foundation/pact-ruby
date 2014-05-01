@@ -39,5 +39,17 @@ module Pact
 
     end
 
+    context "when reifying a Request" do
+
+      let(:request){ Pact::Request::Expected.from_hash(method: 'get', path: '/', body: Pact::Term.new(generate: "sunny", matcher: /sun/))}
+
+      subject { Reification.from_term(request) }
+
+      it "turns it into a hash before reifying it" do
+        expect(subject[:body]).to eq("sunny")
+      end
+
+    end
+
   end
 end

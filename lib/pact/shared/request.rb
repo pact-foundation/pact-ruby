@@ -41,20 +41,11 @@ module Pact
       end
 
       def method_and_path
-        "#{method.upcase} #{path}"
+        "#{method.upcase} #{display_path}"
       end
 
       def full_path
-        fp = ''
-        if path.empty?
-          fp << "/"
-        else
-          fp << path
-        end
-        if query && !query.empty?
-          fp << ("?" + (query.kind_of?(Pact::Term) ? query.generate : query))
-        end
-        fp
+        display_path + display_query
       end
 
       protected
@@ -66,6 +57,14 @@ module Pact
       def to_hash_without_body
         keep_keys = [:method, :path, :headers, :query]
         as_json.reject{ |key, value| !keep_keys.include? key }
+      end
+
+      def display_path
+        path.empty? ? "/" : path
+      end
+
+      def display_query
+        (query.nil? || query.empty?) ? '' : "?#{Pact::Reification.from_term(query)}"
       end
     end
   end

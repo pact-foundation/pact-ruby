@@ -1,44 +1,52 @@
 Do this to generate your change history
 
-    git log --pretty=format:'  * %h - %s (%an, %ad)'
+  git log --pretty=format:'  * %h - %s (%an, %ad)'
+
+### 1.1.0.rc4 (1 May 2014)
+
+  * 5e1b78d - Display / in logs when path is empty https://github.com/realestate-com-au/pact/issues/14 (Beth, Thu May 1 22:09:29 2014 +1000)
+  * 01c5414 - Fixing doc generation bug where Pact::Terms were being displayed https://github.com/realestate-com-au/pact/issues/13 (Beth, Thu May 1 21:41:11 2014 +1000)
+  * 292a14b - Cleaning doc dir before generating new docs as per https://github.com/realestate-com-au/pact/issues/11 (Beth, Tue Apr 29 12:44:47 2014 +1000)
+  * 73c15dd - Changed default doc_dir to ./doc/pacts as per https://github.com/realestate-com-au/pact/issues/12 (Beth, Tue Apr 29 12:33:57 2014 +1000)
+  * 78ca78c - Fixed bug where log_dir was being ignored when set to a non default value (Beth, Tue Apr 29 07:50:32 2014 +1000)
 
 ### 1.1.0.rc3 (28 April 2014)
 
-    * 41fa409 - Cleaned up consumer after spec failure message (Beth, Sun Apr 27 22:18:03 2014 +1000)
-    * 8593fa9 - Updated zoo-app example (Beth, Sun Apr 27 20:54:51 2014 +1000)
-    * 716e3a8 - Added standalone consumer spec and spec for VerificationGet (Beth, Thu Apr 24 10:15:17 2014 +1000)
-    * c0f9bc6 - Copied RSpec::Expectations::Differ to Pact::Matchers::Differ - safer than trying to override behaviour (Beth, Thu Apr 24 09:17:58 2014 +
-    * 0eeb032 - Changing default diff_formatter to unix (Beth, Thu Apr 24 08:19:15 2014 +1000)
-    * ace5d4d - Update README.md (bethesque, Wed Apr 23 20:59:24 2014 +1000)
-    * 24efef6 - Update configuration.md (bethesque, Wed Apr 23 20:51:00 2014 +1000)
-    * 2d862b7 - Update best-practices.md (bethesque, Wed Apr 23 07:33:01 2014 +1000)
-    * ff8dfd2 - Updated doco (Beth, Tue Apr 22 21:45:17 2014 +1000)
-    * 88e4572 - Moving best practices into its own file (Beth, Tue Apr 22 21:28:36 2014 +1000)
-    * 5a3b92c - Moving provider state documentation out of main README into it's own file. (Beth, Tue Apr 22 19:59:48 2014 +1000)
-    * 1d568c4 - Updated configuration documentation (Beth, Tue Apr 22 13:06:47 2014 +1000)
-    * be1412e - Added configuration documentation (Beth, Tue Apr 22 13:04:33 2014 +1000)
-    * 9f9d178 - Added HAL raq (Beth, Tue Apr 22 12:51:42 2014 +1000)
-    * d9b6479 - Renamed ListOfPathsFormatter to ListDiffFormatter (Beth, Tue Apr 22 12:48:57 2014 +1000)
-    * 6b82402 - Renamed NestedJsonDiffFormatter to EmbeddedDiffFormatter (Beth, Tue Apr 22 12:45:50 2014 +1000)
-    * def8afd - Merge branch 'master' into release-1.1.0 (bethesque, Tue Apr 22 09:13:41 2014 +1000)
-    * 789a471 - Added generated docs to zoo-app (bethesque, Tue Apr 15 17:20:08 2014 +1000)
-    * f5da7ab - Improved header match failure message (bethesque, Tue Apr 15 09:39:12 2014 +1000)
-    * 1179489 - Stopped RSpec turning failure message lines that should be white to red (bethesque, Mon Apr 14 21:41:55 2014 +1000)
-    * ddad510 - Added type and regexp matching output to ListOfPathsFormatter (bethesque, Mon Apr 14 13:43:08 2014 +1000)
-    * b007248 - Added class based matching output to plus_and_minus diff formatter (bethesque, Sat Apr 12 21:20:43 2014 +1000)
-    * f7910a1 - Swapped colored for term-ansicolor, as the colored mixins clash with other gems (bethesque, Sat Apr 12 20:37:57 2014 +1000)
-    * 93bfbdb - Fixing failing tests caused by JRuby inserting a blank line between the braces of an empty hash. Moved ActiveSupportSupport into shared
-    * da16f95 - Added after hook to allow customisation of Doc::Generator (bethesque, Sat Apr 12 18:46:04 2014 +1000)
-    * 85a6fe3 - Breaking up configuration files into separate files (bethesque, Sat Apr 12 11:21:56 2014 +1000)
-    * 7515360 - Merge branch 'doc' into release-1.1.0 (bethesque, Sat Apr 12 10:37:51 2014 +1000)
-    * 1200481 - Removed pact_gem key from pact fixtures (bethesque, Wed Apr 9 22:19:02 2014 +1000)
-    * 72d791b - Ordered rendering of keys in markdown (bethesque, Wed Apr 9 22:15:01 2014 +1000)
-    * 000b223 - Hiding headers and body from docs when they are empty (bethesque, Wed Apr 9 21:46:02 2014 +1000)
-    * 7f6ed91 - Changing request key ordering so it makes more sense when reading it (bethesque, Wed Apr 9 21:45:31 2014 +1000)
-    * 65054a8 - Added index rendering (bethesque, Wed Apr 9 19:38:55 2014 +1000)
-    * 9426565 - Refactoring generation code. Fixed rendering of interaction in markdown when ActiveSupport is loaded (bethesque, Wed Apr 9 18:20:53 2014 +100
-    * 73d0dbf - WIP refactoring generator code (bethesque, Wed Apr 9 17:03:14 2014 +1000)
-    * 7d1d07b - WIP tests and refactor doc generator (bethesque, Wed Apr 9 13:36:46 2014 +1000)
+  * 41fa409 - Cleaned up consumer after spec failure message (Beth, Sun Apr 27 22:18:03 2014 +1000)
+  * 8593fa9 - Updated zoo-app example (Beth, Sun Apr 27 20:54:51 2014 +1000)
+  * 716e3a8 - Added standalone consumer spec and spec for VerificationGet (Beth, Thu Apr 24 10:15:17 2014 +1000)
+  * c0f9bc6 - Copied RSpec::Expectations::Differ to Pact::Matchers::Differ - safer than trying to override behaviour (Beth, Thu Apr 24 09:17:58 2014 +
+  * 0eeb032 - Changing default diff_formatter to unix (Beth, Thu Apr 24 08:19:15 2014 +1000)
+  * ace5d4d - Update README.md (bethesque, Wed Apr 23 20:59:24 2014 +1000)
+  * 24efef6 - Update configuration.md (bethesque, Wed Apr 23 20:51:00 2014 +1000)
+  * 2d862b7 - Update best-practices.md (bethesque, Wed Apr 23 07:33:01 2014 +1000)
+  * ff8dfd2 - Updated doco (Beth, Tue Apr 22 21:45:17 2014 +1000)
+  * 88e4572 - Moving best practices into its own file (Beth, Tue Apr 22 21:28:36 2014 +1000)
+  * 5a3b92c - Moving provider state documentation out of main README into it's own file. (Beth, Tue Apr 22 19:59:48 2014 +1000)
+  * 1d568c4 - Updated configuration documentation (Beth, Tue Apr 22 13:06:47 2014 +1000)
+  * be1412e - Added configuration documentation (Beth, Tue Apr 22 13:04:33 2014 +1000)
+  * 9f9d178 - Added HAL raq (Beth, Tue Apr 22 12:51:42 2014 +1000)
+  * d9b6479 - Renamed ListOfPathsFormatter to ListDiffFormatter (Beth, Tue Apr 22 12:48:57 2014 +1000)
+  * 6b82402 - Renamed NestedJsonDiffFormatter to EmbeddedDiffFormatter (Beth, Tue Apr 22 12:45:50 2014 +1000)
+  * def8afd - Merge branch 'master' into release-1.1.0 (bethesque, Tue Apr 22 09:13:41 2014 +1000)
+  * 789a471 - Added generated docs to zoo-app (bethesque, Tue Apr 15 17:20:08 2014 +1000)
+  * f5da7ab - Improved header match failure message (bethesque, Tue Apr 15 09:39:12 2014 +1000)
+  * 1179489 - Stopped RSpec turning failure message lines that should be white to red (bethesque, Mon Apr 14 21:41:55 2014 +1000)
+  * ddad510 - Added type and regexp matching output to ListOfPathsFormatter (bethesque, Mon Apr 14 13:43:08 2014 +1000)
+  * b007248 - Added class based matching output to plus_and_minus diff formatter (bethesque, Sat Apr 12 21:20:43 2014 +1000)
+  * f7910a1 - Swapped colored for term-ansicolor, as the colored mixins clash with other gems (bethesque, Sat Apr 12 20:37:57 2014 +1000)
+  * 93bfbdb - Fixing failing tests caused by JRuby inserting a blank line between the braces of an empty hash. Moved ActiveSupportSupport into shared
+  * da16f95 - Added after hook to allow customisation of Doc::Generator (bethesque, Sat Apr 12 18:46:04 2014 +1000)
+  * 85a6fe3 - Breaking up configuration files into separate files (bethesque, Sat Apr 12 11:21:56 2014 +1000)
+  * 7515360 - Merge branch 'doc' into release-1.1.0 (bethesque, Sat Apr 12 10:37:51 2014 +1000)
+  * 1200481 - Removed pact_gem key from pact fixtures (bethesque, Wed Apr 9 22:19:02 2014 +1000)
+  * 72d791b - Ordered rendering of keys in markdown (bethesque, Wed Apr 9 22:15:01 2014 +1000)
+  * 000b223 - Hiding headers and body from docs when they are empty (bethesque, Wed Apr 9 21:46:02 2014 +1000)
+  * 7f6ed91 - Changing request key ordering so it makes more sense when reading it (bethesque, Wed Apr 9 21:45:31 2014 +1000)
+  * 65054a8 - Added index rendering (bethesque, Wed Apr 9 19:38:55 2014 +1000)
+  * 9426565 - Refactoring generation code. Fixed rendering of interaction in markdown when ActiveSupport is loaded (bethesque, Wed Apr 9 18:20:53 2014 +100
+  * 73d0dbf - WIP refactoring generator code (bethesque, Wed Apr 9 17:03:14 2014 +1000)
+  * 7d1d07b - WIP tests and refactor doc generator (bethesque, Wed Apr 9 13:36:46 2014 +1000)
 
 ### 1.0.39 (8 April 2014)
 

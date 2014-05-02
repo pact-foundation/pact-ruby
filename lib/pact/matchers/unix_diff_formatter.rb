@@ -37,6 +37,7 @@ module Pact
         when TypeDifference then copy_diff(thing, target)
         when RegexpDifference then copy_diff(thing, target)
         when NoDiffIndicator then copy_no_diff(thing, target)
+        when Pact::Term then handle(thing.matcher, target)
         else copy_object(thing, target)
         end
       end
@@ -65,15 +66,19 @@ module Pact
         end
       end
 
+      def copy_term(thing, target)
+        thing.matcher
+      end
+
       def copy_no_diff(thing, target)
         thing
       end
 
       def copy_diff difference, target
         if target == :actual
-          copy_object difference.actual, target
+          handle difference.actual, target
         else
-          copy_object difference.expected, target
+          handle difference.expected, target
         end
       end
 

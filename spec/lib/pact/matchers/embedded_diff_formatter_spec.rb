@@ -22,9 +22,12 @@ module Pact
 
       describe ".call" do
 
-        let(:colour) { true }
+        let(:colour) { false }
 
         context "when color_enabled is true" do
+
+          let(:colour) { true }
+
           it "returns nicely formatted json" do
             expect(subject.split("\n").size).to eq 6
           end
@@ -47,6 +50,16 @@ module Pact
             expect(subject).to_not include expected_coloured
             expect(subject).to_not include actual_coloured
           end
+        end
+
+        context "with a Pact::Term" do
+          let(:diff) { {thing: Difference.new(Pact::Term.new(generate: "Joe", matcher: /Jo/), "Mary")} }
+
+          xit "displays the matcher from the Pact::Term" do
+            expect(subject).to_not include("Pact::Term")
+            expect(subject).to include("/Jo/")
+          end
+
         end
 
         context "when no options are specified" do

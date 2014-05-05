@@ -44,16 +44,6 @@ EOF
           end
         end
 
-        context "with a Pact::Term" do
-          let(:diff) { {thing: Difference.new(Pact::Term.new(generate: "Joe", matcher: /Jo/), "Mary")} }
-
-          it "displays the matcher from the Pact::Term" do
-            expect(subject).to_not include("Pact::Term")
-            expect(subject).to include("/Jo/")
-          end
-
-        end
-
         context "with an incorrect value in a hash" do
           let(:diff) { {thing: {alligator: Difference.new({name: 'Mary'}, "Joe" )}} }
 

@@ -37,7 +37,6 @@ module Pact
         when TypeDifference then copy_diff(thing, target)
         when RegexpDifference then copy_diff(thing, target)
         when NoDiffIndicator then copy_no_diff(thing, target)
-        when Pact::Term then handle(thing.matcher, target)
         else copy_object(thing, target)
         end
       end
@@ -64,10 +63,6 @@ module Pact
           value = handle array[index], target
           new_array[index] = value unless (UnexpectedIndex === value || IndexNotFound === value)
         end
-      end
-
-      def copy_term(thing, target)
-        thing.matcher
       end
 
       def copy_no_diff(thing, target)

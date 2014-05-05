@@ -20,11 +20,11 @@ module Pact
     DEFAULT_OPTIONS = {allow_unexpected_keys: true, type: false}.freeze
 
     def diff expected, actual, opts = {}
-      calculate_diff(expected, actual, DEFAULT_OPTIONS.merge(opts))
+      calculate_diff(Pact::Term.unpack_regexps(expected), actual, DEFAULT_OPTIONS.merge(opts))
     end
 
     def type_diff expected, actual, opts = {}
-      calculate_diff expected, actual, DEFAULT_OPTIONS.merge(opts).merge(type: true)
+      calculate_diff Pact::Term.unpack_regexps(expected), actual, DEFAULT_OPTIONS.merge(opts).merge(type: true)
     end
 
     private
@@ -34,7 +34,6 @@ module Pact
       case expected
       when Hash then hash_diff(expected, actual, options)
       when Array then array_diff(expected, actual, options)
-      when Pact::Term then calculate_diff(expected.matcher, actual, options)
       when Regexp then regexp_diff(expected, actual, options)
       when Pact::SomethingLike then calculate_diff(expected.contents, actual, options.merge(:type => true))
       else object_diff(expected, actual, options)

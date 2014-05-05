@@ -144,6 +144,17 @@ module Pact::Matchers
         end
       end
 
+      context "when a term is expected inside a missing hash" do
+        let(:expected) { {a: {b: Pact::Term.new(:matcher => /p/, :generate => 'apple')}} }
+        context "and a non matching value is found" do
+          let(:actual) { {a: nil} }
+          let(:difference) { {a: Difference.new({b: /p/}, nil)} }
+          it "returns the diff with the regexp unpacked" do
+            expect(type_diff(expected, actual)).to eq difference
+          end
+        end
+      end
+
       context "when unexpected keys are allowed" do
         let(:expected) { { a: 'b' } }
         let(:actual) { {a: 'c', d: 'e'} }

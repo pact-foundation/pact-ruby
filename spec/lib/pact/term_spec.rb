@@ -74,5 +74,16 @@ module Pact
 
     end
 
+    describe 'unpack_regexps' do
+      let(:term) { Term.new(generate: 'some', matcher: /s/) }
+      let(:body) { [{a: [{b: term}], c:term, d: 1, e: 'blah'}] }
+      let(:expected) { [{:a=>[{:b=>/s/}], :c=>/s/, :d=>1, :e=>"blah"}] }
+
+      it "returns a structure with the Pact::Terms replaced by their regexps" do
+        expect(Term.unpack_regexps(body)).to eq expected
+      end
+
+    end
+
   end
 end

@@ -12,6 +12,16 @@ module Pact
       new(generate: obj['data']['generate'], matcher: obj['data']['matcher'])
     end
 
+    def self.unpack_regexps source
+      case source
+      when Pact::Term then source.matcher
+      when Array then unpack_regexps_from_array source
+      when Hash then unpack_regexps_from_hash source
+      else
+        source
+      end
+    end
+
     def initialize(attributes = {})
       @generate = attributes[:generate]
       @matcher = attributes[:matcher]
@@ -55,6 +65,20 @@ module Pact
 
     def empty?
       false
+    end
+
+    private
+
+    def self.unpack_regexps_from_array source
+      source.each_with_object([]) do | item, destination |
+        destination << unpack_regexps(item)
+      end
+    end
+
+    def self.unpack_regexps_from_hash source
+      source.keys.each_with_object({}) do | key, destination |
+        destination[key] = unpack_regexps source[key]
+      end
     end
 
   end

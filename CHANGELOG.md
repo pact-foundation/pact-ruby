@@ -2,6 +2,12 @@ Do this to generate your change history
 
   git log --pretty=format:'  * %h - %s (%an, %ad)'
 
+### 1.1.0 (5 May 2014)
+
+### 1.1.0.rc5 (5 May 2014)
+  * dc9855b - Downcasing HTTP methods before sending call to RSpec::Test::Methods because pact-jvm is using an upcase method https://github.com/DiUS/pact-jvm/issues/34 (Beth, Mon May 5 12:29:51 2014 +1000)
+  * ddd4677 - Fixed problem of Pact::Terms displaying inside diff output by unpacking all the regular expressions before the diff is calculated (Beth, Mon May 5 12:16:25 2014 +1000)
+
 ### 1.1.0.rc4 (1 May 2014)
 
   * 5e1b78d - Display / in logs when path is empty https://github.com/realestate-com-au/pact/issues/14 (Beth, Thu May 1 22:09:29 2014 +1000)

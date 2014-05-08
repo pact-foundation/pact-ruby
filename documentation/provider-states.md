@@ -2,6 +2,8 @@
 
 Provider states allow you to set up data on the provider before the interaction is run, so that it can make a response that matches what the consumer expects. It also allows the consumer to make the same request with different expected responses.
 
+Keep in mind that a provider state is all about the state of the *provider*, not about the state of the consumer or the request.
+
 ### Consumer codebase
 
 For example, some code that creates a pact in a consumer project might look like this:

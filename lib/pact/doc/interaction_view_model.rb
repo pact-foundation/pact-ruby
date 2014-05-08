@@ -1,4 +1,5 @@
 require 'pact/shared/active_support_support'
+require 'pact/reification'
 
 module Pact
   module Doc

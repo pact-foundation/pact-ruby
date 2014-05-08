@@ -256,7 +256,7 @@ As in all things, there are good ways to implement Pacts, and there are not so g
 * [Terminology](documentation/terminology.md)
 * [Configuration](/documentation/configuration.md)
 
-## Related Gems
+## Related libraries
 
 [Pact Provider Proxy](https://github.com/bethesque/pact-provider-proxy) - Verify a pact against a running server, allowing you to use pacts with a provider of any language.
 
@@ -264,7 +264,10 @@ As in all things, there are good ways to implement Pacts, and there are not so g
 
 [Pact Broker Client](https://github.com/bethesque/pact_broker-client) - Contains rake tasks for publishing pacts to the pact_broker.
 
+[Pact JVM](https://github.com/DiUS/pact-jvm) - A Pact implementation for the JVM (Java and Scala). It generates pact files that are compatible with the Ruby implementation.
+
 [Shokkenki](https://github.com/brentsnook/shokkenki) - Another Consumer Driven Contract gem written by one of Pact's original authors, Brent Snook. Shokkenki allows matchers to be composed using jsonpath expressions and allows auto-generation of mock response values based on regular expressions.
+
 
 ## TODO
 

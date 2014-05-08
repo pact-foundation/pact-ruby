@@ -248,13 +248,13 @@ See the [Configuration](/documentation/configuration.md) section of the document
 
 As in all things, there are good ways to implement Pacts, and there are not so good ways. Check out the [Best practices](/documentation/best-practices.md) section of the documentation to make sure you're not Pacting it Wrong.
 
-## Gotchas
+## Docs
 
-* Be aware when using the app from the config.ru file is used (the default option) that the Rack::Builder.parse_file seems to require files even if they have already been required, so make sure your boot files are idempotent.
-
-
-See [Frequently Asked Questions](https://github.com/realestate-com-au/pact/blob/master/documentation/faq.md) and [Rarely Asked Questions](https://github.com/realestate-com-au/pact/blob/master/documentation/raq.md) and [Terminology](https://github.com/realestate-com-au/pact/blob/master/documentation/terminology.md) for more information.
-
+* [Example](example)
+* [Frequently Asked Questions](documentation/faq.md) 
+* [Rarely Asked Questions](documentation/raq.md)
+* [Terminology](documentation/terminology.md)
+* [Configuration](/documentation/configuration.md)
 
 ## Related Gems
 

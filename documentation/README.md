@@ -7,4 +7,5 @@
 * [Frequently asked questions](faq.md)
 * [Rarely asked questions](raq.md)
 * [Best practices](best-practices.md)
+* [Troubleshooting](troubleshooting.md)
 * [Testing with pact diagram](Testing with pact.png)

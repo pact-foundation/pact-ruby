@@ -4,7 +4,7 @@ require 'pact/doc/sort_interactions'
 module Pact
   module Doc
     module Markdown
-      class InteractionsRenderer
+      class ConsumerContractRenderer
 
         def initialize consumer_contract
           @consumer_contract = consumer_contract

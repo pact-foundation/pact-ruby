@@ -9,7 +9,7 @@ module Pact
       def initialize pact_dir, doc_dir, options
         @doc_dir = doc_dir
         @pact_dir = pact_dir
-        @interactions_renderer = options[:interactions_renderer]
+        @consumer_contract_renderer = options[:consumer_contract_renderer]
         @doc_type = options[:doc_type]
         @file_extension = options[:file_extension]
         @index_renderer = options[:index_renderer]
@@ -26,7 +26,7 @@ module Pact
 
       private
 
-      attr_reader :doc_dir, :pact_dir, :interactions_renderer, :doc_type, :file_extension, :index_renderer, :after
+      attr_reader :doc_dir, :pact_dir, :consumer_contract_renderer, :doc_type, :file_extension, :index_renderer, :after
 
       def write_index
         File.open(index_file_path, "w") { |io|  io << index_file_contents }
@@ -52,7 +52,7 @@ module Pact
 
       def doc_files
         consumer_contracts.collect do | consumer_contract |
-          DocFile.new(consumer_contract, target_dir, interactions_renderer, file_extension)
+          DocFile.new(consumer_contract, target_dir, consumer_contract_renderer, file_extension)
         end
       end
 

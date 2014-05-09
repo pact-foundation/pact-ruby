@@ -1,12 +1,12 @@
 require 'spec_helper'
-require 'pact/doc/markdown/interactions_renderer'
+require 'pact/doc/markdown/consumer_contract_renderer'
 
 module Pact
   module Doc
     module Markdown
-      describe InteractionsRenderer do
+      describe ConsumerContractRenderer do
 
-        subject { InteractionsRenderer.new(consumer_contract) }
+        subject { ConsumerContractRenderer.new(consumer_contract) }
         let(:consumer_contract) { Pact::ConsumerContract.from_uri './spec/support/markdown_pact.json' }
 
         let(:expected_output) { File.read("./spec/support/generated_markdown.md") }
@@ -19,7 +19,7 @@ module Pact
 
         describe ".call" do
           it "renders an interaction" do
-            expect(InteractionsRenderer.call consumer_contract).to eq(expected_output)
+            expect(ConsumerContractRenderer.call consumer_contract).to eq(expected_output)
           end
         end
 

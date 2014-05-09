@@ -1,5 +1,5 @@
 require 'pact/doc/generator'
-require 'pact/doc/markdown/interactions_renderer'
+require 'pact/doc/markdown/consumer_contract_renderer'
 require 'pact/doc/markdown/index_renderer'
 
 module Pact
@@ -9,7 +9,7 @@ module Pact
 
         def initialize pact_dir, doc_dir
           super(pact_dir, doc_dir,
-            interactions_renderer: InteractionsRenderer,
+            consumer_contract_renderer: ConsumerContractRenderer,
             doc_type: 'markdown',
             file_extension: '.md',
             index_renderer: IndexRenderer,

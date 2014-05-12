@@ -271,7 +271,9 @@ As in all things, there are good ways to implement Pacts, and there are not so g
 ## Links
 
 [Integrated tests are a scam](http://vimeo.com/80533536) - J.B. Rainsberger
+
 [Consumer Driven Contracts](http://martinfowler.com/articles/consumerDrivenContracts.html) - Ian Robinson
+
 [Integration Contract Tests](http://martinfowler.com/bliki/IntegrationContractTest.html) - Martin Fowler
 
 ## TODO

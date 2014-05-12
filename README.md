@@ -268,6 +268,11 @@ As in all things, there are good ways to implement Pacts, and there are not so g
 
 [Shokkenki](https://github.com/brentsnook/shokkenki) - Another Consumer Driven Contract gem written by one of Pact's original authors, Brent Snook. Shokkenki allows matchers to be composed using jsonpath expressions and allows auto-generation of mock response values based on regular expressions.
 
+## Links
+
+[Integrated tests are a scam](http://vimeo.com/80533536) - J.B. Rainsberger
+[Consumer Driven Contracts](http://martinfowler.com/articles/consumerDrivenContracts.html) - Ian Robinson
+[Integration Contract Tests](http://martinfowler.com/bliki/IntegrationContractTest.html) - Martin Fowler
 
 ## TODO
 

@@ -1,6 +1,6 @@
 require 'open-uri'
 require 'pact/consumer_contract'
-require 'pact/provider/matchers'
+require 'pact/provider/rspec/matchers'
 require 'pact/provider/test_methods'
 require 'pact/provider/configuration'
 

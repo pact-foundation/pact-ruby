@@ -34,7 +34,7 @@ module Pact::Consumer
         include_context "unexpected requests and missed interactions"
         let(:expected_diff) {
           {:missing_interactions=>["GET /path"],
-            :unexpected_requests=>["PUT /path"],
+            :unexpected_requests=>["PUT /path?query"],
             :interaction_mismatches => ['blah']}
         }
         it "returns the unexpected requests and missed interactions" do

@@ -41,7 +41,7 @@ module Pact
       end
 
       def method_and_path
-        "#{method.upcase} #{display_path}"
+        "#{method.upcase} #{full_path}"
       end
 
       def full_path

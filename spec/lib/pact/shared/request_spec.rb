@@ -72,6 +72,14 @@ module Pact
             expect(subject).to eq("GET /something")
           end
         end
+
+        context "with a query" do
+          subject { TestRequest.new("get", "/something", {}, {} , "test=query").method_and_path }
+
+          it "includes the query" do
+            expect(subject).to eq("GET /something?test=query")
+          end
+        end
       end
 
     end

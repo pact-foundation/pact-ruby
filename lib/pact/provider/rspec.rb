@@ -66,24 +66,29 @@ module Pact
 
           describe description_for(interaction), metadata do
 
-            interaction_context = InteractionContext.new
+            describe "with #{interaction.request.method_and_path}" do
 
-            before do
-              interaction_context.run_once :before do
-                Pact.configuration.logger.info "Running example '#{self.example.full_description}'"
-                set_up_provider_state interaction.provider_state, options[:consumer]
-                replay_interaction interaction
-                interaction_context.last_response = last_response
+              interaction_context = InteractionContext.new
+
+              before do
+                interaction_context.run_once :before do
+                  Pact.configuration.logger.info "Running example '#{self.example.full_description}'"
+                  set_up_provider_state interaction.provider_state, options[:consumer]
+                  replay_interaction interaction
+                  interaction_context.last_response = last_response
+                end
               end
+
+              after do
+                interaction_context.run_once :after do
+                  tear_down_provider_state interaction.provider_state, options[:consumer]
+                end
+              end
+
+              describe_response interaction.response, interaction_context
+
             end
 
-            after do
-              interaction_context.run_once :after do
-                tear_down_provider_state interaction.provider_state, options[:consumer]
-              end
-            end
-
-            describe_response interaction.response, interaction_context
           end
 
         end

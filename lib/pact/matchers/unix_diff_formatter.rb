@@ -24,7 +24,7 @@ module Pact
       def to_s
         expected = generate_string(diff, :expected)
         actual = generate_string(diff, :actual)
-        Pact::Matchers::Differ.new(@colour).diff_as_string actual, expected
+        Pact::Matchers::Differ.new(@colour).diff_as_string(actual, expected).lstrip
       end
 
       private

@@ -10,9 +10,11 @@ module Pact
       describe "#match_term_failure_message" do
 
         let(:message) { "line1\nline2"}
+        let(:output_message) { "Actual: actual\n\n#{message}"}
+        let(:output_message_with_resets) { "Actual: actual\n\n#{r}line1\n#{r}line2"}
         let(:r) { ::Term::ANSIColor.reset }
-        let(:message_with_resets) { "#{r}line1\n#{r}line2"}
         let(:diff) { double("diff") }
+        let(:actual) { "actual" }
         let(:color_enabled) { true }
         let(:ansi_reset_at_start_of_line) { /^#{Regexp.escape ::Term::ANSIColor.reset}/ }
         let(:message_line_count) { message.split("\n").size }
@@ -21,7 +23,7 @@ module Pact
           allow(Pact.configuration.diff_formatter).to receive(:call).and_return(message)
         end
 
-        subject { match_term_failure_message diff, color_enabled }
+        subject { match_term_failure_message diff, actual, color_enabled }
 
         it "creates a message using the configured diff_formatter" do
           expect(Pact.configuration.diff_formatter).to receive(:call).with(diff)
@@ -31,9 +33,18 @@ module Pact
         context "when color_enabled is true" do
 
           it "returns the message with ANSI reset at the start of each line" do
-            expect(subject).to eq(message_with_resets)
+            expect(subject).to eq(output_message_with_resets)
           end
 
+        end
+
+        context "when the actual is not a string" do
+
+          let(:actual) { {the: "actual"} }
+
+          it "includes the actual as json" do
+            expect(subject).to include(actual.to_json)
+          end
         end
 
         context "when color_enabled is false" do
@@ -41,7 +52,7 @@ module Pact
           let(:color_enabled) { false }
 
           it "returns the message unmodified" do
-            expect(subject).to eq(message)
+            expect(subject).to eq(output_message)
           end
 
         end

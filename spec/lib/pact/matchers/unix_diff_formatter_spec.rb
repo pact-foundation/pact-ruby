@@ -54,7 +54,7 @@ EOF
           end
 
           it "generates the right number of lines, even with ActiveSupport loaded" do
-            expect(line_count).to eq 10
+            expect(line_count).to eq 9
           end
 
         end
@@ -76,7 +76,7 @@ EOF
           end
 
           it "generates the right number of lines, even with ActiveSupport loaded" do
-            expect(line_count).to eq 10
+            expect(line_count).to eq 9
           end
 
         end
@@ -98,7 +98,7 @@ EOF
           end
 
           it "generates the right number of lines, even with ActiveSupport loaded" do
-            expect(line_count).to eq 6
+            expect(line_count).to eq 5
           end
 
         end
@@ -120,7 +120,7 @@ EOF
           end
 
           it "generates the right number of lines, even with ActiveSupport loaded" do
-            expect(line_count).to eq 9
+            expect(line_count).to eq 8
           end
         end
 
@@ -140,7 +140,7 @@ EOF
           end
 
           it "generates the right number of lines, even with ActiveSupport loaded" do
-            expect(line_count).to eq 9
+            expect(line_count).to eq 8
           end
 
         end
@@ -159,7 +159,7 @@ EOF
           end
 
           it "generates the right number of lines, even with ActiveSupport loaded" do
-            expect(line_count).to eq 9
+            expect(line_count).to eq 8
           end
 
         end
@@ -185,7 +185,7 @@ EOF
           end
 
           it "generates the right number of lines, even with ActiveSupport loaded" do
-            expect(line_count).to eq 9
+            expect(line_count).to eq 8
           end
 
         end
@@ -203,7 +203,7 @@ EOF
           end
 
           it "generates the right number of lines, even with ActiveSupport loaded" do
-            expect(line_count).to eq 12
+            expect(line_count).to eq 11
           end
 
         end

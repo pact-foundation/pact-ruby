@@ -172,7 +172,7 @@ Require "pact/tasks" in your Rakefile.
 require 'pact/tasks'
 ```
 
-Create a `pact_helper.rb` in your service provider project. The file must be called pact_helper.rb, however there is some flexibility in where it can be stored. The recommended place is `specs/service_consumers/pact_helper.rb`.
+Create a `pact_helper.rb` in your service provider project. The file must be called pact_helper.rb, however there is some flexibility in where it can be stored. The recommended place is `spec/service_consumers/pact_helper.rb`.
 
 See the [Provider](documentation/configuration.md#provider) section of the Configuration documentation for more information.
 

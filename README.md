@@ -178,9 +178,9 @@ Require "pact/tasks" in your Rakefile.
 require 'pact/tasks'
 ```
 
-Create a `pact_helper.rb` in your service provider project. The file must be called pact_helper.rb, however there is some flexibility in where it can be stored. The recommended place is `spec/service_consumers/pact_helper.rb`.
+Create a `pact_helper.rb` in your service provider project. The recommended place is `spec/service_consumers/pact_helper.rb`.
 
-See the [Provider](documentation/configuration.md#provider) section of the Configuration documentation for more information.
+See [Verifying Pacts](documentation/verifying-pacts.md) and the [Provider](documentation/configuration.md#provider) section of the Configuration documentation for more information.
 
 ```ruby
 # In specs/service_consumers/pact_helper.rb
@@ -189,12 +189,10 @@ require 'pact/provider/rspec'
 
 Pact.service_provider "My Service Provider" do
 
-  app { MyApp.new } # Optional, loads app from config.ru by default
-
   honours_pact_with 'My Service Consumer' do
 
     # This example points to a local file, however, on a real project with a continuous
-    # integration box, you would publish your pacts as artifacts,
+    # integration box, you would use a [Pact Broker](https://github.com/bethesque/pact_broker) or publish your pacts as artifacts,
     # and point the pact_uri to the pact published by the last successful build.
 
     pact_uri '../path-to-your-consumer-project/specs/pacts/my_consumer-my_provider.json'

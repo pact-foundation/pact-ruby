@@ -30,13 +30,13 @@ Pact is most valuable for designing and testing integrations where you (or your 
 1. When the specs are run, the requests, and their expected responses, are written to a "pact" file.
 1. The requests in the pact file are later replayed against the provider, and the actual responses are checked to make sure they match the expected responses.
 
-## Why is developing and testing with pacts better than using integration tests?
+## Why is developing and testing with Pact better than using traditional system integration tests?
 
 * Faster execution.
-* Reliable responses from mock service provider reduce likelihood of flakey tests.
-* Only one component is being tested at a time, making the causes of test failures easier to identify.
+* Reliable responses from mock service reduce likelihood of flakey tests.
+* Causes of failure are easier to identify as only one component is being tested at a time.
 * Design of service provider is improved by considering first how the data is actually going to be used, rather than how it is most easily retrieved and serialised.
-* No need to manage starting, stopping and fixture set up for multiple applications during a test run.
+* No separate integration environment required for automated integration tests - pact tests run in standalone CI builds.
 
 ## Contact
 

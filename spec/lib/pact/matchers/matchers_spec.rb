@@ -1,10 +1,45 @@
 require 'spec_helper'
 require 'pact/matchers'
+require 'pact/consumer_contract/headers'
 
 module Pact::Matchers
 
   describe Pact::Matchers do
     include Pact::Matchers
+
+    # TODO this is an integration test
+    describe 'matching headers' do
+      let(:expected) { Pact::Headers.new('Content-Type' => 'application/hippo')}
+
+      context "when the headers match in a case insensitive way" do
+
+        context "when the values match" do
+          let(:actual) { Pact::Headers.new('CONTENT-TYPE' => 'application/hippo')}
+          it "returns an empty diff" do
+            expect(diff(expected, actual)).to be_empty
+          end
+        end
+
+        context "when the header values do not match" do
+          let(:actual) { Pact::Headers.new('CONTENT-TYPE' => 'application/alligator')}
+          let(:difference) { {"Content-Type" => Difference.new('application/hippo', 'application/alligator')} }
+          it "returns the diff" do
+            expect(diff(expected, actual)).to eq difference
+          end
+        end
+      end
+
+      context "when the headers do not match" do
+
+        let(:actual) { Pact::Headers.new('Content-Length' => '1')}
+        let(:difference) { {"Content-Type" => Difference.new('application/hippo', Pact::KeyNotFound.new)} }
+        it "returns a diff" do
+          expect(diff(expected, actual)).to eq difference
+        end
+
+      end
+
+    end
 
     describe 'matching with something like' do
 

@@ -30,18 +30,18 @@ require 'pact/tasks/task_helper'
 
 module Pact
   class VerificationTask < ::Rake::TaskLib
-    attr_reader :pact_spec_config
+    attr_reader :pact_spec_configs
 
     include Pact::TaskHelper
     def initialize(name)
-      @pact_spec_config = []
+      @pact_spec_configs = []
       @name = name
       yield self
       rake_task
     end
 
     def uri(uri, options = {})
-      @pact_spec_config << {uri: uri, support_file: options[:support_file], pact_helper: options[:pact_helper]}
+      @pact_spec_configs << {uri: uri, pact_helper: options[:pact_helper]}
     end
 
     private
@@ -71,7 +71,7 @@ module Pact
         desc "Verify provider against the consumer pacts for #{name}"
         task "verify:#{name}" do |t, args|
 
-          exit_statuses = pact_spec_config.collect do | config |
+          exit_statuses = pact_spec_configs.collect do | config |
             Pact::TaskHelper.execute_pact_verify config[:uri], config[:pact_helper]
           end
 

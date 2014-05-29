@@ -15,11 +15,6 @@ module Pact
 
       include Pact::Provider::RSpec::ClassMethods
 
-      SUPPORT_FILE_DEPRECATION_MESSAGE = "The :support_file option is deprecated. " +
-        "The preferred way to specify a support file is to create a pact_helper.rb in one of the following paths: " +
-        Pact::Provider::PactHelperLocater::PACT_HELPER_FILE_PATTERNS.join(", ") +
-        ". If you cannot do this, you may use the :pact_helper option in place of the :support_file option."
-
       attr_reader :spec_definitions
       attr_reader :options
       attr_reader :output

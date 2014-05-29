@@ -7,10 +7,10 @@ The development process will be different for every organisation, but this is on
 ## Initial development
 1. Write consumer tests with pact
 1. Implement consumer 
-1. Add pact:publish task to consumer build or publish pact as CI artifact
+1. Add `pact:publish` task to consumer build or publish pact as CI artifact
 1. Create provider project
 1. Configure pact:verify task to point to latest published pact
-1. Implement provider until pact:verify passes
+1. Implement provider until `pact:verify` passes
 
 ## New features
 

@@ -1,4 +1,5 @@
 require 'pact/tasks/verification_task'
+require 'open3'
 
 Pact::VerificationTask.new(:stubbing) do | pact |
 	pact.uri './spec/support/stubbing.json', :pact_helper => './spec/support/stubbing'

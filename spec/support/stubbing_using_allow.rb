@@ -1,5 +1,6 @@
 require 'pact/provider/rspec'
 require 'rspec/mocks'
+require './spec/support/active_support_if_configured'
 
 class StubbedThing
   def self.stub_me

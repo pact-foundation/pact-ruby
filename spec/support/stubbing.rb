@@ -21,8 +21,6 @@ Pact.provider_states_for 'Consumer' do
   end
 end
 
-puts "REQUIRING"
-
 Pact.service_provider 'Provider' do
   app { App }
 end

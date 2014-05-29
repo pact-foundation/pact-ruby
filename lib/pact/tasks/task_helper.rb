@@ -3,27 +3,29 @@ module Pact
 
     extend self
 
+    def execute_pact_verify pact_uri = nil, pact_helper = nil
+      require 'pact/provider'
+      require 'pact/provider/pact_helper_locator'
+
+      command = verify_command(pact_helper || Pact::Provider::PactHelperLocater.pact_helper_path, pact_uri)
+      system(command) ? 0 : 1
+    end
+
     def handle_verification_failure
       exit_status = yield
       abort if exit_status != 0
     end
 
-    def spec_criteria defaults = {description: nil, provider_state: nil}
-      criteria = {}
+    def verify_command pact_helper, pact_uri = nil
+      require 'rake/file_utils'
 
-      description = ENV.fetch("PACT_DESCRIPTION", defaults[:description])
-      criteria[:description] = Regexp.new(description) if description
-
-      provider_state = ENV.fetch("PACT_PROVIDER_STATE", defaults[:provider_state])
-      if provider_state
-        if provider_state.length == 0
-          criteria[:provider_state] = nil #Allow PACT_PROVIDER_STATE="" to mean no provider state
-        else
-          criteria[:provider_state] = Regexp.new(provider_state)
-        end
-      end
-
-      criteria
+      command_parts = []
+      command_parts << FileUtils::RUBY
+      command_parts << "-S pact verify"
+      command_parts << "-h" << (pact_helper.end_with?(".rb") ? pact_helper : pact_helper + ".rb")
+      (command_parts << "-p" << pact_uri) if pact_uri
+      command_parts.flatten.join(" ")
     end
+
   end
 end

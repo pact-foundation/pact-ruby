@@ -1,6 +1,7 @@
+# This is the pact_helper for rake pact:tests
 require 'json'
 require 'pact/provider/rspec'
-# pact_helper for rake pact:tests
+require './spec/support/active_support_if_configured'
 
 module Pact
 	module Test

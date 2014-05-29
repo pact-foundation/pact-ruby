@@ -2,7 +2,7 @@ require 'spec_helper'
 require 'pact/tasks/verification_task'
 
 module Pact
-  describe VerificationTask do
+  describe VerificationTask, :pending => true do
     before :all do
       @support_file = nil
       @pact_helper = '/custom/path/support_file.rb'

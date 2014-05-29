@@ -1,4 +1,5 @@
 require 'pact/consumer/rspec'
+require './spec/support/active_support_if_configured'
 
 Pact.service_consumer "Standalone Consumer" do
   has_pact_with "Standalone Provider" do

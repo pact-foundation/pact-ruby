@@ -43,28 +43,14 @@ module Pact
 
       private
 
-      def require_pact_helper spec_definition
-        if spec_definition[:pact_helper]
-          Pact.configuration.output_stream.puts "Using #{spec_definition[:pact_helper]}"
-          require spec_definition[:pact_helper]
-        elsif spec_definition[:support_file]
-          Pact.configuration.output_stream.puts "Using #{spec_definition[:support_file]}"
-          Pact.configuration.error_stream.puts SUPPORT_FILE_DEPRECATION_MESSAGE
-          require spec_definition[:support_file]
-        else
-          require 'pact/provider/client_project_pact_helper'
-        end
-      end
-
       def initialize_specs
         spec_definitions.each do | spec_definition |
-          require_pact_helper spec_definition
           options = {
             consumer: spec_definition[:consumer],
             save_pactfile_to_tmp: true,
             criteria: @options[:criteria]
           }
-          honour_pactfile spec_definition[:uri], Pact.configuration.provider.app, options
+          honour_pactfile spec_definition[:uri], options
         end
       end
 

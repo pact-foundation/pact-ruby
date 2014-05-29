@@ -1,7 +1,7 @@
-require 'pact/tasks'
+require 'pact/tasks/verification_task'
 
 Pact::VerificationTask.new(:stubbing) do | pact |
-	pact.uri './spec/support/stubbing.json', :pact_helper => './spec/support/stubbing.rb'
+	pact.uri './spec/support/stubbing.json', :pact_helper => './spec/support/stubbing'
 end
 
 Pact::VerificationTask.new(:stubbing_using_allow) do | pact |
@@ -13,6 +13,7 @@ Pact::VerificationTask.new(:pass) do | pact |
 end
 
 Pact::VerificationTask.new(:fail) do | pact |
+	pact.uri './spec/support/test_app_pass.json'
 	pact.uri './spec/support/test_app_fail.json'
 end
 
@@ -40,6 +41,7 @@ task :bethtest => ['pact:tests:all','pact:tests:all:with_active_support']
 
 namespace :pact do
 
+	desc "All the verification tests"
 	task "tests:all" do
 		Rake::Task['pact:verify:stubbing'].execute
 		Rake::Task['pact:verify:stubbing_using_allow'].execute
@@ -49,14 +51,9 @@ namespace :pact do
 		Rake::Task['pact:test:fail'].execute
 	end
 
-	task 'tests:all:with_active_support' => 'load_active_support' do
+	desc "All the verification tests with active support loaded"
+	task 'tests:all:with_active_support' => :set_active_support_on do
 		Rake::Task['pact:tests:all'].execute
-	end
-
-	task 'load_active_support' do
-		require 'active_support/all'
-		require 'active_support'
-		require 'active_support/json'
 	end
 
 	desc 'Runs pact tests against a sample application, testing failure and success.'

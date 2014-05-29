@@ -9,32 +9,33 @@ module Pact
     module RSpec
 
       module InstanceMethods
-        def app
-          Pact.configuration.provider.app
-        end
+        # def app
+        #   Pact.configuration.provider.app
+        # end
       end
 
       module ClassMethods
 
         include ::RSpec::Core::DSL
 
-        def honour_pactfile pactfile_uri, options = {}
+        def honour_pactfile pactfile_uri, app, options = {}
+          #TODO change puts to use output stream
           puts "Filtering specs by: #{options[:criteria]}" if options[:criteria] && options[:criteria].any?
           consumer_contract = Pact::ConsumerContract.from_json(read_pact_from(pactfile_uri, options))
           describe "Verifying a pact between #{consumer_contract.consumer.name} and #{consumer_contract.provider.name}", :pactfile_uri => pactfile_uri do
-            honour_consumer_contract consumer_contract, options
+            honour_consumer_contract consumer_contract, app, options
           end
         end
 
-        def honour_consumer_contract consumer_contract, options = {}
-          describe_consumer_contract consumer_contract, options.merge({:consumer => consumer_contract.consumer.name})
+        def honour_consumer_contract consumer_contract, app, options = {}
+          describe_consumer_contract consumer_contract, app, options.merge({:consumer => consumer_contract.consumer.name})
         end
 
         private
 
-        def describe_consumer_contract consumer_contract, options
+        def describe_consumer_contract consumer_contract, app, options
           consumer_interactions(consumer_contract, options).each do |interaction|
-            describe_interaction_with_provider_state interaction, options
+            describe_interaction_with_provider_state interaction, app, options
           end
         end
 
@@ -46,23 +47,25 @@ module Pact
           end
         end
 
-        def describe_interaction_with_provider_state interaction, options
+        def describe_interaction_with_provider_state interaction, app, options
           if interaction.provider_state
             describe "Given #{interaction.provider_state}" do
-              describe_interaction interaction, options
+              describe_interaction interaction, app, options
             end
           else
-            describe_interaction interaction, options
+            describe_interaction interaction, app, options
           end
         end
 
-        def describe_interaction interaction, options
+        def describe_interaction interaction, application, options
 
           metadata = {
             :pact => :verify,
             :pact_interaction => interaction,
             :pact_interaction_example_description => interaction_description_for_rerun_command(interaction)
           }
+
+          let(:app) { application }
 
           describe description_for(interaction), metadata do
 

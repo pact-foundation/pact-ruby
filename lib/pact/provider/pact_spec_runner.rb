@@ -64,7 +64,7 @@ module Pact
             save_pactfile_to_tmp: true,
             criteria: @options[:criteria]
           }
-          honour_pactfile spec_definition[:uri], options
+          honour_pactfile spec_definition[:uri], Pact.configuration.provider.app, options
         end
       end
 

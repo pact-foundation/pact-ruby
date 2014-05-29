@@ -2,7 +2,7 @@ require 'spec_helper'
 require 'pact/consumer/request'
 require 'pact/consumer_contract/request'
 
-PACT_SPEC_DIR = "../pact_specification/testcases"
+PACT_SPEC_DIR = "../pact-specification/testcases"
 REQUEST_TEST_CASE_FOLDERS = Dir.glob("#{PACT_SPEC_DIR}/request/**")
 REQUEST_TEST_CASE_FILES = Dir.glob("#{PACT_SPEC_DIR}/request/**/*.json")
 

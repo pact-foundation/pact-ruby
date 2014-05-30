@@ -5,7 +5,7 @@ module Pact
 
     def execute_pact_verify pact_uri = nil, pact_helper = nil
       require 'pact/provider/pact_helper_locator'
-      execute_command verify_command(pact_helper || Pact::Provider::PactHelperLocater.pact_helper_path, pact_uri)
+      execute_cmd verify_command(pact_helper || Pact::Provider::PactHelperLocater.pact_helper_path, pact_uri)
     end
 
     def handle_verification_failure
@@ -24,7 +24,7 @@ module Pact
       command_parts.flatten.join(" ")
     end
 
-    def execute_command command
+    def execute_cmd command
       system(command) ? 0 : 1
     end
 

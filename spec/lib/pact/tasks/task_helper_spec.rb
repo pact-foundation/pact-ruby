@@ -19,7 +19,7 @@ module Pact
       context "with no pact_helper or pact URI" do
         let(:command) { "#{ruby_path} -S pact verify -h #{default_pact_helper_path}" }
         it "executes the command" do
-          expect(TaskHelper).to receive(:execute_command).with(command)
+          expect(TaskHelper).to receive(:execute_cmd).with(command)
           TaskHelper.execute_pact_verify
         end
       end
@@ -27,7 +27,7 @@ module Pact
       context "with a pact URI" do
         let(:command) { "#{ruby_path} -S pact verify -h #{default_pact_helper_path} -p #{pact_uri}" }
         it "executes the command" do
-          expect(TaskHelper).to receive(:execute_command).with(command)
+          expect(TaskHelper).to receive(:execute_cmd).with(command)
           TaskHelper.execute_pact_verify(pact_uri)
         end
       end
@@ -36,7 +36,7 @@ module Pact
         let(:custom_pact_helper_path) { '/custom/pact_helper.rb' }
         let(:command) { "#{ruby_path} -S pact verify -h #{custom_pact_helper_path} -p #{pact_uri}" }
         it "executes the command" do
-          expect(TaskHelper).to receive(:execute_command).with(command)
+          expect(TaskHelper).to receive(:execute_cmd).with(command)
           TaskHelper.execute_pact_verify(pact_uri, custom_pact_helper_path)
         end
       end
@@ -45,7 +45,7 @@ module Pact
         let(:custom_pact_helper_path) { '/custom/pact_helper' }
         let(:command) { "#{ruby_path} -S pact verify -h #{custom_pact_helper_path}.rb -p #{pact_uri}" }
         it "executes the command" do
-          expect(TaskHelper).to receive(:execute_command).with(command)
+          expect(TaskHelper).to receive(:execute_cmd).with(command)
           TaskHelper.execute_pact_verify(pact_uri, custom_pact_helper_path)
         end
       end
@@ -53,7 +53,7 @@ module Pact
       context "with a pact URI and a nil pact_helper" do
         let(:command) { "#{ruby_path} -S pact verify -h #{default_pact_helper_path} -p #{pact_uri}" }
         it "executes the command" do
-          expect(TaskHelper).to receive(:execute_command).with(command)
+          expect(TaskHelper).to receive(:execute_cmd).with(command)
           TaskHelper.execute_pact_verify(pact_uri, nil)
         end
       end

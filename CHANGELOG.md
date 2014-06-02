@@ -4,6 +4,7 @@ Do this to generate your change history
 
 ### 1.1.1 (3 June 2014)
 
+* 503a3f4 - The pact verify executable now adds lib to the load path before requiring the pact_helper. (bethesque, Tue Jun 3 09:26:46 2014 +1000)
 * f62622e - Fixed output when a Pact::Term is expected in a response header. (bethesque, Tue Jun 3 07:18:52 2014 +1000)
 * bb5ae47 - Updated pact spec runner, matchers and pact verification code to work with both rspec 2.14 and 2.99. It's not pretty, but it does the job
 * c150e35 - Created a "pact verify" executable and change the rake task to invoke it to avoid the problem of cross contamination of requires (eg. wit

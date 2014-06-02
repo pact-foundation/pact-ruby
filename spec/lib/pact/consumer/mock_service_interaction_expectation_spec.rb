@@ -39,7 +39,7 @@ describe Pact::Consumer::MockServiceInteractionExpectation do
 
     context "without options" do
       it "does not include the options key" do
-        expect(subject.as_json.key?(:options)).to be_false
+        expect(subject.as_json.key?(:options)).to be false
       end
     end
 
@@ -50,5 +50,5 @@ describe Pact::Consumer::MockServiceInteractionExpectation do
       end
     end
   end
-   
+
 end

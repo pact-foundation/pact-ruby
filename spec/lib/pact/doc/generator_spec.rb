@@ -43,9 +43,9 @@ module Pact
         end
 
         it "clears the existing files" do
-          expect(File.exist?(existing_doc_file_path)).to be_true
+          expect(File.exist?(existing_doc_file_path)).to be true
           subject.call
-          expect(File.exist?(existing_doc_file_path)).to be_false
+          expect(File.exist?(existing_doc_file_path)).to be false
         end
       end
 

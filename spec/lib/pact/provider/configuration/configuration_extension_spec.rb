@@ -14,12 +14,12 @@ module Pact
         describe "#color_enabled" do
 
           it "sets color_enabled to be true by default" do
-            expect(subject.color_enabled).to be_true
+            expect(subject.color_enabled).to be true
           end
 
           it "allows configuration of colour_enabled" do
             subject.color_enabled = false
-            expect(subject.color_enabled).to be_false
+            expect(subject.color_enabled).to be false
           end
 
         end

@@ -57,13 +57,13 @@ module Pact::Consumer
       context "when unexpected requests or missed interactions exist" do
         include_context "unexpected requests and missed interactions"
         it "returns false" do
-          expect(subject.all_matched?).to be_false
+          expect(subject.all_matched?).to be false
         end
       end
       context "when unexpected requests or missed interactions do not exist" do
         include_context "no unexpected requests or missed interactions exist"
         it "returns false" do
-          expect(subject.all_matched?).to be_true
+          expect(subject.all_matched?).to be true
         end
       end
     end

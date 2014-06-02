@@ -60,7 +60,6 @@ namespace :pact do
 	desc 'Runs pact tests against a sample application, testing failure and success.'
 	task 'test:fail' do
 
-		require 'pact/provider/pact_spec_runner'
 		require 'open3'
 
 		silent = true

@@ -59,10 +59,21 @@ shared_examples "a request" do
 
     subject { described_class.from_hash(raw_request) }
 
-    its(:method) { should == 'get' }
-    its(:path) { should == '/mallory' }
-    its(:body) { should == 'hello mallory' }
-    its(:query) { should eq 'query'}
+    it "extracts the method" do
+      expect(subject.method).to eq 'get'
+    end
+
+    it "extracts the path" do
+      expect(subject.path).to eq '/mallory'
+    end
+
+    it "extracts the body" do
+      expect(subject.body).to eq 'hello mallory'
+    end
+
+    it "extracts the query" do
+      expect(subject.query).to eq 'query'
+    end
 
     it "blows up if method is absent" do
       raw_request.delete 'method'

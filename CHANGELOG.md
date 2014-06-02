@@ -2,38 +2,48 @@ Do this to generate your change history
 
   git log --pretty=format:'  * %h - %s (%an, %ad)'
 
+### 1.1.1 (3 June 2014)
+
+* f62622e - Fixed output when a Pact::Term is expected in a response header. (bethesque, Tue Jun 3 07:18:52 2014 +1000)
+* bb5ae47 - Updated pact spec runner, matchers and pact verification code to work with both rspec 2.14 and 2.99. It's not pretty, but it does the job
+* c150e35 - Created a "pact verify" executable and change the rake task to invoke it to avoid the problem of cross contamination of requires (eg. wit
+* d981ab7 - Added "actual" response to pact:verify failure message to make it easier to identify the reason for failure. (bethesque, Tue May 20 21:49:06 2
+* a18787d - Added pact specification compliance spec. WIP. (bethesque, Tue May 20 21:48:10 2014 +1000)
+* 2d52356 - Adding back HTTP method and path to pact verify output, as it is otherwise impossible to tell from the output what the actual request was
+* 674d8c9 - Addd query to request.method_and_path (bethesque, Sat May 17 16:23:20 2014 +1000)
+
 ### 1.1.0 (5 May 2014)
 
 ### 1.1.0.rc5 (5 May 2014)
-  * dc9855b - Downcasing HTTP methods before sending call to RSpec::Test::Methods because pact-jvm is using an upcase method https://github.com/DiUS/pact-jvm/issues/34 (Beth, Mon May 5 12:29:51 2014 +1000)
-  * ddd4677 - Fixed problem of Pact::Terms displaying inside diff output by unpacking all the regular expressions before the diff is calculated (Beth, Mon May 5 12:16:25 2014 +1000)
+  * dc9855b - Downcasing HTTP methods before sending call to RSpec::Test::Methods because pact-jvm is using an upcase method https://github.com/DiUS/pact-jvm/issues/34 (bethesque, Mon May 5 12:29:51 2014 +1000)
+  * ddd4677 - Fixed problem of Pact::Terms displaying inside diff output by unpacking all the regular expressions before the diff is calculated (bethesque, Mon May 5 12:16:25 2014 +1000)
 
 ### 1.1.0.rc4 (1 May 2014)
 
-  * 5e1b78d - Display / in logs when path is empty https://github.com/realestate-com-au/pact/issues/14 (Beth, Thu May 1 22:09:29 2014 +1000)
-  * 01c5414 - Fixing doc generation bug where Pact::Terms were being displayed https://github.com/realestate-com-au/pact/issues/13 (Beth, Thu May 1 21:41:11 2014 +1000)
-  * 292a14b - Cleaning doc dir before generating new docs as per https://github.com/realestate-com-au/pact/issues/11 (Beth, Tue Apr 29 12:44:47 2014 +1000)
-  * 73c15dd - Changed default doc_dir to ./doc/pacts as per https://github.com/realestate-com-au/pact/issues/12 (Beth, Tue Apr 29 12:33:57 2014 +1000)
-  * 78ca78c - Fixed bug where log_dir was being ignored when set to a non default value (Beth, Tue Apr 29 07:50:32 2014 +1000)
+  * 5e1b78d - Display / in logs when path is empty https://github.com/realestate-com-au/pact/issues/14 (bethesque, Thu May 1 22:09:29 2014 +1000)
+  * 01c5414 - Fixing doc generation bug where Pact::Terms were being displayed https://github.com/realestate-com-au/pact/issues/13 (bethesque, Thu May 1 21:41:11 2014 +1000)
+  * 292a14b - Cleaning doc dir before generating new docs as per https://github.com/realestate-com-au/pact/issues/11 (bethesque, Tue Apr 29 12:44:47 2014 +1000)
+  * 73c15dd - Changed default doc_dir to ./doc/pacts as per https://github.com/realestate-com-au/pact/issues/12 (bethesque, Tue Apr 29 12:33:57 2014 +1000)
+  * 78ca78c - Fixed bug where log_dir was being ignored when set to a non default value (bethesque, Tue Apr 29 07:50:32 2014 +1000)
 
 ### 1.1.0.rc3 (28 April 2014)
 
-  * 41fa409 - Cleaned up consumer after spec failure message (Beth, Sun Apr 27 22:18:03 2014 +1000)
-  * 8593fa9 - Updated zoo-app example (Beth, Sun Apr 27 20:54:51 2014 +1000)
-  * 716e3a8 - Added standalone consumer spec and spec for VerificationGet (Beth, Thu Apr 24 10:15:17 2014 +1000)
-  * c0f9bc6 - Copied RSpec::Expectations::Differ to Pact::Matchers::Differ - safer than trying to override behaviour (Beth, Thu Apr 24 09:17:58 2014 +
-  * 0eeb032 - Changing default diff_formatter to unix (Beth, Thu Apr 24 08:19:15 2014 +1000)
+  * 41fa409 - Cleaned up consumer after spec failure message (bethesque, Sun Apr 27 22:18:03 2014 +1000)
+  * 8593fa9 - Updated zoo-app example (bethesque, Sun Apr 27 20:54:51 2014 +1000)
+  * 716e3a8 - Added standalone consumer spec and spec for VerificationGet (bethesque, Thu Apr 24 10:15:17 2014 +1000)
+  * c0f9bc6 - Copied RSpec::Expectations::Differ to Pact::Matchers::Differ - safer than trying to override behaviour (bethesque, Thu Apr 24 09:17:58 2014 +
+  * 0eeb032 - Changing default diff_formatter to unix (bethesque, Thu Apr 24 08:19:15 2014 +1000)
   * ace5d4d - Update README.md (bethesque, Wed Apr 23 20:59:24 2014 +1000)
   * 24efef6 - Update configuration.md (bethesque, Wed Apr 23 20:51:00 2014 +1000)
   * 2d862b7 - Update best-practices.md (bethesque, Wed Apr 23 07:33:01 2014 +1000)
-  * ff8dfd2 - Updated doco (Beth, Tue Apr 22 21:45:17 2014 +1000)
-  * 88e4572 - Moving best practices into its own file (Beth, Tue Apr 22 21:28:36 2014 +1000)
-  * 5a3b92c - Moving provider state documentation out of main README into it's own file. (Beth, Tue Apr 22 19:59:48 2014 +1000)
-  * 1d568c4 - Updated configuration documentation (Beth, Tue Apr 22 13:06:47 2014 +1000)
-  * be1412e - Added configuration documentation (Beth, Tue Apr 22 13:04:33 2014 +1000)
-  * 9f9d178 - Added HAL raq (Beth, Tue Apr 22 12:51:42 2014 +1000)
-  * d9b6479 - Renamed ListOfPathsFormatter to ListDiffFormatter (Beth, Tue Apr 22 12:48:57 2014 +1000)
-  * 6b82402 - Renamed NestedJsonDiffFormatter to EmbeddedDiffFormatter (Beth, Tue Apr 22 12:45:50 2014 +1000)
+  * ff8dfd2 - Updated doco (bethesque, Tue Apr 22 21:45:17 2014 +1000)
+  * 88e4572 - Moving best practices into its own file (bethesque, Tue Apr 22 21:28:36 2014 +1000)
+  * 5a3b92c - Moving provider state documentation out of main README into it's own file. (bethesque, Tue Apr 22 19:59:48 2014 +1000)
+  * 1d568c4 - Updated configuration documentation (bethesque, Tue Apr 22 13:06:47 2014 +1000)
+  * be1412e - Added configuration documentation (bethesque, Tue Apr 22 13:04:33 2014 +1000)
+  * 9f9d178 - Added HAL raq (bethesque, Tue Apr 22 12:51:42 2014 +1000)
+  * d9b6479 - Renamed ListOfPathsFormatter to ListDiffFormatter (bethesque, Tue Apr 22 12:48:57 2014 +1000)
+  * 6b82402 - Renamed NestedJsonDiffFormatter to EmbeddedDiffFormatter (bethesque, Tue Apr 22 12:45:50 2014 +1000)
   * def8afd - Merge branch 'master' into release-1.1.0 (bethesque, Tue Apr 22 09:13:41 2014 +1000)
   * 789a471 - Added generated docs to zoo-app (bethesque, Tue Apr 15 17:20:08 2014 +1000)
   * f5da7ab - Improved header match failure message (bethesque, Tue Apr 15 09:39:12 2014 +1000)

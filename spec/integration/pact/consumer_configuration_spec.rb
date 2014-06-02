@@ -53,7 +53,7 @@ describe "consumer side" do
       end
 
       it "should have registered the app" do
-        Pact::Consumer::AppManager.instance.app_registered_on?(1111).should be_true
+        Pact::Consumer::AppManager.instance.app_registered_on?(1111).should be true
       end
     end
 
@@ -67,13 +67,13 @@ describe "consumer side" do
 
       context "when standalone is true" do
         it "is not registerd with the AppManager" do
-          Pact::Consumer::AppManager.instance.app_registered_on?(1234).should be_false
+          Pact::Consumer::AppManager.instance.app_registered_on?(1234).should be false
         end
       end
 
       context "when standalone is false" do
         it "should register the MockServices on their given ports if they are not" do
-          Pact::Consumer::AppManager.instance.app_registered_on?(1235).should be_true
+          Pact::Consumer::AppManager.instance.app_registered_on?(1235).should be true
         end
       end
     end

@@ -12,13 +12,13 @@ module Pact
         context "when other is the same" do
           let(:other) { InteractionFactory.create }
           it "returns true" do
-            expect(subject == other).to be_true
+            expect(subject == other).to be true
           end
         end
         context "when other is not the same" do
           let(:other) { InteractionFactory.create(:request => {:path => '/a_different_path'}) }
           it "returns false" do
-            expect(subject == other).to be_false
+            expect(subject == other).to be false
           end
         end
       end
@@ -28,12 +28,12 @@ module Pact
         context "by description" do
           context "when the interaction matches" do
             it "returns true" do
-              expect(subject.matches_criteria?(:description => /request.*food/)).to be_true
+              expect(subject.matches_criteria?(:description => /request.*food/)).to be true
             end
           end
           context "when the interaction does not match" do
             it "returns false" do
-              expect(subject.matches_criteria?(:description => /blah/)).to be_false
+              expect(subject.matches_criteria?(:description => /blah/)).to be false
             end
           end
         end

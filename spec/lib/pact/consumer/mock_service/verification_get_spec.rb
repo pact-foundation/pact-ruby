@@ -11,9 +11,17 @@ module Pact
 
       subject { VerificationGet.new('VerificationGet', logger, interaction_list, log_description) }
 
-      its(:request_path) { should eq '/verify'}
-      its(:request_method) { should eq 'GET'}
+      describe "request_path" do
+        it "is /verify" do
+          expect(subject.request_path).to eq '/verify'
+        end
+      end
 
+      describe "request_method" do
+        it "is GET" do
+          expect(subject.request_method).to eq 'GET'
+        end
+      end
 
       describe "#respond" do
         let(:env) { {

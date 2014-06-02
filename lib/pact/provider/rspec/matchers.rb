@@ -1,6 +1,7 @@
 require 'rspec'
 require 'pact/matchers'
 require 'pact/provider/matchers/messages'
+require 'pact/rspec'
 
 RSpec::Matchers.define :match_term do |expected|
 
@@ -12,7 +13,7 @@ RSpec::Matchers.define :match_term do |expected|
   end
 
   failure_message_for_should do | actual |
-    match_term_failure_message @difference, actual, ::RSpec.configuration.color_enabled
+    match_term_failure_message @difference, actual, Pact::RSpec.color_enabled?
   end
 
 end

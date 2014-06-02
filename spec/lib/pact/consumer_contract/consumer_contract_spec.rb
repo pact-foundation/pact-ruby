@@ -169,7 +169,7 @@ eos
       end
 
       it "should write to a file specified by the consumer and provider name" do
-        File.exist?(expected_pact_path).should be_true
+        File.exist?(expected_pact_path).should be true
       end
 
       it "should write the interactions to the file" do

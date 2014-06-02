@@ -24,13 +24,13 @@ module Pact
           expect(subject.headers).to be_instance_of(Pact::NullExpectation)
         end
       end
-    end    
+    end
 
     describe "as_json" do
       subject { Request::Expected.new(:get, '/path', {:header => 'value'}, {:body => 'yeah'}, "query", {some: 'options'}) }
       context "with options" do
         it "does not include the options because they are a temporary hack and should leave no trace of themselves in the pact file" do
-          expect(subject.as_json.key?(:options)).to be_false
+          expect(subject.as_json.key?(:options)).to be false
         end
       end
     end
@@ -55,7 +55,7 @@ module Pact
       let(:actual_query) { '' }
 
       it "matches identical requests" do
-        expect(subject.matches? actual_request).to be_true
+        expect(subject.matches? actual_request).to be true
       end
 
       context "when the methods are the same but one is symbolized" do
@@ -63,7 +63,7 @@ module Pact
         let(:actual_method) { 'get' }
 
         it "matches" do
-          expect(subject.matches? actual_request).to be_true
+          expect(subject.matches? actual_request).to be true
         end
       end
 
@@ -72,7 +72,7 @@ module Pact
         let(:actual_method) { 'post' }
 
         it "does not match" do
-          expect(subject.matches? actual_request).to be_false
+          expect(subject.matches? actual_request).to be false
         end
       end
 
@@ -81,7 +81,7 @@ module Pact
         let(:actual_path) { '/bar' }
 
         it "does not match" do
-          expect(subject.matches? actual_request).to be_false
+          expect(subject.matches? actual_request).to be false
         end
       end
 
@@ -90,7 +90,7 @@ module Pact
         let(:actual_path) { '/foo/' }
 
         it "matches" do
-          expect(subject.matches? actual_request).to be_true
+          expect(subject.matches? actual_request).to be true
         end
       end
 
@@ -99,7 +99,7 @@ module Pact
         let(:actual_body) { '' }
 
         it "does not match" do
-          expect(subject.matches? actual_request).to be_false
+          expect(subject.matches? actual_request).to be false
         end
       end
 
@@ -108,7 +108,7 @@ module Pact
         let(:actual_body) { '' }
 
         it "matches" do
-          expect(subject.matches? actual_request).to be_true
+          expect(subject.matches? actual_request).to be true
         end
       end
 
@@ -122,7 +122,7 @@ module Pact
         let(:actual_body) { nil }
 
         it "does not match" do
-          expect(subject.matches? actual_request).to be_false
+          expect(subject.matches? actual_request).to be false
         end
       end
 
@@ -131,7 +131,7 @@ module Pact
         let(:actual_body) { 'bar' }
 
         it "does not match" do
-          expect(subject.matches? actual_request).to be_false
+          expect(subject.matches? actual_request).to be false
         end
       end
 
@@ -151,7 +151,7 @@ module Pact
         end
 
         it "matches" do
-          expect(subject.matches? actual_request).to be_true
+          expect(subject.matches? actual_request).to be true
         end
       end
 
@@ -171,7 +171,7 @@ module Pact
         end
 
         it "does not match" do
-          expect(subject.matches? actual_request).to be_false
+          expect(subject.matches? actual_request).to be false
         end
       end
 
@@ -191,7 +191,7 @@ module Pact
         end
 
         it "matches" do
-          expect(subject.matches? actual_request).to be_true
+          expect(subject.matches? actual_request).to be true
         end
       end
 
@@ -211,7 +211,7 @@ module Pact
         end
 
         it "does not match" do
-          expect(subject.matches? actual_request).to be_false
+          expect(subject.matches? actual_request).to be false
         end
       end
 
@@ -231,7 +231,7 @@ module Pact
         end
 
         it "does not match" do
-          expect(subject.matches? actual_request).to be_false
+          expect(subject.matches? actual_request).to be false
         end
       end
       context "when the expected body contains non-matching hash where one field contains a substring of the other" do
@@ -248,7 +248,7 @@ module Pact
           end
 
           it "does not match" do
-            expect(subject.matches? actual_request).to be_false
+            expect(subject.matches? actual_request).to be false
           end
       end
 
@@ -268,7 +268,7 @@ module Pact
         end
 
         it "does not match" do
-          expect(subject.matches? actual_request).to be_true
+          expect(subject.matches? actual_request).to be true
         end
       end
 
@@ -277,7 +277,7 @@ module Pact
         let(:actual_query) { 'bar' }
 
         it "does not match" do
-          expect(subject.matches? actual_request).to be_false
+          expect(subject.matches? actual_request).to be false
         end
       end
 
@@ -286,7 +286,7 @@ module Pact
         let(:actual_query) { 'bar' }
 
         it 'matches' do
-          expect(subject.matches? actual_request).to be_true
+          expect(subject.matches? actual_request).to be true
         end
       end
 
@@ -295,7 +295,7 @@ module Pact
         let(:expected_body) { { thing: "123" } }
 
         it 'does not match' do
-          expect(subject.matches? actual_request).to be_false
+          expect(subject.matches? actual_request).to be false
         end
       end
 
@@ -305,13 +305,13 @@ module Pact
         context "when allowing unexpected keys" do
           let(:options) { {'allow_unexpected_keys_in_body' => true} } #From json, these will be strings
           it "matches" do
-            expect(subject.matches? actual_request).to be_true
+            expect(subject.matches? actual_request).to be true
           end
         end
         context "when not allowing unexpected keys" do
           let(:options) { {'allow_unexpected_keys_in_body' => false} }
           it "does not match" do
-            expect(subject.matches? actual_request).to be_false
+            expect(subject.matches? actual_request).to be false
           end
         end
       end

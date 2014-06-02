@@ -1,10 +1,12 @@
+require 'pact/provider/pact_helper_locator'
+require 'rake/file_utils'
+
 module Pact
   module TaskHelper
 
     extend self
 
     def execute_pact_verify pact_uri = nil, pact_helper = nil
-      require 'pact/provider/pact_helper_locator'
       execute_cmd verify_command(pact_helper || Pact::Provider::PactHelperLocater.pact_helper_path, pact_uri)
     end
 
@@ -14,8 +16,6 @@ module Pact
     end
 
     def verify_command pact_helper, pact_uri = nil
-      require 'rake/file_utils'
-
       command_parts = []
       command_parts << FileUtils::RUBY
       command_parts << "-S pact verify"

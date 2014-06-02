@@ -79,7 +79,7 @@ module Pact
        end
 
        it "calls finalize" do
-        expect(@test.finalized).to be_true
+        expect(@test.finalized).to be true
        end
     end
   end

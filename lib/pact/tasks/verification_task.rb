@@ -1,7 +1,4 @@
 require 'rake/tasklib'
-require 'pact/provider/pact_spec_runner'
-require 'pact/provider/verification_report'
-require 'pact/tasks/task_helper'
 
 =begin
   To create a rake pact:verify:<something> task
@@ -30,9 +27,9 @@ require 'pact/tasks/task_helper'
 
 module Pact
   class VerificationTask < ::Rake::TaskLib
+
     attr_reader :pact_spec_configs
 
-    include Pact::TaskHelper
     def initialize(name)
       @pact_spec_configs = []
       @name = name
@@ -68,14 +65,17 @@ module Pact
 
     def rake_task
       namespace :pact do
+
         desc "Verify provider against the consumer pacts for #{name}"
         task "verify:#{name}" do |t, args|
+
+          require 'pact/tasks/task_helper'
 
           exit_statuses = pact_spec_configs.collect do | config |
             Pact::TaskHelper.execute_pact_verify config[:uri], config[:pact_helper]
           end
 
-          handle_verification_failure do
+          Pact::TaskHelper.handle_verification_failure do
             exit_statuses.count{ | status | status != 0 }
           end
         end

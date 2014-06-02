@@ -1,6 +1,7 @@
 require 'spec_helper'
 require 'pact/provider/rspec/formatter'
 require './spec/support/factories'
+require './spec/support/spec_support'
 
 module Pact
   module Provider
@@ -18,7 +19,8 @@ module Pact
         let(:missing_provider_states) { 'missing_provider_states'}
 
         subject { Formatter.new output }
-        let(:output_result) { output.string }
+
+        let(:output_result) { Pact::SpecSupport.remove_ansicolor output.string }
 
         before do
           allow(PrintMissingProviderStates).to receive(:call)

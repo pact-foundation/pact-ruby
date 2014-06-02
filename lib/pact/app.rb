@@ -33,21 +33,57 @@ module Pact
 
   class RunPactVerification
 
+    attr_reader :options
+
+    def initialize options
+      @options = options
+    end
+
     def self.call options
+      new(options).call
+    end
+
+
+    def call
+      setup_load_path
+      load_pact_helper
+      run_specs
+    end
+
+    private
+
+    def setup_load_path
       require 'pact/provider/pact_spec_runner'
+      lib = Dir.pwd + "/lib" # Assume we are running from within the project root. RSpec is smarter about this.
+      $LOAD_PATH.unshift(lib) unless $LOAD_PATH.include?(lib)
+    end
 
+    def load_pact_helper
       load options[:pact_helper]
-      pact_spec_options = {criteria: SpecCriteria.call}
+    end
 
+    def run_specs
       exit_code = if options[:pact_uri]
-        Pact::Provider::PactSpecRunner.new([{uri: options[:pact_uri]}], pact_spec_options).run
+        run_with_pact_uri
       else
-        pact_verifications = Pact.configuration.pact_verifications
-        verification_configs = pact_verifications.collect { | pact_verification | { :uri => pact_verification.uri }}
-        raise "Please configure a pact to verify" if verification_configs.empty?
-        Pact::Provider::PactSpecRunner.new(verification_configs, options).run
+        run_with_configured_pacts
       end
       exit 1 unless exit_code == 0
+    end
+
+    def run_with_pact_uri
+      Pact::Provider::PactSpecRunner.new([{uri: options[:pact_uri]}], pact_spec_options).run
+    end
+
+    def run_with_configured_pacts
+      pact_verifications = Pact.configuration.pact_verifications
+      verification_configs = pact_verifications.collect { | pact_verification | { :uri => pact_verification.uri }}
+      raise "Please configure a pact to verify" if verification_configs.empty?
+      Pact::Provider::PactSpecRunner.new(verification_configs, options).run
+    end
+
+    def pact_spec_options
+      {criteria: SpecCriteria.call}
     end
 
   end

@@ -30,10 +30,9 @@ module Pact
 
       def expected_desc expected
         case expected
-        when Pact::Term then "match #{expected.matcher.inspect}"
         when NilClass then "be nil"
         else
-          "match \"#{expected}\""
+          "match #{expected.inspect}"
         end
       end
 

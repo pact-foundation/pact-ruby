@@ -99,9 +99,9 @@ module Pact
 
         end
 
-        context "when the expected is a Pact::Term" do
+        context "when the expected is a regexp" do
 
-          let(:expected) { Pact::Term.new(matcher: /hal/, generate: 'application/hal+json')}
+          let(:expected) { /hal/ }
           let(:expected_message) { "Expected header \"Content-Type\" to match /hal/, but was \"text/plain\"" }
 
           it "creates a message with the term's matcher" do

@@ -87,7 +87,7 @@ module Pact
                 end
               end
 
-              describe_response interaction.response, interaction_context
+              describe_response Pact::Term.unpack_regexps(interaction.response), interaction_context
 
             end
 
@@ -114,7 +114,7 @@ module Pact
             if expected_response['headers']
               describe "includes headers" do
                 expected_response['headers'].each do |name, expected_header_value|
-                  it "\"#{name}\" with value \"#{expected_header_value}\"" do
+                  it "\"#{name}\" with value #{expected_header_value.inspect}" do
                     header_value = response.headers[name]
                     expect(header_value).to match_header(name, expected_header_value)
                   end

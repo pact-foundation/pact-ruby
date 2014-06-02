@@ -15,7 +15,19 @@
             },
             "response": {
                 "status": 200,
-                "headers" : {"Content-type": "application/json"},
+                "headers" : {
+                    "Content-type": {
+                      "json_class": "Pact::Term",
+                      "data": {
+                        "generate": "text/plain",
+                        "matcher": {
+                          "json_class": "Regexp",
+                          "o": 0,
+                          "s": "text"
+                        }
+                      }
+                    }
+                },
                 "body": {
                     "message" : {
                       "json_class": "Pact::Term",

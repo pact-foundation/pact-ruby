@@ -67,21 +67,30 @@ namespace :pact do
 		# Run these specs silently, otherwise expected failures will be written to stdout and look like unexpected failures.
 		#Pact.configuration.output_stream = StringIO.new if silent
 
-		expect_to_fail "bundle exec rake pact:verify:test_app:fail"
-		expect_to_fail "bundle exec rake spec:standalone:fail"
+		expect_to_fail "bundle exec rake pact:verify:test_app:fail", with: [/Could not find one or more provider states/]
+		expect_to_fail "bundle exec rake spec:standalone:fail", with: [/Actual interactions do not match expected interactions/]
+		expect_to_fail "bundle exec rake pact:verify:term", with: [%r{"Content-type" with value /text/}]
 	end
 
-	def expect_to_fail command
-		success = execute_command command
+	def expect_to_fail command, options = {}
+		success = execute_command command, options
 		fail "Expected '#{command}' to fail" if success
 	end
 
-	def execute_command command
+	def execute_command command, options
 		result = nil
 		Open3.popen3(command) {|stdin, stdout, stderr, wait_thr|
 		  result = wait_thr.value
+		  ensure_patterns_present(options, stdout, stderr) if options[:with]
 		}
 		result.success?
+	end
+
+	def ensure_patterns_present options, stdout, stderr
+		output = stdout.read + stderr.read
+		options[:with].each do | pattern |
+			raise (::Term::ANSIColor.red("Could not find #{pattern.inspect} in output of #{command}").red + "\n\n#{output}") unless output =~ pattern
+		end
 	end
 
 end

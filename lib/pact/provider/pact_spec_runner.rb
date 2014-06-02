@@ -6,6 +6,9 @@ require 'rspec/core/formatters/json_formatter'
 require 'pact/provider/pact_helper_locator'
 require 'pact/provider/rspec/formatter'
 require 'pact/provider/rspec/silent_json_formatter'
+require 'pact/project_root'
+require 'pact/rspec'
+
 require_relative 'rspec'
 
 
@@ -83,10 +86,25 @@ module Pact
       end
 
       def run_specs
-        exit_code = ::RSpec::Core::CommandLine.new(NoConfigurationOptions.new)
-          .run(::RSpec.configuration.output_stream, ::RSpec.configuration.error_stream)
+        exit_code = if Pact::RSpec.runner_defined?
+          ::RSpec::Core::Runner.run(rspec_runner_options,
+            ::RSpec.configuration.output_stream, ::RSpec.configuration.error_stream)
+        else
+          ::RSpec::Core::CommandLine.new(NoConfigurationOptions.new)
+            .run(::RSpec.configuration.output_stream, ::RSpec.configuration.error_stream)
+        end
         @output = JSON.parse(Pact.world.json_formatter_stream.string, symbolize_keys: true)
         exit_code
+      end
+
+      def rspec_runner_options
+        ["--options", Pact.project_root.join("lib/pact/provider/rspec/custom_options_file").to_s]
+      end
+
+      def class_exists? name
+        Kernel.const_get name
+      rescue NameError
+        false
       end
 
       class NoConfigurationOptions

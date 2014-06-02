@@ -72,9 +72,9 @@ module Pact
 
               interaction_context = InteractionContext.new
 
-              before do
+              before do | example |
                 interaction_context.run_once :before do
-                  Pact.configuration.logger.info "Running example '#{self.example.full_description}'"
+                  Pact.configuration.logger.info "Running example '#{Pact::RSpec.full_description(example)}'"
                   set_up_provider_state interaction.provider_state, options[:consumer]
                   replay_interaction interaction
                   interaction_context.last_response = last_response

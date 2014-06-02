@@ -1,5 +1,6 @@
 require 'pact/consumer'
 require 'pact/consumer/spec_hooks'
+require 'pact/rspec'
 
 module Pact
   module Consumer
@@ -19,11 +20,11 @@ RSpec.configure do |config|
   end
 
   config.before :each, :pact => true do | example |
-    hooks.before_each example.example.full_description
+    hooks.before_each Pact::RSpec.full_description(example)
   end
 
   config.after :each, :pact => true do | example |
-    hooks.after_each example.example.full_description
+    hooks.after_each Pact::RSpec.full_description(example)
   end
 
   config.after :suite do

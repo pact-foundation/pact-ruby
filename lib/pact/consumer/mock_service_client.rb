@@ -1,3 +1,4 @@
+require 'net/http'
 require 'pact/consumer/mock_service_interaction_expectation'
 
 module Pact

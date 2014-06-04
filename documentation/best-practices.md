@@ -12,7 +12,7 @@ Do not hand create any HTTP requests in your consumer app or specs. Testing thro
 
 #### Use factories to create your expected models
 
-Sure, you've checked that your client deserialises the HTTP response into the object you expect, but then you need to make sure in your other tests where you stub your client that you're stubbing it with a valid object. The best way to do this is to use factories for all your tests.
+Sure, you've checked that your client deserialises the HTTP response into the object you expect, but then you need to make sure in your other tests where you stub your client that you're stubbing it with a valid object. The best way to do this is to use factories for all your tests. [More](model-factories.md)
 
 ## In your provider project
 

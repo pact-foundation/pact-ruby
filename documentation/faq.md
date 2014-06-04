@@ -80,4 +80,4 @@ However, if you have a large and complex provider, you might decide to stub some
 
 * Maintainability: Pact is "contract by example", and the examples may involve large quantities of JSON. Maintaining the JSON files by hand would be both time consuming and error prone. By dynamically creating the pacts, you have the option to keep your expectations in fixture files, or to generate them from your domain (the recommended approach, as it ensures your domain objects and their JSON representations in the pacts can never get out of sync).
 
-* Provider states: Dynamically setting expectations on the mock server allows the use of provider states, meaning you can make the same request more than once, with different expected responses, allowing you to properly test all your code paths.
+* Provider states: Dynamically setting expectations on the mock server allows the use of provider states, meaning you can make the same request in different tests, with different expected responses. This allowing you to properly test all your code paths. If all the interactions were loaded at start up from a static file, the mock server wouldn't know which response to return.

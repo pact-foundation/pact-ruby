@@ -4,9 +4,12 @@ require 'pact/consumer/configuration'
 module Pact::Consumer::Configuration
 
    describe MockService do
+
+      let(:world) { Pact::Consumer::World.new }
       before do
          Pact.clear_configuration
          Pact::Consumer::AppManager.instance.stub(:register_mock_service_for)
+         allow(Pact).to receive(:consumer_world).and_return(world)
       end
 
       describe "configure_consumer_contract_builder" do

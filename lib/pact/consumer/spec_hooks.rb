@@ -1,4 +1,5 @@
 require 'pact/doc/generate'
+require 'pact/consumer/world'
 
 module Pact
   module Consumer
@@ -24,6 +25,7 @@ module Pact
       end
 
       def after_suite
+        Pact.consumer_world.consumer_contract_builders.each { | c | c.write_pact }
         Pact::Doc::Generate.call
         Pact::Consumer::AppManager.instance.kill_all
         Pact::Consumer::AppManager.instance.clear_all

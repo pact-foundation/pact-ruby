@@ -10,12 +10,14 @@ describe "consumer side" do
     end
 
     let(:application) { double("App")}
+    let(:world) { Pact::Consumer::World.new }
 
     before do
       Pact.clear_configuration
       Pact::Consumer::AppManager.instance.clear_all
       #Don't want processes actually spawning
       Pact::Consumer::AppRegistration.any_instance.stub(:spawn)
+      allow(Pact).to receive(:consumer_world).and_return(world)
 
       my_app = application
 
@@ -38,23 +40,6 @@ describe "consumer side" do
         end
       end
 
-    end
-
-    describe "consumer" do
-
-      subject { TestHelper.new.my_service.consumer_contract.consumer }
-
-      it "should be configured" do
-        expect(subject).to be_instance_of Pact::ServiceConsumer
-      end
-
-      it "should have the right name" do
-        expect(subject.name).to eq "My Consumer"
-      end
-
-      it "should have registered the app" do
-        Pact::Consumer::AppManager.instance.app_registered_on?(1111).should be true
-      end
     end
 
     describe "providers" do

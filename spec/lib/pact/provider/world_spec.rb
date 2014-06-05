@@ -1,21 +1,21 @@
 require 'spec_helper'
-require 'pact/provider/world'
+load 'pact/provider/world.rb'
 
 describe Pact do
-  describe ".world" do
+  describe ".provider_world" do
     it "returns a world" do
-      expect(Pact.world).to be_instance_of Pact::Provider::World
+      expect(Pact.provider_world).to be_instance_of Pact::Provider::World
     end
     it "returns the same world each time" do
-      expect(Pact.world).to be Pact.world
+      expect(Pact.provider_world).to be Pact.provider_world
     end
   end
 
-  describe ".clear_world" do
+  describe ".clear_provider_world" do
     it "clears the world" do
-      original_world = Pact.world
-      Pact.clear_world
-      expect(original_world).to_not be Pact.world
+      original_world = Pact.provider_world
+      Pact.clear_provider_world
+      expect(original_world).to_not be Pact.provider_world
     end
   end
 

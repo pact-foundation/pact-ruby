@@ -1,14 +1,19 @@
 require 'net/http'
 require 'pact/consumer'
 require 'pact/consumer/rspec'
+load 'pact/consumer/world.rb'
 
 describe "A service consumer side of a pact", :pact => true  do
+
+  before do
+    Pact.clear_configuration
+    Pact.clear_consumer_world
+  end
 
   describe "blah" do
     describe "thing" do
 
   it "goes a little something like this" do
-    Pact.clear_configuration
 
     Pact.service_consumer "Consumer" do
       has_pact_with "Alice Service" do

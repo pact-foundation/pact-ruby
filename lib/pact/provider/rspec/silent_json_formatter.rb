@@ -9,7 +9,7 @@ module Pact
           # Don't want to display this to the screen,
           # not sure how else to set a custom stream for a particular formatter
           # Store a reference to this so it can be inspected afterwards.
-          super(Pact.world.json_formatter_stream)
+          super(Pact.provider_world.json_formatter_stream)
         end
 
       end

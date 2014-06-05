@@ -3,6 +3,7 @@ require 'pact/consumer/mock_service_interaction_expectation'
 
 describe Pact::Consumer::MockServiceInteractionExpectation do
   describe "as_json" do
+
     let(:options ) { {} }
     let(:request_as_json) { {a: 'request'} }
     let(:request) { instance_double('Pact::Request::Expected', :as_json => request_as_json, :options => options)}
@@ -16,9 +17,8 @@ describe Pact::Consumer::MockServiceInteractionExpectation do
       Pact::Reification.stub(:from_term).with(response).and_return(generated_response)
     end
 
-    it "generates an actual response" do
-      Pact::Reification.should_receive(:from_term).with(response).and_return(generated_response)
-      expect(subject.as_json[:response]).to eq generated_response
+    it "includes the response" do
+      expect(subject.as_json[:response]).to eq response
     end
 
     it "includes the options in the request" do

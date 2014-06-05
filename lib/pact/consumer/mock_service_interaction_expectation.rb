@@ -16,7 +16,7 @@ module Pact
         hash[:provider_state] = interaction.provider_state if interaction.provider_state
         options = interaction.request.options.empty? ? {} : { options: interaction.request.options}
         hash[:request] = interaction.request.as_json.merge(options)
-        hash[:response] = Reification.from_term(interaction.response)
+        hash[:response] = interaction.response
         hash
       end
 

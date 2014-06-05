@@ -28,7 +28,7 @@ module Pact
         end
 
         def print_missing_provider_states
-          PrintMissingProviderStates.call Pact.world.provider_states.missing_provider_states, output
+          PrintMissingProviderStates.call Pact.provider_world.provider_states.missing_provider_states, output
         end
 
         def interaction_rerun_commands

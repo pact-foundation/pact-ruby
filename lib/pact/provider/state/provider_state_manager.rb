@@ -26,15 +26,15 @@ module Pact
       end
 
       def get_provider_state
-        Pact.world.provider_states.get(provider_state_name, :for => consumer)
+        Pact.provider_world.provider_states.get(provider_state_name, :for => consumer)
       end
 
       def get_consumer_base_provider_state
-        Pact.world.provider_states.get_base(:for => consumer)
+        Pact.provider_world.provider_states.get_base(:for => consumer)
       end
 
       def get_global_base_provider_state
-        Pact.world.provider_states.get_base
+        Pact.provider_world.provider_states.get_base
       end
 
     end

@@ -35,7 +35,7 @@ module Pact
           run_specs
         ensure
           ::RSpec.reset
-          Pact.clear_world
+          Pact.clear_provider_world
         end
       end
 
@@ -93,7 +93,7 @@ module Pact
           ::RSpec::Core::CommandLine.new(NoConfigurationOptions.new)
             .run(::RSpec.configuration.output_stream, ::RSpec.configuration.error_stream)
         end
-        @output = JSON.parse(Pact.world.json_formatter_stream.string, symbolize_keys: true)
+        @output = JSON.parse(Pact.provider_world.json_formatter_stream.string, symbolize_keys: true)
         exit_code
       end
 

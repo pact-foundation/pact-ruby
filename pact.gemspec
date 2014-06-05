@@ -35,4 +35,5 @@ Gem::Specification.new do |gem|
   gem.add_development_dependency 'hashie', '~> 2.0'
   gem.add_development_dependency 'rspec-fire'
   gem.add_development_dependency 'activesupport'
+  gem.add_development_dependency 'faraday'
 end

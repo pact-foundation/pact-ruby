@@ -10,7 +10,7 @@ module Pact::Provider::State
 
     before do
       PROVIDER_STATE_MESSAGES.clear
-      Pact.clear_world
+      Pact.clear_provider_world
 
       Pact.set_up do
         PROVIDER_STATE_MESSAGES << :global_base_set_up

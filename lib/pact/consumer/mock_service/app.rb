@@ -11,6 +11,7 @@ require 'pact/consumer/mock_service/interaction_replay'
 require 'pact/consumer/mock_service/missing_interactions_get'
 require 'pact/consumer/mock_service/verification_get'
 require 'pact/consumer/mock_service/log_get'
+require 'pact/consumer/mock_service/pact_post'
 
 AwesomePrint.defaults = {
   indent: -2,
@@ -28,13 +29,15 @@ module Pact
         interaction_list = InteractionList.new
 
         @name = options.fetch(:name, "MockService")
+        interactions = []
         @handlers = [
           MissingInteractionsGet.new(@name, @logger, interaction_list),
           VerificationGet.new(@name, @logger, interaction_list, log_description),
           InteractionPost.new(@name, @logger, interaction_list),
           InteractionDelete.new(@name, @logger, interaction_list),
           LogGet.new(@name, @logger),
-          InteractionReplay.new(@name, @logger, interaction_list)
+          PactPost.new(@name, @logger, interactions),
+          InteractionReplay.new(@name, @logger, interaction_list, interactions)
         ]
       end
 

@@ -2,6 +2,8 @@ require 'spec_helper'
 require 'net/http'
 require 'pact/consumer'
 require 'pact/consumer/rspec'
+require 'faraday'
+load 'pact/consumer/world.rb'
 
 describe "A service consumer side of a pact", :pact => true  do
 
@@ -12,6 +14,7 @@ describe "A service consumer side of a pact", :pact => true  do
 
     it "returns an error" do
       Pact.clear_configuration
+      Pact.clear_consumer_world
 
       Pact.service_consumer "Consumer" do
         has_pact_with "Mary Service" do
@@ -109,6 +112,8 @@ describe "A service consumer side of a pact", :pact => true  do
       end
     end
 
+    let(:body) { 'That is some good Mallory.' }
+
     it "goes like this" do
       zebra_service.
         given(:the_zebras_are_here).
@@ -120,12 +125,14 @@ describe "A service consumer side of a pact", :pact => true  do
         will_respond_with({
           status: 200,
           headers: { 'Content-Type' => 'text/html' },
-          body: Pact::Term.new(matcher: /Mallory/, generate: 'That is some good Mallory.')
+          body: Pact::Term.new(matcher: /Mallory/, generate: body)
         })
 
-        interactions = Pact::ConsumerContract.from_json(File.read(zebra_service.consumer_contract.pactfile_path)).interactions
-        interactions.first.provider_state.should eq("the_zebras_are_here")
-        sleep 1
+      response = Faraday.get(zebra_service.mock_service_base_url + "/mallory", nil, {'Accept' => 'text/html'})
+      expect(response.body).to eq body
+
+      interactions = Pact::ConsumerContract.from_json(zebra_service.write_pact).interactions
+      interactions.first.provider_state.should eq("the_zebras_are_here")
     end
   end
 
@@ -146,11 +153,6 @@ describe "A service consumer side of a pact", :pact => true  do
         upon_receiving("a request with multiple headers").
         with(method: :get, path: '/something', headers: {'X-Something' => "1, 2"}).
         will_respond_with(status: 200)
-    end
-
-    it "handles multiple headers with the same name in a comma separated list" do
-        interactions = Pact::ConsumerContract.from_json(File.read(multi_headers_service.consumer_contract.pactfile_path)).interactions
-        expect(interactions.first.request.headers['X-Something']).to eq("1, 2")
 
         uri = URI('http://localhost:1240/something')
         post_req = Net::HTTP::Get.new(uri.path)
@@ -159,6 +161,11 @@ describe "A service consumer side of a pact", :pact => true  do
         response = Net::HTTP.start(uri.hostname, uri.port) do |http|
           http.request post_req
         end
+    end
+
+    it "handles multiple headers with the same name in a comma separated list" do
+      interactions = Pact::ConsumerContract.from_json(multi_headers_service.write_pact).interactions
+      expect(interactions.first.request.headers['X-Something']).to eq("1, 2")
     end
 
   end

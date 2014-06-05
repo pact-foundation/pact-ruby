@@ -102,7 +102,7 @@ module Pact
 
     def pactfile_path
       raise 'You must first specify a consumer and service name' unless (consumer && consumer.name && provider && provider.name)
-      @pactfile_path ||= File.join(Pact.configuration.pact_dir, pact_file_name)
+      @pactfile_path ||= file_path consumer.name, provider.name
     end
 
     def update_pactfile

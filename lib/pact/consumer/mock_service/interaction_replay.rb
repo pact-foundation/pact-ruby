@@ -1,6 +1,8 @@
 require 'pact/matchers'
 require 'pact/consumer/mock_service/rack_request_helper'
 require 'pact/consumer/mock_service/interaction_mismatch'
+require 'pact/consumer_contract'
+require 'pact/consumer/interactions_filter'
 
 module Pact
   module Consumer
@@ -9,12 +11,13 @@ module Pact
       include Pact::Matchers
       include RackRequestHelper
 
-      attr_accessor :name, :logger, :interaction_list
+      attr_accessor :name, :logger, :interaction_list, :interactions
 
-      def initialize name, logger, interaction_list
+      def initialize name, logger, interaction_list, interactions
         @name = name
         @logger = logger
         @interaction_list = interaction_list
+        @interactions = DistinctInteractionsFilter.new(interactions)
       end
 
       def match? env
@@ -26,6 +29,10 @@ module Pact
       end
 
       private
+
+      def add_verified_interaction interaction
+        interactions << interaction
+      end
 
       def find_response request_hash
         actual_request = Request::Actual.from_hash(request_hash)
@@ -51,6 +58,7 @@ module Pact
 
       def handle_matched_interaction interaction
         interaction_list.register_matched interaction
+        add_verified_interaction interaction
         response = response_from(interaction.response)
         logger.info "Found matching response for #{interaction.request.method_and_path}"
         logger.debug pretty_generate(interaction.response)
@@ -110,7 +118,7 @@ module Pact
       end
 
       def response_from response
-        [response['status'], (response['headers'] || {}).to_hash, [render_body(response['body'])]]
+        [response['status'], (response['headers'] || {}).to_hash, [render_body(Pact::Reification.from_term(response['body']))]]
       end
 
       def render_body body

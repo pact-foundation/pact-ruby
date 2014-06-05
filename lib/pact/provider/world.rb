@@ -2,12 +2,12 @@ require 'pact/provider/state/provider_state_proxy'
 
 module Pact
 
-  def self.world
+  def self.provider_world
     @world ||= Pact::Provider::World.new
   end
 
   # internal api, for testing only
-  def self.clear_world
+  def self.clear_provider_world
     @world = nil
   end
 

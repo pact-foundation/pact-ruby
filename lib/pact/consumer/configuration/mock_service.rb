@@ -1,6 +1,7 @@
 require 'pact/consumer/app_manager'
 require 'pact/consumer/consumer_contract_builder'
 require 'pact/consumer/consumer_contract_builders'
+require 'pact/consumer/world'
 
 module Pact
   module Consumer
@@ -78,6 +79,7 @@ module Pact
           Pact::Consumer::ConsumerContractBuilders.send(:define_method, @name.to_sym) do
             consumer_contract_builder
           end
+          Pact.consumer_world.add_consumer_contract_builder consumer_contract_builder
         end
 
         def validate

@@ -7,7 +7,7 @@ module Pact
 
       MOCK_SERVICE_ADMINISTRATON_HEADERS = {'X-Pact-Mock-Service' => 'true'}
 
-      def initialize name, port
+      def initialize port
         @http = Net::HTTP.new('localhost', port)
       end
 
@@ -32,14 +32,22 @@ module Pact
       end
 
       def add_expected_interaction interaction
-        http.request_post('/interactions', MockServiceInteractionExpectation.new(interaction).to_json, MOCK_SERVICE_ADMINISTRATON_HEADERS)
+        response = http.request_post('/interactions', MockServiceInteractionExpectation.new(interaction).to_json, MOCK_SERVICE_ADMINISTRATON_HEADERS)
+        raise "\e[31m#{response.body}\e[m" unless response.is_a? Net::HTTPSuccess
       end
 
       def self.clear_interactions port, example_description
         Net::HTTP.new("localhost", port).delete("/interactions?example_description=#{URI.encode(example_description)}", MOCK_SERVICE_ADMINISTRATON_HEADERS)
       end
 
+      def write_pact pacticipant_details
+        response = http.request_post("/pact", pacticipant_details.to_json, MOCK_SERVICE_ADMINISTRATON_HEADERS)
+        raise "\e[31m#{response.body}\e[m" unless response.is_a? Net::HTTPSuccess
+        response.body
+      end
+
       private
+
       attr_reader :http
 
       #todo: in need a better home (where can we move it?)

@@ -57,6 +57,14 @@ namespace :pact do
 		Rake::Task['pact:tests:all'].execute
 	end
 
+	desc "Ensure pact file is written"
+	task 'test:pactfile' do
+		pact_path = './spec/pacts/standalone_consumer-standalone_provider.json'
+		FileUtils.rm_rf pact_path
+		Rake::Task['spec:standalone:pass'].execute
+		fail "Did not find expected pact file at #{pact_path}" unless File.exist?(pact_path)
+	end
+
 	desc 'Runs pact tests against a sample application, testing failure and success.'
 	task 'test:fail' do
 

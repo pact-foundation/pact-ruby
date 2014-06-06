@@ -274,6 +274,8 @@ As in all things, there are good ways to implement Pacts, and there are not so g
 
 ## Links
 
+[Simplifying microservices testing with pacts](http://dius.com.au/2014/05/19/simplifying-micro-service-testing-with-pacts/) - Ron Holshausen (one of the original pact authors)
+
 [Pact specification](https://github.com/bethesque/pact-specification)
 
 [Integrated tests are a scam](http://vimeo.com/80533536) - J.B. Rainsberger

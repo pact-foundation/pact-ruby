@@ -25,8 +25,8 @@ module Pact
         let(:interaction_replay) { double(InteractionReplay, :match? => true)}
 
         before do
-          InteractionReplay.stub(:new).and_return(interaction_replay)
-          interaction_replay.stub(:respond).and_raise("an error")
+          expect(InteractionReplay).to receive(:new).and_return(interaction_replay)
+          expect(interaction_replay).to receive(:respond).and_raise("an error")
         end
 
         subject { get "/" }

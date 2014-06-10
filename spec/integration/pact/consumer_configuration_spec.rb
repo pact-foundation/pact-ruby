@@ -15,8 +15,8 @@ describe "consumer side" do
     before do
       Pact.clear_configuration
       Pact::Consumer::AppManager.instance.clear_all
-      #Don't want processes actually spawning
-      Pact::Consumer::AppRegistration.any_instance.stub(:spawn)
+      # Don't want processes actually spawning
+      allow_any_instance_of(Pact::Consumer::AppRegistration).to receive(:spawn)
       allow(Pact).to receive(:consumer_world).and_return(world)
 
       my_app = application
@@ -47,18 +47,18 @@ describe "consumer side" do
       subject { TestHelper.new.my_service }
 
       it "should have defined methods in MockServices for the providers" do
-        subject.should be_instance_of Pact::Consumer::ConsumerContractBuilder
+        expect(subject).to be_instance_of(Pact::Consumer::ConsumerContractBuilder)
       end
 
       context "when standalone is true" do
         it "is not registerd with the AppManager" do
-          Pact::Consumer::AppManager.instance.app_registered_on?(1234).should be false
+          expect(Pact::Consumer::AppManager.instance.app_registered_on?(1234)).to be_falsey
         end
       end
 
       context "when standalone is false" do
         it "should register the MockServices on their given ports if they are not" do
-          Pact::Consumer::AppManager.instance.app_registered_on?(1235).should be true
+          expect(Pact::Consumer::AppManager.instance.app_registered_on?(1235)).to be_truthy
         end
       end
     end

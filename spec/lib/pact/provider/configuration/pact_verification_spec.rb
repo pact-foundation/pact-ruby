@@ -20,7 +20,7 @@ module Pact
             end
 
             it "creates a Verification" do
-              Pact::Provider::PactVerification.should_receive(:new).with(consumer_name, url, ref)
+              expect(Pact::Provider::PactVerification).to receive(:new).with(consumer_name, url, ref)
               subject
             end
           end

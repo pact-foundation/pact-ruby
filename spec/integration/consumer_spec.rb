@@ -132,7 +132,7 @@ describe "A service consumer side of a pact", :pact => true  do
       expect(response.body).to eq body
 
       interactions = Pact::ConsumerContract.from_json(zebra_service.write_pact).interactions
-      interactions.first.provider_state.should eq("the_zebras_are_here")
+      expect(interactions.first.provider_state).to eq("the_zebras_are_here")
     end
   end
 

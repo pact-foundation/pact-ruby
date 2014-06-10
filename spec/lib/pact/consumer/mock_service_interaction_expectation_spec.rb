@@ -14,7 +14,7 @@ describe Pact::Consumer::MockServiceInteractionExpectation do
     let(:expected_hash) { {:response => generated_response, :request => as_json_with_options, :description => '' } }
 
     before do
-      Pact::Reification.stub(:from_term).with(response).and_return(generated_response)
+      allow(Pact::Reification).to receive(:from_term).with(response).and_return(generated_response)
     end
 
     it "includes the response" do

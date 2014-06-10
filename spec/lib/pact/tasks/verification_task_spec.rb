@@ -30,12 +30,12 @@ module Pact
     describe '.initialize' do
       context 'with an explict pact_helper' do
         it 'creates the tasks' do
-          Rake::Task.tasks.should include_task @task_name
+          expect(Rake::Task.tasks).to include_task @task_name
         end
       end
       context 'with no explict pact_helper' do
         it 'creates the tasks' do
-          Rake::Task.tasks.should include_task @task_name_with_explict_pact_helper
+          expect(Rake::Task.tasks).to include_task @task_name_with_explict_pact_helper
         end
       end
     end

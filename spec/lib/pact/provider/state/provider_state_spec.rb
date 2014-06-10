@@ -33,26 +33,26 @@ module Pact
         describe 'set_up' do
           it 'should call the block passed to set_up' do
             subject.set_up
-            MESSAGES.should eq ['set_up']
+            expect(MESSAGES).to eq ['set_up']
           end
         end
 
         describe 'tear_down' do
           it 'should call the block passed to set_up' do
             subject.tear_down
-            MESSAGES.should eq ['tear_down']
+            expect(MESSAGES).to eq ['tear_down']
           end
         end
 
         describe '.get' do
           context 'when the name is a matching symbol' do
             it 'will return the ProviderState' do
-              ProviderStates.get('no_alligators').should_not be_nil
+              expect(ProviderStates.get('no_alligators')).to_not be_nil
             end
           end
           context 'when the name is a matching string' do
             it 'will return the ProviderState' do
-              ProviderStates.get('some alligators').should_not be_nil
+              expect(ProviderStates.get('some alligators')).to_not be_nil
             end
           end
         end
@@ -121,11 +121,11 @@ module Pact
         describe '.get' do
           context 'for a consumer' do
             it 'has a namespaced name' do
-              ProviderStates.get('the weather is sunny', :for => 'a consumer').should_not be_nil
+              expect(ProviderStates.get('the weather is sunny', :for => 'a consumer')).to_not be_nil
             end
 
             it 'falls back to a global state of the same name if one is not found for the specified consumer' do
-              ProviderStates.get('the weather is cloudy', :for => 'a consumer').should_not be_nil
+              expect(ProviderStates.get('the weather is cloudy', :for => 'a consumer')).to_not be_nil
             end
           end
 
@@ -135,7 +135,7 @@ module Pact
           context 'for a consumer' do
             it 'runs its own setup' do
               ProviderStates.get('the weather is sunny', :for => 'a consumer').set_up
-              NAMESPACED_MESSAGES.should eq ['sunny!']
+              expect(NAMESPACED_MESSAGES).to eq ['sunny!']
             end
           end
         end

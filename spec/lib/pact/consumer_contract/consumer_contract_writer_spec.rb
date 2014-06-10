@@ -11,7 +11,7 @@ module Pact
 
     before do
       Pact.clear_configuration
-      Pact.configuration.stub(:pact_dir).and_return(File.expand_path(tmp_pact_dir))
+      allow(Pact.configuration).to receive(:pact_dir).and_return(File.expand_path(tmp_pact_dir))
       FileUtils.rm_rf tmp_pact_dir
       FileUtils.mkdir_p tmp_pact_dir
       FileUtils.cp support_pact_file, "#{tmp_pact_dir}/a_consumer-a_provider.json"

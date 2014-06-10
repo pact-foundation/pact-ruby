@@ -15,8 +15,8 @@ module Pact
       let(:diff_2) { {} }
 
       before do
-        expected_request_1.stub(:difference).with(actual_request).and_return(diff_1)
-        expected_request_2.stub(:difference).with(actual_request).and_return(diff_2)
+        allow(expected_request_1).to receive(:difference).with(actual_request).and_return(diff_1)
+        allow(expected_request_2).to receive(:difference).with(actual_request).and_return(diff_2)
       end
 
       describe "short_summary" do

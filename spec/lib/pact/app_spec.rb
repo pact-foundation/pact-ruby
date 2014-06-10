@@ -16,9 +16,9 @@ module Pact
 
       context "when ENV variables are defined" do
         before do
-          ENV.stub(:[])
-          ENV.stub(:[]).with("PACT_DESCRIPTION").and_return(env_description)
-          ENV.stub(:[]).with("PACT_PROVIDER_STATE").and_return(env_provider_state)
+          allow(ENV).to receive(:[])
+          allow(ENV).to receive(:[]).with("PACT_DESCRIPTION").and_return(env_description)
+          allow(ENV).to receive(:[]).with("PACT_PROVIDER_STATE").and_return(env_provider_state)
         end
 
         it "returns the env vars as regexes" do
@@ -34,8 +34,8 @@ module Pact
 
       context "when provider state is an empty string" do
         before do
-          ENV.stub(:[]).with(anything).and_return(nil)
-          ENV.stub(:[]).with("PACT_PROVIDER_STATE").and_return('')
+          allow(ENV).to receive(:[]).with(anything).and_return(nil)
+          allow(ENV).to receive(:[]).with("PACT_PROVIDER_STATE").and_return('')
         end
 
         it "returns a nil provider state so that it matches a nil provider state on the interaction" do

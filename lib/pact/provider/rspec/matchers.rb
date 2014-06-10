@@ -12,9 +12,16 @@ RSpec::Matchers.define :match_term do |expected|
     (@difference = diff(expected, actual)).empty?
   end
 
-  failure_message_for_should do | actual |
+  def failure_message(actual)
     match_term_failure_message @difference, actual, Pact::RSpec.color_enabled?
   end
+
+  # RSpec 2 compatibility:
+  alias_method :failure_message_for_should, :failure_message
+
+  # failure_message_for_should do | actual |
+  #   match_term_failure_message @difference, actual, Pact::RSpec.color_enabled?
+  # end
 
 end
 
@@ -27,8 +34,15 @@ RSpec::Matchers.define :match_header do |header_name, expected|
     diff(expected, actual).empty?
   end
 
-  failure_message_for_should do | actual |
+  def failure_message(actual)
     match_header_failure_message header_name, expected, actual
   end
+
+  # RSpec 2 compatibility:
+  alias_method :failure_message_for_should, :failure_message
+
+  # failure_message_for_should do | actual |
+  #   match_header_failure_message header_name, expected, actual
+  # end
 
 end

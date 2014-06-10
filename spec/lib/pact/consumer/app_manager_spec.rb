@@ -21,7 +21,7 @@ module Pact::Consumer
 
         it "registers the mock service as running on the given port" do
           AppManager.instance.register_mock_service_for name, url
-          expect(AppManager.instance.app_registered_on?(1234)).to be_truthy
+          expect(AppManager.instance.app_registered_on?(1234)).to eq true
         end
       end
       context "for https://" do

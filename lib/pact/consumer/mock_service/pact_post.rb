@@ -21,8 +21,8 @@ module Pact
       end
 
       def respond env
-        logger.info "Writing pact BLAH"
         consumer_contract_details = JSON.parse(env['rack.input'].string, symbolize_names: true)
+        logger.info "Writing pact with details #{consumer_contract_details}"
         consumer_contract_writer = ConsumerContractWriter.new(consumer_contract_details.merge(interactions: interactions), logger)
         json = consumer_contract_writer.write
 

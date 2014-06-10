@@ -18,7 +18,7 @@ module Pact
         @consumer_contract_details = {
           consumer: {name: attributes[:consumer_name]},
           provider: {name: attributes[:provider_name]},
-          pactfile_write_mode: attributes[:pactfile_write_mode]
+          pactfile_write_mode: attributes[:pactfile_write_mode].to_s
         }
         @mock_service_client = MockServiceClient.new(attributes[:port])
         @mock_service_base_url = "http://localhost:#{attributes[:port]}"

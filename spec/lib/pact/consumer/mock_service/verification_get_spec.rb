@@ -12,8 +12,8 @@ module Pact
       subject { VerificationGet.new('VerificationGet', logger, interaction_list, log_description) }
 
       describe "request_path" do
-        it "is /verify" do
-          expect(subject.request_path).to eq '/verify'
+        it "is /interactions/verification" do
+          expect(subject.request_path).to eq '/interactions/verification'
         end
       end
 

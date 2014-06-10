@@ -14,7 +14,7 @@ module Pact
       end
 
       def request_path
-        '/verify'
+        '/interactions/verification'
       end
 
       def request_method
@@ -26,7 +26,6 @@ module Pact
           logger.info "Verifying - interactions matched for example \"#{example_description(env)}\""
           [200, {'Content-Type' => 'text/plain'}, ['Interactions matched']]
         else
-
           error_message = FailureMessage.new(interaction_list).to_s
           logger.warn "Verifying - actual interactions do not match expected interactions for example \"#{example_description(env)}\". \n#{error_message}"
           logger.warn error_message

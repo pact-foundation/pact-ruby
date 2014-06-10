@@ -12,7 +12,7 @@ module Pact
       end
 
       def request_path
-        '/number_of_missing_interactions'
+        '/interactions/missing'
       end
 
       def request_method
@@ -22,7 +22,7 @@ module Pact
       def respond env
         number_of_missing_interactions = @interaction_list.missing_interactions.size
         logger.info "Number of missing interactions for mock \"#{name}\" = #{number_of_missing_interactions}"
-        [200, {}, ["#{number_of_missing_interactions}"]]
+        [200, {}, [{size: number_of_missing_interactions}.to_json]]
       end
 
     end

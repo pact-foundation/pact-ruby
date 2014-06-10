@@ -28,15 +28,16 @@ class InteractionFactory
   extend Pact::HashUtils
 
   DEFAULTS = Hash[
+    'description' => 'a description',
+    'provider_state' => 'a thing exists',
     'request' => {
       'path' => '/path',
       'method' => 'get',
     },
     'response' => {
+      'status' => 200,
       'body' => {a: 'response body'}
-    },
-    'description' => 'a description',
-    'provider_state' => 'a thing exists'
+    }
   ]
 
   def self.create hash = {}

@@ -12,7 +12,7 @@ module Pact
       end
 
       def verify example_description
-        response = http.request_get("/verify?example_description=#{URI.encode(example_description)}", MOCK_SERVICE_ADMINISTRATON_HEADERS)
+        response = http.request_get("/interactions/verification?example_description=#{URI.encode(example_description)}", MOCK_SERVICE_ADMINISTRATON_HEADERS)
         raise "\e[31m#{response.body}\e[m" unless response.is_a? Net::HTTPSuccess
       end
 
@@ -22,8 +22,8 @@ module Pact
 
       def wait_for_interactions wait_max_seconds, poll_interval
         wait_until_true(wait_max_seconds, poll_interval) do
-          response = http.request_get("/number_of_missing_interactions", MOCK_SERVICE_ADMINISTRATON_HEADERS)
-          response.body == '0'
+          response = http.request_get("/interactions/missing", MOCK_SERVICE_ADMINISTRATON_HEADERS)
+          JSON.parse(response.body)['size'] == 0
         end
       end
 
@@ -32,7 +32,7 @@ module Pact
       end
 
       def add_expected_interaction interaction
-        response = http.request_post('/interactions', MockServiceInteractionExpectation.new(interaction).to_json, MOCK_SERVICE_ADMINISTRATON_HEADERS)
+        response = http.request_post('/interactions', MockServiceInteractionExpectation.new(interaction).to_json, MOCK_SERVICE_ADMINISTRATON_HEADERS.merge("Content-Type" => "application/json"))
         raise "\e[31m#{response.body}\e[m" unless response.is_a? Net::HTTPSuccess
       end
 
@@ -41,7 +41,7 @@ module Pact
       end
 
       def write_pact pacticipant_details
-        response = http.request_post("/pact", pacticipant_details.to_json, MOCK_SERVICE_ADMINISTRATON_HEADERS)
+        response = http.request_post("/pact", pacticipant_details.to_json, MOCK_SERVICE_ADMINISTRATON_HEADERS.merge("Content-Type" => "application/json"))
         raise "\e[31m#{response.body}\e[m" unless response.is_a? Net::HTTPSuccess
         response.body
       end

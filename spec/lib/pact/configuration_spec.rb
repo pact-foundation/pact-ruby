@@ -143,7 +143,7 @@ describe Pact do
       context "when @pactfile_write_mode is :smart" do
         before do
           configuration.pactfile_write_mode = :smart
-          configuration.should_receive(:is_rake_running?).and_return(is_rake_running)
+          expect(configuration).to receive(:is_rake_running?).and_return(is_rake_running)
         end
         context "when rake is running" do
           let(:is_rake_running) { true }

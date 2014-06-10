@@ -27,21 +27,20 @@ class InteractionFactory
 
   extend Pact::HashUtils
 
-  DEFAULTS = Hash[
-    'description' => 'a description',
-    'provider_state' => 'a thing exists',
-    'request' => {
-      'path' => '/path',
-      'method' => 'get',
-    },
-    'response' => {
-      'status' => 200,
-      'body' => {a: 'response body'}
-    }
-  ]
-
   def self.create hash = {}
-    Pact::Interaction.from_hash(stringify_keys(deep_merge(DEFAULTS, stringify_keys(hash))))
+    defaults = {
+        'description' => 'a description',
+        'provider_state' => 'a thing exists',
+        'request' => {
+            'path' => '/path',
+            'method' => 'get',
+        },
+        'response' => {
+            'status' => 200,
+            'body' => {a: 'response body'}
+        }
+    }
+    Pact::Interaction.from_hash(stringify_keys(deep_merge(defaults, stringify_keys(hash))))
   end
 end
 

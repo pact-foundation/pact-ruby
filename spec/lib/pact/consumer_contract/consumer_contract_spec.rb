@@ -12,7 +12,7 @@ module Pact
       end
 
       before do
-        DateTime.stub(:now).and_return(DateTime.strptime("2013-08-15T13:27:13+10:00"))
+        allow(DateTime).to receive(:now).and_return(DateTime.strptime("2013-08-15T13:27:13+10:00"))
       end
 
       let(:service_consumer) { double('ServiceConsumer', :as_json => {:a => 'consumer'}) }
@@ -21,7 +21,7 @@ module Pact
       let(:expected_as_json) { {:provider=>{:a=>"provider"}, :consumer=>{:a=>"consumer"}, :interactions=>[{:mock=>"interaction"}], :metadata=>{:pactSpecificationVersion=> "1.0.0" }} }
 
       it "should return a hash representation of the Pact" do
-        pact.as_json.should eq expected_as_json
+        expect(pact.as_json).to eq expected_as_json
       end
 
     end
@@ -32,43 +32,43 @@ module Pact
         let(:string) { '{"interactions":[{"request": {"path":"/path", "method" : "get"}}], "consumer": {"name" : "Bob"} , "provider": {"name" : "Mary"} }' }
 
         it "should create a Pact" do
-          loaded_pact.should be_instance_of ConsumerContract
+          expect(loaded_pact).to be_instance_of ConsumerContract
         end
 
         it "should have interactions" do
-          loaded_pact.interactions.should be_instance_of Array
+          expect(loaded_pact.interactions).to be_instance_of Array
         end
 
         it "should have a consumer" do
-          loaded_pact.consumer.should be_instance_of Pact::ServiceConsumer
+          expect(loaded_pact.consumer).to be_instance_of Pact::ServiceConsumer
         end
 
         it "should have a provider" do
-          loaded_pact.provider.should be_instance_of Pact::ServiceProvider
+          expect(loaded_pact.provider).to be_instance_of Pact::ServiceProvider
         end
       end
 
       context "with old 'producer' key" do
         let(:string) { File.read('./spec/support/a_consumer-a_producer.json')}
         it "should create a Pact" do
-          loaded_pact.should be_instance_of ConsumerContract
+          expect(loaded_pact).to be_instance_of ConsumerContract
         end
 
         it "should have interactions" do
-          loaded_pact.interactions.should be_instance_of Array
+          expect(loaded_pact.interactions).to be_instance_of Array
         end
 
         it "should have a consumer" do
-          loaded_pact.consumer.should be_instance_of Pact::ServiceConsumer
+          expect(loaded_pact.consumer).to be_instance_of Pact::ServiceConsumer
         end
 
         it "should have a provider" do
-          loaded_pact.provider.should be_instance_of Pact::ServiceProvider
-          loaded_pact.provider.name.should eq "an old producer"
+          expect(loaded_pact.provider).to be_instance_of Pact::ServiceProvider
+          expect(loaded_pact.provider.name).to eq "an old producer"
         end
 
         it "should have a provider_state" do
-          loaded_pact.interactions.first.provider_state.should eq 'state one'
+          expect(loaded_pact.interactions.first.provider_state).to eq 'state one'
         end
       end
     end
@@ -80,7 +80,7 @@ module Pact
       subject { ConsumerContract.new(:interactions => [interaction], :consumer => consumer, :provider => provider) }
       let(:criteria) { {:description => /blah/} }
       before do
-        interaction.should_receive(:matches_criteria?).with(criteria).and_return(matches)
+        expect(interaction).to receive(:matches_criteria?).with(criteria).and_return(matches)
       end
       context "by description" do
         context "when no interactions are found" do
@@ -106,8 +106,8 @@ module Pact
       let(:criteria) { {:description => /blah/} }
 
       before do
-        interaction1.should_receive(:matches_criteria?).with(criteria).and_return(matches1)
-        interaction2.should_receive(:matches_criteria?).with(criteria).and_return(matches2)
+        expect(interaction1).to receive(:matches_criteria?).with(criteria).and_return(matches1)
+        expect(interaction2).to receive(:matches_criteria?).with(criteria).and_return(matches2)
       end
 
       subject { ConsumerContract.new(:interactions => [interaction1, interaction2], :consumer => consumer, :provider => provider) }
@@ -162,18 +162,18 @@ eos
       let(:interactions) { [double("interaction", as_json: "something")]}
       subject { ConsumerContract.new(:consumer => consumer, :provider => provider, :interactions => interactions) }
       before do
-        Pact.configuration.stub(:pact_dir).and_return(Pathname.new("./tmp/pactfiles"))
+        allow(Pact.configuration).to receive(:pact_dir).and_return(Pathname.new("./tmp/pactfiles"))
         FileUtils.rm_rf pacts_dir
         FileUtils.mkdir_p pacts_dir
         subject.update_pactfile
       end
 
       it "should write to a file specified by the consumer and provider name" do
-        File.exist?(expected_pact_path).should be true
+        expect(File.exist?(expected_pact_path)).to be_truthy
       end
 
       it "should write the interactions to the file" do
-        File.read(expected_pact_path).should eql expected_pact_string.strip
+        expect(File.read(expected_pact_path)).to eql expected_pact_string.strip
       end
     end
   end

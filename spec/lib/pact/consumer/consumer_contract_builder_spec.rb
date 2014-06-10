@@ -42,11 +42,11 @@ module Pact
 
         it "posts the interaction with generated response to the mock service" do
           subject.handle_interaction_fully_defined interaction
-          WebMock.should have_requested(:post, 'localhost:2222/interactions').with(body: interaction_json)
+          expect(WebMock).to have_requested(:post, 'localhost:2222/interactions').with(body: interaction_json)
         end
 
         it "resets the interaction_builder to nil" do
-          subject.should_receive(:interaction_builder=).with(nil)
+          expect(subject).to receive(:interaction_builder=).with(nil)
           subject.handle_interaction_fully_defined interaction
         end
       end

@@ -5,7 +5,6 @@ module Pact
   module Consumer
     describe MockServiceClient do
 
-
       subject { MockServiceClient.new(4444) }
 
       let(:administration_headers) { {'X-Pact-Mock-Service' => 'true'} }
@@ -23,7 +22,7 @@ module Pact
 
           it "sets up the expected interaction on the mock server" do
             subject.add_expected_interaction interaction
-            post_interaction.should have_been_made
+            expect(post_interaction).to have_been_made
           end
         end
 
@@ -41,7 +40,7 @@ module Pact
 
           it "does not throw an error" do
             subject.verify "some example"
-            get_verification.should have_been_made
+            expect(get_verification).to have_been_made
           end
         end
       end
@@ -55,7 +54,7 @@ module Pact
 
         it "deletes the interactions" do
           MockServiceClient.clear_interactions 4444, "some example"
-          delete_verifications.should have_been_made
+          expect(delete_verifications).to have_been_made
         end
       end
 
@@ -71,7 +70,7 @@ module Pact
 
         it "deletes the interactions" do
           expect(subject.write_pact(consumer_contract_details)).to eq pact
-          post_pact.should have_been_made
+          expect(post_pact).to have_been_made
         end
 
       end

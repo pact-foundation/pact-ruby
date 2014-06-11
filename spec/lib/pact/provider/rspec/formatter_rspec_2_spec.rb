@@ -1,12 +1,12 @@
 require 'spec_helper'
-require 'pact/provider/rspec/formatter'
+require 'pact/provider/rspec/formatter_rspec_2'
 require './spec/support/factories'
 require './spec/support/spec_support'
 
 module Pact
   module Provider
     module RSpec
-      describe Formatter do
+      describe Formatter2 do
 
         let(:interaction) { InteractionFactory.create 'provider_state' => 'a state', 'description' => 'a description'}
         let(:pactfile_uri) { 'pact_file_uri' }
@@ -18,7 +18,7 @@ module Pact
         let(:rerun_command) { "rake pact:verify:at[pact_file_uri] PACT_DESCRIPTION=\"a description\" PACT_PROVIDER_STATE=\"a state\" # an interaction" }
         let(:missing_provider_states) { 'missing_provider_states'}
 
-        subject { Formatter.new output }
+        subject { Formatter2.new output }
 
         let(:output_result) { Pact::SpecSupport.remove_ansicolor output.string }
 

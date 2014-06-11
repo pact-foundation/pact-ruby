@@ -14,12 +14,6 @@ module Pact
   module Provider
     class World
 
-      attr_reader :json_formatter_stream
-
-      def initialize
-        @json_formatter_stream = StringIO.new
-      end
-
       def provider_states
         @provider_states_proxy ||= Pact::Provider::State::ProviderStateProxy.new
       end

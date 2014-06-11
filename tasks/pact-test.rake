@@ -88,15 +88,16 @@ namespace :pact do
 		result = nil
 		Open3.popen3(command) {|stdin, stdout, stderr, wait_thr|
 		  result = wait_thr.value
-		  ensure_patterns_present(options, stdout, stderr) if options[:with]
+		  ensure_patterns_present(command, options, stdout, stderr) if options[:with]
 		}
 		result.success?
 	end
 
-	def ensure_patterns_present options, stdout, stderr
+	def ensure_patterns_present command, options, stdout, stderr
+		require 'term/ansicolor'
 		output = stdout.read + stderr.read
 		options[:with].each do | pattern |
-			raise (::Term::ANSIColor.red("Could not find #{pattern.inspect} in output of #{command}").red + "\n\n#{output}") unless output =~ pattern
+			raise (::Term::ANSIColor.red("Could not find #{pattern.inspect} in output of #{command}") + "\n\n#{output}") unless output =~ pattern
 		end
 	end
 

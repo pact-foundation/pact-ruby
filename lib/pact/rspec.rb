@@ -9,6 +9,17 @@ module Pact
       end
     end
 
+    def self.formatter_class
+      if ::RSpec::Core::Formatters.respond_to?(:register)
+        require 'pact/provider/rspec/formatter_rspec_3'
+        Pact::Provider::RSpec::Formatter
+      else
+        require 'pact/provider/rspec/formatter_rspec_2'
+        Pact::Provider::RSpec::Formatter2
+      end
+
+    end
+
     def self.full_description example
       example.respond_to?(:full_description) ? example.full_description : example.example.full_description
     end

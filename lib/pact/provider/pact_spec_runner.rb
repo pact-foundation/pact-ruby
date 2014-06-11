@@ -2,10 +2,7 @@ require 'open-uri'
 require 'rspec'
 require 'rspec/core'
 require 'rspec/core/formatters/documentation_formatter'
-require 'rspec/core/formatters/json_formatter'
 require 'pact/provider/pact_helper_locator'
-require 'pact/provider/rspec/formatter'
-require 'pact/provider/rspec/silent_json_formatter'
 require 'pact/project_root'
 require 'pact/rspec'
 
@@ -72,8 +69,7 @@ module Pact
           config.output_stream = Pact.configuration.output_stream
         end
 
-        config.add_formatter Pact::Provider::RSpec::Formatter
-        config.add_formatter Pact::Provider::RSpec::SilentJsonFormatter
+        config.add_formatter Pact::RSpec.formatter_class
 
         config.before(:suite) do
           # Preload app before suite so the classes loaded in memory are consistent for
@@ -87,13 +83,11 @@ module Pact
 
       def run_specs
         exit_code = if Pact::RSpec.runner_defined?
-          ::RSpec::Core::Runner.run(rspec_runner_options,
-            ::RSpec.configuration.output_stream, ::RSpec.configuration.error_stream)
+          ::RSpec::Core::Runner.run(rspec_runner_options)
         else
           ::RSpec::Core::CommandLine.new(NoConfigurationOptions.new)
             .run(::RSpec.configuration.output_stream, ::RSpec.configuration.error_stream)
         end
-        @output = JSON.parse(Pact.provider_world.json_formatter_stream.string, symbolize_keys: true)
         exit_code
       end
 

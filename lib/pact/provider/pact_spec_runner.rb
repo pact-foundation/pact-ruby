@@ -57,8 +57,7 @@ module Pact
 
         config.color = true
         config.pattern = "pattern which doesn't match any files"
-        config.backtrace_inclusion_patterns = [Regexp.new(Dir.getwd), /pact.*pact\.rake.*2/]
-        config.backtrace_exclusion_patterns << /pact/
+        config.backtrace_inclusion_patterns = [Regexp.new(Dir.getwd), /bin\/pact/]
 
         config.extend Pact::Provider::RSpec::ClassMethods
         config.include Pact::Provider::RSpec::InstanceMethods

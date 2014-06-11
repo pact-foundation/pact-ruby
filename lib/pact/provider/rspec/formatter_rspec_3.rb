@@ -7,8 +7,11 @@ module Pact
     module RSpec
       class Formatter < ::RSpec::Core::Formatters::DocumentationFormatter
 
-        ::RSpec::Core::Formatters.register self, :example_group_started, :example_group_finished,
-                                  :example_passed, :example_pending, :example_failed
+        Pact::RSpec.with_rspec_3 do
+          ::RSpec::Core::Formatters.register self, :example_group_started, :example_group_finished,
+                                    :example_passed, :example_pending, :example_failed
+        end
+
         C = ::Term::ANSIColor
 
         def dump_summary(summary)

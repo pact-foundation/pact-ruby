@@ -99,6 +99,8 @@ module Pact
 
           describe "returns a response which" do
 
+            include Pact::RSpec::Matchers
+
             let(:expected_response_status) { expected_response['status'] }
             let(:expected_response_body) { expected_response['body'] }
             let(:response) { interaction_context.last_response }

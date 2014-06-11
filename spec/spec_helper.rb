@@ -3,8 +3,8 @@ require 'fakefs/spec_helpers'
 require 'rspec'
 require 'pact'
 require 'webmock/rspec'
-require_relative 'support/factories'
-require_relative 'support/spec_support'
+require 'support/factories'
+require 'support/spec_support'
 require 'pact/provider/rspec'
 
 WebMock.disable_net_connect!(allow_localhost: true)

@@ -8,6 +8,16 @@ module Pact
     module RSpec
       describe Formatter2 do
 
+        Pact::RSpec.with_rspec_3 do
+
+          # These methods don't exist in RSpec3
+          class Formatter2
+            def failure_color arg ; arg; end
+            def detail_color arg ; arg; end
+          end
+
+        end
+
         let(:interaction) { InteractionFactory.create 'provider_state' => 'a state', 'description' => 'a description'}
         let(:pactfile_uri) { 'pact_file_uri' }
         let(:description) { 'an interaction' }

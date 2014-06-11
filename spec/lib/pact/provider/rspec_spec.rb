@@ -1,6 +1,9 @@
 require 'pact/provider/rspec'
+require 'pact/provider/rspec/matchers'
 
 describe "the match_term matcher" do
+
+  include Pact::RSpec::Matchers
 
   it 'does not match a hash to an array' do
     expect({}).to_not match_term([])

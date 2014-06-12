@@ -45,6 +45,7 @@ module Pact
 
 
     def call
+      initialize_rspec
       setup_load_path
       load_pact_helper
       run_specs
@@ -52,10 +53,20 @@ module Pact
 
     private
 
+    def initialize_rspec
+      # If the pact_helper loads a library that adds its own formatter before we set one,
+      # we will get a ProgressFormatter too, and get little dots sprinkled throughout our output.
+      require 'rspec'
+      require 'pact/provider/rspec/formatter'
+      ::RSpec.configuration.add_formatter Pact::Provider::RSpec::Formatter
+    end
+
     def setup_load_path
       require 'pact/provider/pact_spec_runner'
-      lib = Dir.pwd + "/lib" # Assume we are running from within the project root. RSpec is smarter about this.
+      lib = File.join(Dir.pwd, "lib") # Assume we are running from within the project root. RSpec is smarter about this.
+      spec = File.join(Dir.pwd, "spec")
       $LOAD_PATH.unshift(lib) unless $LOAD_PATH.include?(lib)
+      $LOAD_PATH.unshift(spec) if Dir.exist?(spec) && !$LOAD_PATH.include?(spec)
     end
 
     def load_pact_helper

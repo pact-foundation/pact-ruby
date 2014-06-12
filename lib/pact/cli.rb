@@ -5,7 +5,7 @@ require 'pact/consumer'
 require 'rack/handler/webrick'
 
 module Pact
-  class App < Thor
+  class CLI < Thor
 
     desc 'verify', "Verify a pact"
     method_option :pact_helper, aliases: "-h", desc: "Pact helper file", :required => true

@@ -1,5 +1,5 @@
 require 'spec_helper'
-require 'pact/app'
+require 'pact/cli'
 
 module Pact
   describe SpecCriteria do

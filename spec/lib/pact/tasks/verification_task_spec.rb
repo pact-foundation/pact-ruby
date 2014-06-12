@@ -44,7 +44,7 @@ module Pact
 
       context "with no explicit pact_helper" do
         it 'verifies the pacts using the TaskHelper' do
-          expect(Pact::TaskHelper).to receive(:execute_pact_verify).with(@pact_uri, nil)
+          expect(Pact::TaskHelper).to receive(:execute_pact_verify).with(@pact_uri, nil, nil)
           Rake::Task[@task_name].execute
         end
       end
@@ -52,7 +52,7 @@ module Pact
       context "with an explict pact_helper" do
         let(:verification_config) { [ uri: @pact_uri, pact_helper: @pact_helper] }
         it 'verifies the pacts using the TaskHelper' do
-          expect(Pact::TaskHelper).to receive(:execute_pact_verify).with(@pact_uri, @pact_helper)
+          expect(Pact::TaskHelper).to receive(:execute_pact_verify).with(@pact_uri, @pact_helper, nil)
           Rake::Task[@task_name_with_explict_pact_helper].execute
         end
       end

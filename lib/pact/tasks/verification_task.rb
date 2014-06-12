@@ -29,8 +29,10 @@ module Pact
   class VerificationTask < ::Rake::TaskLib
 
     attr_reader :pact_spec_configs
+    attr_accessor :rspec_opts
 
     def initialize(name)
+      @rspec_opts = nil
       @pact_spec_configs = []
       @name = name
       yield self
@@ -72,7 +74,7 @@ module Pact
           require 'pact/tasks/task_helper'
 
           exit_statuses = pact_spec_configs.collect do | config |
-            Pact::TaskHelper.execute_pact_verify config[:uri], config[:pact_helper]
+            Pact::TaskHelper.execute_pact_verify config[:uri], config[:pact_helper], rspec_opts
           end
 
           Pact::TaskHelper.handle_verification_failure do

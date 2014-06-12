@@ -1,5 +1,5 @@
 require 'pact/provider/print_missing_provider_states'
-require 'rspec/core/formatters'
+require 'rspec/core/formatters/documentation_formatter'
 require 'term/ansicolor'
 
 module Pact

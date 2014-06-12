@@ -73,8 +73,8 @@ by your CI box) add the following to your Rakefile. The pact.uri may be a local 
 # This creates a rake task that can be executed by running
 # $ rake pact:verify:dev
 
-Pact::VerificationTask.new(:dev) do | pact |
-  pact.uri '../path-to-your-consumer-project/specs/pacts/my_consumer-my_provider.json'
+Pact::VerificationTask.new(:dev) do | task |
+  task.uri '../path-to-your-consumer-project/specs/pacts/my_consumer-my_provider.json'
 end
 ```
 
@@ -83,6 +83,15 @@ end
 At some stage, you'll want to be able to run your specs one at a time while you implement each feature. At the bottom of the failed pact:verify output you will see the commands to rerun each failed interaction individually. A command to run just one interaction will look like this:
 
     $ rake pact:verify PACT_DESCRIPTION="a request for something" PACT_PROVIDER_STATE="something exists"
+
+## Configuring RSpec
+
+Pact uses dynamically created RSpec specs to verify pacts. If you want to modify the behaviour of the underlying RSpec execution, you can:
+
+1. Set `task.rspec_opts` in your custom rake VerificationTask, the same way you would with a normal RSpec rake task declaration.
+1. Configure RSpec in the pact_helper using the normal `RSpec.configure` code.
+
+For future proofing though, try to use the provider state set_up/tear_down blocks where you can, because we may swap out RSpec for custom verification code in the future.
 
 ## Pact Helper location
 

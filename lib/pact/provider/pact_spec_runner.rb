@@ -68,7 +68,9 @@ module Pact
           config.output_stream = Pact.configuration.output_stream
         end
 
-        config.add_formatter Pact::RSpec.formatter_class
+        Pact::RSpec.with_rspec_2 do
+          ::RSpec.configuration.add_formatter Pact::RSpec.formatter_class
+        end
 
         config.before(:suite) do
           # Preload app before suite so the classes loaded in memory are consistent for
@@ -78,6 +80,7 @@ module Pact
           # (eg. with database_cleaner transactions)
           Pact.configuration.provider.app
         end
+
       end
 
       def run_specs

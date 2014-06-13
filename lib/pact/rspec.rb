@@ -1,3 +1,4 @@
+require 'rspec'
 # This is horrible, must work out a better way of doing this
 module Pact
   module RSpec

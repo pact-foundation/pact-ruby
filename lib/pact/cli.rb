@@ -54,11 +54,13 @@ module Pact
     private
 
     def initialize_rspec
-      # If the pact_helper loads a library that adds its own formatter before we set one,
+      # With RSpec3, if the pact_helper loads a library that adds its own formatter before we set one,
       # we will get a ProgressFormatter too, and get little dots sprinkled throughout our output.
-      require 'rspec'
-      require 'pact/provider/rspec/formatter'
-      ::RSpec.configuration.add_formatter Pact::Provider::RSpec::Formatter
+      require 'pact/rspec'
+
+      Pact::RSpec.with_rspec_3 do
+        ::RSpec.configuration.add_formatter Pact::RSpec.formatter_class
+      end
     end
 
     def setup_load_path

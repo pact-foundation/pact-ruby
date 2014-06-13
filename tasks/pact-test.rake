@@ -2,10 +2,6 @@ require 'pact/tasks/verification_task'
 require 'open3'
 
 Pact::VerificationTask.new(:stubbing) do | pact |
-	pact.uri './spec/support/stubbing.json', :pact_helper => './spec/support/stubbing'
-end
-
-Pact::VerificationTask.new(:stubbing_using_allow) do | pact |
 	pact.uri './spec/support/stubbing.json', :pact_helper => './spec/support/stubbing_using_allow.rb'
 end
 
@@ -45,7 +41,6 @@ namespace :pact do
 	desc "All the verification tests"
 	task "tests:all" do
 		Rake::Task['pact:verify:stubbing'].execute
-		Rake::Task['pact:verify:stubbing_using_allow'].execute
 		Rake::Task['spec:standalone:pass'].execute
 		Rake::Task['pact:verify'].execute
 		Rake::Task['pact:verify:test_app:pass'].execute

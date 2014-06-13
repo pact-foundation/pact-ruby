@@ -158,18 +158,10 @@ end
 
 ### Including modules for use in set_up and tear_down
 
-To use RSpec's `allow()` syntax, include `RSpec::Mocks::ExampleMethods` in the configuration.
+Any modules included this way will be available in the set_up and tear_down blocks. One common use of this to include factory methods for setting up data so that the provider states file doesn't get too bloated.
 
 ```ruby
 Pact.configure do | config |
-  config.include RSpec::Mocks::ExampleMethods
-end
-```
-
-Any modules included this way will be available in the set_up and tear_down blocks eg. test data helper methods.
-
-```ruby
-Pact.configure do | config |
-  config.include MyFactoryMethods
+  config.include MyTestHelperMethods
 end
 ```

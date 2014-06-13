@@ -1,5 +1,5 @@
 require 'sinatra/base'
-require 'animal_service/animal_repository'
+require_relative 'animal_repository'
 
 module AnimalService
 

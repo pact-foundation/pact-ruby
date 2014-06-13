@@ -13,7 +13,7 @@ module Pact
           pact_helper_search_results = []
           PACT_HELPER_FILE_PATTERNS.find { | pattern | (pact_helper_search_results.concat(Dir.glob(pattern))).any? }
           raise NO_PACT_HELPER_FOUND_MSG if pact_helper_search_results.empty?
-          "#{Dir.pwd}/#{pact_helper_search_results[0]}"
+          File.join(Dir.pwd, pact_helper_search_results[0])
         end
 
     end

@@ -2,10 +2,6 @@ require 'pact/provider/rspec'
 
 require "./spec/service_consumers/provider_states_for_zoo_app"
 
-Pact.configure do | config |
-  config.include RSpec::Mocks::ExampleMethods
-end
-
 Pact.service_provider 'Animal Service' do
 
   honours_pact_with "Zoo App" do

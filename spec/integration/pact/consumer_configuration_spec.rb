@@ -52,13 +52,13 @@ describe "consumer side" do
 
       context "when standalone is true" do
         it "is not registerd with the AppManager" do
-          expect(Pact::Consumer::AppManager.instance.app_registered_on?(1234)).to be_falsey
+          expect(Pact::Consumer::AppManager.instance.app_registered_on?(1234)).to eq false
         end
       end
 
       context "when standalone is false" do
         it "should register the MockServices on their given ports if they are not" do
-          expect(Pact::Consumer::AppManager.instance.app_registered_on?(1235)).to be_truthy
+          expect(Pact::Consumer::AppManager.instance.app_registered_on?(1235)).to eq true
         end
       end
     end

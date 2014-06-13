@@ -24,10 +24,6 @@ end
 # Include the ExampleMethods module after the provider states are declared
 # to ensure the ordering doesn't matter
 
-Pact.configure do | config |
-  config.include RSpec::Mocks::ExampleMethods
-end
-
 Pact.service_provider 'Provider' do
   app { App }
 end

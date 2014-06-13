@@ -2,10 +2,6 @@ require 'pact/tasks/verification_task'
 require 'open3'
 
 Pact::VerificationTask.new(:stubbing) do | pact |
-	pact.uri './spec/support/stubbing.json', :pact_helper => './spec/support/stubbing'
-end
-
-Pact::VerificationTask.new(:stubbing_using_allow) do | pact |
 	pact.uri './spec/support/stubbing.json', :pact_helper => './spec/support/stubbing_using_allow.rb'
 end
 
@@ -45,7 +41,6 @@ namespace :pact do
 	desc "All the verification tests"
 	task "tests:all" do
 		Rake::Task['pact:verify:stubbing'].execute
-		Rake::Task['pact:verify:stubbing_using_allow'].execute
 		Rake::Task['spec:standalone:pass'].execute
 		Rake::Task['pact:verify'].execute
 		Rake::Task['pact:verify:test_app:pass'].execute
@@ -88,15 +83,16 @@ namespace :pact do
 		result = nil
 		Open3.popen3(command) {|stdin, stdout, stderr, wait_thr|
 		  result = wait_thr.value
-		  ensure_patterns_present(options, stdout, stderr) if options[:with]
+		  ensure_patterns_present(command, options, stdout, stderr) if options[:with]
 		}
 		result.success?
 	end
 
-	def ensure_patterns_present options, stdout, stderr
+	def ensure_patterns_present command, options, stdout, stderr
+		require 'term/ansicolor'
 		output = stdout.read + stderr.read
 		options[:with].each do | pattern |
-			raise (::Term::ANSIColor.red("Could not find #{pattern.inspect} in output of #{command}").red + "\n\n#{output}") unless output =~ pattern
+			raise (::Term::ANSIColor.red("Could not find #{pattern.inspect} in output of #{command}") + "\n\n#{output}") unless output =~ pattern
 		end
 	end
 

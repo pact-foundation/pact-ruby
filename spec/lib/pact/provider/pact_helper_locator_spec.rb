@@ -29,7 +29,7 @@ module Pact::Provider
         context "the pact_helper is stored in #{dir}" do
           it "finds the pact_helper" do
             make_pactfile dir
-            expect(subject).to eq "#{Dir.pwd}#{dir}/pact_helper.rb"
+            expect(subject).to eq File.join(Dir.pwd, dir, 'pact_helper.rb')
           end
         end
       end
@@ -38,7 +38,7 @@ module Pact::Provider
         it "returns the one that matches the most explict search pattern" do
           make_pactfile '/spec/consumer'
           FileUtils.touch 'pact_helper.rb'
-          expect(subject).to eq "#{Dir.pwd}/spec/consumer/pact_helper.rb"
+          expect(subject).to eq File.join(Dir.pwd, '/spec/consumer/pact_helper.rb')
         end
       end
 

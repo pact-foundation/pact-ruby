@@ -2,6 +2,13 @@ Do this to generate your change history
 
   git log --pretty=format:'  * %h - %s (%an, %ad)'
 
+### 1.2.1.rc1 (13 June 2014)
+
+* b8d1586 - Making RSpec::Mocks::ExampleMethods available in set_up and tear_down, so the allow method is available without configuration.
+* 5ec17aa - Updating code to work with RSpec 3 (bethesque, Wed Jun 11 22:09:30 2014 +1000)
+* 1227b71 - RESTifying the endpoints on the mock server (bethesque, Tue Jun 10 10:06:33 2014 +1000)
+* 57409b5 - Moved pact writing into mock server, so the mock server can be reused by consumer libraries in other languages. (bethesque, Thu Jun
+
 ### 1.1.1 (3 June 2014)
 
 * 503a3f4 - The pact verify executable now adds lib to the load path before requiring the pact_helper. (bethesque, Tue Jun 3 09:26:46 2014 +1000)

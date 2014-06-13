@@ -23,7 +23,7 @@ module Pact
           puts "Reading pact at #{pactfile_uri}"
           puts "Filtering interactions by: #{options[:criteria]}" if options[:criteria] && options[:criteria].any?
           consumer_contract = Pact::ConsumerContract.from_json(read_pact_from(pactfile_uri, options))
-          describe "Verifying a pact between #{consumer_contract.consumer.name} and #{consumer_contract.provider.name}", :pactfile_uri => pactfile_uri do
+          ::RSpec.describe "Verifying a pact between #{consumer_contract.consumer.name} and #{consumer_contract.provider.name}", :pactfile_uri => pactfile_uri do
             honour_consumer_contract consumer_contract, options
           end
         end
@@ -98,6 +98,8 @@ module Pact
         def describe_response expected_response, interaction_context
 
           describe "returns a response which" do
+
+            include Pact::RSpec::Matchers
 
             let(:expected_response_status) { expected_response['status'] }
             let(:expected_response_body) { expected_response['body'] }

@@ -5,7 +5,7 @@ require 'term/ansicolor'
 module Pact
   module Provider
     module RSpec
-      class Formatter < ::RSpec::Core::Formatters::DocumentationFormatter
+      class Formatter2 < ::RSpec::Core::Formatters::DocumentationFormatter
 
         C = ::Term::ANSIColor
 

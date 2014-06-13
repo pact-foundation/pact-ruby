@@ -158,9 +158,9 @@ Pact uses RSpec and Rack::Test to create dynamic specs based on the pact files. 
 
 ```ruby
 Pact.configure do | config |
-  config.include RSpec::Mocks::ExampleMethods
+  config.include MyTestHelperMethods
 end
 ```
 
-To make modules available in the provider state set_up and tear_down blocks, include them in the configuration as shown below. One common use of this is to include RSpec::Mocks::ExampleMethods to make the `allow()` method available.
+To make modules available in the provider state set_up and tear_down blocks, include them in the configuration as shown below. One common use of this to include factory methods for setting up data so that the provider states file doesn't get too bloated.
 

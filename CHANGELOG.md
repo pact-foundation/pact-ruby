@@ -2,6 +2,11 @@ Do this to generate your change history
 
   git log --pretty=format:'  * %h - %s (%an, %ad)'
 
+### 1.2.1.rc2 (13 June 2014)
+
+* d805f35 - Ensuring the pact RSpec formatter works for both rspec 2 and rspec 3 (Beth, Fri Jun 13 16:27:01 2014 +1000)
+* 1669d46 - Fix require for sample app to work without munging LOAD_PATH (Daniel Heath, Fri Jun 13 15:50:03 2014 +1000)
+
 ### 1.2.1.rc1 (13 June 2014)
 
 * b8d1586 - Making RSpec::Mocks::ExampleMethods available in set_up and tear_down, so the allow method is available without configuration.

@@ -68,9 +68,10 @@ module Pact
           config.output_stream = Pact.configuration.output_stream
         end
 
-        Pact::RSpec.with_rspec_2 do
-          ::RSpec.configuration.add_formatter Pact::RSpec.formatter_class
-        end
+        # Sometimes the formatter set in the cli.rb get set with an output of StringIO.. don't know why
+        formatter_class = Pact::RSpec.formatter_class
+        pact_formatter = ::RSpec.configuration.formatters.find {|f| f.class == formatter_class && f.output == ::RSpec.configuration.output_stream}
+        ::RSpec.configuration.add_formatter formatter_class unless pact_formatter
 
         config.before(:suite) do
           # Preload app before suite so the classes loaded in memory are consistent for

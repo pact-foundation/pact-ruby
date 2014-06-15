@@ -7,6 +7,9 @@ require 'pact/logging'
 require 'pact/consumer/server'
 require 'singleton'
 
+require 'pact/consumer/mock_service/control_server'
+
+
 module Pact
   module Consumer
     class AppManager
@@ -26,6 +29,19 @@ module Pact
         raise "Currently only services on localhost are supported" unless uri.host == 'localhost'
 
         register(MockService.new(log_file: create_log_file(name), name: name), uri.port)
+      end
+
+      def new_register_mock_service_for name, url
+        spawn_control_server
+        uri = URI(url)
+        raise "Currently only http is supported" unless uri.scheme == 'http'
+        raise "Currently only services on localhost are supported" unless uri.host == 'localhost'
+
+        http = Net::HTTP.new('localhost', Pact.configuration.control_server_port)
+
+        response = http.request_post("/mock-services?port=#{uri.port}", '', {'X-Pact-Mock-Service' => 'true'})
+        raise "\e[31m#{response.body}\e[m" unless response.is_a? Net::HTTPSuccess
+
       end
 
       def register(app, port = FindAPort.available_port)
@@ -63,6 +79,14 @@ module Pact
         app_registrations.find_all(&:not_spawned?).collect(&:spawn)
         @apps_spawned = true
       end
+
+      def spawn_control_server
+        @control_server_spawned ||= begin
+          Pact::Server.new(ControlServer.new(log_file: create_log_file('Control Server')), Pact.configuration.control_server_port).boot
+          true
+        end
+      end
+
 
       private
 

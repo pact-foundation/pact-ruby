@@ -3,6 +3,27 @@ require 'pact/consumer/configuration'
 
 module Pact::Consumer::Configuration
 
+
+
+   describe "control_server_port" do
+
+      before do
+         Pact.clear_configuration
+      end
+      context "default value" do
+         it "is 8888" do
+            expect(Pact.configuration.control_server_port).to eq 8888
+         end
+      end
+
+      context "when configured" do
+         it "returns the configured value" do
+            Pact.configuration.control_server_port = 1234
+            expect(Pact.configuration.control_server_port).to eq 1234
+         end
+      end
+   end
+
    describe MockService do
 
       let(:world) { Pact::Consumer::World.new }
@@ -28,15 +49,15 @@ module Pact::Consumer::Configuration
 
          it "adds a verification to the Pact configuration" do
             allow(Pact::Consumer::ConsumerContractBuilder).to receive(:new).and_return(consumer_contract_builder)
-            subject.finalize
+            subject
             expect(consumer_contract_builder).to receive(:verify)
             Pact.configuration.provider_verifications.first.call
          end
 
          context "when standalone" do
             it "does not register the app with the AppManager" do
-               expect(Pact::Consumer::AppManager.instance).to_not receive(:register_mock_service_for)
-               subject.finalize
+               expect(Pact::Consumer::AppManager.instance).to_not receive(:new_register_mock_service_for)
+               subject
             end
          end
          context "when not standalone" do
@@ -48,8 +69,8 @@ module Pact::Consumer::Configuration
                end
             }
             it "registers the app with the AppManager" do
-               expect(Pact::Consumer::AppManager.instance).to receive(:register_mock_service_for).with(provider_name, url)
-               subject.finalize
+               expect(Pact::Consumer::AppManager.instance).to receive(:new_register_mock_service_for).with(provider_name, url)
+               subject
             end
          end
       end

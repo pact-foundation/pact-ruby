@@ -45,7 +45,7 @@ module Pact
 
         def register_mock_service
           unless standalone
-            AppManager.instance.register_mock_service_for provider_name, "http://localhost:#{port}"
+            AppManager.instance.new_register_mock_service_for provider_name, "http://localhost:#{port}"
           end
         end
 

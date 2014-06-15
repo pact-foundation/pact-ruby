@@ -14,7 +14,7 @@ module Pact
 
       def match? env
         headers_from(env)['X-Pact-Mock-Service'] &&
-        env['REQUEST_PATH'] == request_path &&
+        env['PATH_INFO'] == request_path &&
           env['REQUEST_METHOD'] == request_method
       end
 

@@ -30,7 +30,7 @@ end
 
 describe StandaloneClient, pact: true do
 
-  subject { StandaloneClient.new("http://localhost:1237") }
+  subject { StandaloneClient.new(standalone_service.mock_service_base_url) }
 
   describe "call" do
 
@@ -46,6 +46,7 @@ describe StandaloneClient, pact: true do
     it "will pass" do
       expect(subject.call).to eq response_body.to_json
     end
+
   end
 
 end

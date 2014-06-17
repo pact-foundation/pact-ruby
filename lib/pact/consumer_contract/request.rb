@@ -22,7 +22,7 @@ module Pact
       end
 
       def initialize(method, path, headers, body, query, options = {})
-        super(method, path, headers, body, query)
+        super(method, path, headers, body, process_query(query))
         @options = options
       end
 
@@ -65,10 +65,14 @@ module Pact
       def query_difference(actual_query)
         return {} if query.is_a? NullExpectation
 
+        diff({query: query}, {query: actual_query})
+      end
+
+      def process_query(query)
         if query.is_a?(Hash)
-          diff({query: Pact::HashQuery.new(query)}, {query: actual_query})
+          Pact::HashQuery.new(query)
         else
-          diff({query: query}, {query: actual_query})
+          query
         end
       end
     end

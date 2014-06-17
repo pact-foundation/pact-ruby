@@ -152,4 +152,74 @@ module Pact::Provider
     end
 
   end
+
+  describe "with a query" do
+
+    context "that is a string" do
+
+        pact = Pact::ConsumerContract.from_json <<-EOS
+        {
+            "consumer" : { "name" : "a consumer"},
+            "provider" : { "name" : "a provider"},
+            "interactions" : [
+                {
+                    "description": "donut creation request",
+                    "request": {
+                        "method": "get",
+                        "path": "/donuts",
+                        "query": "shape=round&hole=1"
+                    },
+                    "response": {
+                        "body": {"message": "Donut created."},
+                        "status": 201
+                    }
+                }
+            ]
+        }
+        EOS
+
+        before :all do
+            Pact.service_provider "My Provider" do
+                app { ServiceUnderTest.new }
+            end
+        end
+
+        honour_consumer_contract pact
+    end
+
+    context "that is a hash" do
+        pact = Pact::ConsumerContract.from_json <<-EOS
+        {
+            "consumer" : { "name" : "a consumer"},
+            "provider" : { "name" : "a provider"},
+            "interactions" : [
+                {
+                    "description": "donut creation request",
+                    "request": {
+                        "method": "get",
+                        "path": "/donuts",
+                        "query": {
+                            "shape": "round",
+                            "hole": 1
+                        }
+                    },
+                    "response": {
+                        "body": {"message": "Donut created."},
+                        "status": 201
+                    }
+                }
+            ]
+        }
+        EOS
+
+        before :all do
+           Pact.service_provider "My Provider" do
+                app { ServiceUnderTest.new }
+            end
+        end
+
+        honour_consumer_contract pact
+    end
+
+  end
 end

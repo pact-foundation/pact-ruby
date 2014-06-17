@@ -5,9 +5,9 @@ module Pact
     extend self
 
     def read uri, options = {}
-      pact = open(uri) { | file | file.read }
+      pact = open(uri.to_s) { | file | file.read }
       if options[:save_pactfile_to_tmp]
-        save_pactfile_to_tmp pact, ::File.basename(uri)
+        save_pactfile_to_tmp pact, ::File.basename(uri.to_s)
       end
       pact
     rescue StandardError => e

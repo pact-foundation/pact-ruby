@@ -4,6 +4,8 @@ module Pact
   class HashQuery
     include Pact::SymbolizeKeys
 
+    attr_reader :query
+
     def self.json_create(obj)
       new(obj['data']['query'])
     end
@@ -13,11 +15,15 @@ module Pact
     end
 
     def ==(other)
-      symbolize_keys(@query) == symbolize_keys(Rack::Utils.parse_nested_query(other))
+      if other.is_a?(HashQuery)
+        query == other.query
+      else
+        symbolize_keys(query) == symbolize_keys(Rack::Utils.parse_nested_query(other))
+      end
     end
 
     def to_hash
-      { json_class: self.class.name, data: { query: @query } }
+      { json_class: self.class.name, data: { query: query } }
     end
 
     def as_json(options = {})
@@ -25,11 +31,11 @@ module Pact
     end
 
     def to_s
-      Rack::Utils.build_query(@query)
+      Rack::Utils.build_query(query)
     end
 
     def empty?
-      @query.empty?
+      query.empty?
     end
   end
 end

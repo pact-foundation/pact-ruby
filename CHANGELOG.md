@@ -2,6 +2,11 @@ Do this to generate your change history
 
   git log --pretty=format:'  * %h - %s (%an, %ad)'
 
+### 1.3.0 (18 June 2014)
+
+* ea79190 - Modifying (cough*monkeypatching*cough) RSpec::Core::BacktraceFormatter as RSpec3 has some hardcoded exclusion patterns that result in *all* the backtrace lines being shown when pact:verify fails. (bethesque, Wed Jun 18 13:02:38 2014 +1000)
+* 0fd2bb2 - Support objects that return valid URI strings through to_s (Gabriel Rotbart, Fri Jun 13 14:34:03 2014 +1000)
+
 ### 1.2.1.rc2 (13 June 2014)
 
 * d805f35 - Ensuring the pact RSpec formatter works for both rspec 2 and rspec 3 (Beth, Fri Jun 13 16:27:01 2014 +1000)

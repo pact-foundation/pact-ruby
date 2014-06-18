@@ -11,6 +11,7 @@ module Pact
       end
 
       def before_each example_description
+        Pact.consumer_world.register_pact_example_ran
         Pact.configuration.logger.info "Clearing all expectations"
         Pact::Consumer::AppManager.instance.ports_of_mock_services.each do | port |
           Pact::Consumer::MockServiceClient.clear_interactions port, example_description

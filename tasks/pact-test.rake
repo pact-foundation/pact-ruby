@@ -45,6 +45,7 @@ namespace :pact do
 		Rake::Task['pact:verify'].execute
 		Rake::Task['pact:verify:test_app:pass'].execute
 		Rake::Task['pact:test:fail'].execute
+		Rake::Task['pact:test:pactfile'].execute
 	end
 
 	desc "All the verification tests with active support loaded"

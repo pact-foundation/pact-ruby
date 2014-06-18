@@ -50,11 +50,13 @@ module Pact
       end
 
       def configure_rspec
+        monkey_patch_backtrace_formatter
+
         config = ::RSpec.configuration
 
         config.color = true
         config.pattern = "pattern which doesn't match any files"
-        config.backtrace_inclusion_patterns = [Regexp.new(Dir.getwd), /bin\/pact/]
+        config.backtrace_inclusion_patterns = [Regexp.new(Dir.getwd), /pact.*main/]
 
         config.extend Pact::Provider::RSpec::ClassMethods
         config.include Pact::Provider::RSpec::InstanceMethods
@@ -96,6 +98,12 @@ module Pact
 
       def rspec_runner_options
         ["--options", Pact.project_root.join("lib/pact/provider/rspec/custom_options_file").to_s]
+      end
+
+      def monkey_patch_backtrace_formatter
+        Pact::RSpec.with_rspec_3 do
+          require 'pact/provider/rspec/backtrace_formatter'
+        end
       end
 
       def class_exists? name

@@ -24,7 +24,7 @@ module Pact
         end
       end
 
-      def after_suite
+      def after_all
         Pact.consumer_world.consumer_contract_builders.each { | c | c.write_pact }
         Pact::Doc::Generate.call
         Pact::Consumer::AppManager.instance.kill_all

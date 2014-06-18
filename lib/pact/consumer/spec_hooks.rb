@@ -24,11 +24,13 @@ module Pact
         end
       end
 
-      def after_all
-        Pact.consumer_world.consumer_contract_builders.each { | c | c.write_pact }
-        Pact::Doc::Generate.call
-        Pact::Consumer::AppManager.instance.kill_all
-        Pact::Consumer::AppManager.instance.clear_all
+      def after_suite
+        if Pact.consumer_world.any_pact_examples_ran?
+          Pact.consumer_world.consumer_contract_builders.each { | c | c.write_pact }
+          Pact::Doc::Generate.call
+          Pact::Consumer::AppManager.instance.kill_all
+          Pact::Consumer::AppManager.instance.clear_all
+        end
       end
     end
   end

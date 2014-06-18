@@ -27,7 +27,7 @@ RSpec.configure do |config|
     hooks.after_each Pact::RSpec.full_description(example)
   end
 
-  config.after :all, :pact => true do
-    hooks.after_all
+  config.after :suite do
+    hooks.after_suite
   end
 end

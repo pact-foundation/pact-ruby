@@ -19,11 +19,20 @@ module Pact
       :list => Pact::Matchers::ListDiffFormatter
     }
 
-    DIFFERS = {
-      /json/ => Pact::JsonDiffer,
-      /text\/plain/ => Pact::TextDiffer,
-      nil => Pact::TextDiffer
-    }
+    class NilMatcher
+      def self.=~ other
+        other == nil ? 0 : nil
+      end
+    end
+
+    DIFFERS = [
+      [/json/, Pact::JsonDiffer],
+      [NilMatcher, Pact::TextDiffer],
+      [/.*/, Pact::TextDiffer]
+    ]
+
+
+    DEFAULT_DIFFER = Pact::TextDiffer
 
     attr_accessor :pact_dir
     attr_accessor :log_dir
@@ -50,7 +59,7 @@ module Pact
     end
 
     def initialize
-      @differs = {}.merge!(DIFFERS)
+      @differ_registration = []
     end
 
     def logger
@@ -93,19 +102,18 @@ module Pact
       key = case content_type
       when String then Regexp.new(/^#{Regexp.escape(content_type)}$/)
       when Regexp then content_type
-      when nil then content_type
+      when nil then NilMatcher
       else
         raise "Invalid content type used to register a differ (#{content_type.inspect}). Please use a Regexp or a String."
       end
       if !differ.respond_to?(:call)
         raise "Pact.configuration.register_body_differ expects a differ that is a lamda or a class/object that responds to call."
       end
-      @differs[key] = differ
+      @differ_registration << [key, differ]
     end
 
     def differ_for_content_type content_type
-      key = @differs.keys.find{ | c | content_type =~ c }
-      @differs.fetch(key, Pact::TextDiffer)
+      differs.find{ | differ_registration | differ_registration.first =~ content_type }.last
     end
 
     def log_path
@@ -121,6 +129,10 @@ module Pact
     end
 
     private
+
+    def differs
+      @differ_registration + DIFFERS
+    end
 
     def self.default_log_dir
       File.expand_path("./log")

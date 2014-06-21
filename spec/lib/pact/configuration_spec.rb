@@ -170,11 +170,14 @@ describe Pact do
     end
 
     describe "differ_for_content_type" do
-      context "when 2 potentially matching content types are registered" do
+
+      let(:differ) { lambda { |expected, actual| }}
+
+      context "when 2 potentially matching content types have a differ registered" do
         let(:differ_1) { lambda{ |expected, actual| } }
         let(:differ_2) { lambda{ |expected, actual| } }
 
-        it "returns the first configured one" do
+        it "returns the differ that was configured first" do
           Pact.configuration.register_body_differ /application\/.*xml/, differ_2
           Pact.configuration.register_body_differ /application\/hal\+xml/, differ_1
           expect(Pact.configuration.differ_for_content_type 'application/hal+xml').to be differ_2
@@ -193,9 +196,17 @@ describe Pact do
         end
       end
 
-      context "with a nil content type" do
-        it "returns the text differ" do
-          expect(Pact.configuration.differ_for_content_type(nil)).to be Pact::TextDiffer
+      context "when the nil content type has a custom differ configured" do
+        it "returns the custom differ" do
+          Pact.configuration.register_body_differ nil, differ
+          expect(Pact.configuration.differ_for_content_type(nil)).to be differ
+        end
+      end
+
+      context "when a custom differ is registered for a content type that has a default differ" do
+        it "returns the custom differ" do
+          Pact.configuration.register_body_differ /application\/json/, differ
+          expect(Pact.configuration.differ_for_content_type 'application/json').to be differ
         end
       end
     end

@@ -20,7 +20,7 @@ module Pact
     }
 
     DIFFERS = {
-      /application\/.*json/ => Pact::JsonDiffer,
+      /json/ => Pact::JsonDiffer,
       /text\/plain/ => Pact::TextDiffer,
       nil => Pact::TextDiffer
     }

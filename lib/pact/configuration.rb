@@ -21,7 +21,8 @@ module Pact
 
     DIFFERS = {
       /application\/.*json/ => Pact::JsonDiffer,
-      /text\/plain/ => Pact::TextDiffer
+      /text\/plain/ => Pact::TextDiffer,
+      nil => Pact::TextDiffer
     }
 
     attr_accessor :pact_dir

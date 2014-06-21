@@ -192,6 +192,12 @@ describe Pact do
           expect(Pact.configuration.differ_for_content_type 'blah').to be Pact::TextDiffer
         end
       end
+
+      context "with a nil content type" do
+        it "returns the text differ" do
+          expect(Pact.configuration.differ_for_content_type(nil)).to be Pact::TextDiffer
+        end
+      end
     end
 
     describe "pactfile_write_mode" do

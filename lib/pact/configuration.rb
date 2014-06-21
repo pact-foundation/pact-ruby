@@ -89,8 +89,11 @@ module Pact
     end
 
     def register_body_differ content_type, differ
-      key = String === content_type ? Regexp.new(/^#{Regexp.escape(content_type)}$/) : content_type
-      if !(Regexp === key)
+      key = case content_type
+      when String then Regexp.new(/^#{Regexp.escape(content_type)}$/)
+      when Regexp then content_type
+      when nil then content_type
+      else
         raise "Invalid content type used to register a differ (#{content_type.inspect}). Please use a Regexp or a String."
       end
       if !differ.respond_to?(:call)
@@ -101,7 +104,7 @@ module Pact
 
     def differ_for_content_type content_type
       key = @differs.keys.find{ | c | content_type =~ c }
-      @differs[key] || Pact::TextDiffer
+      @differs.fetch(key, Pact::TextDiffer)
     end
 
     def log_path

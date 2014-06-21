@@ -160,6 +160,13 @@ describe Pact do
         end
       end
 
+      context "when a nil content type is registered for responses without a content type header" do
+        it "returns that differ if the differ for a nil content type is requested" do
+          Pact.configuration.register_body_differ nil, differ
+          expect(Pact.configuration.differ_for_content_type(nil)).to be differ
+        end
+      end
+
     end
 
     describe "differ_for_content_type" do

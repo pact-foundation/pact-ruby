@@ -127,6 +127,66 @@ describe Pact do
 
     end
 
+    describe "register_body_differ" do
+
+      let(:differ) { lambda{ |expected, actual| } }
+
+      context "with a string for a content type" do
+        it "configures the differ for the given content type" do
+          Pact.configure do | config |
+            config.register_body_differ 'application/xml', differ
+          end
+
+          expect(Pact.configuration.differ_for_content_type 'application/xml').to be differ
+        end
+      end
+
+      context "with a regexp for a content type" do
+        it "returns a matching differ" do
+          Pact.configuration.register_body_differ /application\/.*xml/, differ
+          expect(Pact.configuration.differ_for_content_type 'application/hal+xml').to be differ
+        end
+      end
+
+      context "when a non string or regexp is used to register a differ" do
+        it "raises an error" do
+          expect { Pact.configuration.register_body_differ 1, differ }.to raise_error /Invalid/
+        end
+      end
+
+      context "when something that does not respond to call is sumbitted as a differ" do
+        it "raises an error" do
+          expect { Pact.configuration.register_body_differ 'thing', Object.new }.to raise_error /responds to call/
+        end
+      end
+
+    end
+
+    describe "differ_for_content_type" do
+      context "when 2 potentially matching content types are registered" do
+        let(:differ_1) { lambda{ |expected, actual| } }
+        let(:differ_2) { lambda{ |expected, actual| } }
+
+        it "returns the first configured one" do
+          Pact.configuration.register_body_differ /application\/.*xml/, differ_2
+          Pact.configuration.register_body_differ /application\/hal\+xml/, differ_1
+          expect(Pact.configuration.differ_for_content_type 'application/hal+xml').to be differ_2
+        end
+      end
+
+      context "when a nil content type is given" do
+        it "returns the text differ" do
+          expect(Pact.configuration.differ_for_content_type nil).to be Pact::TextDiffer
+        end
+      end
+
+      context "when no matching content type is found" do
+        it "returns the text differ" do
+          expect(Pact.configuration.differ_for_content_type 'blah').to be Pact::TextDiffer
+        end
+      end
+    end
+
     describe "pactfile_write_mode" do
       context "when @pactfile_write_mode is :overwrite" do
         it 'returns :overwrite' do

@@ -4,6 +4,8 @@ require 'pact/doc/markdown/generator'
 require 'pact/matchers/unix_diff_formatter'
 require 'pact/matchers/embedded_diff_formatter'
 require 'pact/matchers/list_diff_formatter'
+require 'pact/shared/json_differ'
+require 'pact/shared/text_differ'
 
 module Pact
 
@@ -15,6 +17,11 @@ module Pact
       :embedded => Pact::Matchers::EmbeddedDiffFormatter,
       :unix => Pact::Matchers::UnixDiffFormatter,
       :list => Pact::Matchers::ListDiffFormatter
+    }
+
+    DIFFERS = {
+      /application\/.*json/ => Pact::JsonDiffer,
+      /text\/plain/ => Pact::TextDiffer
     }
 
     attr_accessor :pact_dir
@@ -39,6 +46,10 @@ module Pact
       c.output_stream = $stdout
       c.error_stream = $stderr
       c
+    end
+
+    def initialize
+      @differs = {}.merge!(DIFFERS)
     end
 
     def logger
@@ -75,6 +86,22 @@ module Pact
           raise "Pact.configuration.diff_formatter needs to respond to call, or be in the preconfigured list: #{DIFF_FORMATTERS.keys}"
         end
       end
+    end
+
+    def register_body_differ content_type, differ
+      key = String === content_type ? Regexp.new(/^#{Regexp.escape(content_type)}$/) : content_type
+      if !(Regexp === key)
+        raise "Invalid content type used to register a differ (#{content_type.inspect}). Please use a Regexp or a String."
+      end
+      if !differ.respond_to?(:call)
+        raise "Pact.configuration.register_body_differ expects a differ that is a lamda or a class/object that responds to call."
+      end
+      @differs[key] = differ
+    end
+
+    def differ_for_content_type content_type
+      key = @differs.keys.find{ | c | content_type =~ c }
+      @differs[key] || Pact::TextDiffer
     end
 
     def log_path

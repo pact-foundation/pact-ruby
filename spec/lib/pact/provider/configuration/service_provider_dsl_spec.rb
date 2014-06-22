@@ -84,6 +84,22 @@ module Pact
           end
 
         end
+
+        describe "CONFIG_RU_APP" do
+          context "when a config.ru file does not exist" do
+
+            let(:path_that_does_not_exist) { './tmp/this/path/does/not/exist/probably' }
+
+            before do
+              allow(Pact.configuration).to receive(:config_ru_path).and_return(path_that_does_not_exist)
+            end
+
+            it "raises an error with some helpful text" do
+              expect{ ServiceProviderDSL::CONFIG_RU_APP.call }.to raise_error /Could not find config\.ru file.*#{Regexp.escape(path_that_does_not_exist)}/
+            end
+
+          end
+        end
       end
 
     end

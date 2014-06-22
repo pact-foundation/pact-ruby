@@ -13,15 +13,21 @@ To verify a pact, we must:
 
 ## Using rake pact:verify
 
-Using the pact:verify task is the default way to verify pacts. It is made available by requiring `'pact/tasks'` in your Rakefile.
+Using the `pact:verify` task is the most common way to verify pacts. This is where you configure the default set of pacts that your service provider should honour.
+
+It is made available by requiring `'pact/tasks'` in your Rakefile.
 
 ```ruby
 # In Rakefile
 require 'pact/tasks'
+
+# Remember to add it to your default Rake task
+task :default => 'pact:verify'
+
 ```
 
-The pacts that will be verified by the pact:verify task are configured in the pact_helper.rb file in your provider codebase.
-The file must be called pact_helper.rb, however there is some flexibility in where it can be stored.
+The pacts that will be verified by the `pact:verify` task are configured in the `pact_helper.rb` file in your provider codebase.
+The file must be called `pact_helper.rb`, however there is some flexibility in where it can be stored.
 The recommended place is `spec/service_consumers/pact_helper.rb`.
 
 To ensure that the latest version of the consumer pact is used each time, it is recommended that you either use a [Pact Broker](https://github.com/bethesque/pact_broker)
@@ -61,7 +67,7 @@ Pact.service_provider "My Service Provider" do
 end
 ```
 
-## Using rake pact:verify:at
+## Verifying a pact at any URL using rake pact:verify:at
 
 You can verify a pact at any arbitrary local or remote URL using the `pact:verify:at` task.
 This is useful when you are developing the consumer and provider concurrently, and wish to verify the pact you have just generated in the consumer code base. It will use the same pact_helper file as `pact:verify`.
@@ -87,20 +93,11 @@ Pact::VerificationTask.new(:dev) do | task |
 end
 ```
 
-## Running one pact at a time
+## Verifying one interaction at a time
 
 At some stage, you'll want to be able to run your specs one at a time while you implement each feature. At the bottom of the failed pact:verify output you will see the commands to rerun each failed interaction individually. A command to run just one interaction will look like this:
 
     $ rake pact:verify PACT_DESCRIPTION="a request for something" PACT_PROVIDER_STATE="something exists"
-
-## Configuring RSpec
-
-Pact uses dynamically created RSpec specs to verify pacts. If you want to modify the behaviour of the underlying RSpec execution, you can:
-
-1. Set `task.rspec_opts` in your custom rake VerificationTask, the same way you would with a normal RSpec rake task declaration.
-1. Configure RSpec in the pact_helper using the normal `RSpec.configure` code.
-
-For future proofing though, try to use the provider state set_up/tear_down blocks where you can, because we may swap out RSpec for custom verification code in the future.
 
 ## Verifying pacts for non-Rack apps
 
@@ -114,6 +111,15 @@ Use [pact-jvm](https://github.com/DiUS/pact-jvm).
 ### Other apps
 Use the [pact-provider-proxy](https://github.com/bethesque/pact-provider-proxy) gem
 
+
+## Configuring RSpec
+
+Pact uses dynamically created RSpec specs to verify pacts. If you want to modify the behaviour of the underlying RSpec execution, you can:
+
+1. Configure RSpec in the pact_helper using the normal `RSpec.configure` code.
+1. Set `task.rspec_opts` in your custom rake VerificationTask, the same way you would with a normal RSpec rake task declaration.
+
+For future proofing though, try to use the provider state set_up/tear_down blocks where you can, because we may swap out RSpec for custom verification code in the future.
 
 ## Pact Helper location
 

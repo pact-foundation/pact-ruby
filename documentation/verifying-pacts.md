@@ -26,6 +26,8 @@ The recommended place is `spec/service_consumers/pact_helper.rb`.
 To ensure that the latest version of the consumer pact is used each time, it is recommended that you either use a [Pact Broker](https://github.com/bethesque/pact_broker)
 or that you publish the pacts of a successful consumer build as artefacts in your CI system.
 
+Note: Pact uses Rack::Test, and assumes that your service provider will be a Rack app. See below for options if your provider is not a Rack app.
+
 ```ruby
 # In specs/service_consumers/pact_helper.rb
 
@@ -33,7 +35,10 @@ require 'pact/provider/rspec'
 
 Pact.service_provider "My Service Provider" do
 
-  app { MyApp.new } # Optional, loads app from config.ru by default
+  # Optional app configuration. Pact loads the app from config.ru by default 
+  # (it is recommended to let Pact use the config.ru if possible, so testing 
+  # conditions are closest to runtime conditions)
+  app { MyApp.new }
 
   honours_pact_with 'My Service Consumer' do
 
@@ -54,8 +59,8 @@ end
 
 ## Using rake pact:verify:at
 
-You can also verify a pact at any arbitrary local or remote URL using the `pact:verify:at` task.
-This is useful when you are writing the consumer and provider concurrently, and wish to 
+You can verify a pact at any arbitrary local or remote URL using the `pact:verify:at` task.
+This is useful when you are developing the consumer and provider concurrently, and wish to verify the pact you have just generated in the consumer code base. It will use the same pact_helper file as `pact:verify`.
 
     $ rake pact:verify:at[../path-to-your-consumer-project/specs/pacts/my_consumer-my_provider.json]
     $ rake pact:verify:at[http://build-box/MyConsumerBuild/latestSuccessful/artifacts/my_consumer-my_provider.json]
@@ -92,6 +97,19 @@ Pact uses dynamically created RSpec specs to verify pacts. If you want to modify
 1. Configure RSpec in the pact_helper using the normal `RSpec.configure` code.
 
 For future proofing though, try to use the provider state set_up/tear_down blocks where you can, because we may swap out RSpec for custom verification code in the future.
+
+## Verifying pacts for non-Rack apps
+
+### Ruby apps
+If your app is a non-Rack Ruby app, you may be able to find a Rack adapter for it. If you can do this, then configure the `app` in the `Pact.service_provider` block to point to an instance of your adapter. Otherwise, use the [pact-provider-proxy](https://github.com/bethesque/pact-provider-proxy) gem. 
+
+### JVM apps
+
+Use [pact-jvm](https://github.com/DiUS/pact-jvm).
+
+### Other apps
+Use the [pact-provider-proxy](https://github.com/bethesque/pact-provider-proxy) gem
+
 
 ## Pact Helper location
 

@@ -34,6 +34,9 @@ Note: Pact uses Rack::Test, and assumes that your service provider will be a Rac
 
 require 'pact/provider/rspec'
 
+# Require the provider states files for each service consumer
+require 'service_consumers/provider_states_for_my_service_consumer'
+
 Pact.service_provider "My Service Provider" do
 
   # Optional app configuration. Pact loads the app from config.ru by default 

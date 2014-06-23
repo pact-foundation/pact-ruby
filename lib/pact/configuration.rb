@@ -112,7 +112,7 @@ module Pact
       @differ_registration << [key, differ]
     end
 
-    def differ_for_content_type content_type
+    def body_differ_for_content_type content_type
       differs.find{ | differ_registration | differ_registration.first =~ content_type }.last
     end
 

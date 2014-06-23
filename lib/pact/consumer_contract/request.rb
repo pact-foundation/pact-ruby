@@ -64,7 +64,7 @@ module Pact
       end
 
       def body_differ
-        Pact.configuration.differ_for_content_type content_type
+        Pact.configuration.body_differ_for_content_type content_type
       end
 
     end

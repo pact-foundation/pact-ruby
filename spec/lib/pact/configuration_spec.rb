@@ -137,14 +137,14 @@ describe Pact do
             config.register_body_differ 'application/xml', differ
           end
 
-          expect(Pact.configuration.differ_for_content_type 'application/xml').to be differ
+          expect(Pact.configuration.body_differ_for_content_type 'application/xml').to be differ
         end
       end
 
       context "with a regexp for a content type" do
         it "returns a matching differ" do
           Pact.configuration.register_body_differ /application\/.*xml/, differ
-          expect(Pact.configuration.differ_for_content_type 'application/hal+xml').to be differ
+          expect(Pact.configuration.body_differ_for_content_type 'application/hal+xml').to be differ
         end
       end
 
@@ -163,13 +163,13 @@ describe Pact do
       context "when a nil content type is registered for responses without a content type header" do
         it "returns that differ if the differ for a nil content type is requested" do
           Pact.configuration.register_body_differ nil, differ
-          expect(Pact.configuration.differ_for_content_type(nil)).to be differ
+          expect(Pact.configuration.body_differ_for_content_type(nil)).to be differ
         end
       end
 
     end
 
-    describe "differ_for_content_type" do
+    describe "body_differ_for_content_type" do
 
       let(:differ) { lambda { |expected, actual| }}
 
@@ -180,33 +180,33 @@ describe Pact do
         it "returns the differ that was configured first" do
           Pact.configuration.register_body_differ /application\/.*xml/, differ_2
           Pact.configuration.register_body_differ /application\/hal\+xml/, differ_1
-          expect(Pact.configuration.differ_for_content_type 'application/hal+xml').to be differ_2
+          expect(Pact.configuration.body_differ_for_content_type 'application/hal+xml').to be differ_2
         end
       end
 
       context "when a nil content type is given" do
         it "returns the text differ" do
-          expect(Pact.configuration.differ_for_content_type nil).to be Pact::TextDiffer
+          expect(Pact.configuration.body_differ_for_content_type nil).to be Pact::TextDiffer
         end
       end
 
       context "when no matching content type is found" do
         it "returns the text differ" do
-          expect(Pact.configuration.differ_for_content_type 'blah').to be Pact::TextDiffer
+          expect(Pact.configuration.body_differ_for_content_type 'blah').to be Pact::TextDiffer
         end
       end
 
       context "when the nil content type has a custom differ configured" do
         it "returns the custom differ" do
           Pact.configuration.register_body_differ nil, differ
-          expect(Pact.configuration.differ_for_content_type(nil)).to be differ
+          expect(Pact.configuration.body_differ_for_content_type(nil)).to be differ
         end
       end
 
       context "when a custom differ is registered for a content type that has a default differ" do
         it "returns the custom differ" do
           Pact.configuration.register_body_differ /application\/json/, differ
-          expect(Pact.configuration.differ_for_content_type 'application/json').to be differ
+          expect(Pact.configuration.body_differ_for_content_type 'application/json').to be differ
         end
       end
     end

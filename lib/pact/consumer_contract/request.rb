@@ -60,8 +60,13 @@ module Pact
       end
 
       def body_difference(actual_body)
-        diff({:body => body}, {body: actual_body}, allow_unexpected_keys: runtime_options[:allow_unexpected_keys_in_body])
+        body_differ.call({:body => body}, {body: actual_body}, allow_unexpected_keys: runtime_options[:allow_unexpected_keys_in_body])
       end
+
+      def body_differ
+        Pact.configuration.differ_for_content_type content_type
+      end
+
     end
 
   end

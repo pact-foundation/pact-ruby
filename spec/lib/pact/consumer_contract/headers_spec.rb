@@ -79,8 +79,8 @@ module Pact
       subject { Headers.new 'Content-Type' => 'application/hippo' }
 
       it "is case insensitive as HTTP headers are case insensitive" do
-        expect(subject.key?('CONTENT-TYPE')).to be_true
-        expect(subject.key?('CONTENT-LENGTH')).to be_false
+        expect(subject.key?('CONTENT-TYPE')).to be true
+        expect(subject.key?('CONTENT-LENGTH')).to be false
       end
     end
 
@@ -89,8 +89,8 @@ module Pact
       subject { Headers.new 'Content-Type' => 'application/hippo' }
 
       it "is case insensitive as HTTP headers are case insensitive" do
-        expect(subject.has_key?('CONTENT-TYPE')).to be_true
-        expect(subject.has_key?('CONTENT-LENGTH')).to be_false
+        expect(subject.has_key?('CONTENT-TYPE')).to be true
+        expect(subject.has_key?('CONTENT-LENGTH')).to be false
       end
     end
 

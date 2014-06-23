@@ -67,6 +67,11 @@ module Pact
       def display_query
         (query.nil? || query.empty?) ? '' : "?#{Pact::Reification.from_term(query)}"
       end
+
+      def content_type
+        return nil if headers.is_a? self.class.key_not_found.class
+        headers['Content-Type']
+      end
     end
   end
 end

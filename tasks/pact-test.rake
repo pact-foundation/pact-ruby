@@ -30,6 +30,10 @@ Pact::VerificationTask.new('test_app:pass') do | pact |
 	pact.uri './spec/support/test_app_pass.json'
 end
 
+Pact::VerificationTask.new('test_app:content_type') do | pact |
+	pact.uri './spec/support/test_app_with_right_content_type_differ.json'
+end
+
 Pact::VerificationTask.new('test_app:fail') do | pact |
 	pact.uri './spec/support/test_app_fail.json', pact_helper: './spec/support/pact_helper.rb'
 end
@@ -46,6 +50,7 @@ namespace :pact do
 		Rake::Task['pact:verify:test_app:pass'].execute
 		Rake::Task['pact:test:fail'].execute
 		Rake::Task['pact:test:pactfile'].execute
+		Rake::Task['pact:verify:test_app:content_type'].execute
 	end
 
 	desc "All the verification tests with active support loaded"

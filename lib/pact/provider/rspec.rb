@@ -106,8 +106,8 @@ module Pact
             let(:response) { interaction_context.last_response }
             let(:response_status) { response.status }
             let(:response_body) { parse_body_from_response(response) }
-            #TODO make this case insensitive
-            let(:differ) { Pact.configuration.body_differ_for_content_type (expected_response['headers'] || {})['Content-Type'] }
+            let(:differ) { Pact.configuration.body_differ_for_content_type expected_content_type }
+            let(:expected_content_type) { Pact::Headers.new(expected_response['headers'] || {})['Content-Type'] }
 
             if expected_response['status']
               it "has status code #{expected_response['status']}" do

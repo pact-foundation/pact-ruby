@@ -4,9 +4,10 @@ require 'pact/consumer/mock_service/interaction_mismatch'
 module Pact
   module Consumer
     describe InteractionMismatch do
+      let(:content_type) { 'some/content' }
       let(:actual_request) { instance_double('Pact::Consumer::Request::Actual', :method_and_path => 'GET /path') }
-      let(:expected_request_1) { instance_double('Pact::Request::Expected') }
-      let(:expected_request_2) { instance_double('Pact::Request::Expected') }
+      let(:expected_request_1) { instance_double('Pact::Request::Expected', :content_type => content_type) }
+      let(:expected_request_2) { instance_double('Pact::Request::Expected', :content_type => content_type) }
       let(:candidate_1) { instance_double('Pact::Interaction', request: expected_request_1, description_with_provider_state_quoted: "desc 1") }
       let(:candidate_2) { instance_double('Pact::Interaction', request: expected_request_2, description_with_provider_state_quoted: "desc 2") }
       let(:candidate_interactions) { [candidate_1, candidate_2] }
@@ -48,13 +49,15 @@ module Pact
       describe "to_s" do
         let(:expected_message) { "Diff with interaction: desc 1\ndiff 1\nDiff with interaction: desc 2\ndiff 2" }
 
+        let(:diff_formatter) { double("diff_formatter")}
         before do
-          allow(Pact.configuration.diff_formatter).to receive(:call).and_return("diff 1", "diff 2")
+          allow(Pact.configuration).to receive(:diff_formatter_for_content_type).with(content_type).and_return(diff_formatter)
+          allow(diff_formatter).to receive(:call).and_return("diff 1", "diff 2")
         end
 
         it "creates diff output using the configured diff_formatter" do
-          expect(Pact.configuration.diff_formatter).to receive(:call).with(diff_1, colour: false)
-          expect(Pact.configuration.diff_formatter).to receive(:call).with(diff_2, colour: false)
+          expect(diff_formatter).to receive(:call).with(diff_1, colour: false)
+          expect(diff_formatter).to receive(:call).with(diff_2, colour: false)
           subject.to_s
         end
 

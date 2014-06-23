@@ -1,5 +1,6 @@
 require 'pact/matchers'
 require 'pact/symbolize_keys'
+require 'pact/consumer_contract/headers'
 
 module Pact
 
@@ -15,7 +16,7 @@ module Pact
       def initialize(method, path, headers, body, query)
         @method = method.to_s
         @path = path.chomp('/')
-        @headers = headers
+        @headers = Hash === headers ? Headers.new(headers) : headers # Could be a NullExpectation - TODO make this more elegant
         @body = body
         @query = query
       end
@@ -48,6 +49,11 @@ module Pact
         display_path + display_query
       end
 
+      def content_type
+        return nil if headers.is_a? self.class.key_not_found.class
+        headers['Content-Type']
+      end
+
       protected
 
       def self.key_not_found
@@ -66,6 +72,7 @@ module Pact
       def display_query
         (query.nil? || query.empty?) ? '' : "?#{Pact::Reification.from_term(query)}"
       end
+
     end
   end
 end

@@ -83,12 +83,12 @@ describe Pact do
 
     end
 
-    describe "#diff_formatter" do
+    describe "#diff_formatter_for_content_type" do
 
       let(:subject) { Pact::Configuration.new }
 
       it "returns the Pact::Matchers::UnixDiffFormatter by default" do
-        expect(subject.diff_formatter).to eq(Pact::Matchers::UnixDiffFormatter)
+        expect(subject.diff_formatter_for_content_type 'anything').to eq(Pact::Matchers::UnixDiffFormatter)
       end
 
       Pact::Configuration::DIFF_FORMATTERS.each_pair do | key, diff_formatter |
@@ -100,7 +100,7 @@ describe Pact do
           end
 
           it "sets the diff_formatter to #{diff_formatter}" do
-            expect(subject.diff_formatter).to be diff_formatter
+            expect(subject.diff_formatter_for_content_type nil).to be diff_formatter
           end
         end
 
@@ -115,16 +115,138 @@ describe Pact do
         end
 
         it "sets the diff_formatter to the object" do
-          expect(subject.diff_formatter).to be diff_formatter
+          expect(subject.diff_formatter_for_content_type nil).to be diff_formatter
         end
       end
 
       context "when set to an object that does not respond to call and isn't a known default option" do
         it "raises an error" do
-          expect { subject.diff_formatter = Object.new }.to raise_error "Pact.configuration.diff_formatter needs to respond to call, or be in the preconfigured list: [:embedded, :unix, :list]"
+          expect { subject.diff_formatter = Object.new }.to raise_error "Pact diff_formatter needs to respond to call, or be in the preconfigured list: [:embedded, :unix, :list]"
+          expect { subject.diff_formatter = Object.new }.to raise_error "Pact diff_formatter needs to respond to call, or be in the preconfigured list: [:embedded, :unix, :list]"
         end
       end
 
+    end
+
+    describe "diff_formatter_for_content_type" do
+      let(:diff_formatter) { lambda { |expected, actual| }}
+      context "with the default configuration" do
+        context "when the content type is nil" do
+          it "returns the UnixDiffFormatter" do
+            expect(Pact.configuration.diff_formatter_for_content_type nil).to eq Pact::Matchers::UnixDiffFormatter
+          end
+        end
+        context "when the content type is application/json" do
+          it "returns the UnixDiffFormatter" do
+            expect(Pact.configuration.diff_formatter_for_content_type nil).to eq Pact::Matchers::UnixDiffFormatter
+          end
+        end
+        context "when the content type is text/plain" do
+          it "returns the UnixDiffFormatter" do
+            expect(Pact.configuration.diff_formatter_for_content_type nil).to eq Pact::Matchers::UnixDiffFormatter
+          end
+        end
+      end
+      context "with a custom diff_formatter registered for nil content type" do
+        context "when the content_type is nil" do
+          it "returns the custom diff_formatter" do
+            Pact.configuration.register_diff_formatter nil, diff_formatter
+            expect(Pact.configuration.diff_formatter_for_content_type nil).to eq diff_formatter
+          end
+        end
+      end
+      context "with a custom diff_formatter registered for json content type" do
+        context "when the content_type is application/json" do
+          it "returns the custom diff_formatter" do
+            Pact.configuration.register_diff_formatter /json/, diff_formatter
+            expect(Pact.configuration.diff_formatter_for_content_type 'application/json').to eq diff_formatter
+          end
+        end
+      end
+    end
+
+    describe "register_body_differ" do
+
+      let(:differ) { lambda{ |expected, actual| } }
+
+      context "with a string for a content type" do
+        it "configures the differ for the given content type" do
+          Pact.configure do | config |
+            config.register_body_differ 'application/xml', differ
+          end
+
+          expect(Pact.configuration.body_differ_for_content_type 'application/xml').to be differ
+        end
+      end
+
+      context "with a regexp for a content type" do
+        it "returns a matching differ" do
+          Pact.configuration.register_body_differ /application\/.*xml/, differ
+          expect(Pact.configuration.body_differ_for_content_type 'application/hal+xml').to be differ
+        end
+      end
+
+      context "when a non string or regexp is used to register a differ" do
+        it "raises an error" do
+          expect { Pact.configuration.register_body_differ 1, differ }.to raise_error /Invalid/
+        end
+      end
+
+      context "when something that does not respond to call is sumbitted as a differ" do
+        it "raises an error" do
+          expect { Pact.configuration.register_body_differ 'thing', Object.new }.to raise_error /responds to call/
+        end
+      end
+
+      context "when a nil content type is registered for responses without a content type header" do
+        it "returns that differ if the differ for a nil content type is requested" do
+          Pact.configuration.register_body_differ nil, differ
+          expect(Pact.configuration.body_differ_for_content_type(nil)).to be differ
+        end
+      end
+
+    end
+
+    describe "body_differ_for_content_type" do
+
+      let(:differ) { lambda { |expected, actual| }}
+
+      context "when 2 potentially matching content types have a differ registered" do
+        let(:differ_1) { lambda{ |expected, actual| } }
+        let(:differ_2) { lambda{ |expected, actual| } }
+
+        it "returns the differ that was configured first" do
+          Pact.configuration.register_body_differ /application\/.*xml/, differ_2
+          Pact.configuration.register_body_differ /application\/hal\+xml/, differ_1
+          expect(Pact.configuration.body_differ_for_content_type 'application/hal+xml').to be differ_2
+        end
+      end
+
+      context "when a nil content type is given" do
+        it "returns the text differ" do
+          expect(Pact.configuration.body_differ_for_content_type nil).to be Pact::TextDiffer
+        end
+      end
+
+      context "when no matching content type is found" do
+        it "returns the text differ" do
+          expect(Pact.configuration.body_differ_for_content_type 'blah').to be Pact::TextDiffer
+        end
+      end
+
+      context "when the nil content type has a custom differ configured" do
+        it "returns the custom differ" do
+          Pact.configuration.register_body_differ nil, differ
+          expect(Pact.configuration.body_differ_for_content_type(nil)).to be differ
+        end
+      end
+
+      context "when a custom differ is registered for a content type that has a default differ" do
+        it "returns the custom differ" do
+          Pact.configuration.register_body_differ /application\/json/, differ
+          expect(Pact.configuration.body_differ_for_content_type 'application/json').to be differ
+        end
+      end
     end
 
     describe "pactfile_write_mode" do

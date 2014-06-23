@@ -2,6 +2,8 @@ require 'rspec'
 require 'pact/matchers'
 require 'pact/provider/matchers/messages'
 require 'pact/rspec'
+require 'pact/shared/json_differ'
+
 
 module Pact
   module RSpec
@@ -20,27 +22,28 @@ module Pact
 
       class MatchTerm
 
-        include Pact::Matchers
         include Pact::Matchers::Messages
         include RSpec2Delegator
 
-        def initialize expected
+        def initialize expected, differ, diff_formatter
           @expected = expected
+          @differ = differ
+          @diff_formatter = diff_formatter
         end
 
         def matches? actual
           @actual = actual
-          (@difference = diff(@expected, @actual)).empty?
+          (@difference = @differ.call(@expected, @actual)).empty?
         end
 
         def failure_message
-          match_term_failure_message @difference, @actual, Pact::RSpec.color_enabled?
+          match_term_failure_message @difference, @actual, @diff_formatter, Pact::RSpec.color_enabled?
         end
 
       end
 
-      def match_term expected
-        MatchTerm.new(expected)
+      def match_term expected, options
+        MatchTerm.new(expected, options.fetch(:with), options.fetch(:diff_formatter))
       end
 
       class MatchHeader

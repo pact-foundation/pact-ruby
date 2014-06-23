@@ -1,5 +1,6 @@
 require 'spec_helper'
 require 'pact/shared/request'
+require 'pact/shared/key_not_found'
 
 module Pact
 
@@ -10,7 +11,7 @@ module Pact
       class TestRequest < Base
 
         def self.key_not_found
-          nil
+          Pact::KeyNotFound.new
         end
 
       end
@@ -78,6 +79,29 @@ module Pact
 
           it "includes the query" do
             expect(subject).to eq("GET /something?test=query")
+          end
+        end
+      end
+
+      describe "#content_type" do
+
+        subject { TestRequest.new("get", "/something", headers, {} , "") }
+        context "when there are no expected headers" do
+          let(:headers) { Pact::KeyNotFound.new }
+          it "returns nil" do
+            expect(subject.send(:content_type)).to be nil
+          end
+        end
+        context "when there is no Content-Type header" do
+          let(:headers) { {} }
+          it "returns the content-type" do
+            expect(subject.send(:content_type)).to be nil
+          end
+        end
+        context "when there is a content-type header (" do
+          let(:headers) { {'content-type' => 'blah'} }
+          it "returns the content-type" do
+            expect(subject.send(:content_type)).to eq 'blah'
           end
         end
       end

@@ -9,6 +9,7 @@ module Pact
 
       describe "#match_term_failure_message" do
 
+        let(:diff_formatter) { Pact::Matchers::UnixDiffFormatter }
         let(:message) { "line1\nline2"}
         let(:output_message) { "Actual: actual\n\n#{message}"}
         let(:output_message_with_resets) { "Actual: actual\n\n#{r}line1\n#{r}line2"}
@@ -20,13 +21,13 @@ module Pact
         let(:message_line_count) { message.split("\n").size }
 
         before do
-          allow(Pact.configuration.diff_formatter).to receive(:call).and_return(message)
+          allow(diff_formatter).to receive(:call).and_return(message)
         end
 
-        subject { match_term_failure_message diff, actual, color_enabled }
+        subject { match_term_failure_message diff, actual, diff_formatter, color_enabled }
 
-        it "creates a message using the configured diff_formatter" do
-          expect(Pact.configuration.diff_formatter).to receive(:call).with(diff)
+        it "creates a message using the diff_formatter" do
+          expect(diff_formatter).to receive(:call).with(diff)
           subject
         end
 

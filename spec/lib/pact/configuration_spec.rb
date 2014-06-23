@@ -83,12 +83,12 @@ describe Pact do
 
     end
 
-    describe "#diff_formatter" do
+    describe "#diff_formatter_for_content_type" do
 
       let(:subject) { Pact::Configuration.new }
 
       it "returns the Pact::Matchers::UnixDiffFormatter by default" do
-        expect(subject.diff_formatter).to eq(Pact::Matchers::UnixDiffFormatter)
+        expect(subject.diff_formatter_for_content_type 'anything').to eq(Pact::Matchers::UnixDiffFormatter)
       end
 
       Pact::Configuration::DIFF_FORMATTERS.each_pair do | key, diff_formatter |
@@ -100,7 +100,7 @@ describe Pact do
           end
 
           it "sets the diff_formatter to #{diff_formatter}" do
-            expect(subject.diff_formatter).to be diff_formatter
+            expect(subject.diff_formatter_for_content_type nil).to be diff_formatter
           end
         end
 
@@ -115,16 +115,54 @@ describe Pact do
         end
 
         it "sets the diff_formatter to the object" do
-          expect(subject.diff_formatter).to be diff_formatter
+          expect(subject.diff_formatter_for_content_type nil).to be diff_formatter
         end
       end
 
       context "when set to an object that does not respond to call and isn't a known default option" do
         it "raises an error" do
-          expect { subject.diff_formatter = Object.new }.to raise_error "Pact.configuration.diff_formatter needs to respond to call, or be in the preconfigured list: [:embedded, :unix, :list]"
+          expect { subject.diff_formatter = Object.new }.to raise_error "Pact diff_formatter needs to respond to call, or be in the preconfigured list: [:embedded, :unix, :list]"
+          expect { subject.diff_formatter = Object.new }.to raise_error "Pact diff_formatter needs to respond to call, or be in the preconfigured list: [:embedded, :unix, :list]"
         end
       end
 
+    end
+
+    describe "diff_formatter_for_content_type" do
+      let(:diff_formatter) { lambda { |expected, actual| }}
+      context "with the default configuration" do
+        context "when the content type is nil" do
+          it "returns the UnixDiffFormatter" do
+            expect(Pact.configuration.diff_formatter_for_content_type nil).to eq Pact::Matchers::UnixDiffFormatter
+          end
+        end
+        context "when the content type is application/json" do
+          it "returns the UnixDiffFormatter" do
+            expect(Pact.configuration.diff_formatter_for_content_type nil).to eq Pact::Matchers::UnixDiffFormatter
+          end
+        end
+        context "when the content type is text/plain" do
+          it "returns the UnixDiffFormatter" do
+            expect(Pact.configuration.diff_formatter_for_content_type nil).to eq Pact::Matchers::UnixDiffFormatter
+          end
+        end
+      end
+      context "with a custom diff_formatter registered for nil content type" do
+        context "when the content_type is nil" do
+          it "returns the custom diff_formatter" do
+            Pact.configuration.register_diff_formatter nil, diff_formatter
+            expect(Pact.configuration.diff_formatter_for_content_type nil).to eq diff_formatter
+          end
+        end
+      end
+      context "with a custom diff_formatter registered for json content type" do
+        context "when the content_type is application/json" do
+          it "returns the custom diff_formatter" do
+            Pact.configuration.register_diff_formatter /json/, diff_formatter
+            expect(Pact.configuration.diff_formatter_for_content_type 'application/json').to eq diff_formatter
+          end
+        end
+      end
     end
 
     describe "register_body_differ" do

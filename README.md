@@ -270,6 +270,8 @@ As in all things, there are good ways to implement Pacts, and there are not so g
 
 [Pact JVM](https://github.com/DiUS/pact-jvm) - A Pact implementation for the JVM (Java and Scala). It generates pact files that are compatible with the Ruby implementation.
 
+[Pact .NET](https://github.com/SEEK-Jobs/pact-net) - A Pact implementation for .NET.
+
 [Shokkenki](https://github.com/brentsnook/shokkenki) - Another Consumer Driven Contract gem written by one of Pact's original authors, Brent Snook. Shokkenki allows matchers to be composed using jsonpath expressions and allows auto-generation of mock response values based on regular expressions.
 
 ## Links

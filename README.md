@@ -259,6 +259,7 @@ As in all things, there are good ways to implement Pacts, and there are not so g
 * [Rarely Asked Questions](documentation/raq.md)
 * [Terminology](documentation/terminology.md)
 * [Configuration](/documentation/configuration.md)
+* [Model Factories](documentation/model-factories.md)
 
 ## Related libraries
 

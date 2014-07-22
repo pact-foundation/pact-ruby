@@ -7,5 +7,6 @@
 * [Frequently asked questions](faq.md)
 * [Rarely asked questions](raq.md)
 * [Best practices](best-practices.md)
+* [Model Factories](model-factories.md)
 * [Troubleshooting](troubleshooting.md)
 * [Testing with pact diagram](Testing with pact.png)

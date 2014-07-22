@@ -10,9 +10,9 @@ Either of these techniques makes the pact available via URL, which your provider
 
 Do not hand create any HTTP requests in your consumer app or specs. Testing through your provider client class gives you the assurance that your consumer app will be creating exactly the HTTP requests that you think it should.
 
-#### Use factories to create your expected models
+#### Ensure the models you stub with are valid
 
-Sure, you've checked that your client deserialises the HTTP response into the object you expect, but then you need to make sure in your other tests where you stub your client that you're stubbing it with a valid object. The best way to do this is to use factories for all your tests.
+Sure, you've checked that your client deserialises the HTTP response into the object you expect, but then you need to make sure in your other tests where you stub your client that you're stubbing it with a valid object (eg. is `time` a Time or a DateTime?). One way to do this is to use factories to create the models for all your tests. See this [gist](https://gist.github.com/bethesque/69ae590e8312523e5337) for a more detailed explanation.
 
 ## In your provider project
 

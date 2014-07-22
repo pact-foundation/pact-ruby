@@ -9,6 +9,7 @@ module Pact
 
       def initialize port
         @http = Net::HTTP.new('localhost', port)
+        @port = port
       end
 
       def verify example_description
@@ -32,7 +33,7 @@ module Pact
       end
 
       def add_expected_interaction interaction
-        response = http.request_post('/interactions', MockServiceInteractionExpectation.new(interaction).to_json, MOCK_SERVICE_ADMINISTRATON_HEADERS.merge("Content-Type" => "application/json"))
+        response = http.request_post('/interactions', MockServiceInteractionExpectation.new(interaction, "localhost:#{@port}").to_json, MOCK_SERVICE_ADMINISTRATON_HEADERS.merge("Content-Type" => "application/json"))
         raise "\e[31m#{response.body}\e[m" unless response.is_a? Net::HTTPSuccess
       end
 

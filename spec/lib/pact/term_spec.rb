@@ -64,6 +64,35 @@ module Pact
       end
     end
 
+    describe '==' do
+      subject { Term.new(generate: 'some', matcher: /some/) }
+      context "when the matcher and generate are the same" do
+        let(:other) { Term.new(generate: 'some', matcher: /some/) }
+        it "returns true" do
+          expect(subject).to eq other
+        end
+      end
+      context "when generate is different" do
+        let(:other) { Term.new(generate: 'some-thing', matcher: /some/) }
+        it "returns false" do
+          expect(subject).to_not eq other
+        end
+      end
+      context "when matcher is different" do
+        let(:other) { Term.new(generate: 'some', matcher: /so/) }
+        it "returns false" do
+          expect(subject).to_not eq other
+        end
+      end
+      context "when the matcher is the same, but created from different source strings" do
+        subject { Term.new(generate: 'http://blahthing', matcher: Regexp.new("http://blah")) }
+        let(:other) { Term.new(generate: 'http://blahthing', matcher: /http:\/\/blah/) }
+        it "returns true" do
+          expect(subject).to eq other
+        end
+      end
+    end
+
     describe 'empty?' do
 
       subject { Term.new(generate: 'some', matcher: /some/) }

@@ -11,7 +11,7 @@ module Pact
 
       describe "#add_expected_interaction" do
         let(:interaction) { InteractionFactory.create }
-        let(:request_body) { MockServiceInteractionExpectation.new(interaction).to_json }
+        let(:request_body) { MockServiceInteractionExpectation.new(interaction, "localhost:1234").to_json }
 
         context "when successful" do
           let!(:post_interaction) do

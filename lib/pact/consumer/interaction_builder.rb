@@ -1,6 +1,7 @@
 require 'net/http'
 require 'pact/reification'
 require 'pact/consumer_contract/interaction'
+require 'pact/consumer_contract/response'
 
 module Pact
   module Consumer
@@ -28,7 +29,7 @@ module Pact
       end
 
       def will_respond_with(response)
-        interaction.response = response
+        interaction.response = Pact::Response.new(response)
         @callback.call interaction
         self
       end

@@ -28,6 +28,8 @@ module Pact
         find_response request_as_hash_from(env)
       end
 
+      alias_method :call, :respond # For rack test
+
       private
 
       def add_verified_interaction interaction
@@ -61,7 +63,7 @@ module Pact
         add_verified_interaction interaction
         response = response_from(interaction.response)
         logger.info "Found matching response for #{interaction.request.method_and_path}"
-        logger.debug pretty_generate(interaction.response)
+        logger.debug pretty_generate(Pact::Reification.from_term(interaction.response))
         response
       end
 
@@ -118,7 +120,16 @@ module Pact
       end
 
       def response_from response
-        [response['status'], (response['headers'] || {}).to_hash, [render_body(Pact::Reification.from_term(response['body']))]]
+        [response['status'], response_headers(response), [response_body(response)]]
+      end
+
+      def response_body response
+        render_body(Pact::Reification.from_term(response['body']))
+      end
+
+
+      def response_headers response
+        Pact::Reification.from_term((response['headers'] || {}).to_hash)
       end
 
       def render_body body

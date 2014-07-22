@@ -12,7 +12,7 @@ Do not hand create any HTTP requests in your consumer app or specs. Testing thro
 
 #### Ensure the models you stub with are valid
 
-Sure, you've checked that your client deserialises the HTTP response into the object you expect, but then you need to make sure in your other tests where you stub your client that you're stubbing it with a valid object (eg. is `time` a Time or a DateTime?). One way to do this is to use factories to create the models for all your tests. See this [gist](https://gist.github.com/bethesque/69ae590e8312523e5337) for a more detailed explanation.
+Sure, you've checked that your client deserialises the HTTP response into the object you expect, but then you need to make sure in your other tests where you stub your client that you're stubbing it with a valid object (eg. is `time` a Time or a DateTime?). One way to do this is to use factories or fixtures to create the models for all your tests. See this [gist](https://gist.github.com/bethesque/69ae590e8312523e5337) for a more detailed explanation.
 
 ## In your provider project
 

@@ -76,6 +76,15 @@ module Pact
         end
       end
 
+      context "when the methods are the same but different case" do
+        let(:expected_method) { 'get' }
+        let(:actual_method) { 'GET' }
+
+        it "matches" do
+          expect(subject.matches? actual_request).to be true
+        end
+      end
+
       context "when the paths are different" do
         let(:expected_path) { '/foo' }
         let(:actual_path) { '/bar' }

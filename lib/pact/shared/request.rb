@@ -62,7 +62,9 @@ module Pact
 
       def to_hash_without_body
         keep_keys = [:method, :path, :headers, :query]
-        as_json.reject{ |key, value| !keep_keys.include? key }
+        as_json.reject{ |key, value| !keep_keys.include? key }.tap do | hash |
+          hash[:method] = method.upcase
+        end
       end
 
       def display_path

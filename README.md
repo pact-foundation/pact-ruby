@@ -33,7 +33,7 @@ Pact is most valuable for designing and testing integrations where you (or your 
 ## How does it work?
 
 1. In the specs for the provider facing code in the consumer project, expectations are set up on a mock service provider.
-1. When the specs are run, the requests, and their expected responses, are written to a "pact" file.
+1. When the specs are run, the mock service returns the expected responses. The requests, and their expected responses, are then written to a "pact" file.
 1. The requests in the pact file are later replayed against the provider, and the actual responses are checked to make sure they match the expected responses.
 
 ## Why is developing and testing with Pact better than using traditional system integration tests?

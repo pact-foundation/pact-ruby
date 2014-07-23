@@ -227,9 +227,7 @@ Yay! Your provider now honours the pact it has with your consumer. You can now h
 
 ### Using provider states
 
-Provider states allow you to set up data on the provider before the interaction is run, so that it can make a response that matches what the consumer expects. It also allows the consumer to make the same request with different expected responses.
-
-Read more about provider states [here](/documentation/provider-states.md).
+Each interaction in a pact is verified in isolation, with no context maintained from the previous interactions. So how do you test a request that requires data to already exist on the provider? Read about provider states [here](/documentation/provider-states.md).
 
 
 ## Configuration

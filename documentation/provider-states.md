@@ -1,6 +1,6 @@
 # Provider States
 
-Provider states allow you to set up data on the provider before the interaction is run, so that it can make a response that matches what the consumer expects. It also allows the consumer to make the same request with different expected responses.
+Each interaction in a pact is verified in isolation, with no context maintained from the previous interactions. So how do you test a request that requires data to already exist on the provider? Provider states allow you to set up data on the provider before the interaction is run, so that it can make a response that matches what the consumer expects. It also allows the consumer to make the same request with different expected responses.
 
 Keep in mind that a provider state is all about the state of the *provider* (eg. what data is there, how it is going to handle a given response), not about the state of the consumer, or about what is in the request.
 

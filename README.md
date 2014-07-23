@@ -231,25 +231,6 @@ Provider states allow you to set up data on the provider before the interaction 
 
 Read more about provider states [here](/documentation/provider-states.md).
 
-### Verifying pacts
-
-You can verify a pact at an arbitrary local or remote URL
-
-    $ rake pact:verify:at[../path-to-your-consumer-project/specs/pacts/my_consumer-my_provider.json]
-    $ rake pact:verify:at[http://build-box/MyConsumerBuild/latestSuccessful/artifacts/my_consumer-my_provider.json]
-
-To make a shortcut task for pact at an arbitrary URL, add the following to your Rakefile. The pact.uri may be a local file system path or a remote URL.
-
-```ruby
-# In Rakefile or /tasks/pact.rake
-
-# This creates a rake task that can be executed by running
-# $ rake pact:verify:dev
-
-Pact::VerificationTask.new(:dev) do | pact |
-  pact.uri '../path-to-your-consumer-project/specs/pacts/my_consumer-my_provider.json'
-end
-```
 
 ## Configuration
 
@@ -262,10 +243,15 @@ As in all things, there are good ways to implement Pacts, and there are not so g
 ## Docs
 
 * [Example](example)
-* [Frequently Asked Questions](documentation/faq.md) 
-* [Rarely Asked Questions](documentation/raq.md)
 * [Terminology](documentation/terminology.md)
-* [Configuration](/documentation/configuration.md)
+* [Configuration](documentation/configuration.md)
+* [Provider States](documentation/provider-states.md)
+* [Verifying pacts](documentation/verifying-pacts.md)
+* [Frequently asked questions](documentation/faq.md)
+* [Rarely asked questions](documentation/raq.md)
+* [Best practices](documentation/best-practices.md)
+* [Troubleshooting](documentation/troubleshooting.md)
+* [Testing with pact diagram](documentation/Testing with pact.png)
 
 ## Related libraries
 

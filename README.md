@@ -14,6 +14,12 @@ Travis CI Status: [![travis-ci.org Build Status](https://travis-ci.org/realestat
 
 Pact is most valuable for designing and testing integrations where you (or your team/organisation/partner organisation) control the development of both the consumer and the provider. It is fantastic tool for intra-organsation microservices.
 
+## What is it not good for?
+
+* Performance and load testing.
+* Functional testing of the provider - that is what the provider's own tests should do. Pact is about checking the contents and format of requests and responses.
+* Situations where you cannot load data into the provider without using the API that you're actually testing.
+
 ## Features
 
 * A service is mocked using an actual process running on a specified port, so javascript clients can be tested as easily as backend clients.
@@ -37,6 +43,7 @@ Pact is most valuable for designing and testing integrations where you (or your 
 * Causes of failure are easier to identify as only one component is being tested at a time.
 * Design of service provider is improved by considering first how the data is actually going to be used, rather than how it is most easily retrieved and serialised.
 * No separate integration environment required for automated integration tests - pact tests run in standalone CI builds.
+* Integration flows that would traditionally require running multiple services at the same time can be broken down and each integration point tested separately.
 
 ## Contact
 

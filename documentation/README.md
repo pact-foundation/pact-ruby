@@ -4,6 +4,7 @@
 * [Terminology](terminology.md)
 * [Configuration](configuration.md)
 * [Provider States](provider-states.md)
+* [Verifying pacts](verifying-pacts.md)
 * [Frequently asked questions](faq.md)
 * [Rarely asked questions](raq.md)
 * [Best practices](best-practices.md)

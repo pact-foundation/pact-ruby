@@ -187,7 +187,7 @@ require 'pact/tasks'
 
 Create a `pact_helper.rb` in your service provider project. The recommended place is `spec/service_consumers/pact_helper.rb`.
 
-See [Verifying Pacts](documentation/verifying-pacts.md) and the [Provider](documentation/configuration.md#provider) section of the Configuration documentation for more information.
+See [Verifying Pacts](https://github.com/realestate-com-au/pact/wiki/Verifying-pacts) and the [Provider](documentation/configuration.md#provider) section of the Configuration documentation for more information.
 
 ```ruby
 # In specs/service_consumers/pact_helper.rb
@@ -227,7 +227,7 @@ Yay! Your provider now honours the pact it has with your consumer. You can now h
 
 ### Using provider states
 
-Each interaction in a pact is verified in isolation, with no context maintained from the previous interactions. So how do you test a request that requires data to already exist on the provider? Read about provider states [here](/documentation/provider-states.md).
+Each interaction in a pact is verified in isolation, with no context maintained from the previous interactions. So how do you test a request that requires data to already exist on the provider? Read about provider states [here](https://github.com/realestate-com-au/pact/wiki/Provider-states).
 
 
 ## Configuration
@@ -236,20 +236,20 @@ See the [Configuration](/documentation/configuration.md) section of the document
 
 ## Pact best practices
 
-As in all things, there are good ways to implement Pacts, and there are not so good ways. Check out the [Best practices](/documentation/best-practices.md) section of the documentation to make sure you're not Pacting it Wrong.
+As in all things, there are good ways to implement Pacts, and there are not so good ways. Check out the [Best practices](https://github.com/realestate-com-au/pact/wiki/Best-practices) section of the documentation to make sure you're not Pacting it Wrong.
 
 ## Docs
 
 * [Example](example)
-* [Terminology](documentation/terminology.md)
 * [Configuration](documentation/configuration.md)
-* [Provider States](documentation/provider-states.md)
-* [Verifying pacts](documentation/verifying-pacts.md)
-* [Frequently asked questions](documentation/faq.md)
-* [Rarely asked questions](documentation/raq.md)
-* [Best practices](documentation/best-practices.md)
-* [Troubleshooting](documentation/troubleshooting.md)
-* [Testing with pact diagram](documentation/Testing with pact.png)
+* [Terminology](https://github.com/realestate-com-au/pact/wiki/Terminology)
+* [Provider States](https://github.com/realestate-com-au/pact/wiki/Provider-states)
+* [Verifying pacts](https://github.com/realestate-com-au/pact/wiki/Verifying-pacts)
+* [Frequently asked questions](https://github.com/realestate-com-au/pact/wiki/FAQ)
+* [Rarely asked questions](https://github.com/realestate-com-au/pact/wiki/RAQ)
+* [Best practices](https://github.com/realestate-com-au/pact/wiki/Best-practices)
+* [Troubleshooting](https://github.com/realestate-com-au/pact/wiki/Troubleshooting)
+* [Testing with pact diagram](https://github.com/realestate-com-au/pact/wiki/Testing with pact.png)
 
 ## Related libraries
 

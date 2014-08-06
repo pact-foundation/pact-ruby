@@ -5,4 +5,4 @@ rvm:
   - 2.1.1
   - jruby-19mode
   - jruby-1.7.11
-  - jruby-head
+  - jruby-1.7.12

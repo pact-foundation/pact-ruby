@@ -2,6 +2,20 @@ Do this to generate your change history
 
   git log --pretty=format:'  * %h - %s (%an, %ad)'
 
+### 1.3.1 (11 August 2014)
+
+* 3432259 - Fixed 'pact:verify broken with rspec-core 3.0.3'  https://github.com/realestate-com-au/pact/issues/44 (bethesque, Mon Aug 11 10:14:42 2014 +1000)
+* e2e8eff - Deleted documentation that has been moved to the wiki (bethesque, Thu Jul 24 15:20:07 2014 +1000)
+* bcc3143 - Fixing bug 'Method case should not matter when matching requests' https://github.com/realestate-com-au/pact/issues/41 (bethesque, Tue Jul 22 16:51:48 2014 +1000)
+* d4bfab9 - Adding ability to configure DiffFormatter based on content-type (bethesque, Mon Jun 23 21:22:47 2014 +1000)
+* eb330ea - Ensured content-type header works in a case insensitive way when looking up the right differ (bethesque, Mon Jun 23 17:23:04 2014 +1000)
+* 2733e8e - Made header matching case insensitive for requests. Fixing issue https://github.com/realestate-com-au/pact/issues/20 (bethesque, Mon May 26 19:15:48 2014 +1000)
+* 2b8355d - Added nicer error message for scenario when a service provider app has not been configured, and there is no config.ru (bethesque, Mon Jun 23 09:42:18 2014 +1000)
+* 1e774bb - Defaulting to TextDiffer if response has no content-type (bethesque, Sat Jun 21 10:34:44 2014 +1000)
+* 863b093 - Added support for documents without content types (bethesque, Sat Jun 21 10:32:08 2014 +1000)
+* b21900b - Enabling differs to be configured based on Content-Type (bethesque, Sat Jun 21 10:21:37 2014 +1000)
+* 527b5d5 - Modified after hook to only write pacts when one or more 'pact => true' examples have run (bethesque, Wed Jun 18 15:15:55 2014 +1000)
+
 ### 1.3.0 (18 June 2014)
 
 * ea79190 - Modifying (cough*monkeypatching*cough) RSpec::Core::BacktraceFormatter as RSpec3 has some hardcoded exclusion patterns that result in *all* the backtrace lines being shown when pact:verify fails. (bethesque, Wed Jun 18 13:02:38 2014 +1000)

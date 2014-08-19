@@ -2,6 +2,11 @@ Do this to generate your change history
 
   git log --pretty=format:'  * %h - %s (%an, %ad)'
 
+### 1.3.2 (20 August 2014)
+
+* 65e1e23 - Renamed memoised :options to :diff_options because it clashes with the HTTP options method (bethesque, Wed Aug 20 09:31:0
+* ca883a8 - Made options optional for ConsumerContactBuilder.wait_for_interactions (bethesque, Mon Aug 18 15:53:47 2014 +1000)
+
 ### 1.3.1 (11 August 2014)
 
 * 3432259 - Fixed 'pact:verify broken with rspec-core 3.0.3'  https://github.com/realestate-com-au/pact/issues/44 (bethesque, Mon Aug 11 10:14:42 2014 +1000)

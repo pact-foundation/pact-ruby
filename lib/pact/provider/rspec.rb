@@ -111,7 +111,7 @@ module Pact
             let(:expected_content_type) { Pact::Headers.new(expected_response['headers'] || {})['Content-Type'] }
             let(:actual_content_type) { response.headers['Content-Type']}
             let(:diff_content_type) { String === expected_content_type ? expected_content_type : actual_content_type } # expected_content_type may be a Regexp
-            let(:options) { { with: differ, diff_formatter: diff_formatter } }
+            let(:diff_options) { { with: differ, diff_formatter: diff_formatter } }
 
             if expected_response['status']
               it "has status code #{expected_response['status']}" do
@@ -132,7 +132,7 @@ module Pact
 
             if expected_response['body']
               it "has a matching body" do
-                expect(response_body).to match_term expected_response_body, options
+                expect(response_body).to match_term expected_response_body, diff_options
               end
             end
           end

@@ -1,0 +1,21 @@
+{
+    "consumer": {
+        "name": "Consumer"
+    },
+    "provider": {
+        "name": "Provider"
+    },
+    "interactions": [
+        {
+            "description": "an OPTIONS request",
+            "request": {
+                "method": "options",
+                "path": "/"
+            },
+            "response": {
+                "status": 200
+            },
+            "provider_state": null
+        }
+    ]
+}

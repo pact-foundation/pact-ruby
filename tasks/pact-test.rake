@@ -5,6 +5,10 @@ Pact::VerificationTask.new(:stubbing) do | pact |
 	pact.uri './spec/support/stubbing.json', :pact_helper => './spec/support/stubbing_using_allow.rb'
 end
 
+Pact::VerificationTask.new(:options) do | pact |
+	pact.uri './spec/support/options.json', :pact_helper => './spec/support/options_app.rb'
+end
+
 Pact::VerificationTask.new(:pass) do | pact |
 	pact.uri './spec/support/test_app_pass.json'
 end

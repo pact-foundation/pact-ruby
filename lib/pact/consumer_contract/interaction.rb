@@ -13,7 +13,7 @@ module Pact
         @description = attributes[:description]
         @request = attributes[:request]
         @response = attributes[:response]
-        @provider_state = attributes[:provider_state]
+        @provider_state = attributes[:provider_state] || attributes[:providerState]
       end
 
       def self.from_hash hash

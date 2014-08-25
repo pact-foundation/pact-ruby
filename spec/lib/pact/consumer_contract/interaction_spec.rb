@@ -7,6 +7,9 @@ module Pact
 
     describe Interaction do
 
+      let(:request) { {method: 'get', path: 'path'} }
+      let(:response) { {} }
+
       describe "==" do
         subject { InteractionFactory.create }
         context "when other is the same" do
@@ -35,6 +38,17 @@ module Pact
             it "returns false" do
               expect(subject.matches_criteria?(:description => /blah/)).to be false
             end
+          end
+        end
+      end
+
+      describe "from_hash" do
+        context "when providerState has been used instead of provider_state" do
+
+          subject { Interaction.from_hash('response' => response, 'request' => request, 'providerState' => 'some state') }
+
+          it "recognises the provider state" do
+            expect(subject.provider_state).to eq 'some state'
           end
         end
       end

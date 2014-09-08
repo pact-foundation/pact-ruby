@@ -11,6 +11,7 @@ module Pact
       def initialize diff, options = {}
         @diff = diff
         @colour = options.fetch(:colour, false)
+        @differ = Pact::Matchers::Differ.new(@colour)
       end
 
       def self.call diff, options = {colour: Pact.configuration.color_enabled}
@@ -24,7 +25,7 @@ module Pact
       def to_s
         expected = generate_string(diff, :expected)
         actual = generate_string(diff, :actual)
-        Pact::Matchers::Differ.new(@colour).diff_as_string(actual, expected).lstrip
+        @differ.diff_as_string(actual, expected).lstrip + "\n" + key
       end
 
       private
@@ -83,6 +84,12 @@ module Pact
         else
           object
         end
+      end
+
+      def key
+        "Key: " + @differ.red("-") + @differ.red(" means \"expected, but was not found\". \n") +
+        @differ.green("     +") + @differ.green(" means \"actual, should not be found\". \n") +
+        "     Values where the expected matches the actual are not shown.\n"
       end
 
       class RegexpDecorator

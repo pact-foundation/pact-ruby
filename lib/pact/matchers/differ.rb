@@ -71,6 +71,16 @@ module Pact
         end
       end
 
+      def red(text)
+        return text unless @color
+        color(text, 31)
+      end
+
+      def green(text)
+        return text unless @color
+        color(text, 32)
+      end
+
     protected
 
       def format
@@ -85,13 +95,6 @@ module Pact
         "\e[#{color_code}m#{text}\e[0m"
       end
 
-      def red(text)
-        color(text, 31)
-      end
-
-      def green(text)
-        color(text, 32)
-      end
 
       def blue(text)
         color(text, 34)

@@ -128,7 +128,7 @@ describe MyServiceProviderClient, :pact => true do
 
     before do
       my_service_provider.given("something exists").
-        upon_receiving("a request for something").with(method: :get, path: '/something').
+        upon_receiving("a request for something").with(method: :get, path: '/something', query: '').
         will_respond_with(
           status: 200,
           headers: {'Content-Type' => 'application/json'},

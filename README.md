@@ -255,6 +255,7 @@ As in all things, there are good ways to implement Pacts, and there are not so g
 * [Terminology](https://github.com/realestate-com-au/pact/wiki/Terminology)
 * [Provider States](https://github.com/realestate-com-au/pact/wiki/Provider-states)
 * [Verifying pacts](https://github.com/realestate-com-au/pact/wiki/Verifying-pacts)
+* [Sharing pacts between consumer and provider](https://github.com/realestate-com-au/pact/wiki/Sharing-pacts-between-consumer-and-provider)
 * [Frequently asked questions](https://github.com/realestate-com-au/pact/wiki/FAQ)
 * [Rarely asked questions](https://github.com/realestate-com-au/pact/wiki/RAQ)
 * [Best practices](https://github.com/realestate-com-au/pact/wiki/Best-practices)

@@ -175,7 +175,7 @@ end
 
 Green! You now have a pact file that can be used to verify your expectations of the provider project.
 
-Now, rinse and repeat for other likely status codes that may be returned. For example, consider how you want your code to respond to a: 
+Now, rinse and repeat for other likely status codes that may be returned. For example, consider how you want your client to respond to a: 
 * 404 (return null, or raise an error?)
 * 500 (specifying that the response body should contain an error message, and ensuring that your client logs that error message will make your life much easier when things go wrong)
 * 401/403 if there is authorisation.
@@ -184,7 +184,7 @@ Now, rinse and repeat for other likely status codes that may be returned. For ex
 
 #### 1. Create the skeleton API classes
 
-Create your API class using the framework of your choice - leave the methods unimplemented, we're doing Test First Develoment, remember?
+Create your API class using the framework of your choice (the Pact authors have a preference for [Webmachine][webmachine] and [Roar][roar]) - leave the methods unimplemented, we're doing Test First Develoment, remember?
 
 #### 2. Tell your provider that it needs to honour the pact file you made earlier
 
@@ -306,4 +306,7 @@ Long term:
 5. Create new Pull Request
 
 If you would like to implement pact in another language, please check out the [Pact specification](https://github.com/bethesque/pact-specification) and have a chat to one of us on the [pact-dev Google group](https://groups.google.com/forum/#!forum/pact-dev). The vision is to have a compatible pact implementation in all the commonly used languages, your help would be greatly appreciated!
+
+[webmachine][https://github.com/seancribbs/webmachine-ruby]
+[roar][https://github.com/apotonick/roar]
 

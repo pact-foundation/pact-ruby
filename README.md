@@ -81,6 +81,8 @@ end
 Imagine a service provider client class that looks something like this.
 
 ```ruby
+require 'httparty'
+
 class MyServiceProviderClient
   include HTTParty
   base_uri 'http://my-service'

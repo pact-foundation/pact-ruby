@@ -173,8 +173,12 @@ end
 
 #### 7. Run the specs again.
 
-Green! You now have a pact file that can be used to verify your expectations in the provider project.
-Now, rinse and repeat for ALL the likely status codes that may be returned (we recommend 404, 500 and 401/403 if there is authorisation.)
+Green! You now have a pact file that can be used to verify your expectations of the provider project.
+
+Now, rinse and repeat for other likely status codes that may be returned. For example, consider how you want your code to respond to a: 
+* 404 (return null, or raise an error?)
+* 500 (specifying that the response body should contain an error message, and ensuring that your client logs that error message will make your life much easier when things go wrong)
+* 401/403 if there is authorisation.
 
 ### Service Provider project
 

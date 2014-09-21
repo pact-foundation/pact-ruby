@@ -2,11 +2,11 @@
 
 Define a pact between service consumers and providers, enabling "consumer driven contract" testing.
 
-Pact provides an fluent API for service consumers to define the HTTP requests they will make to a service provider and the HTTP responses they expect back. These expectations are used in the consumers specs to provide a mock service provider. The interactions are recorded, and played back in the service provider specs to ensure the service provider actually does provide the response the consumer expects.
+Pact provides an fluent API for service consumers to define the HTTP requests they will make to a service provider and the HTTP responses they expect back. These expectations are used in the consumer specs to provide a mock service provider. The interactions are recorded, and played back in the service provider specs to ensure the service provider actually does provide the response the consumer expects.
 
 This allows testing of both sides of an integration point using fast unit tests.
 
-This gem is inspired by the concept of "Consumer driven contracts". See http://martinfowler.com/articles/consumerDrivenContracts.html for more information.
+This gem is inspired by the concept of "Consumer driven contracts". See [this article](http://martinfowler.com/articles/consumerDrivenContracts.html) by Martin Fowler for more information.
 
 Travis CI Status: [![travis-ci.org Build Status](https://travis-ci.org/realestate-com-au/pact.png)](https://travis-ci.org/realestate-com-au/pact)
 
@@ -101,7 +101,8 @@ The following code will create a mock service on localhost:1234 which will respo
 ```ruby
 # In /spec/service_providers/pact_helper.rb
 
-require 'pact/consumer/rspec' # or 'pact/consumer/minitest' if you are using Minitest
+require 'pact/consumer/rspec'
+# or require 'pact/consumer/minitest' if you are using Minitest
 
 Pact.service_consumer "My Service Consumer" do
   has_pact_with "My Service Provider" do

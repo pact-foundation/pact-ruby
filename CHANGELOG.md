@@ -2,6 +2,13 @@ Do this to generate your change history
 
   git log --pretty=format:'  * %h - %s (%an, %ad)'
 
+### 1.3.3 (23 September 2014)
+
+* 9106aac - Fixed reification when using FactoryGirl. (bethesque, Tue Sep 23 08:23:51 2014 +1000)
+* 2182803 - Added "query" to example. (bethesque, Fri Sep 19 14:29:36 2014 +1000)
+* 0002014 - Added key to explain - and + in unix diff output. (bethesque, Mon Sep 8 15:21:37 2014 +1000)
+* 34f1c9b - Adding forward compatibility for reading 'providerState' from pact. (bethesque, Mon Aug 25 16:09:57 2014 +1000)
+
 ### 1.3.2 (20 August 2014)
 
 * 65e1e23 - Renamed memoised :options to :diff_options because it clashes with the HTTP options method (bethesque, Wed Aug 20 09:31:0

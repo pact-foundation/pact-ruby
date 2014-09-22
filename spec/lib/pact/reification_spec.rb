@@ -51,5 +51,17 @@ module Pact
 
     end
 
+    context "when SomethingLike" do
+
+      let(:request) { Pact::SomethingLike.new({a: 'String'})}
+
+      subject { Reification.from_term(request)}
+
+      it "returns the contents of the SomethingLike" do
+        expect(subject).to eq({a: 'String'})
+      end
+
+    end
+
   end
 end

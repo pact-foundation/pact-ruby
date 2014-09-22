@@ -4,20 +4,20 @@ module Pact
   module Reification
 
     def self.from_term(term)
-      case
-      when term.respond_to?(:generate)
+      case term
+      when Pact::Term, Regexp, Pact::SomethingLike
         term.generate
-      when term.is_a?(Hash)
+      when Hash
         term.inject({}) do |mem, (key,term)|
           mem[key] = from_term(term)
         mem
         end
-      when term.is_a?(Array)
+      when Array
         term.inject([]) do |mem, term|
           mem << from_term(term)
           mem
         end
-      when term.is_a?(Pact::Request::Base)
+      when Pact::Request::Base
         from_term(term.to_hash)
       else
         term

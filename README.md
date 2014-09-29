@@ -59,7 +59,7 @@ Put it in your Gemfile. You know how.
 
 ### Service Consumer project
 
-#### 1. Start with you model
+#### 1. Start with your model
 
 Imagine a model class that looks something like this. The attributes for a Something live on a remote server, and will need to be retrieved by an HTTP call.
 
@@ -95,7 +95,7 @@ end
 ```
 #### 3. Configure the mock server
 
-The following code will create a mock service on localhost:1234 which will respond to your application's queries over HTTP as if it were the real "My Service Provider" app. It also creats a mock service provider object which you will use to set up your expectations. The method name to access the mock service provider will be what ever name you give as the service argument - in this case "my_service_provider"
+The following code will create a mock service on localhost:1234 which will respond to your application's queries over HTTP as if it were the real "My Service Provider" app. It also creates a mock service provider object which you will use to set up your expectations. The method name to access the mock service provider will be what ever name you give as the service argument - in this case "my_service_provider"
 
 
 ```ruby

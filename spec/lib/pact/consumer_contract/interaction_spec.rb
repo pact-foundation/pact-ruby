@@ -102,6 +102,60 @@ module Pact
         end
 
       end
+
+      describe "request_modifies_resource_without_checking_response_body?" do
+        let(:interaction) { Interaction.from_hash 'request' => request, 'response' => response }
+        let(:http_method) { :put }
+
+        subject { interaction.request_modifies_resource_without_checking_response_body? }
+
+        describe "when the HTTP method is PUT" do
+
+          context "when the request body and response body are not specified" do
+            let(:request) { {method: http_method, path: '/'} }
+            let(:response) { {status: 200} }
+
+            it "returns false" do
+              expect(subject).to be false
+            end
+          end
+
+          context "when the request body and response body are empty" do
+            let(:request) { {method: http_method, path: '/', body: {}} }
+            let(:response) { {status: 200, body: {}} }
+            it "returns false" do
+              expect(subject).to be false
+            end
+          end
+
+          context "when the request body is not empty, and the response body is empty" do
+            let(:request) { {method: http_method, path: '/', body: {some: 'body'}} }
+            let(:response) { {status: 200, body: {}} }
+
+            it "returns true" do
+              expect(subject).to be true
+            end
+          end
+
+          context "when the request body is not empty, and the response body is not specified" do
+            let(:request) { {method: http_method, path: '/', body: {some: 'body'}} }
+            let(:response) { {status: 200} }
+
+            it "returns true" do
+              expect(subject).to be true
+            end
+          end
+        end
+
+        describe "when the HTTP method is GET" do
+          let(:request) { {method: :get, path: '/', body: {some: 'body'}} }
+          let(:response) { {status: 200} }
+
+          it "returns true" do
+            expect(subject).to be false
+          end
+        end
+      end
     end
   end
 end

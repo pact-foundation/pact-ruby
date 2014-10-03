@@ -23,6 +23,10 @@ module Pact
       self[:body]
     end
 
+    def body_allows_any_value?
+      !self.key?(:body) || body.empty?
+    end
+
     def [] key
       super key.to_sym
     end

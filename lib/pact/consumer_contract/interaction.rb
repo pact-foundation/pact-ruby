@@ -62,6 +62,10 @@ module Pact
         provider_state ? "\"#{description}\" given \"#{provider_state}\"" : "\"#{description}\""
       end
 
+      def request_modifies_resource_without_checking_response_body?
+        request.modifies_resource? && response.body_allows_any_value?
+      end
+
       def to_s
         JSON.pretty_generate(self)
       end

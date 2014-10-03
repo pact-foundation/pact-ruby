@@ -54,6 +54,10 @@ module Pact
         headers['Content-Type']
       end
 
+      def modifies_resource?
+        ['PUT','POST','PATCH'].include?(method.to_s.upcase) && body && !body.empty?
+      end
+
       protected
 
       def self.key_not_found

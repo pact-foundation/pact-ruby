@@ -5,7 +5,7 @@ module Pact
   module Consumer
     describe InteractionBuilder do
 
-      subject { InteractionBuilder.new }
+      subject { InteractionBuilder.new {|interaction|} }
       let(:interaction) { double('Interaction').as_null_object}
 
       before do
@@ -57,7 +57,7 @@ module Pact
         it "returns itself" do
           expect(subject.given(nil)).to be(subject)
         end
-      end 
+      end
 
       describe "will_respond_with" do
         let(:response) { {a: 'response'} }
@@ -66,11 +66,7 @@ module Pact
           double(callback: nil)
         end
 
-        before do
-          subject.on_interaction_fully_defined do | interaction |
-            provider.callback interaction
-          end
-        end
+        subject { InteractionBuilder.new {|interaction| provider.callback interaction } }
 
         it "sets the response on the interaction" do
           expect(interaction).to receive(:response=).with(response)
@@ -84,7 +80,7 @@ module Pact
         it "invokes the 'on_interaction_fully_defined' callback" do
           expect(provider).to receive(:callback).with(interaction)
           subject.will_respond_with response
-        end          
+        end
       end
     end
   end

@@ -35,8 +35,7 @@ module Pact
       def interaction_builder
         @interaction_builder ||=
         begin
-          interaction_builder = InteractionBuilder.new
-          interaction_builder.on_interaction_fully_defined do | interaction |
+          interaction_builder = InteractionBuilder.new do | interaction |
             self.handle_interaction_fully_defined(interaction)
           end
           interaction_builder

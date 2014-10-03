@@ -8,8 +8,9 @@ module Pact
 
       attr_reader :interaction
 
-      def initialize
+      def initialize &block
         @interaction = Interaction.new
+        @callback = block
       end
 
       def upon_receiving description
@@ -33,9 +34,6 @@ module Pact
         self
       end
 
-      def on_interaction_fully_defined &block
-        @callback = block
-      end
     end
   end
 end

@@ -22,6 +22,10 @@ Pact::VerificationTask.new(:term) do | pact |
 	pact.uri './spec/support/term.json'
 end
 
+Pact::VerificationTask.new(:case_insensitive_response_header_matching) do | pact |
+	pact.uri './spec/support/case-insensitive-response-header-matching.json', :pact_helper => './spec/support/case-insensitive-response-header-matching.rb'
+end
+
 RSpec::Core::RakeTask.new('spec:standalone:fail') do | task |
 	task.pattern = FileList["spec/standalone/**/*_fail_test.rb"]
 end
@@ -55,6 +59,7 @@ namespace :pact do
 		Rake::Task['pact:test:fail'].execute
 		Rake::Task['pact:test:pactfile'].execute
 		Rake::Task['pact:verify:test_app:content_type'].execute
+		Rake::Task['pact:verify:case_insensitive_response_header_matching'].execute
 	end
 
 	desc "All the verification tests with active support loaded"

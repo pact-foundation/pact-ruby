@@ -1,0 +1,21 @@
+{
+    "consumer": {
+        "name": "an easy consumer"
+    },
+    "provider": {
+        "name": "a provider which returns headers that don't match the expected case"
+    },
+    "interactions": [
+        {
+            "description": "a test request",
+            "request": {
+                "method": "get",
+                "path": "/"
+            },
+            "response": {
+                "status": 200,
+                "headers": {"Content-Type": "application/hippo"}
+            }
+        }
+    ]
+}

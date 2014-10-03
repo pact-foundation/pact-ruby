@@ -7,15 +7,6 @@ module ZooApp
     include HTTParty
     base_uri 'animal-service.com'
 
-    def self.find_alligators
-      response = get("/alligators", :headers => {'Accept' => 'application/json'})
-      handle_response response do
-        parse_body(response).collect do | hash |
-          ZooApp::Animals::Alligator.new(hash)
-        end
-      end
-    end
-
     def self.find_alligator_by_name name
       response = get("/alligators/#{name}", :headers => {'Accept' => 'application/json'})
       when_successful(response) do

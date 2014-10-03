@@ -1,7 +1,9 @@
 module ZooApp
   module Animals
     class Alligator
+
       attr_reader :name
+
       def initialize attributes
         @name = attributes[:name]
       end

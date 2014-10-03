@@ -118,7 +118,7 @@ module Pact
       end
 
       def response_from response
-        [response['status'], (response['headers'] || {}).to_hash, [render_body(Pact::Reification.from_term(response['body']))]]
+        [response.status, (response.headers || {}).to_hash, [render_body(Pact::Reification.from_term(response.body))]]
       end
 
       def render_body body

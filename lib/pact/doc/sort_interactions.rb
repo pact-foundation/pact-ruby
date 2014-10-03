@@ -9,7 +9,7 @@ module Pact
       private
 
       def self.sortable_id interaction
-        "#{interaction.description.downcase} #{interaction.response['status']} #{(interaction.provider_state || '').downcase}"
+        "#{interaction.description.downcase} #{interaction.response.status} #{(interaction.provider_state || '').downcase}"
       end
 
     end

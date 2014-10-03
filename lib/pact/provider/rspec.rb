@@ -68,7 +68,9 @@ module Pact
 
           describe description_for(interaction), metadata do
 
+
             describe "with #{interaction.request.method_and_path}" do
+
 
               interaction_context = InteractionContext.new
 
@@ -87,7 +89,7 @@ module Pact
                 end
               end
 
-              describe_response Pact::Term.unpack_regexps(interaction.response), interaction_context
+              describe_response Pact::Response.new(Pact::Term.unpack_regexps(interaction.response)), interaction_context
 
             end
 
@@ -101,27 +103,27 @@ module Pact
 
             include Pact::RSpec::Matchers
 
-            let(:expected_response_status) { expected_response['status'] }
-            let(:expected_response_body) { expected_response['body'] }
+            let(:expected_response_status) { expected_response.status }
+            let(:expected_response_body) { expected_response.body }
             let(:response) { interaction_context.last_response }
             let(:response_status) { response.status }
             let(:response_body) { parse_body_from_response(response) }
             let(:differ) { Pact.configuration.body_differ_for_content_type diff_content_type }
             let(:diff_formatter) { Pact.configuration.diff_formatter_for_content_type diff_content_type }
-            let(:expected_content_type) { Pact::Headers.new(expected_response['headers'] || {})['Content-Type'] }
+            let(:expected_content_type) { Pact::Headers.new(expected_response.headers || {})['Content-Type'] }
             let(:actual_content_type) { response.headers['Content-Type']}
             let(:diff_content_type) { String === expected_content_type ? expected_content_type : actual_content_type } # expected_content_type may be a Regexp
             let(:diff_options) { { with: differ, diff_formatter: diff_formatter } }
 
-            if expected_response['status']
-              it "has status code #{expected_response['status']}" do
+            if expected_response.status
+              it "has status code #{expected_response.status}" do
                 expect(response_status).to eql expected_response_status
               end
             end
 
-            if expected_response['headers']
+            if expected_response.headers
               describe "includes headers" do
-                expected_response['headers'].each do |name, expected_header_value|
+                expected_response.headers.each do |name, expected_header_value|
                   it "\"#{name}\" with value #{expected_header_value.inspect}" do
                     header_value = response.headers[name]
                     expect(header_value).to match_header(name, expected_header_value)
@@ -130,7 +132,7 @@ module Pact
               end
             end
 
-            if expected_response['body']
+            if expected_response.body
               it "has a matching body" do
                 expect(response_body).to match_term expected_response_body, diff_options
               end

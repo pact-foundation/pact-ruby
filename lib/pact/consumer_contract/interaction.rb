@@ -1,4 +1,5 @@
 require 'pact/consumer_contract/request'
+require 'pact/consumer_contract/response'
 require 'pact/symbolize_keys'
 require 'pact/shared/active_support_support'
 
@@ -18,7 +19,8 @@ module Pact
 
       def self.from_hash hash
         request = Pact::Request::Expected.from_hash(hash['request'])
-        new(symbolize_keys(hash).merge({request: request}))
+        response = Pact::Response.from_hash(hash['response'])
+        new(symbolize_keys(hash).merge({request: request, response: response}))
       end
 
       def to_hash

@@ -31,7 +31,7 @@ module Pact
       end
 
       def response_status
-        interaction.response['status']
+        interaction.response.status
       end
 
       def consumer_name
@@ -67,7 +67,10 @@ module Pact
       attr_reader :interaction, :consumer_contract
 
       def clean_request
-        ordered_clean_hash Reification.from_term(interaction.request)
+        reified_request = Reification.from_term(interaction.request)
+        ordered_clean_hash(reified_request).tap do | hash |
+          hash[:body] = reified_request[:body] if reified_request[:body]
+        end
       end
 
       def clean_response
@@ -80,17 +83,17 @@ module Pact
       def ordered_clean_hash source
         ordered_keys.each_with_object({}) do |key, target|
           if source.key? key
-            target[key] = source[key] unless value_is_an_empty_hash_that_is_not_request_body(source[key], key)
+            target[key] = source[key] unless value_is_an_empty_hash(source[key])
           end
         end
       end
 
-      def value_is_an_empty_hash_that_is_not_request_body value, key
-        value.is_a?(Hash) && value.empty? && key != :body
+      def value_is_an_empty_hash value
+        value.is_a?(Hash) && value.empty?
       end
 
       def ordered_keys
-        [:method, :path, :query, :headers, :body, "status", "headers","body"]
+        [:method, :path, :query, :status, :headers, :body]
       end
 
       def remove_key_if_empty key, hash

@@ -106,6 +106,91 @@ module Pact
         end
       end
 
+      describe "modifies_resource?" do
+
+        subject { Pact::Request::Expected.from_hash(request).modifies_resource? }
+
+        shared_examples_for "may modify resource" do
+          context "when the request body is not specified" do
+            let(:request) { {method: http_method, path: '/'} }
+
+            it "returns false" do
+              expect(subject).to be false
+            end
+          end
+
+          context "when the request body is an empty Hash" do
+            let(:request) { {method: http_method, path: '/', body: {}} }
+
+            it "returns true" do
+              expect(subject).to be true
+            end
+          end
+
+          context "when the request body is a Hash and not empty" do
+            let(:request) { {method: http_method, path: '/', body: {some: 'body'}} }
+
+            it "returns true" do
+              expect(subject).to be true
+            end
+          end
+
+          context "when the request body is a String and not empty" do
+            let(:request) { {method: http_method, path: '/', body: 'some body'} }
+
+            it "returns true" do
+              expect(subject).to be true
+            end
+          end
+
+          context "when the request body is a String and is empty" do
+            let(:request) { {method: http_method, path: '/', body: ''} }
+
+            it "returns true" do
+              expect(subject).to be true
+            end
+          end
+        end
+
+        describe "when the method is PUT" do
+          let(:http_method) { :put }
+          include_examples 'may modify resource'
+        end
+
+        describe "when the method is POST" do
+          let(:http_method) { :post }
+          include_examples 'may modify resource'
+        end
+
+        describe "when the method is PATCH" do
+          let(:http_method) { :post }
+          include_examples 'may modify resource'
+        end
+
+        shared_examples_for "does not modify resource" do
+          let(:request) { {method: http_method, path: '/', body: {some: 'body'}} }
+
+          it "returns false" do
+            expect(subject).to be false
+          end
+        end
+
+        describe "when the method is GET" do
+          let(:http_method) { :get }
+          include_examples 'does not modify resource'
+        end
+
+        describe "when the method is DELETE" do
+          let(:http_method) { :delete }
+          include_examples 'does not modify resource'
+        end
+
+        describe "when the method is HEAD" do
+          let(:http_method) { :head }
+          include_examples 'does not modify resource'
+        end
+      end
+
     end
   end
 end

@@ -24,7 +24,7 @@ module Pact
     end
 
     def body_allows_any_value?
-      !self.key?(:body) || body.empty?
+      body_not_specified? || body_is_empty_hash?
     end
 
     def [] key
@@ -34,6 +34,16 @@ module Pact
     def self.from_hash hash
       headers = Headers.new(hash[:headers] || hash['headers'] || {})
       new(symbolize_keys(hash).merge(headers: headers))
+    end
+
+    private
+
+    def body_is_empty_hash?
+      body.is_a?(Hash) && body.empty?
+    end
+
+    def body_not_specified?
+      !self.key?(:body)
     end
 
   end

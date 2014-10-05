@@ -104,57 +104,47 @@ module Pact
       end
 
       describe "request_modifies_resource_without_checking_response_body?" do
-        let(:interaction) { Interaction.from_hash 'request' => request, 'response' => response }
-        let(:http_method) { :put }
 
-        subject { interaction.request_modifies_resource_without_checking_response_body? }
+        let(:interaction) { Interaction.new(request: request, response: response)}
 
-        describe "when the HTTP method is PUT" do
+        subject { interaction.request_modifies_resource_without_checking_response_body?}
 
-          context "when the request body and response body are not specified" do
-            let(:request) { {method: http_method, path: '/'} }
-            let(:response) { {status: 200} }
+        context "when the request modifies the resource and the response allows any value in body" do
+          let(:request) { instance_double(Pact::Request::Expected, modifies_resource?: true) }
+          let(:response) { instance_double(Pact::Response, body_allows_any_value?: true) }
 
-            it "returns false" do
-              expect(subject).to be false
-            end
-          end
-
-          context "when the request body and response body are empty" do
-            let(:request) { {method: http_method, path: '/', body: {}} }
-            let(:response) { {status: 200, body: {}} }
-            it "returns false" do
-              expect(subject).to be false
-            end
-          end
-
-          context "when the request body is not empty, and the response body is empty" do
-            let(:request) { {method: http_method, path: '/', body: {some: 'body'}} }
-            let(:response) { {status: 200, body: {}} }
-
-            it "returns true" do
-              expect(subject).to be true
-            end
-          end
-
-          context "when the request body is not empty, and the response body is not specified" do
-            let(:request) { {method: http_method, path: '/', body: {some: 'body'}} }
-            let(:response) { {status: 200} }
-
-            it "returns true" do
-              expect(subject).to be true
-            end
+          it "returns true" do
+            expect(subject).to be true
           end
         end
 
-        describe "when the HTTP method is GET" do
-          let(:request) { {method: :get, path: '/', body: {some: 'body'}} }
-          let(:response) { {status: 200} }
+        context "when the request modifies the resource and the response does not allow any value in body" do
+          let(:request) { instance_double(Pact::Request::Expected, modifies_resource?: true) }
+          let(:response) { instance_double(Pact::Response, body_allows_any_value?: false) }
 
-          it "returns true" do
+          it "returns false" do
             expect(subject).to be false
           end
         end
+
+        context "when the request does not modifies the resource and the response does not allow any value in body" do
+          let(:request) { instance_double(Pact::Request::Expected, modifies_resource?: false) }
+          let(:response) { instance_double(Pact::Response, body_allows_any_value?: false) }
+
+          it "returns false" do
+            expect(subject).to be false
+          end
+        end
+
+        context "when the request does not modifies the resource and the response allows any value in body" do
+          let(:request) { instance_double(Pact::Request::Expected, modifies_resource?: false) }
+          let(:response) { instance_double(Pact::Response, body_allows_any_value?: true) }
+
+          it "returns false" do
+            expect(subject).to be false
+          end
+        end
+
       end
     end
   end

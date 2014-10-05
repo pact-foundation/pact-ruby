@@ -55,13 +55,26 @@ module Pact
       end
 
       def modifies_resource?
-        ['PUT','POST','PATCH'].include?(method.to_s.upcase) && body && !body.empty?
+        http_method_modifies_resource? && body_specified?
       end
 
       protected
 
+      # Not including DELETE, as we don't care about the resources updated state.
+      def http_method_modifies_resource?
+        ['PUT','POST','PATCH'].include?(method.to_s.upcase)
+      end
+
       def self.key_not_found
         raise NotImplementedError
+      end
+
+      def body_specified?
+        specified?(:body)
+      end
+
+      def specified? key
+        !(self.send(key).is_a? self.class.key_not_found.class)
       end
 
       def to_hash_without_body

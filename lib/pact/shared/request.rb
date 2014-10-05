@@ -35,9 +35,9 @@ module Pact
           path: path,
         }
 
-        hash.merge!(query: query) unless query.is_a? self.class.key_not_found.class
-        hash.merge!(headers: headers) unless headers.is_a? self.class.key_not_found.class
-        hash.merge!(body: body) unless body.is_a? self.class.key_not_found.class
+        hash.merge!(query: query) if specified?(:query)
+        hash.merge!(headers: headers) if specified?(:headers)
+        hash.merge!(body: body) if specified?(:body)
         hash
       end
 

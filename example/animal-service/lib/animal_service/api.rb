@@ -1,5 +1,6 @@
 require 'sinatra/base'
 require_relative 'animal_repository'
+require 'json'
 
 module AnimalService
 

@@ -256,7 +256,7 @@ As in all things, there are good ways to implement Pacts, and there are not so g
 * [Provider States](https://github.com/realestate-com-au/pact/wiki/Provider-states)
 * [Verifying pacts](https://github.com/realestate-com-au/pact/wiki/Verifying-pacts)
 * [Sharing pacts between consumer and provider](https://github.com/realestate-com-au/pact/wiki/Sharing-pacts-between-consumer-and-provider)
-* [Regular expressions and type matching with Pact][Using regular expressions with Pact](https://github.com/realestate-com-au/pact/wiki/Regular-expressions-and-type-matching-with-Pact)
+* [Regular expressions and type matching with Pact](https://github.com/realestate-com-au/pact/wiki/Regular-expressions-and-type-matching-with-Pact)
 * [Frequently asked questions](https://github.com/realestate-com-au/pact/wiki/FAQ)
 * [Rarely asked questions](https://github.com/realestate-com-au/pact/wiki/RAQ)
 * [Best practices](https://github.com/realestate-com-au/pact/wiki/Best-practices)

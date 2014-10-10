@@ -20,7 +20,7 @@ module Pact
       }
     end
 
-    def as_json
+    def as_json opts = {}
       to_hash
     end
 

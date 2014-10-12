@@ -28,6 +28,11 @@ Gem::Specification.new do |gem|
   gem.add_runtime_dependency 'webrick'
   gem.add_runtime_dependency 'term-ansicolor', '~> 1.0'
 
+  unless ENV['X_PACT_DEVELOPMENT']
+    gem.add_runtime_dependency 'pact-support', '~> 0.0.1'
+    gem.add_runtime_dependency 'pact-mock_service', '~> 0.0.1'
+  end
+
   gem.add_development_dependency 'rake', '~> 10.0.3'
   gem.add_development_dependency 'webmock', '~> 1.18.0'
   gem.add_development_dependency 'pry'

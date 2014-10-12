@@ -13,6 +13,20 @@ PATH
       webrick
 
 PATH
+  remote: ../pact-mock_service
+  specs:
+    pact-mock_service (0.0.1)
+      awesome_print (~> 1.1)
+      find_a_port (~> 1.0.1)
+      json
+      rack
+      rack-test (~> 0.6.2)
+      rspec (>= 2.14)
+      term-ansicolor (~> 1.0)
+      thor
+      webrick
+
+PATH
   remote: ../pact-support
   specs:
     pact-support (0.0.1)
@@ -94,6 +108,7 @@ DEPENDENCIES
   faraday
   hashie (~> 2.0)
   pact!
+  pact-mock_service!
   pact-support!
   pry
   rake (~> 10.0.3)

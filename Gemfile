@@ -4,3 +4,4 @@ source 'https://rubygems.org'
 gemspec
 
 gem "pact-support", path: '../pact-support'
+gem "pact-mock_service", path: '../pact-mock_service'

@@ -1,1 +1,0 @@
-require 'pact/consumer_contract/consumer_contract'

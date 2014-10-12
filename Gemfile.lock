@@ -12,6 +12,19 @@ PATH
       thor
       webrick
 
+PATH
+  remote: ../pact-support
+  specs:
+    pact-support (0.0.1)
+      awesome_print (~> 1.1)
+      find_a_port (~> 1.0.1)
+      json
+      rack-test (~> 0.6.2)
+      randexp (~> 0.1.7)
+      rspec (>= 2.14)
+      term-ansicolor (~> 1.0)
+      thor
+
 GEM
   remote: https://rubygems.org/
   specs:
@@ -81,6 +94,7 @@ DEPENDENCIES
   faraday
   hashie (~> 2.0)
   pact!
+  pact-support!
   pry
   rake (~> 10.0.3)
   webmock (~> 1.18.0)

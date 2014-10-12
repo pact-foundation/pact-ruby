@@ -2,6 +2,17 @@ Do this to generate your change history
 
   git log --pretty=format:'  * %h - %s (%an, %ad)'
 
+### 1.4.0.rc1 (12 October 2014)
+
+* df3342f - Removing pact server command as it is now in pact-mock_service (bethesque, Sun Oct 12 12:39:56 2014 +1100)
+* 12ccdb7 - Making gem source configurable (bethesque, Sun Oct 12 12:39:32 2014 +1100)
+* 5b76516 - Removed files that are now in pact-support (bethesque, Sun Oct 12 11:40:57 2014 +1100)
+* c4365c5 - Fix bug in calling of SomethingLike serialisation (André Allavena, Fri Oct 10 15:39:57 2014 +1000)
+* 546b5c7 - JSON isn't auto-loaded; require it before use. (Daniel Heath, Wed Oct 8 13:31:24 2014 +1100)
+* 7cac7e9 - Replaced response hash with Response class - say no to Hash Driven Development (bethesque, Fri Oct 3 17:22:38 2014 +1000)
+* 36940d3 - Added test cases to show response headers are case insensitive (bethesque, Fri Oct 3 15:25:03 2014 +1000)
+* f4422e2 - Fix typos in README (Mark Dalgleish, Mon Sep 29 17:12:17 2014 +1000)
+
 ### 1.3.3 (23 September 2014)
 
 * 9106aac - Fixed reification when using FactoryGirl. (bethesque, Tue Sep 23 08:23:51 2014 +1000)
@@ -35,7 +46,7 @@ Do this to generate your change history
 
 ### 1.2.1.rc2 (13 June 2014)
 
-* d805f35 - Ensuring the pact RSpec formatter works for both rspec 2 and rspec 3 (Beth, Fri Jun 13 16:27:01 2014 +1000)
+* d805f35 - Ensuring the pact RSpec formatter works for both rspec 2 and rspec 3 (bethesque, Fri Jun 13 16:27:01 2014 +1000)
 * 1669d46 - Fix require for sample app to work without munging LOAD_PATH (Daniel Heath, Fri Jun 13 15:50:03 2014 +1000)
 
 ### 1.2.1.rc1 (13 June 2014)

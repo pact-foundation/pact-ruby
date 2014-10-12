@@ -1,12 +1,12 @@
 PATH
   remote: .
   specs:
-    pact (1.3.3)
+    pact (1.4.0.rc1)
       awesome_print (~> 1.1)
       find_a_port (~> 1.0.1)
       json
       pact-mock_service (~> 0.0.1)
-      pact-support (~> 0.0.1)
+      pact-support (~> 0.0.2)
       rack-test (~> 0.6.2)
       randexp (~> 0.1.7)
       rspec (>= 2.14)
@@ -49,7 +49,7 @@ GEM
       term-ansicolor (~> 1.0)
       thor
       webrick
-    pact-support (0.0.1)
+    pact-support (0.0.2)
       awesome_print (~> 1.1)
       find_a_port (~> 1.0.1)
       json

@@ -135,6 +135,44 @@ describe "A service consumer side of a pact", :pact => true  do
       expect(interactions.first.provider_state).to eq("the_zebras_are_here")
     end
   end
+  context "with a provider state" do
+    before do
+      Pact.clear_configuration
+
+      Pact.service_consumer "Consumer" do
+        has_pact_with "Zebra Service" do
+          mock_service :zebra_service do
+            verify false
+            port 1242
+          end
+        end
+      end
+    end
+
+    let(:body) { 'That is some good Mallory.' }
+
+    xit "goes like that" do#, :pending => true do
+      zebra_service.
+          given(:the_zebras_are_here).
+          upon_receiving("a retrieve Mallory request").with({
+                                                                method: :get,
+                                                                path: '/mallory',
+                                                                headers: {'Accept' => 'application/json'},
+                                                                query: {colour: 'brown', size: 'small'}
+                                                            }).
+          will_respond_with({
+                                status: 200,
+                                headers: { 'Content-Type' => 'application/json' },
+                                body: Pact::Term.new(matcher: /Mallory/, generate: body)
+                            })
+
+      response = Faraday.get(zebra_service.mock_service_base_url + "/mallory?colour=brown&size=small", nil, {'Accept' => 'application/json'})
+      expect(response.body).to eq body
+
+      interactions = Pact::ConsumerContract.from_json(zebra_service.write_pact).interactions
+      expect(interactions.first.provider_state).to eq("the_zebras_are_here")
+    end
+  end
 
   context "with multiple headers" do
     before do

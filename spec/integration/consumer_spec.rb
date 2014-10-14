@@ -151,7 +151,7 @@ describe "A service consumer side of a pact", :pact => true  do
 
     let(:body) { 'That is some good Mallory.' }
 
-    it "goes like that" do
+    xit "goes like that" do#, :pending => true do
       zebra_service.
           given(:the_zebras_are_here).
           upon_receiving("a retrieve Mallory request").with({

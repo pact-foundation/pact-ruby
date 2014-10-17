@@ -2,6 +2,10 @@ Do this to generate your change history
 
   git log --pretty=format:'  * %h - %s (%an, %ad)'
 
+### 1.4.0.rc3 (17 October 2014)
+
+* 602906f - Upped pact-support version to allow queries specified as hashes. (bethesque, Fri Oct 17 14:30:39 2014 +1100)
+
 ### 1.4.0.rc2 (12 October 2014)
 
 * 61036fc - Updating pact-support version (bethesque, Sun Oct 12 14:39:36 2014 +1100)

@@ -52,7 +52,6 @@ describe "A service consumer side of a pact", :pact => true  do
 
     it "matches form data" do
       response =  Faraday.post  url, param2: 'penguin', param1: 'wiffle'
-      puts response.body
       expect(response.status).to eq 200
     end
 

@@ -2,6 +2,10 @@ Do this to generate your change history
 
   git log --pretty=format:'  * %h - %s (%an, %ad)'
 
+### 1.4.0.rc4 (22 October 2014)
+
+* e56775a - Upgraded pact support gems to allow form bodies to be specified as Hashes with Pact::Terms (bethesque, Wed Oct 22 15:31:30 2014 +1100)
+
 ### 1.4.0.rc3 (17 October 2014)
 
 * 602906f - Upped pact-support version to allow queries specified as hashes. (bethesque, Fri Oct 17 14:30:39 2014 +1100)

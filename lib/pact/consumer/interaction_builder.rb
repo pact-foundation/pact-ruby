@@ -29,7 +29,7 @@ module Pact
       end
 
       def will_respond_with(response)
-        interaction.response = response
+        interaction.response = Pact::Response.new(response)
         @callback.call interaction
         self
       end

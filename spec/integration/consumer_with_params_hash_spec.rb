@@ -10,10 +10,10 @@ describe "A service consumer side of a pact", :pact => true  do
   # Helper to make Faraday requests.
   # Faraday::FlatParamsEncoder may only be needed with our current version of Faraday 0.9
   # and ensures that when there are multiple parameters of the same name, they are encoded properly. e.g. colour=blue&colour=green
-  def faraday_mallory(base_url,params)
+  def faraday_mallory(base_url,params, headers = {})
     (Faraday.new base_url, :request => {
        :params_encoder => Faraday::FlatParamsEncoder,
-    }).get '/mallory', params, {'Accept' => 'application/json'}
+    }).get '/mallory', params, {'Accept' => 'application/json'}.merge(headers)
   end
 
   let(:body) { 'That is some good Mallory.' }
@@ -77,7 +77,7 @@ describe "A service consumer side of a pact", :pact => true  do
 
   context "and a complex request matching Pact Terms and multiple instances of the same parameter" do
 
-    it "goes like this" do
+    before :all do
       Pact.clear_configuration
       Pact.service_consumer "Consumer" do
         has_pact_with "Zebra Service" do
@@ -87,13 +87,16 @@ describe "A service consumer side of a pact", :pact => true  do
           end
         end
       end
+    end
+
+    before do
       zebra_service.
         given(:the_zebras_are_here).
         upon_receiving("a retrieve Mallory request").
         with({
            method: :get,
            path: '/mallory',
-           headers: {'Accept' => 'application/json'},
+           headers: {'Accept' => 'application/json', 'Content-Type' => 'application/x-www-form-urlencoded'},
            query: { size: ['small',Pact::Term.new(matcher: /med.*/, generate: 'medium'),'large'], colour: 'brown', weight: '5'}
         }).
         will_respond_with({
@@ -101,11 +104,19 @@ describe "A service consumer side of a pact", :pact => true  do
           headers: { 'Content-Type' => 'application/json' },
           body: Pact::Term.new(matcher: /Mallory/, generate: body)
       })
-      response = faraday_mallory(zebra_service.mock_service_base_url, { weight: 5, size: ['small','medium','large'], colour: 'brown'})
-      expect(response.body).to eq body
-
-      interactions = Pact::ConsumerContract.from_json(zebra_service.write_pact).interactions
-      expect(interactions.first.provider_state).to eq("the_zebras_are_here")
     end
+
+    let(:response) do
+      faraday_mallory(
+        zebra_service.mock_service_base_url,
+        { weight: 5, size: ['small','medium','large'], colour: 'brown'},
+        {'Content-Type' => 'application/x-www-form-urlencoded'}
+      )
+    end
+
+    it "goes like this" do
+      expect(response.body).to eq body
+    end
+
   end
 end

@@ -61,7 +61,8 @@ module Pact
             :consumer_name => consumer_name,
             :provider_name => provider_name,
             :pactfile_write_mode => Pact.configuration.pactfile_write_mode,
-            :port => port
+            :port => port,
+            :pact_dir => Pact.configuration.pact_dir
           }
           Pact::Consumer::ConsumerContractBuilder.new consumer_contract_builder_fields
         end

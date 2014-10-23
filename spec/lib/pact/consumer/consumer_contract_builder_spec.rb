@@ -8,12 +8,19 @@ module Pact
 
       let(:consumer_name) { 'a consumer' }
       let(:provider_name) { 'a provider' }
+      let(:pact_dir) { './spec/pacts' }
+
+      subject do
+        Pact::Consumer::ConsumerContractBuilder.new(
+          :consumer_name => consumer_name,
+          :provider_name => provider_name,
+          :pactfile_write_mode => :overwrite,
+          :port => 2222,
+          :pact_dir => pact_dir)
+      end
 
       describe "handle_interaction_fully_defined" do
 
-        subject {
-          Pact::Consumer::ConsumerContractBuilder.new(:consumer_name => 'blah', :provider_name => 'blah', :port => 2222)
-        }
 
         let(:interaction_hash) {
           {
@@ -56,6 +63,7 @@ module Pact
       	subject {
       		ConsumerContractBuilder.new(
       			:pactfile_write_mode => :overwrite,
+            :pact_dir => './spec/pacts',
             :consumer_name => consumer_name,
             :provider_name => provider_name,
         		:port => 1234) }
@@ -63,6 +71,23 @@ module Pact
       	it "returns the mock service base URL" do
       		expect(subject.mock_service_base_url).to eq("http://localhost:1234")
       	end
+      end
+
+      describe "write_pact" do
+
+        let(:body) do
+          {
+            consumer: { name: consumer_name },
+            provider: { name: provider_name },
+            pactfile_write_mode: "overwrite",
+            pact_dir: pact_dir
+          }
+        end
+
+        it "posts the pact details to the mock service" do
+          allow_any_instance_of(MockServiceClient).to receive(:write_pact).with(body)
+          subject.write_pact
+        end
       end
     end
   end

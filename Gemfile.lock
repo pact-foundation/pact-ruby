@@ -5,7 +5,7 @@ PATH
       awesome_print (~> 1.1)
       find_a_port (~> 1.0.1)
       json
-      pact-mock_service (~> 0.1.0)
+      pact-mock_service (~> 0.2.0)
       pact-support (~> 0.1.2)
       rack-test (~> 0.6.2)
       randexp (~> 0.1.7)
@@ -39,7 +39,7 @@ GEM
     method_source (0.8.2)
     minitest (5.3.4)
     multipart-post (2.0.0)
-    pact-mock_service (0.1.0)
+    pact-mock_service (0.2.0)
       awesome_print (~> 1.1)
       find_a_port (~> 1.0.1)
       json

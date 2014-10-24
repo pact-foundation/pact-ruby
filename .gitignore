@@ -27,3 +27,4 @@ spec/pacts
 log
 .idea
 reports
+Gemfile.lock

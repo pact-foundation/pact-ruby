@@ -1,3 +1,5 @@
+# The support you need when you use ActiveSupport
+
 module Pact
   module ActiveSupportSupport
 

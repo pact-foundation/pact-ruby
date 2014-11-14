@@ -63,6 +63,8 @@ module Pact
       end
     rescue SystemCallError
       return false
+    rescue EOFError
+      return false
     end
 
     def run_default_server(app, port)

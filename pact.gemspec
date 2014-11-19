@@ -38,4 +38,5 @@ Gem::Specification.new do |gem|
   gem.add_development_dependency 'hashie', '~> 2.0'
   gem.add_development_dependency 'activesupport'
   gem.add_development_dependency 'faraday'
+  gem.add_development_dependency 'appraisal'
 end

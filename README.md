@@ -18,7 +18,7 @@ Pact is most valuable for designing and testing integrations where you (or your 
 
 * Performance and load testing.
 * Functional testing of the provider - that is what the provider's own tests should do. Pact is about checking the contents and format of requests and responses.
-* Situations where you cannot load data into the provider without using the API that you're actually testing (eg. public APIs)
+* Situations where you cannot load data into the provider without using the API that you're actually testing (eg. public APIs). [Why?][pact-public-apis]
 
 ## Features
 
@@ -311,4 +311,4 @@ If you would like to implement pact in another language, please check out the [P
 
 [webmachine]: https://github.com/seancribbs/webmachine-ruby
 [roar]: https://github.com/apotonick/roar
-
+[pact-public-apis]: https://github.com/realestate-com-au/pact/wiki/Why-Pact-may-not-be-the-best-tool-for-testing-public-APIs

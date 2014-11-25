@@ -18,7 +18,7 @@ Pact is most valuable for designing and testing integrations where you (or your 
 
 * Performance and load testing.
 * Functional testing of the provider - that is what the provider's own tests should do. Pact is about checking the contents and format of requests and responses.
-* Situations where you cannot load data into the provider without using the API that you're actually testing.
+* Situations where you cannot load data into the provider without using the API that you're actually testing (eg. public APIs). [Why?][pact-public-apis]
 
 ## Features
 
@@ -175,7 +175,7 @@ end
 
 Green! You now have a pact file that can be used to verify your expectations of the provider project.
 
-Now, rinse and repeat for other likely status codes that may be returned. For example, consider how you want your client to respond to a: 
+Now, rinse and repeat for other likely status codes that may be returned. For example, consider how you want your client to respond to a:
 * 404 (return null, or raise an error?)
 * 500 (specifying that the response body should contain an error message, and ensuring that your client logs that error message will make your life much easier when things go wrong)
 * 401/403 if there is authorisation.
@@ -313,3 +313,4 @@ If you would like to implement pact in another language, please check out the [P
 [roar]: https://github.com/apotonick/roar
 [pact_broker]: https://github.com/bethesque/pact_broker
 [pact_broker-client]: https://github.com/bethesque/pact_broker-client
+[pact-public-apis]: https://github.com/realestate-com-au/pact/wiki/Why-Pact-may-not-be-the-best-tool-for-testing-public-APIs

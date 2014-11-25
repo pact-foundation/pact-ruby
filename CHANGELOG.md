@@ -2,6 +2,19 @@ Do this to generate your change history
 
   git log --pretty=format:'  * %h - %s (%an, %ad)'
 
+
+
+### 1.4.0 (25 November 2014)
+
+* e596eb8 - Added appraisal gem so we can test against RSpec 2 and 3. (bethesque, Thu Nov 20 09:31:13 2014 +1100)
+* fb40662 - Rescue EOFError when starting server jruby fails because of this all the time on TravisCI (bethesque, Fri Nov 14 15:58:08 2014 +1100)
+* c1e8b55 - Removing extraneous files from being included in the gem (bethesque, Fri Nov 14 14:03:44 2014 +1100)
+* 247e1c2 - Added example pact:publish task to example app (bethesque, Tue Nov 11 21:30:48 2014 +1100)
+* 935b318 - Removed Gemfile.lock from source control (bethesque, Fri Oct 24 16:02:36 2014 +1100)
+* b2f9073 - Mock Service client must now specify the pact dir (bethesque, Fri Oct 24 09:39:12 2014 +1100)
+* c64e122 - Add the ability to use regex in headers when defining the response. (Michael Treacher, Thu Oct 23 21:22:13 2014 +1100)
+* 892e526 - Removed jruby-19mode from .travis.yml, it fails inconsistently with EOF error. (bethesque, Wed Oct 22 16:26:28 2014 +1100)
+
 ### 1.4.0.rc4 (22 October 2014)
 
 * e56775a - Upgraded pact support gems to allow form bodies to be specified as Hashes with Pact::Terms (bethesque, Wed Oct 22 15:31:30 2014 +1100)

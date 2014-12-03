@@ -17,7 +17,7 @@ module Pact
           if has_provider_state?
             "#{description} given #{interaction.provider_state}"
           else
-            interaction.description
+            description
           end.gsub(/\s+/,'_')
         end
       end
@@ -51,6 +51,7 @@ module Pact
       end
 
       def description start_of_sentence = false
+        return '' unless @interaction.description
         apply_capitals(@interaction.description.strip, start_of_sentence)
       end
 

@@ -126,6 +126,19 @@ module Pact
         end
       end
 
+      describe "description" do
+        context "with a nil description" do
+          let(:interaction) do
+            interaction_with_request_with_body_and_headers.description = nil
+            interaction_with_request_with_body_and_headers
+          end
+
+          it "does not blow up" do
+            expect(subject.description(true)).to eq ''
+            expect(subject.description(false)).to eq ''
+          end
+        end
+      end
 
     end
   end

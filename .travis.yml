@@ -6,7 +6,6 @@ rvm:
   - 2.1.2
   - jruby-1.7.11
   - jruby-1.7.12
-  - jruby-19mode
 gemfile:
   - Gemfile
   - gemfiles/rspec_2.gemfile

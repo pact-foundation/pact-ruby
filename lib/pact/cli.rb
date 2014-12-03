@@ -10,6 +10,7 @@ module Pact
     desc 'verify', "Verify a pact"
     method_option :pact_helper, aliases: "-h", desc: "Pact helper file", :required => true
     method_option :pact_uri, aliases: "-p", desc: "Pact URI"
+    method_option :backtrace, aliases: "-b", desc: "Show full backtrace", :default => false, :type => :boolean
 
     def verify
       RunPactVerification.call(options)
@@ -84,7 +85,7 @@ module Pact
     end
 
     def pact_spec_options
-      {criteria: SpecCriteria.call}
+      {criteria: SpecCriteria.call, full_backtrace: options[:backtrace]}
     end
 
   end

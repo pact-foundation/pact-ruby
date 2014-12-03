@@ -14,7 +14,6 @@ Pact::VerificationTask.new(:pass) do | pact |
 end
 
 Pact::VerificationTask.new(:fail) do | pact |
-	pact.uri './spec/support/test_app_pass.json'
 	pact.uri './spec/support/test_app_fail.json'
 end
 

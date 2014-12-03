@@ -67,6 +67,21 @@ module Pact
         end
       end
 
+      context "with $BACKTRACE=true" do
+        before do
+          ENV['BACKTRACE'] = 'true'
+        end
+
+        it "includes the -b option in the command" do
+          expect(TaskHelper).to receive(:execute_cmd).with(/\s\-b\b/)
+          TaskHelper.execute_pact_verify(pact_uri, nil, nil)
+        end
+
+        after do
+          ENV.delete('BACKTRACE')
+        end
+      end
+
     end
 
 

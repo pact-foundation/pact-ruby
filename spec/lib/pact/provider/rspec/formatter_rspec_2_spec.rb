@@ -52,6 +52,10 @@ module Pact
             expect(output_result).to include("For assistance debugging failures")
           end
 
+          it "explains how to show the full backtrace" do
+            expect(output_result).to include("BACKTRACE=true")
+          end
+
           it "prints missing provider states" do
             expect(PrintMissingProviderStates).to receive(:call).with(missing_provider_states, output)
             subject.dump_commands_to_rerun_failed_examples

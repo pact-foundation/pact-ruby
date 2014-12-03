@@ -25,6 +25,7 @@ module Pact
       command_parts << "-S pact verify"
       command_parts << "-h" << (pact_helper.end_with?(".rb") ? pact_helper : pact_helper + ".rb")
       (command_parts << "-p" << pact_uri) if pact_uri
+      command_parts << "-b" if ENV['BACKTRACE'] == 'true'
       command_parts.flatten.join(" ")
     end
 

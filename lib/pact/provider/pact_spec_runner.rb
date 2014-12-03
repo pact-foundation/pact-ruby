@@ -74,6 +74,7 @@ module Pact
         formatter_class = Pact::RSpec.formatter_class
         pact_formatter = ::RSpec.configuration.formatters.find {|f| f.class == formatter_class && f.output == ::RSpec.configuration.output_stream}
         ::RSpec.configuration.add_formatter formatter_class unless pact_formatter
+        ::RSpec.configuration.full_backtrace = @options[:full_backtrace]
 
         config.before(:suite) do
           # Preload app before suite so the classes loaded in memory are consistent for

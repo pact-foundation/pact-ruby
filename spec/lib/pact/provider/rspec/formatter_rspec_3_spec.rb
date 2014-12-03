@@ -55,6 +55,10 @@ Pact::RSpec.with_rspec_3 do
               expect(output_result).to include("1 failure")
             end
 
+            it "explains how to show the full backtrace" do
+              expect(output_result).to include("BACKTRACE=true")
+            end
+
             it "prints missing provider states" do
               expect(PrintMissingProviderStates).to receive(:call).with(missing_provider_states, output)
               subject.dump_summary summary

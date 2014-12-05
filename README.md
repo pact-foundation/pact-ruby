@@ -19,6 +19,7 @@ Pact is most valuable for designing and testing integrations where you (or your 
 * Performance and load testing.
 * Functional testing of the provider - that is what the provider's own tests should do. Pact is about checking the contents and format of requests and responses.
 * Situations where you cannot load data into the provider without using the API that you're actually testing (eg. public APIs). [Why?][pact-public-apis]
+* Testing "pass through" APIs, where the provider merely passes on the request contents to a downstream service without validating them. [Why?][pass-through-apis]
 
 ## Features
 
@@ -314,3 +315,4 @@ If you would like to implement pact in another language, please check out the [P
 [pact_broker]: https://github.com/bethesque/pact_broker
 [pact_broker-client]: https://github.com/bethesque/pact_broker-client
 [pact-public-apis]: https://github.com/realestate-com-au/pact/wiki/Why-Pact-may-not-be-the-best-tool-for-testing-public-APIs
+[pass-through-apis]: https://github.com/realestate-com-au/pact/wiki/Why-Pact-may-not-be-the-best-tool-for-testing-pass-through-APIs

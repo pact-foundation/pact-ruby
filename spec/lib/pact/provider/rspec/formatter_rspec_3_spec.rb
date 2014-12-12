@@ -12,7 +12,15 @@ Pact::RSpec.with_rspec_3 do
           let(:interaction) { InteractionFactory.create 'provider_state' => 'a state', 'description' => 'a description'}
           let(:pactfile_uri) { 'pact_file_uri' }
           let(:description) { 'an interaction' }
-          let(:metadata) { {pact_interaction: interaction, pactfile_uri: pactfile_uri, pact_interaction_example_description: description}}
+          let(:pact_json) { {some: 'pact json'}.to_json }
+          let(:metadata) do
+            {
+              pact_interaction: interaction,
+              pactfile_uri: pactfile_uri,
+              pact_interaction_example_description: description,
+              pact_json: pact_json
+            }
+          end
           let(:metadata_2) { metadata.merge(pact_interaction_example_description: 'another interaction')}
           let(:example) { double("Example", metadata: metadata) }
           let(:example_2) { double("Example", metadata: metadata_2) }
@@ -29,6 +37,7 @@ Pact::RSpec.with_rspec_3 do
 
           before do
             allow(PrintMissingProviderStates).to receive(:call)
+            allow(PrintPactDiff).to receive(:call)
             allow(subject).to receive(:failed_examples).and_return(failed_examples)
             allow(Pact.provider_world.provider_states).to receive(:missing_provider_states).and_return(missing_provider_states)
             subject.dump_summary summary
@@ -61,6 +70,11 @@ Pact::RSpec.with_rspec_3 do
 
             it "prints missing provider states" do
               expect(PrintMissingProviderStates).to receive(:call).with(missing_provider_states, output)
+              subject.dump_summary summary
+            end
+
+            it "prints the diff with the previous pact" do
+              expect(PrintPactDiff).to receive(:call).with(pact_json, output)
               subject.dump_summary summary
             end
           end

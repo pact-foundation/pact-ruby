@@ -1,6 +1,8 @@
 require 'pact/provider/print_missing_provider_states'
 require 'rspec/core/formatters'
 require 'term/ansicolor'
+require 'pact/provider/print_pact_diff'
+
 
 module Pact
   module Provider
@@ -20,16 +22,17 @@ module Pact
           print_rerun_commands summary
           print_failure_message
           print_missing_provider_states
+          print_pact_diff summary
         end
 
         private
 
         def interactions_count(summary)
-          summary.examples.collect{ |e|e.metadata[:pact_interaction_example_description]}.uniq.size
+          summary.examples.collect{ |e| e.metadata[:pact_interaction_example_description] }.uniq.size
         end
 
         def failed_interactions_count(summary)
-          summary.failed_examples.collect{ |e|e.metadata[:pact_interaction_example_description]}.uniq.size
+          summary.failed_examples.collect{ |e| e.metadata[:pact_interaction_example_description] }.uniq.size
         end
 
         def totals_line summary
@@ -39,11 +42,11 @@ module Pact
         end
 
         def colorized_totals_line(summary)
-          if summary.failure_count > 0
-            colorizer.wrap(totals_line(summary), ::RSpec.configuration.failure_color)
-          else
-            colorizer.wrap(totals_line(summary), ::RSpec.configuration.success_color)
-          end
+          colorizer.wrap(totals_line(summary), color_for_summary(summary))
+        end
+
+        def color_for_summary summary
+          summary.failure_count > 0 ? ::RSpec.configuration.failure_color : ::RSpec.configuration.success_color
         end
 
         def print_rerun_commands summary
@@ -55,6 +58,14 @@ module Pact
 
         def print_missing_provider_states
           PrintMissingProviderStates.call Pact.provider_world.provider_states.missing_provider_states, output
+        end
+
+        def print_pact_diff summary
+          PrintPactDiff.call pact_json(summary), output
+        end
+
+        def pact_json summary
+          summary.examples.first.metadata[:pact_json]
         end
 
         def interaction_rerun_commands summary

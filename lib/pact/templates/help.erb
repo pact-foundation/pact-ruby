@@ -1,0 +1,10 @@
+For assistance debugging failures
+=================================
+
+The pact files have been stored locally in the following temp directory:
+ <%= temp_dir %>
+
+The requests and responses are logged in the following log file:
+ <%= log_path %>
+
+Add BACKTRACE=true to the `rake pact:verify` command to see the full backtrace

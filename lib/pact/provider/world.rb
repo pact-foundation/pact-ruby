@@ -26,6 +26,10 @@ module Pact
         @pact_verifications ||= []
       end
 
+      def pact_urls
+        pact_verifications.collect(&:uri)
+      end
+
     end
   end
 end

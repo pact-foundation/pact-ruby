@@ -49,7 +49,7 @@ module Pact
         else
           run_with_configured_pacts
         end
-        exit 1 unless exit_code == 0
+        exit exit_code
       end
 
       def run_with_pact_uri
@@ -57,10 +57,9 @@ module Pact
       end
 
       def run_with_configured_pacts
-        pact_verifications = Pact.provider_world.pact_verifications
-        pact_urls = pact_verifications.collect(&:uri)
+        pact_urls = Pact.provider_world.pact_urls
         raise "Please configure a pact to verify" if pact_urls.empty?
-        Pact::Provider::PactSpecRunner.new(pact_urls, options).run
+        Pact::Provider::PactSpecRunner.new(pact_urls, pact_spec_options).run
       end
 
       def pact_spec_options

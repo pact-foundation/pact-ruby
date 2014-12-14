@@ -5,6 +5,7 @@ require 'rspec/core/formatters/documentation_formatter'
 require 'pact/provider/pact_helper_locator'
 require 'pact/project_root'
 require 'pact/rspec'
+require 'pact/provider/verification'
 
 require_relative 'rspec'
 
@@ -38,14 +39,22 @@ module Pact
 
       private
 
+      def verifications
+        @verifications ||= begin
+          spec_definitions.collect do | spec_definition |
+            options = {
+              consumer: spec_definition[:consumer],
+              save_pactfile_to_tmp: true,
+              criteria: @options[:criteria]
+            }
+            PactBroker::Provider::Verification.new(spec_definition[:uri], options)
+          end
+        end
+      end
+
       def initialize_specs
-        spec_definitions.each do | spec_definition |
-          options = {
-            consumer: spec_definition[:consumer],
-            save_pactfile_to_tmp: true,
-            criteria: @options[:criteria]
-          }
-          honour_pactfile spec_definition[:uri], options
+        verifications.each do | verification |
+          honour_pactfile verification
         end
       end
 

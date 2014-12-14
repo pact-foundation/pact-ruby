@@ -18,14 +18,14 @@ module Pact
 
         include ::RSpec::Core::DSL
 
-        def honour_pactfile pactfile_uri, options = {}
+        def honour_pactfile verification
+          options = verification.options
           #TODO change puts to use output stream
-          puts "Reading pact at #{pactfile_uri}"
+          puts "Reading pact at #{verification.uri}"
           puts "Filtering interactions by: #{options[:criteria]}" if options[:criteria] && options[:criteria].any?
-          pact_json = read_pact_from(pactfile_uri, options)
-          consumer_contract = Pact::ConsumerContract.from_json(pact_json)
-          ::RSpec.describe "Verifying a pact between #{consumer_contract.consumer.name} and #{consumer_contract.provider.name}", :pactfile_uri => pactfile_uri do
-            honour_consumer_contract consumer_contract, options.merge(pact_json: pact_json)
+          consumer_contract = verification.consumer_contract
+          ::RSpec.describe "Verifying a pact between #{verification.consumer_name} and #{verification.provider_name}", :pactfile_uri => verification.uri do
+            honour_consumer_contract consumer_contract, options.merge(pact_json: verification.pact_json)
           end
         end
 
@@ -148,10 +148,6 @@ module Pact
 
         def interaction_description_for_rerun_command interaction
           description_for(interaction).capitalize + ( interaction.provider_state ? " given #{interaction.provider_state}" : "")
-        end
-
-        def read_pact_from uri, options = {}
-          Pact::PactFile.read(uri, options)
         end
 
       end

@@ -2,13 +2,12 @@ module Pact
   module Cli
     class SpecCriteria
 
-      def self.call
+      def self.call options
         criteria = {}
 
-        description = ENV["PACT_DESCRIPTION"]
-        criteria[:description] = Regexp.new(description) if description
+        criteria[:description] = Regexp.new(options[:description]) if options[:description]
 
-        provider_state = ENV["PACT_PROVIDER_STATE"]
+        provider_state = options[:provider_state]
         if provider_state
           if provider_state.length == 0
             criteria[:provider_state] = nil #Allow PACT_PROVIDER_STATE="" to mean no provider state

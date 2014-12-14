@@ -64,7 +64,10 @@ module Pact
       end
 
       def pact_spec_options
-        {criteria: SpecCriteria.call, full_backtrace: options[:backtrace]}
+        {
+          full_backtrace: options[:backtrace],
+          criteria: SpecCriteria.call(options)
+        }
       end
 
     end

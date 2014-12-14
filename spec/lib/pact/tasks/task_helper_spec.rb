@@ -17,7 +17,7 @@ module Pact
       end
 
       context "with no pact_helper or pact URI" do
-        let(:command) { "SPEC_OPTS='' #{ruby_path} -S pact verify -h #{default_pact_helper_path}" }
+        let(:command) { "SPEC_OPTS='' #{ruby_path} -S pact verify --pact-helper #{default_pact_helper_path}" }
         it "executes the command" do
           expect(TaskHelper).to receive(:execute_cmd).with(command)
           TaskHelper.execute_pact_verify
@@ -25,7 +25,7 @@ module Pact
       end
 
       context "with a pact URI" do
-        let(:command) { "SPEC_OPTS='' #{ruby_path} -S pact verify -h #{default_pact_helper_path} -p #{pact_uri}" }
+        let(:command) { "SPEC_OPTS='' #{ruby_path} -S pact verify --pact-helper #{default_pact_helper_path} --pact-uri #{pact_uri}" }
         it "executes the command" do
           expect(TaskHelper).to receive(:execute_cmd).with(command)
           TaskHelper.execute_pact_verify(pact_uri)
@@ -34,7 +34,7 @@ module Pact
 
       context "with a pact URI and a pact_helper" do
         let(:custom_pact_helper_path) { '/custom/pact_helper.rb' }
-        let(:command) { "SPEC_OPTS='' #{ruby_path} -S pact verify -h #{custom_pact_helper_path} -p #{pact_uri}" }
+        let(:command) { "SPEC_OPTS='' #{ruby_path} -S pact verify --pact-helper #{custom_pact_helper_path} --pact-uri #{pact_uri}" }
         it "executes the command" do
           expect(TaskHelper).to receive(:execute_cmd).with(command)
           TaskHelper.execute_pact_verify(pact_uri, custom_pact_helper_path)
@@ -43,7 +43,7 @@ module Pact
 
       context "with a pact_helper with no .rb on the end" do
         let(:custom_pact_helper_path) { '/custom/pact_helper' }
-        let(:command) { "SPEC_OPTS='' #{ruby_path} -S pact verify -h #{custom_pact_helper_path}.rb -p #{pact_uri}" }
+        let(:command) { "SPEC_OPTS='' #{ruby_path} -S pact verify --pact-helper #{custom_pact_helper_path}.rb --pact-uri #{pact_uri}" }
         it "executes the command" do
           expect(TaskHelper).to receive(:execute_cmd).with(command)
           TaskHelper.execute_pact_verify(pact_uri, custom_pact_helper_path)
@@ -51,7 +51,7 @@ module Pact
       end
 
       context "with a pact URI and a nil pact_helper" do
-        let(:command) { "SPEC_OPTS='' #{ruby_path} -S pact verify -h #{default_pact_helper_path} -p #{pact_uri}" }
+        let(:command) { "SPEC_OPTS='' #{ruby_path} -S pact verify --pact-helper #{default_pact_helper_path} --pact-uri #{pact_uri}" }
         it "executes the command" do
           expect(TaskHelper).to receive(:execute_cmd).with(command)
           TaskHelper.execute_pact_verify(pact_uri, nil)
@@ -73,12 +73,57 @@ module Pact
         end
 
         it "includes the -b option in the command" do
-          expect(TaskHelper).to receive(:execute_cmd).with(/\s\-b\b/)
+          expect(TaskHelper).to receive(:execute_cmd).with(/\s\--backtrace\b/)
           TaskHelper.execute_pact_verify(pact_uri, nil, nil)
         end
 
         after do
           ENV.delete('BACKTRACE')
+        end
+      end
+
+      context "with PACT_DESCRIPTION set" do
+        before do
+          ENV['PACT_DESCRIPTION'] = 'some description'
+        end
+
+        it "includes the -b option in the command" do
+          expect(TaskHelper).to receive(:execute_cmd).with(/--description some\\ description/)
+          TaskHelper.execute_pact_verify(pact_uri, nil, nil)
+        end
+
+        after do
+          ENV.delete('PACT_DESCRIPTION')
+        end
+      end
+
+      context "with PACT_PROVIDER_STATE set" do
+        before do
+          ENV['PACT_PROVIDER_STATE'] = 'some state'
+        end
+
+        it "includes the -b option in the command" do
+          expect(TaskHelper).to receive(:execute_cmd).with(/--provider-state some\\ state/)
+          TaskHelper.execute_pact_verify(pact_uri, nil, nil)
+        end
+
+        after do
+          ENV.delete('PACT_PROVIDER_STATE')
+        end
+      end
+
+      context "with PACT_PROVIDER_STATE set as an emtpy string" do
+        before do
+          ENV['PACT_PROVIDER_STATE'] = ''
+        end
+
+        it "includes the -b option in the command" do
+          expect(TaskHelper).to receive(:execute_cmd).with(/--provider-state ''/)
+          TaskHelper.execute_pact_verify(pact_uri, nil, nil)
+        end
+
+        after do
+          ENV.delete('PACT_PROVIDER_STATE')
         end
       end
 

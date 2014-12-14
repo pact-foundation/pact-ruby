@@ -23,9 +23,11 @@ module Pact
       command_parts << "SPEC_OPTS=#{Shellwords.escape(rspec_opts || '')}"
       command_parts << FileUtils::RUBY
       command_parts << "-S pact verify"
-      command_parts << "-h" << (pact_helper.end_with?(".rb") ? pact_helper : pact_helper + ".rb")
-      (command_parts << "-p" << pact_uri) if pact_uri
-      command_parts << "-b" if ENV['BACKTRACE'] == 'true'
+      command_parts << "--pact-helper" << (pact_helper.end_with?(".rb") ? pact_helper : pact_helper + ".rb")
+      (command_parts << "--pact-uri" << pact_uri) if pact_uri
+      command_parts << "--backtrace" if ENV['BACKTRACE'] == 'true'
+      command_parts << "--description #{Shellwords.escape(ENV['PACT_DESCRIPTION'])}" if ENV['PACT_DESCRIPTION']
+      command_parts << "--provider-state #{Shellwords.escape(ENV['PACT_PROVIDER_STATE'])}" if ENV['PACT_PROVIDER_STATE']
       command_parts.flatten.join(" ")
     end
 

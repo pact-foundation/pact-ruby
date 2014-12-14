@@ -49,7 +49,7 @@ module Pact
 
         describe 'honours_pact_with' do
           before do
-            Pact.clear_configuration
+            Pact.clear_provider_world
           end
 
           context "with no optional params" do
@@ -61,9 +61,9 @@ module Pact
                 end
               end
             end
-            it 'adds a verification to the Pact.configuration' do
+            it 'adds a verification to the Pact.provider_world' do
               subject
-              expect(Pact.configuration.pact_verifications.first).to eq(Pact::Provider::PactVerification.new('some-consumer', 'blah', :head))
+              expect(Pact.provider_world.pact_verifications.first).to eq(Pact::Provider::PactVerification.new('some-consumer', 'blah', :head))
             end
           end
 
@@ -76,9 +76,9 @@ module Pact
                 end
               end
             end
-            it 'adds a verification to the Pact.configuration' do
+            it 'adds a verification to the Pact.provider_world' do
               subject
-              expect(Pact.configuration.pact_verifications.first).to eq(Pact::Provider::PactVerification.new('some-consumer', 'blah', :prod))
+              expect(Pact.provider_world.pact_verifications.first).to eq(Pact::Provider::PactVerification.new('some-consumer', 'blah', :prod))
             end
 
           end

@@ -18,6 +18,14 @@ module Pact
         @provider_states_proxy ||= Pact::Provider::State::ProviderStateProxy.new
       end
 
+      def add_pact_verification verification
+        pact_verifications << verification
+      end
+
+      def pact_verifications
+        @pact_verifications ||= []
+      end
+
     end
   end
 end

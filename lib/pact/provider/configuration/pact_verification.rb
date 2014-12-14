@@ -1,5 +1,6 @@
 require 'pact/provider/pact_verification'
 require 'pact/shared/dsl'
+require 'pact/provider/world'
 
 module Pact
   module Provider
@@ -33,7 +34,7 @@ module Pact
 
         def create_pact_verification
           verification = Pact::Provider::PactVerification.new(consumer_name, pact_uri, ref)
-          Pact.configuration.add_pact_verification verification
+          Pact.provider_world.add_pact_verification verification
         end
 
         def validate

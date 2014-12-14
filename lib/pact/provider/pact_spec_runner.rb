@@ -16,12 +16,12 @@ module Pact
 
       include Pact::Provider::RSpec::ClassMethods
 
-      attr_reader :spec_definitions
+      attr_reader :pact_urls
       attr_reader :options
       attr_reader :output
 
-      def initialize spec_definitions, options = {}
-        @spec_definitions = spec_definitions
+      def initialize pact_urls, options = {}
+        @pact_urls = pact_urls
         @options = options
         @results = nil
       end
@@ -41,13 +41,12 @@ module Pact
 
       def verifications
         @verifications ||= begin
-          spec_definitions.collect do | spec_definition |
+          pact_urls.collect do | pact_url |
             options = {
-              consumer: spec_definition[:consumer],
               save_pactfile_to_tmp: true,
               criteria: @options[:criteria]
             }
-            PactBroker::Provider::Verification.new(spec_definition[:uri], options)
+            PactBroker::Provider::Verification.new(pact_url, options)
           end
         end
       end

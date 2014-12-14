@@ -53,14 +53,14 @@ module Pact
       end
 
       def run_with_pact_uri
-        Pact::Provider::PactSpecRunner.new([{uri: options[:pact_uri]}], pact_spec_options).run
+        Pact::Provider::PactSpecRunner.new([options[:pact_uri]], pact_spec_options).run
       end
 
       def run_with_configured_pacts
-        pact_verifications = Pact.configuration.pact_verifications
-        verification_configs = pact_verifications.collect { | pact_verification | { :uri => pact_verification.uri }}
-        raise "Please configure a pact to verify" if verification_configs.empty?
-        Pact::Provider::PactSpecRunner.new(verification_configs, options).run
+        pact_verifications = Pact.provider_world.pact_verifications
+        pact_urls = pact_verifications.collect(&:uri)
+        raise "Please configure a pact to verify" if pact_urls.empty?
+        Pact::Provider::PactSpecRunner.new(pact_urls, options).run
       end
 
       def pact_spec_options

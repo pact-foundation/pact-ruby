@@ -21,14 +21,6 @@ module Pact
           end
         end
 
-        def add_pact_verification verification
-          pact_verifications << verification
-        end
-
-        def pact_verifications
-          @pact_verifications ||= []
-        end
-
         def config_ru_path
           @config_ru_path ||= './config.ru'
         end

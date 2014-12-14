@@ -5,7 +5,7 @@ require 'rspec/core/formatters/documentation_formatter'
 require 'pact/provider/pact_helper_locator'
 require 'pact/project_root'
 require 'pact/rspec'
-require 'pact/provider/verification'
+require 'pact/provider/pact_source'
 
 require_relative 'rspec'
 
@@ -39,21 +39,20 @@ module Pact
 
       private
 
-      def verifications
-        @verifications ||= begin
+      def pact_sources
+        @pact_sources ||= begin
           pact_urls.collect do | pact_url |
-            options = {
-              save_pactfile_to_tmp: true,
-              criteria: @options[:criteria]
-            }
-            PactBroker::Provider::Verification.new(pact_url, options)
+            PactBroker::Provider::PactSource.new(pact_url)
           end
         end
       end
 
       def initialize_specs
-        verifications.each do | verification |
-          honour_pactfile verification
+        pact_sources.each do | pact_source |
+          options = {
+            criteria: @options[:criteria]
+          }
+          honour_pactfile pact_source.uri, pact_source.pact_json, options
         end
       end
 

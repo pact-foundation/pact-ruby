@@ -103,11 +103,11 @@ module Pact
 
           it "prints a warning" do
             subject
-            expect(output.string).to include "Tried to retrieve diff with previous pact from #{href}, but recieved response code 404"
+            expect(output.string).to include "Tried to retrieve diff with previous pact from #{href}, but received response code 404"
           end
         end
 
-        context "when a redirect is recieved" do
+        context "when a redirect is received" do
           before do
             stub_request(:get, "http://pact-broker/diff").
               to_return(:status => 301, :body => diff, :headers => {})

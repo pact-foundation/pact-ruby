@@ -59,7 +59,7 @@ module Pact
         begin
           open(diff_url) { | file | file.read }
         rescue StandardError => e
-          raise PrintPactDiffError.new("Tried to retrieve diff with previous pact from #{diff_url}, but recieved response code #{e}")
+          raise PrintPactDiffError.new("Tried to retrieve diff with previous pact from #{diff_url}, but received response code #{e}")
         end
       end
 

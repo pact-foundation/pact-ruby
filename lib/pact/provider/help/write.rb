@@ -8,13 +8,13 @@ module Pact
     module Help
       class Write
 
-        def self.call report_dir
-          new(report_dir).call
+        def self.call pact_jsons, report_dir
+          new(pact_jsons, report_dir).call
         end
 
-        def initialize report_dir
+        def initialize pact_jsons, report_dir
+          @pact_jsons = pact_jsons
           @report_dir = File.expand_path(report_dir || "./report/pact")
-          puts @report_dir
         end
 
         def call
@@ -24,7 +24,7 @@ module Pact
 
         private
 
-        attr_reader :report_dir
+        attr_reader :report_dir, :pact_jsons
 
         def clean_report_dir
           raise "Cleaning report dir #{report_dir} would delete project!" if report_dir_contains_pwd
@@ -45,7 +45,7 @@ module Pact
         end
 
         def help_text
-          Content.new.text
+          Content.new(pact_jsons).text
         end
 
       end

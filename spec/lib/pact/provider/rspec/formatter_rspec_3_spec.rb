@@ -37,7 +37,6 @@ Pact::RSpec.with_rspec_3 do
 
           before do
             allow(PrintMissingProviderStates).to receive(:call)
-            allow(PrintPactDiff).to receive(:call)
             allow(subject).to receive(:failed_examples).and_return(failed_examples)
             allow(Pact.provider_world.provider_states).to receive(:missing_provider_states).and_return(missing_provider_states)
             subject.dump_summary summary
@@ -73,10 +72,6 @@ Pact::RSpec.with_rspec_3 do
               subject.dump_summary summary
             end
 
-            it "prints the diff with the previous pact" do
-              expect(PrintPactDiff).to receive(:call).with(pact_json, output)
-              subject.dump_summary summary
-            end
           end
 
         end

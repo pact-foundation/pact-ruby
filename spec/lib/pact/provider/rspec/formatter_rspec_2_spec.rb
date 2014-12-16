@@ -42,7 +42,6 @@ module Pact
 
         before do
           allow(PrintMissingProviderStates).to receive(:call)
-          allow(PrintPactDiff).to receive(:call)
           allow(subject).to receive(:failed_examples).and_return(failed_examples)
           allow(Pact.provider_world.provider_states).to receive(:missing_provider_states).and_return(missing_provider_states)
           subject.dump_commands_to_rerun_failed_examples
@@ -70,10 +69,6 @@ module Pact
             subject.dump_commands_to_rerun_failed_examples
           end
 
-          it "prints the diff with the previous pact" do
-            expect(PrintPactDiff).to receive(:call).with(pact_json, output)
-            subject.dump_commands_to_rerun_failed_examples
-          end
         end
 
       end

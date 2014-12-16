@@ -1,8 +1,6 @@
 require 'pact/provider/print_missing_provider_states'
 require 'rspec/core/formatters'
 require 'term/ansicolor'
-require 'pact/provider/print_pact_diff'
-
 
 module Pact
   module Provider
@@ -22,7 +20,6 @@ module Pact
           print_rerun_commands summary
           print_failure_message
           print_missing_provider_states
-          print_pact_diff summary
         end
 
         private
@@ -58,14 +55,6 @@ module Pact
 
         def print_missing_provider_states
           PrintMissingProviderStates.call Pact.provider_world.provider_states.missing_provider_states, output
-        end
-
-        def print_pact_diff summary
-          PrintPactDiff.call pact_json(summary), output
-        end
-
-        def pact_json summary
-          summary.examples.first.metadata[:pact_json]
         end
 
         def interaction_rerun_commands summary

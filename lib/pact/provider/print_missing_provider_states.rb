@@ -1,17 +1,23 @@
+require 'term/ansicolor'
+
 module Pact
   module Provider
     class PrintMissingProviderStates
 
+      C = ::Term::ANSIColor
+
       # Hash of consumer names to array of names of missing provider states
       def self.call missing_provider_states, output
         if missing_provider_states.any?
-          output.puts orangeify(text(missing_provider_states))
+          output.puts colorize(text(missing_provider_states))
         end
       end
 
-      def self.orangeify string
-        string
-        # "\e[33m#{string}\e[m"
+      def self.colorize string
+        lines = string.split("\n")
+        first_line = C.cyan(C.underline(lines[0]))
+        other_lines = C.cyan(lines[1..-1].join("\n"))
+        first_line + "\n" + other_lines
       end
 
       def self.text missing_provider_states

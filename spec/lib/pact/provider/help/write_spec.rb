@@ -18,7 +18,7 @@ module Pact
 
           subject { Write.call(pact_jsons, reports_dir) }
 
-          let(:actual_contents) { File.read(File.join(reports_dir, "help.txt")) }
+          let(:actual_contents) { File.read(File.join(reports_dir, Write::HELP_FILE_NAME)) }
 
           it "passes the pact_jsons into the Content" do
             expect(Content).to receive(:new).with(pact_jsons).and_return(double(text: ''))

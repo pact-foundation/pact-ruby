@@ -10,7 +10,7 @@ module Pact
         end
 
         def text
-          help_text + "\n" + pact_diffs + "\n"
+          help_text + "\n\n" + pact_diffs
         end
 
         private

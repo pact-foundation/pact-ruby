@@ -7,6 +7,8 @@ module Pact
     module Help
       class Write
 
+        HELP_FILE_NAME = 'help.md'
+
         def self.call pact_jsons, reports_dir = Pact.configuration.reports_dir
           new(pact_jsons, reports_dir).call
         end
@@ -40,7 +42,7 @@ module Pact
         end
 
         def help_path
-          File.join(reports_dir, 'help.txt')
+          File.join(reports_dir, 'help.md')
         end
 
         def help_text

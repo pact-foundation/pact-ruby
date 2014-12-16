@@ -27,7 +27,6 @@ module Pact
           end
 
           it "displays the diff" do
-            puts subject.text
             expect(subject.text).to include 'diff 1'
           end
 

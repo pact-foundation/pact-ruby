@@ -1,39 +1,38 @@
 require 'pact/provider/help/content'
 require 'fileutils'
-
-#TODO add report_dir to configuration
+require 'pact/consumer/configuration'
 
 module Pact
   module Provider
     module Help
       class Write
 
-        def self.call pact_jsons, report_dir
-          new(pact_jsons, report_dir).call
+        def self.call pact_jsons, reports_dir = Pact.configuration.reports_dir
+          new(pact_jsons, reports_dir).call
         end
 
-        def initialize pact_jsons, report_dir
+        def initialize pact_jsons, reports_dir
           @pact_jsons = pact_jsons
-          @report_dir = File.expand_path(report_dir || "./report/pact")
+          @reports_dir = File.expand_path(reports_dir)
         end
 
         def call
-          clean_report_dir
+          clean_reports_dir
           write
         end
 
         private
 
-        attr_reader :report_dir, :pact_jsons
+        attr_reader :reports_dir, :pact_jsons
 
-        def clean_report_dir
-          raise "Cleaning report dir #{report_dir} would delete project!" if report_dir_contains_pwd
-          FileUtils.rm_rf report_dir
-          FileUtils.mkdir_p report_dir
+        def clean_reports_dir
+          raise "Cleaning report dir #{reports_dir} would delete project!" if reports_dir_contains_pwd
+          FileUtils.rm_rf reports_dir
+          FileUtils.mkdir_p reports_dir
         end
 
-        def report_dir_contains_pwd
-          Dir.pwd.start_with?(report_dir)
+        def reports_dir_contains_pwd
+          Dir.pwd.start_with?(reports_dir)
         end
 
         def write
@@ -41,7 +40,7 @@ module Pact
         end
 
         def help_path
-          File.join(report_dir, 'help.txt')
+          File.join(reports_dir, 'help.txt')
         end
 
         def help_text

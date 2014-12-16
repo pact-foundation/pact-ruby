@@ -29,11 +29,7 @@ module Pact
         private
 
         def header
-          orangeify "The following changes have been made since the previous distinct version and may be responsible for verification failure:"
-        end
-
-        def orangeify string
-          "\e[33m#{string}\e[m"
+          "The following changes have been made since the previous distinct version of this pact, and may be responsible for verification failure:\n"
         end
 
         def pact_hash
@@ -58,7 +54,7 @@ module Pact
           begin
             open(diff_url) { | file | file.read }
           rescue StandardError => e
-            raise PrintPactDiffError.new("Tried to retrieve diff with previous pact from #{diff_url}, but received response code #{e}")
+            raise PrintPactDiffError.new("Tried to retrieve diff with previous pact from #{diff_url}, but received response code #{e}.")
           end
         end
 

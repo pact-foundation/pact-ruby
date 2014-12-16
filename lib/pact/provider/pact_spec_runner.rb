@@ -6,6 +6,7 @@ require 'pact/provider/pact_helper_locator'
 require 'pact/project_root'
 require 'pact/rspec'
 require 'pact/provider/pact_source'
+require 'pact/provider/help/write'
 
 require_relative 'rspec'
 
@@ -38,23 +39,6 @@ module Pact
       end
 
       private
-
-      def pact_sources
-        @pact_sources ||= begin
-          pact_urls.collect do | pact_url |
-            PactBroker::Provider::PactSource.new(pact_url)
-          end
-        end
-      end
-
-      def initialize_specs
-        pact_sources.each do | pact_source |
-          options = {
-            criteria: @options[:criteria]
-          }
-          honour_pactfile pact_source.uri, pact_source.pact_json, options
-        end
-      end
 
       def configure_rspec
         monkey_patch_backtrace_formatter
@@ -92,6 +76,12 @@ module Pact
           Pact.configuration.provider.app
         end
 
+        jsons = pact_jsons
+
+        config.after(:suite) do
+          Pact::Provider::Help::Write.call(jsons)
+        end
+
       end
 
       def run_specs
@@ -111,6 +101,27 @@ module Pact
       def monkey_patch_backtrace_formatter
         Pact::RSpec.with_rspec_3 do
           require 'pact/provider/rspec/backtrace_formatter'
+        end
+      end
+
+      def pact_sources
+        @pact_sources ||= begin
+          pact_urls.collect do | pact_url |
+            PactBroker::Provider::PactSource.new(pact_url)
+          end
+        end
+      end
+
+      def pact_jsons
+        pact_sources.collect(&:pact_json)
+      end
+
+      def initialize_specs
+        pact_sources.each do | pact_source |
+          options = {
+            criteria: @options[:criteria]
+          }
+          honour_pactfile pact_source.uri, pact_source.pact_json, options
         end
       end
 

@@ -28,3 +28,4 @@ log
 .idea
 reports
 Gemfile.lock
+reports/pacts

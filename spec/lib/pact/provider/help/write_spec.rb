@@ -8,17 +8,17 @@ module Pact
         describe "#call" do
 
           let(:pact_jsons) { double('pact jsons') }
-          let(:report_dir) { "./tmp/reports" }
+          let(:reports_dir) { "./tmp/reports" }
           let(:text) { "help text" }
 
           before do
-            FileUtils.rm_rf report_dir
+            FileUtils.rm_rf reports_dir
             allow_any_instance_of(Content).to receive(:text).and_return(text)
           end
 
-          subject { Write.call(pact_jsons, report_dir) }
+          subject { Write.call(pact_jsons, reports_dir) }
 
-          let(:actual_contents) { File.read(File.join(report_dir, "help.txt")) }
+          let(:actual_contents) { File.read(File.join(reports_dir, "help.txt")) }
 
           it "passes the pact_jsons into the Content" do
             expect(Content).to receive(:new).with(pact_jsons).and_return(double(text: ''))

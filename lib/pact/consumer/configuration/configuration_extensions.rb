@@ -17,6 +17,14 @@ module Pact
           @doc_dir = doc_dir
         end
 
+        def reports_dir
+          @reports_dir ||= File.expand_path("./reports/pacts")
+        end
+
+        def reports_dir= reports_dir
+          @reports_dir = reports_dir
+        end
+
         def add_provider_verification &block
           provider_verifications << block
         end

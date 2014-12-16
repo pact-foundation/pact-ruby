@@ -18,7 +18,11 @@ module Pact
         end
 
         def reports_dir
-          @reports_dir ||= File.expand_path("./reports/pacts")
+          @reports_dir ||= default_reports_dir
+        end
+
+        def default_reports_dir
+          File.expand_path("./reports/pacts")
         end
 
         def reports_dir= reports_dir

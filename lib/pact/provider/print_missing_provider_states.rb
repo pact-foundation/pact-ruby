@@ -10,7 +10,8 @@ module Pact
       end
 
       def self.orangeify string
-        "\e[33m#{string}\e[m"
+        string
+        # "\e[33m#{string}\e[m"
       end
 
       def self.text missing_provider_states

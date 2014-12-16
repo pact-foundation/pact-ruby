@@ -27,10 +27,9 @@ namespace :pact do
   end
 
   desc "Get help debugging pact:verify failures."
-  task 'verify:help' do | t, args |
+  task 'verify:help', :reports_dir do | t, args |
     require 'pact/provider/help/console_text'
-
-    puts Pact::Provider::Help::ConsoleText.()
+    puts Pact::Provider::Help::ConsoleText.(args[:reports_dir])
   end
 
 end

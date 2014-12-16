@@ -1,6 +1,7 @@
 require 'pact/provider/print_missing_provider_states'
 require 'rspec/core/formatters/documentation_formatter'
 require 'term/ansicolor'
+require 'pact/provider/help/prompt_text'
 
 module Pact
   module Provider
@@ -50,10 +51,7 @@ module Pact
         end
 
         def failure_message
-          "\n" +  C.underline(C.yellow("For assistance debugging failures, please note:")) + "\n\n" +
-          "The pact files have been stored locally in the following temp directory:\n #{Pact.configuration.tmp_dir}\n\n" +
-          "The requests and responses are logged in the following log file:\n #{Pact.configuration.log_path}\n\n" +
-          "Add BACKTRACE=true to the `rake pact:verify` command to see the full backtrace\n\n"
+          "\n" + Pact::Provider::Help::PromptText.() + "\n"
         end
 
       end

@@ -264,6 +264,7 @@ As in all things, there are good ways to implement Pacts, and there are not so g
 * [Troubleshooting](https://github.com/realestate-com-au/pact/wiki/Troubleshooting)
 * [Testing with pact diagram](https://github.com/realestate-com-au/pact/wiki/Testing with pact.png)
 * [News, blogs and artciles](https://github.com/realestate-com-au/pact/wiki/News,-blogs-and-articles)
+
 ## Related libraries
 
 [Pact Provider Proxy](https://github.com/bethesque/pact-provider-proxy) - Verify a pact against a running server, allowing you to use pacts with a provider of any language.

@@ -247,7 +247,7 @@ See the [Configuration](/documentation/configuration.md) section of the document
 
 ## Pact best practices
 
-As in all things, there are good ways to implement Pacts, and there are not so good ways. Check out the [Best practices](https://github.com/realestate-com-au/pact/wiki/Best-practices) section of the documentation to make sure you're not Pacting it Wrong.
+As in all things, there are good ways to implement Pacts, and there are not so good ways. There are also some Pact GOTCHAS to beware of! Check out the [Best practices](https://github.com/realestate-com-au/pact/wiki/Best-practices) section of the documentation to make sure you're not Pacting it Wrong.
 
 ## Docs
 

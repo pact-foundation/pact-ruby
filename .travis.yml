@@ -9,3 +9,4 @@ rvm:
 gemfile:
   - Gemfile
   - gemfiles/rspec_2.gemfile
+  - gemfiles/rspec_3.gemfile

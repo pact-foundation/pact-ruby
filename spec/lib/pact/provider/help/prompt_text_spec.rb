@@ -12,7 +12,7 @@ module Pact
           subject { PromptText.(reports_dir, color: color)}
 
           it "returns a prompt to tell the user how to get help" do
-            expect(subject).to eq "For assistance debugging failures, run `rake pact:verify:help`\n"
+            expect(subject).to eq "For assistance debugging failures, run `bundle exec rake pact:verify:help`\n"
           end
 
           context "when color: true" do

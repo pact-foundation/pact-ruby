@@ -32,6 +32,7 @@ module Pact
     end
 
     def execute_cmd command
+      $stdout.puts command
       system(command) ? 0 : 1
     end
 

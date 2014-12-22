@@ -43,7 +43,7 @@ module Pact
           description = example.metadata[:pact_interaction].description
           pactfile_uri = example.metadata[:pactfile_uri]
           example_description = example.metadata[:pact_interaction_example_description]
-          failure_color("rake pact:verify:at[#{pactfile_uri}] PACT_DESCRIPTION=\"#{description}\" PACT_PROVIDER_STATE=\"#{provider_state}\"") + " " + detail_color("# #{example_description}")
+          failure_color("bundle exec rake pact:verify:at[#{pactfile_uri}] PACT_DESCRIPTION=\"#{description}\" PACT_PROVIDER_STATE=\"#{provider_state}\"") + " " + detail_color("# #{example_description}")
         end
 
         def print_failure_message

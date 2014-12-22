@@ -27,7 +27,7 @@ module Pact
         attr_reader :reports_dir, :options
 
         def prompt_text_plain
-          "For assistance debugging failures, run `rake pact:verify:help#{rake_args}`\n"
+          "For assistance debugging failures, run `bundle exec rake pact:verify:help#{rake_args}`\n"
         end
 
         def prompt_text_colored

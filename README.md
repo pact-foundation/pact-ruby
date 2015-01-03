@@ -291,25 +291,13 @@ As in all things, there are good ways to implement Pacts, and there are not so g
 
 [Integration Contract Tests](http://martinfowler.com/bliki/IntegrationContractTest.html) - Martin Fowler
 
-## TODO
+## Roadmap
 
-Short term:
-- Support hash of query params
-
-Long term:
-- Provide more flexible matching (eg the keys should match, and the classes of the values should match, but the values of each key do not need to be equal). This is to make the pact verification less brittle.
-- Add XML support
-- Decouple Rspec from Pact and make rspec-pact gem for easy integration
+See [ROADMAP.md](/CONTRIBUTING.md).
 
 ## Contributing
 
-1. Fork it
-2. Create your feature branch (`git checkout -b my-new-feature`)
-3. Commit your changes (`git commit -am 'Add some feature'`)
-4. Push to the branch (`git push origin my-new-feature`)
-5. Create new Pull Request
-
-If you would like to implement pact in another language, please check out the [Pact specification](https://github.com/bethesque/pact-specification) and have a chat to one of us on the [pact-dev Google group](https://groups.google.com/forum/#!forum/pact-dev). The vision is to have a compatible pact implementation in all the commonly used languages, your help would be greatly appreciated!
+See [CONTRIBUTING.md](/CONTRIBUTING.md).
 
 [webmachine]: https://github.com/seancribbs/webmachine-ruby
 [roar]: https://github.com/apotonick/roar

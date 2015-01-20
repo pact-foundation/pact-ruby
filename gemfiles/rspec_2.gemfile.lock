@@ -1,12 +1,12 @@
 PATH
   remote: ../
   specs:
-    pact (1.4.0)
+    pact (1.5.0)
       awesome_print (~> 1.1)
       find_a_port (~> 1.0.1)
       json
-      pact-mock_service (~> 0.2.0)
-      pact-support (~> 0.1.2)
+      pact-mock_service (~> 0.2.3)
+      pact-support (~> 0.2.1)
       rack-test (~> 0.6.2)
       randexp (~> 0.1.7)
       rspec (>= 2.14)
@@ -28,7 +28,7 @@ GEM
       bundler
       rake
       thor (>= 0.14.0)
-    awesome_print (1.2.0)
+    awesome_print (1.6.1)
     coderay (1.1.0)
     crack (0.4.2)
       safe_yaml (~> 1.0.0)
@@ -43,18 +43,17 @@ GEM
     method_source (0.8.2)
     minitest (5.4.3)
     multipart-post (2.0.0)
-    pact-mock_service (0.2.2)
-      awesome_print (~> 1.1)
+    pact-mock_service (0.2.3)
       find_a_port (~> 1.0.1)
       json
-      pact-support (~> 0.1.1)
+      pact-support (~> 0.2.1)
       rack
       rack-test (~> 0.6.2)
       rspec (>= 2.14)
       term-ansicolor (~> 1.0)
       thor
       webrick
-    pact-support (0.1.2)
+    pact-support (0.2.1)
       awesome_print (~> 1.1)
       find_a_port (~> 1.0.1)
       json
@@ -67,8 +66,8 @@ GEM
       coderay (~> 1.1.0)
       method_source (~> 0.8.1)
       slop (~> 3.4)
-    rack (1.5.2)
-    rack-test (0.6.2)
+    rack (1.6.0)
+    rack-test (0.6.3)
       rack (>= 1.0)
     rake (10.0.4)
     randexp (0.1.7)

@@ -2,7 +2,20 @@ Do this to generate your change history
 
   git log --pretty=format:'  * %h - %s (%an, %ad)'
 
+### 1.5.0 (25 November 2014)
 
+* 9a5ab1c - Allow path to be specified as a Pact::Term (Beth, Wed Jan 21 07:56:19 2015 +1100)
+* cdec8bd - Prepended rake commands in output with 'bundle exec' (Beth, Mon Dec 22 17:27:12 2014 +1100)
+* 6dfb16e - Added line to print pact verify command to stdout (Beth, Mon Dec 22 17:19:00 2014 +1100)
+* b507f50 - Changed colours of missing provider state templates (Beth, Tue Dec 16 21:50:00 2014 +1100)
+* d61769c - Added prompt for rake pact:verify:help on test failure. (Beth, Tue Dec 16 21:34:51 2014 +1100)
+* c5377a1 - Created rake pact:verify:help task to display help text (Beth, Tue Dec 16 20:38:45 2014 +1100)
+* c9d1189 - Write help to file after pact:verify (Beth, Tue Dec 16 19:49:20 2014 +1100)
+* c7d8c35 - Added pact diff to help text (Beth, Tue Dec 16 13:14:35 2014 +1100)
+* c877b94 - Moved interaction filter to command line argument from ENV (Beth, Sun Dec 14 22:05:44 2014 +1100)
+* cd077ec - Added message to show diff between current pact and previous version when pact:verify fails. This relies on the 'diff-previous-distinct' relation being present in the pact resource, so will only work when the pact is retrieved from a pact broker (Beth, Fri Dec 12 11:25:59 2014 +1100)
+* 43aa930 - Added command line option to show full backtrace for pact:verify failures (Beth, Thu Dec 4 08:45:28 2014 +1100)
+* 5667874 - Ensure markdown doc rendering doesn't blow up if there is a nil description (Beth, Wed Dec 3 21:35:42 2014 +1100)
 
 ### 1.4.0 (25 November 2014)
 

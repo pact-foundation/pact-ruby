@@ -8,4 +8,4 @@ module Pact
          end
       end
    end
-end   
+end

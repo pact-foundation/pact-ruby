@@ -293,7 +293,7 @@ As in all things, there are good ways to implement Pacts, and there are not so g
 
 ## Roadmap
 
-See [ROADMAP.md](/CONTRIBUTING.md).
+See [ROADMAP.md](/ROADMAP.md).
 
 ## Contributing
 

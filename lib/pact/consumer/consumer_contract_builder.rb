@@ -1,7 +1,7 @@
 require 'uri'
 require 'json/add/regexp'
 require 'pact/logging'
-require 'pact/consumer/mock_service_client'
+require 'pact/mock_service/client'
 require 'pact/consumer/interaction_builder'
 
 module Pact
@@ -21,7 +21,7 @@ module Pact
           pactfile_write_mode: attributes[:pactfile_write_mode].to_s,
           pact_dir: attributes.fetch(:pact_dir)
         }
-        @mock_service_client = MockServiceClient.new(attributes[:port])
+        @mock_service_client = Pact::MockService::Client.new(attributes[:port])
         @mock_service_base_url = "http://localhost:#{attributes[:port]}"
       end
 

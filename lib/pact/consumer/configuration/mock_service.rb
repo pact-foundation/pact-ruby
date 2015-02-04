@@ -1,4 +1,4 @@
-require 'pact/consumer/app_manager'
+require 'pact/mock_service/app_manager'
 require 'pact/consumer/consumer_contract_builder'
 require 'pact/consumer/consumer_contract_builders'
 require 'pact/consumer/world'
@@ -45,7 +45,7 @@ module Pact
 
         def register_mock_service
           unless standalone
-            AppManager.instance.register_mock_service_for provider_name, "http://localhost:#{port}"
+            Pact::MockService::AppManager.instance.register_mock_service_for provider_name, "http://localhost:#{port}"
           end
         end
 

@@ -85,7 +85,7 @@ module Pact
         end
 
         it "posts the pact details to the mock service" do
-          allow_any_instance_of(MockServiceClient).to receive(:write_pact).with(body)
+          allow_any_instance_of(Pact::MockService::Client).to receive(:write_pact).with(body)
           subject.write_pact
         end
       end

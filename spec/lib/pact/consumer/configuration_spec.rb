@@ -8,7 +8,7 @@ module Pact::Consumer::Configuration
       let(:world) { Pact::Consumer::World.new }
       before do
          Pact.clear_configuration
-         allow(Pact::Consumer::AppManager.instance).to receive(:register_mock_service_for)
+         allow(Pact::MockService::AppManager.instance).to receive(:register_mock_service_for)
          allow(Pact).to receive(:consumer_world).and_return(world)
       end
 
@@ -35,7 +35,7 @@ module Pact::Consumer::Configuration
 
          context "when standalone" do
             it "does not register the app with the AppManager" do
-               expect(Pact::Consumer::AppManager.instance).to_not receive(:register_mock_service_for)
+               expect(Pact::MockService::AppManager.instance).to_not receive(:register_mock_service_for)
                subject.finalize
             end
          end
@@ -48,7 +48,7 @@ module Pact::Consumer::Configuration
                end
             }
             it "registers the app with the AppManager" do
-               expect(Pact::Consumer::AppManager.instance).to receive(:register_mock_service_for).with(provider_name, url)
+               expect(Pact::MockService::AppManager.instance).to receive(:register_mock_service_for).with(provider_name, url)
                subject.finalize
             end
          end

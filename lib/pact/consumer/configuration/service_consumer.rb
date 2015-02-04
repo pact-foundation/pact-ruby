@@ -43,7 +43,7 @@ module Pact
 
 
         def register_consumer_app
-          Pact::Consumer::AppManager.instance.register app, port
+          Pact::MockService::AppManager.instance.register app, port
         end
       end
     end

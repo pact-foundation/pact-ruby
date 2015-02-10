@@ -9,5 +9,5 @@ If you would like to generate HTML documentation, see how the [HTMLPactRenderer]
 [consumer_contract_renderer]: https://github.com/realestate-com-au/pact/blob/master/lib/pact/doc/markdown/consumer_contract_renderer.rb
 [index_renderer]: https://github.com/realestate-com-au/pact/blob/master/lib/pact/doc/markdown/index_renderer.rb
 [generator]: https://github.com/realestate-com-au/pact/blob/master/lib/pact/doc/markdown/generator.rb
-[html_pact_renderer]: [HTML renderer](https://github.com/bethesque/pact_broker/blob/master/lib/pact_broker/api/renderers/html_pact_renderer.rb)
+[html_pact_renderer]: https://github.com/bethesque/pact_broker/blob/master/lib/pact_broker/api/renderers/html_pact_renderer.rb
 

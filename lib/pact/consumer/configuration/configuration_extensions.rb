@@ -38,13 +38,17 @@ module Pact
         end
 
         def doc_generator= doc_generator
+          add_doc_generator doc_generator
+        end
+
+        def add_doc_generator doc_generator
           doc_generators << begin
             if DOC_GENERATORS[doc_generator]
               DOC_GENERATORS[doc_generator]
             elsif doc_generator.respond_to?(:call)
               doc_generator
             else
-              raise "Pact.configuration.doc_generator needs to respond to call, or be in the preconfigured list: #{DOC_GENERATORS.keys}"
+              raise "doc_generator needs to respond to call, or be in the preconfigured list: #{DOC_GENERATORS.keys}"
             end
           end
         end

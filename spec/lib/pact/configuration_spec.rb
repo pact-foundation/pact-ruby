@@ -58,6 +58,12 @@ describe Pact do
 
     describe "doc_generator" do
 
+      it "allows the configuration of more than one generator" do
+        Pact.configuration.add_doc_generator :markdown
+        Pact.configuration.add_doc_generator :markdown
+        expect(Pact.configuration.doc_generators.size).to eq 2
+      end
+
       context "with a symbol" do
         it "allows configuration of a doc_generator" do
           Pact.configuration.doc_generator = :markdown
@@ -68,16 +74,16 @@ describe Pact do
       context "with anything that responds to 'call'" do
 
         it "allows configuration of a doc_generator" do
-          Pact.configuration.doc_generator = lambda { | pact_dir, doc_dir | "doc" }
-          expect(Pact.configuration.doc_generators.size).to be 1
-          expect(Pact.configuration.doc_generators.first.call('doc','pacts')).to eq ("doc")
+          callable = lambda { | pact_dir, doc_dir | "doc" }
+          Pact.configuration.doc_generator = callable
+          expect(Pact.configuration.doc_generators.first).to be callable
         end
 
       end
 
       context "with something that does not respond to call and doesn't have a matching doc_generator" do
         it "raises an error" do
-          expect { Pact.configuration.doc_generator = Object.new }.to raise_error "Pact.configuration.doc_generator needs to respond to call, or be in the preconfigured list: [:markdown]"
+          expect { Pact.configuration.doc_generator = Object.new }.to raise_error "doc_generator needs to respond to call, or be in the preconfigured list: [:markdown]"
         end
       end
 

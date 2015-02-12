@@ -78,7 +78,7 @@ class Something
 end
 ```
 
-#### 2. Create a skeleton client class
+#### 2. Create a skeleton MyServiceProvider client class (consumer)
 
 Imagine a service provider client class that looks something like this.
 
@@ -94,9 +94,9 @@ class MyServiceProviderClient
   end
 end
 ```
-#### 3. Configure the mock server
+#### 3. Configure the mock MyServiceProvider server
 
-The following code will create a mock service on localhost:1234 which will respond to your application's queries over HTTP as if it were the real "My Service Provider" app. It also creates a mock service provider object which you will use to set up your expectations. The method name to access the mock service provider will be what ever name you give as the service argument - in this case "my_service_provider"
+The following code will create a mock provider service on localhost:1234 which will respond to your application's queries over HTTP as if it were the real "My Service Provider" app. It also creates a mock service provider object which you will use to set up your expectations. The method name to access the mock service provider will be what ever name you give as the service argument - in this case "my_service_provider"
 
 
 ```ruby
@@ -114,7 +114,7 @@ Pact.service_consumer "My Service Consumer" do
 end
 ```
 
-#### 4. Write a failing spec for the client
+#### 4. Write a failing spec for the MyServiceProvider client (consumer)
 
 ```ruby
 # In /spec/service_providers/my_service_provider_client_spec.rb
@@ -153,12 +153,12 @@ end
 
 #### 5. Run the specs
 
-Running the consumer spec will generate a pact file in the configured pact dir (spec/pacts by default).
+Running the `MyServiceProviderClient` (consumer) spec will generate a pact file in the configured pact dir (spec/pacts by default).
 Logs will be output to the configured log dir that can be useful when diagnosing problems.
 
-Of course, the above specs will fail because the client method is not implemented, so next, implement your client methods.
+Of course, the above specs will fail because the `MyServiceProviderClient` (consumer) client method is not implemented, so next, implement your consumer client methods.
 
-#### 6. Implement the client methods
+#### 6. Implement the client consumer methods
 
 ```ruby
 class MyServiceProviderClient

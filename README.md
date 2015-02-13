@@ -137,8 +137,8 @@ describe AnimalServiceClient, :pact => true do
   describe "get_alligator" do
 
     before do
-      animal_service.given("alligator exists").
-        upon_receiving("a request for a alligator").
+      animal_service.given("an alligator exists").
+        upon_receiving("a request for an alligator").
         with(method: :get, path: '/alligator', query: '').
         will_respond_with(
           status: 200,
@@ -160,7 +160,7 @@ end
 Running the AnimalServiceClient spec will generate a pact file in the configured pact dir (spec/pacts by default).
 Logs will be output to the configured log dir that can be useful when diagnosing problems.
 
-Of course, the above specs will fail because the Animal Service client method is not implemented, so next, implement your consumer client methods.
+Of course, the above specs will fail because the Animal Service client method is not implemented, so next, implement your provider client methods.
 
 #### 6. Implement the Animal Service client consumer methods
 
@@ -169,7 +169,7 @@ class AnimalServiceClient
   include HTTParty
   base_uri 'http://animal-service.com'
 
-  def get_something
+  def get_alligator
     name = JSON.parse(self.class.get("/alligator").body)['name']
     Alligator.new(name)
   end
@@ -230,7 +230,7 @@ Congratulations! You now have a failing spec to develop against.
 
 At this stage, you'll want to be able to run your specs one at a time while you implement each feature. At the bottom of the failed pact:verify output you will see the commands to rerun each failed interaction individually. A command to run just one interaction will look like this:
 
-    $ rake pact:verify PACT_DESCRIPTION="a request for a alligator" PACT_PROVIDER_STATE="alligator exists"
+    $ rake pact:verify PACT_DESCRIPTION="a request for an alligator" PACT_PROVIDER_STATE="an alligator exists"
 
 #### 4. Implement enough to make your first interaction spec pass
 

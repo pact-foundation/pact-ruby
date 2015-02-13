@@ -45,10 +45,11 @@ module Pact::Consumer::Configuration
                   port 1234
                   standalone false
                   verify true
+                  pact_specification_version '1'
                end
             }
             it "registers the app with the AppManager" do
-               expect(Pact::MockService::AppManager.instance).to receive(:register_mock_service_for).with(provider_name, url)
+               expect(Pact::MockService::AppManager.instance).to receive(:register_mock_service_for).with(provider_name, url, pact_specification_version: '1')
                subject.finalize
             end
          end

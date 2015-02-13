@@ -10,7 +10,7 @@ module Pact
 
         extend Pact::DSL
 
-        attr_accessor :port, :standalone, :verify, :provider_name, :consumer_name
+        attr_accessor :port, :standalone, :verify, :provider_name, :consumer_name, :pact_specification_version
 
         def initialize name, consumer_name, provider_name
           @name = name
@@ -19,6 +19,7 @@ module Pact
           @port = nil
           @standalone = false
           @verify = true
+          @pact_specification_version = nil
         end
 
         dsl do
@@ -33,6 +34,10 @@ module Pact
           def verify verify
             self.verify = verify
           end
+
+          def pact_specification_version pact_specification_version
+            self.pact_specification_version = pact_specification_version
+          end
         end
 
         def finalize
@@ -45,7 +50,7 @@ module Pact
 
         def register_mock_service
           unless standalone
-            Pact::MockService::AppManager.instance.register_mock_service_for provider_name, "http://localhost:#{port}"
+            Pact::MockService::AppManager.instance.register_mock_service_for provider_name, "http://localhost:#{port}", mock_service_options
           end
         end
 
@@ -85,6 +90,10 @@ module Pact
 
         def validate
           raise "Please provide a port for service #{name}" unless port
+        end
+
+        def mock_service_options
+          { pact_specification_version: pact_specification_version }
         end
       end
     end

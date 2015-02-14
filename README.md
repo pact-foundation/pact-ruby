@@ -58,14 +58,17 @@ Put it in your Gemfile. You know how.
 
 ## Usage
 
-### Service Consumer project
+### Example Scenario
+![Example](example/zoo_app-animal_service.png)
+
+### Zoo App, the Animal Service client project
 
 #### 1. Start with your model
 
-Imagine a model class that looks something like this. The attributes for a Something live on a remote server, and will need to be retrieved by an HTTP call.
+Imagine a model class that looks something like this. The attributes for a Alligator live on a remote server, and will need to be retrieved by an HTTP call to the Animal Service.
 
 ```ruby
-class Something
+class Alligator
   attr_reader :name
 
   def initialize name
@@ -73,30 +76,30 @@ class Something
   end
 
   def == other
-    other.is_a?(Something) && other.name == name
+    other.is_a?(Alligator) && other.name == name
   end
 end
 ```
 
-#### 2. Create a skeleton client class
+#### 2. Create a skeleton Animal Service client class
 
 Imagine a service provider client class that looks something like this.
 
 ```ruby
 require 'httparty'
 
-class MyServiceProviderClient
+class AnimalServiceClient
   include HTTParty
-  base_uri 'http://my-service'
+  base_uri 'http://animal-service.com'
 
-  def get_something
+  def get_alligator
     # Yet to be implemented because we're doing Test First Development...
   end
 end
 ```
-#### 3. Configure the mock server
+#### 3. Configure the mock Animal Service
 
-The following code will create a mock service on localhost:1234 which will respond to your application's queries over HTTP as if it were the real "My Service Provider" app. It also creates a mock service provider object which you will use to set up your expectations. The method name to access the mock service provider will be what ever name you give as the service argument - in this case "my_service_provider"
+The following code will create a mock provider service on localhost:1234 which will respond to your application's queries over HTTP as if it were the real "Animal Service" app. It also creates a mock service provider object which you will use to set up your expectations. The method name to access the mock service provider will be what ever name you give as the service argument - in this case "animal_service"
 
 
 ```ruby
@@ -105,45 +108,46 @@ The following code will create a mock service on localhost:1234 which will respo
 require 'pact/consumer/rspec'
 # or require 'pact/consumer/minitest' if you are using Minitest
 
-Pact.service_consumer "My Service Consumer" do
-  has_pact_with "My Service Provider" do
-    mock_service :my_service_provider do
+Pact.service_consumer "Zoo App" do
+  has_pact_with "Animal Service" do
+    mock_service :animal_service do
       port 1234
     end
   end
 end
 ```
 
-#### 4. Write a failing spec for the client
+#### 4. Write a failing spec for the Animal Service client
 
 ```ruby
-# In /spec/service_providers/my_service_provider_client_spec.rb
+# In /spec/service_providers/animal_service_client_spec.rb
 
 # When using RSpec, use the metadata `:pact => true` to include all the pact functionality in your spec.
 # When using Minitest, include Pact::Consumer::Minitest in your spec.
 
-describe MyServiceProviderClient, :pact => true do
+describe AnimalServiceClient, :pact => true do
 
   before do
     # Configure your client to point to the stub service on localhost using the port you have specified
-    MyServiceProviderClient.base_uri 'localhost:1234'
+    AnimalServiceClient.base_uri 'localhost:1234'
   end
 
-  subject { MyServiceProviderClient.new }
+  subject { AnimalServiceClient.new }
 
-  describe "get_something" do
+  describe "get_alligator" do
 
     before do
-      my_service_provider.given("something exists").
-        upon_receiving("a request for something").with(method: :get, path: '/something', query: '').
+      animal_service.given("an alligator exists").
+        upon_receiving("a request for an alligator").
+        with(method: :get, path: '/alligator', query: '').
         will_respond_with(
           status: 200,
           headers: {'Content-Type' => 'application/json'},
-          body: {name: 'A small something'} )
+          body: {name: 'Betty'} )
     end
 
-    it "returns a Something" do
-      expect(subject.get_something).to eq(Something.new('A small something'))
+    it "returns a alligator" do
+      expect(subject.get_alligator).to eq(Alligator.new('Betty'))
     end
 
   end
@@ -153,35 +157,35 @@ end
 
 #### 5. Run the specs
 
-Running the consumer spec will generate a pact file in the configured pact dir (spec/pacts by default).
+Running the AnimalServiceClient spec will generate a pact file in the configured pact dir (spec/pacts by default).
 Logs will be output to the configured log dir that can be useful when diagnosing problems.
 
-Of course, the above specs will fail because the client method is not implemented, so next, implement your client methods.
+Of course, the above specs will fail because the Animal Service client method is not implemented, so next, implement your provider client methods.
 
-#### 6. Implement the client methods
+#### 6. Implement the Animal Service client consumer methods
 
 ```ruby
-class MyServiceProviderClient
+class AnimalServiceClient
   include HTTParty
-  base_uri 'http://my-service'
+  base_uri 'http://animal-service.com'
 
-  def get_something
-    name = JSON.parse(self.class.get("/something").body)['name']
-    Something.new(name)
+  def get_alligator
+    name = JSON.parse(self.class.get("/alligator").body)['name']
+    Alligator.new(name)
   end
 end
 ```
 
 #### 7. Run the specs again.
 
-Green! You now have a pact file that can be used to verify your expectations of the provider project.
+Green! You now have a pact file that can be used to verify your expectations of the Animal Service provider project.
 
 Now, rinse and repeat for other likely status codes that may be returned. For example, consider how you want your client to respond to a:
 * 404 (return null, or raise an error?)
 * 500 (specifying that the response body should contain an error message, and ensuring that your client logs that error message will make your life much easier when things go wrong)
 * 401/403 if there is authorisation.
 
-### Service Provider project
+### Animal Service (Provider) project
 
 #### 1. Create the skeleton API classes
 
@@ -205,15 +209,15 @@ See [Verifying Pacts](https://github.com/realestate-com-au/pact/wiki/Verifying-p
 
 require 'pact/provider/rspec'
 
-Pact.service_provider "My Service Provider" do
+Pact.service_provider "Animal Service" do
 
-  honours_pact_with 'My Service Consumer' do
+  honours_pact_with 'Zoo App' do
 
     # This example points to a local file, however, on a real project with a continuous
     # integration box, you would use a [Pact Broker](https://github.com/bethesque/pact_broker) or publish your pacts as artifacts,
     # and point the pact_uri to the pact published by the last successful build.
 
-    pact_uri '../path-to-your-consumer-project/specs/pacts/my_consumer-my_provider.json'
+    pact_uri '../zoo-app/specs/pacts/zoo_app-animal_service.json'
   end
 end
 ```
@@ -226,7 +230,7 @@ Congratulations! You now have a failing spec to develop against.
 
 At this stage, you'll want to be able to run your specs one at a time while you implement each feature. At the bottom of the failed pact:verify output you will see the commands to rerun each failed interaction individually. A command to run just one interaction will look like this:
 
-    $ rake pact:verify PACT_DESCRIPTION="a request for something" PACT_PROVIDER_STATE="something exists"
+    $ rake pact:verify PACT_DESCRIPTION="a request for an alligator" PACT_PROVIDER_STATE="an alligator exists"
 
 #### 4. Implement enough to make your first interaction spec pass
 
@@ -234,7 +238,7 @@ Rinse and repeat.
 
 #### 5. Keep going til you're green
 
-Yay! Your provider now honours the pact it has with your consumer. You can now have confidence that your consumer and provider will play nicely together.
+Yay! Your Animal Service provider now honours the pact it has with your Zoo App consumer. You can now have confidence that your consumer and provider will play nicely together.
 
 ### Using provider states
 

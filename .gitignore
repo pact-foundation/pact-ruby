@@ -28,4 +28,5 @@ log
 .idea
 reports
 Gemfile.lock
+gemfiles/*.gemfile.lock
 reports/pacts

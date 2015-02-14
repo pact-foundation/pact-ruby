@@ -56,12 +56,13 @@ Pact is most valuable for designing and testing integrations where you (or your 
 
 Put it in your Gemfile. You know how.
 
-## Usage
+## Usage - an example scenario
 
-### Example Scenario
+We're going to write an integration, with Pact tests, between a consumer, the Zoo App, and it's provider, the Animal Service. In the Consumer project, we're going to need to need a model (the Alligator class) to represent the data returned from the Animal Service, and a client (the AnimalServiceClient) which will be responsible for making the HTTP calls to the Animal Service.
+
 ![Example](example/zoo_app-animal_service.png)
 
-### Zoo App, the Animal Service client project
+### In the Zoo App (consumer) project
 
 #### 1. Start with your model
 
@@ -83,7 +84,7 @@ end
 
 #### 2. Create a skeleton Animal Service client class
 
-Imagine a service provider client class that looks something like this.
+Imagine an Animal Service client class that looks something like this.
 
 ```ruby
 require 'httparty'
@@ -99,8 +100,7 @@ end
 ```
 #### 3. Configure the mock Animal Service
 
-The following code will create a mock provider service on localhost:1234 which will respond to your application's queries over HTTP as if it were the real "Animal Service" app. It also creates a mock service provider object which you will use to set up your expectations. The method name to access the mock service provider will be what ever name you give as the service argument - in this case "animal_service"
-
+The following code will create a mock service on localhost:1234 which will respond to your application's queries over HTTP as if it were the real "Animal Service" app. It also creates a mock provider object which you will use to set up your expectations. The method name to access the mock service provider will be what ever name you give as the service argument - in this case "animal_service"
 
 ```ruby
 # In /spec/service_providers/pact_helper.rb
@@ -157,8 +157,8 @@ end
 
 #### 5. Run the specs
 
-Running the AnimalServiceClient spec will generate a pact file in the configured pact dir (spec/pacts by default).
-Logs will be output to the configured log dir that can be useful when diagnosing problems.
+Running the AnimalServiceClient spec will generate a pact file in the configured pact dir (`spec/pacts` by default).
+Logs will be output to the configured log dir (`log` by default) that can be useful when diagnosing problems.
 
 Of course, the above specs will fail because the Animal Service client method is not implemented, so next, implement your provider client methods.
 
@@ -185,7 +185,7 @@ Now, rinse and repeat for other likely status codes that may be returned. For ex
 * 500 (specifying that the response body should contain an error message, and ensuring that your client logs that error message will make your life much easier when things go wrong)
 * 401/403 if there is authorisation.
 
-### Animal Service (Provider) project
+### In the Animal Service (provider) project
 
 #### 1. Create the skeleton API classes
 
@@ -244,14 +244,13 @@ Yay! Your Animal Service provider now honours the pact it has with your Zoo App 
 
 Each interaction in a pact is verified in isolation, with no context maintained from the previous interactions. So how do you test a request that requires data to already exist on the provider? Read about provider states [here](https://github.com/realestate-com-au/pact/wiki/Provider-states).
 
-
 ## Configuration
 
 See the [Configuration](/documentation/configuration.md) section of the documentation for options relating to thing like logging, diff formatting, and documentation generation.
 
 ## Pact best practices
 
-As in all things, there are good ways to implement Pacts, and there are not so good ways. There are also some Pact GOTCHAS to beware of! Check out the [Best practices](https://github.com/realestate-com-au/pact/wiki/Best-practices) section of the documentation to make sure you're not Pacting it Wrong.
+As in all things, there are good ways to implement Pacts, and there are not so good ways. There are also some Pact [GOTCHAS][gotchas] to beware of! Check out the [Best practices](https://github.com/realestate-com-au/pact/wiki/Best-practices) section of the documentation to make sure you're not Pacting it Wrong.
 
 ## Docs
 
@@ -309,3 +308,5 @@ See [CONTRIBUTING.md](/CONTRIBUTING.md).
 [pact_broker-client]: https://github.com/bethesque/pact_broker-client
 [pact-public-apis]: https://github.com/realestate-com-au/pact/wiki/Why-Pact-may-not-be-the-best-tool-for-testing-public-APIs
 [pass-through-apis]: https://github.com/realestate-com-au/pact/wiki/Why-Pact-may-not-be-the-best-tool-for-testing-pass-through-APIs
+[gotchas]: https://github.com/realestate-com-au/pact/wiki/Matching-gotchas
+

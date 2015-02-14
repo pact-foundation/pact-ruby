@@ -58,7 +58,7 @@ Put it in your Gemfile. You know how.
 
 ## Usage - an example scenario
 
-We're going to write an integration, with Pact tests, between a consumer, the Zoo App, and it's provider, the Animal Service. In the Consumer project, we're going to need to need a model (the Alligator class) to represent the data returned from the Animal Service, and a client (the AnimalServiceClient) which will be responsible for making the HTTP calls to the Animal Service.
+We're going to write an integration, with Pact tests, between a consumer, the Zoo App, and its provider, the Animal Service. In the Consumer project, we're going to need to need a model (the Alligator class) to represent the data returned from the Animal Service, and a client (the AnimalServiceClient) which will be responsible for making the HTTP calls to the Animal Service.
 
 ![Example](example/zoo_app-animal_service.png)
 

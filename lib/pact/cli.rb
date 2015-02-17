@@ -1,6 +1,5 @@
 require 'thor'
-require 'pact/cli/run_pact_verification'
-require 'pact/cli/generate_pact_docs'
+require 'pact/consumer/configuration'
 
 module Pact
   class CLI < Thor
@@ -13,12 +12,18 @@ module Pact
     method_option :provider_state, aliases: "-s", desc: "Provider state filter"
 
     def verify
+      require 'pact/cli/run_pact_verification'
       Cli::RunPactVerification.call(options)
     end
 
-    desc 'docs', "Generate pact documentation"
+    desc 'docs', "Generate Pact documentation in markdown"
+    method_option :pact_dir, desc: "Directory containing the pacts", default: Pact.configuration.pact_dir
+    method_option :doc_dir, desc: "Documentation directory", default: Pact.configuration.doc_dir
+
     def docs
-      Pact::Doc::Generate.call('./pacts', './doc/pacts', [Pact::Doc::Markdown::Generator])
+      require 'pact/cli/generate_pact_docs'
+      require 'pact/doc/generator'
+      Pact::Doc::Generate.call(options[:pact_dir], options[:doc_dir], [Pact::Doc::Markdown::Generator])
     end
 
   end

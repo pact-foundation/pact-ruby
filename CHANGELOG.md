@@ -2,6 +2,17 @@ Do this to generate your change history
 
   git log --pretty=format:'  * %h - %s (%an, %ad)'
 
+### 1.6.0 (17 February 2015)
+
+* 03a71f7 - Added specs for 'pact docs' CLI, and changed defaults to standard Pact configuration defaults (Beth Skurrie, Tue Feb 17 21:25:50 2015 +1100)
+* 8e0deba - Pact CLI docs feature basic implementation (Daniel Stankevich, Tue Feb 17 20:27:21 2015 +1100)
+* 0e0e3f2 - Added pact_specification_version to the service provider DSL. Upgraded to pact-mock_service 0.4.0 to support this option. (Beth Skurrie, Fri Feb 13 17:53:31 2015 +1100)
+* c8c58cd - minor readme updates to help with clarity :memo: (Joe Sustaric, Thu Feb 12 11:13:21 2015 +1100)
+* dda3c5e - Expose ability to add more than one doc generator (Beth Skurrie, Wed Feb 11 09:50:48 2015 +1100)
+* ada2231 - Upgrading to version 0.3.0 of pact-mock_service (Beth Skurrie, Wed Feb 4 19:41:10 2015 +1100)
+* f34c1de - Whitespace change to LICENSE.txt so I can add a comment to indicate that the previous commit to LICENSE.txt was made because Mike Rowe requested it, as he was auditing REA's use of open source software. (Beth Skurrie, Mon Feb 2 17:05:13 2015 +1100)
+* ff98558 - Update LICENSE.txt (Beth Skurrie, Mon Feb 2 16:59:14 2015 +1100)
+
 ### 1.5.0 (25 November 2014)
 
 * 9a5ab1c - Allow path to be specified as a Pact::Term (Beth, Wed Jan 21 07:56:19 2015 +1100)

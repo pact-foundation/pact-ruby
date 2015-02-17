@@ -1,5 +1,6 @@
 require 'thor'
 require 'pact/cli/run_pact_verification'
+require 'pact/cli/generate_pact_docs'
 
 module Pact
   class CLI < Thor
@@ -13,6 +14,11 @@ module Pact
 
     def verify
       Cli::RunPactVerification.call(options)
+    end
+
+    desc 'docs', "Generate pact documentation"
+    def docs
+      Pact::Doc::Generate.call('./pacts', './doc/pacts', [Pact::Doc::Markdown::Generator])
     end
 
   end

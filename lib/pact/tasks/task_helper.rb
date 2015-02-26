@@ -25,8 +25,8 @@ module Pact
       command_parts << "-S pact verify"
       command_parts << "--pact-helper" << (pact_helper.end_with?(".rb") ? pact_helper : pact_helper + ".rb")
       (command_parts << "--pact-uri" << pact_uri) if pact_uri
-      command_parts << "--pact_repository_username" << ENV['PACT_REPO_USERNAME'] if ENV['PACT_REPO_USERNAME']
-      command_parts << "--pact_repository_password" << ENV['PACT_REPO_PASSWORD'] if ENV['PACT_REPO_PASSWORD']
+      command_parts << "--pact-repository-username" << ENV['PACT_REPO_USERNAME'] if ENV['PACT_REPO_USERNAME']
+      command_parts << "--pact-repository-password" << ENV['PACT_REPO_PASSWORD'] if ENV['PACT_REPO_PASSWORD']
       command_parts << "--backtrace" if ENV['BACKTRACE'] == 'true'
       command_parts << "--backtrace" if ENV['BACKTRACE'] == 'true'
       command_parts << "--description #{Shellwords.escape(ENV['PACT_DESCRIPTION'])}" if ENV['PACT_DESCRIPTION']

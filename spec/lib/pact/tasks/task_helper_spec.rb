@@ -58,6 +58,36 @@ module Pact
         end
       end
 
+      context "with PACT_REPO_USERNAME set" do
+        before do
+          ENV['PACT_REPO_USERNAME'] = 'pact_username'
+        end
+
+        it "includes the -u option in the command" do
+          expect(TaskHelper).to receive(:execute_cmd).with(/--pact_repository_username pact_username/)
+          TaskHelper.execute_pact_verify(pact_uri, nil, nil)
+        end
+
+        after do
+          ENV.delete('PACT_REPO_USERNAME')
+        end
+      end
+
+      context "with PACT_REPO_PASSWORD set" do
+        before do
+          ENV['PACT_REPO_PASSWORD'] = 'pact_password'
+        end
+
+        it "includes the -w option in the command" do
+          expect(TaskHelper).to receive(:execute_cmd).with(/--pact_repository_password pact_password/)
+          TaskHelper.execute_pact_verify(pact_uri, nil, nil)
+        end
+
+        after do
+          ENV.delete('PACT_REPO_PASSWORD')
+        end
+      end
+
       context "with rspec_opts" do
         it "includes the rspec_opts as SPEC_OPTS in the command" do
           expect(TaskHelper).to receive(:execute_cmd) do | command |

@@ -1,5 +1,6 @@
 require 'spec_helper'
 require 'pact/provider/configuration/service_provider_dsl'
+require 'pact/provider/pact_repository_uri'
 
 module Pact
 
@@ -51,34 +52,43 @@ module Pact
           before do
             Pact.clear_provider_world
           end
+          let(:pact_url) { 'blah'}
 
           context "with no optional params" do
             subject do
               ServiceProviderDSL.build 'some-provider' do
                 app {}
                 honours_pact_with 'some-consumer' do
-                  pact_uri 'blah'
+                  pact_uri pact_url
                 end
               end
             end
             it 'adds a verification to the Pact.provider_world' do
               subject
-              expect(Pact.provider_world.pact_verifications.first).to eq(Pact::Provider::PactVerification.new('some-consumer', 'blah', :head))
+              pact_repository_uri = Pact::Provider::PactRepositoryUri.new(pact_url)
+              expect(Pact.provider_world.pact_verifications.first).to eq(Pact::Provider::PactVerification.new('some-consumer', pact_repository_uri, :head))
             end
           end
 
           context "with all params specified" do
+            let(:pact_uri_options) do
+              {
+                username: 'pact_user',
+                password: 'pact_pw'
+              }
+            end
             subject do
               ServiceProviderDSL.build 'some-provider' do
                 app {}
                 honours_pact_with 'some-consumer', :ref => :prod do
-                  pact_uri 'blah'
+                  pact_uri pact_url, pact_uri_options
                 end
               end
             end
             it 'adds a verification to the Pact.provider_world' do
               subject
-              expect(Pact.provider_world.pact_verifications.first).to eq(Pact::Provider::PactVerification.new('some-consumer', 'blah', :prod))
+              pact_repository_uri = Pact::Provider::PactRepositoryUri.new(pact_url, pact_uri_options)
+              expect(Pact.provider_world.pact_verifications.first).to eq(Pact::Provider::PactVerification.new('some-consumer', pact_repository_uri , :prod))
             end
 
           end

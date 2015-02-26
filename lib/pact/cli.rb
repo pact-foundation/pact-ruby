@@ -7,6 +7,8 @@ module Pact
     desc 'verify', "Verify a pact"
     method_option :pact_helper, aliases: "-h", desc: "Pact helper file", :required => true
     method_option :pact_uri, aliases: "-p", desc: "Pact URI"
+    method_option :pact_repository_username, aliases: "-u", desc: "Pact repository user name"
+    method_option :pact_repository_password, aliases: "-w", desc: "Pact repository password"
     method_option :backtrace, aliases: "-b", desc: "Show full backtrace", :default => false, :type => :boolean
     method_option :description, aliases: "-d", desc: "Interaction description filter"
     method_option :provider_state, aliases: "-s", desc: "Provider state filter"

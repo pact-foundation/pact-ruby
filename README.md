@@ -12,7 +12,7 @@ Travis CI Status: [![travis-ci.org Build Status](https://travis-ci.org/realestat
 
 ## What is it good for?
 
-Pact is most valuable for designing and testing integrations where you (or your team/organisation/partner organisation) control the development of both the consumer and the provider. It is fantastic tool for testing intra-organsation microservices.
+Pact is most valuable for designing and testing integrations where you (or your team/organisation/partner organisation) control the development of both the consumer and the provider. It is fantastic tool for testing intra-organisation microservices.
 
 ## What is it not good for?
 
@@ -266,7 +266,7 @@ As in all things, there are good ways to implement Pacts, and there are not so g
 * [Best practices](https://github.com/realestate-com-au/pact/wiki/Best-practices)
 * [Troubleshooting](https://github.com/realestate-com-au/pact/wiki/Troubleshooting)
 * [Testing with pact diagram](https://github.com/realestate-com-au/pact/wiki/Testing with pact.png)
-* [News, blogs and artciles](https://github.com/realestate-com-au/pact/wiki/News,-blogs-and-articles)
+* [News, blogs and articles](https://github.com/realestate-com-au/pact/wiki/News,-blogs-and-articles)
 
 ## Related libraries
 

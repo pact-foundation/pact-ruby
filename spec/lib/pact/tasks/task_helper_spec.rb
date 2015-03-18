@@ -58,33 +58,33 @@ module Pact
         end
       end
 
-      context "with PACT_REPO_USERNAME set" do
+      context "with PACT_BROKER_USERNAME set" do
         before do
-          ENV['PACT_REPO_USERNAME'] = 'pact_username'
+          ENV['PACT_BROKER_USERNAME'] = 'pact_username'
         end
 
         it "includes the -u option in the command" do
-          expect(TaskHelper).to receive(:execute_cmd).with(/--pact_repository_username pact_username/)
+          expect(TaskHelper).to receive(:execute_cmd).with(/--pact-broker-username pact_username/)
           TaskHelper.execute_pact_verify(pact_uri, nil, nil)
         end
 
         after do
-          ENV.delete('PACT_REPO_USERNAME')
+          ENV.delete('PACT_BROKER_USERNAME')
         end
       end
 
-      context "with PACT_REPO_PASSWORD set" do
+      context "with PACT_BROKER_PASSWORD set" do
         before do
-          ENV['PACT_REPO_PASSWORD'] = 'pact_password'
+          ENV['PACT_BROKER_PASSWORD'] = 'pact_password'
         end
 
         it "includes the -w option in the command" do
-          expect(TaskHelper).to receive(:execute_cmd).with(/--pact_repository_password pact_password/)
+          expect(TaskHelper).to receive(:execute_cmd).with(/--pact-broker-password pact_password/)
           TaskHelper.execute_pact_verify(pact_uri, nil, nil)
         end
 
         after do
-          ENV.delete('PACT_REPO_PASSWORD')
+          ENV.delete('PACT_BROKER_PASSWORD')
         end
       end
 

@@ -1,6 +1,6 @@
 module Pact
   module Provider
-    class PactRepositoryUri
+    class PactURI
       attr_reader :uri, :options
 
       def initialize (uri, options={})
@@ -9,7 +9,7 @@ module Pact
       end
 
       def == other
-        other.is_a?(PactRepositoryUri) &&
+        other.is_a?(PactURI) &&
           uri == other.uri &&
           options == other.options
       end

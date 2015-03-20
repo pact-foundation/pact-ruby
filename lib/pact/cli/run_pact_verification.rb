@@ -56,8 +56,8 @@ module Pact
         pact_repository_uri_options = {}
         pact_repository_uri_options[:username] = options[:pact_broker_username] if options[:pact_broker_username]
         pact_repository_uri_options[:password] = options[:pact_broker_password] if options[:pact_broker_password]
-        pact_repository_uri = ::Pact::Provider::PactRepositoryUri.new(options[:pact_uri], pact_repository_uri_options)
-        Pact::Provider::PactSpecRunner.new([pact_repository_uri], pact_spec_options).run
+        pact_uri = ::Pact::Provider::PactURI.new(options[:pact_uri], pact_repository_uri_options)
+        Pact::Provider::PactSpecRunner.new([pact_uri], pact_spec_options).run
       end
 
       def run_with_configured_pacts

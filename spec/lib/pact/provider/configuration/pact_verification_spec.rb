@@ -26,8 +26,8 @@ module Pact
             end
 
             it "creates a Verification" do
-              pact_repository_uri = Pact::Provider::PactRepositoryUri.new(url, pact_repository_uri_options)
-              expect(Pact::Provider::PactVerification).to receive(:new).with(consumer_name, pact_repository_uri, ref)
+              pact_uri = Pact::Provider::PactURI.new(url, pact_repository_uri_options)
+              expect(Pact::Provider::PactVerification).to receive(:new).with(consumer_name, pact_uri, ref)
               subject
             end
           end

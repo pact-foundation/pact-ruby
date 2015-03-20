@@ -1,6 +1,6 @@
 require 'spec_helper'
 require 'pact/provider/configuration/service_provider_dsl'
-require 'pact/provider/pact_repository_uri'
+require 'pact/provider/pact_uri'
 
 module Pact
 
@@ -65,8 +65,8 @@ module Pact
             end
             it 'adds a verification to the Pact.provider_world' do
               subject
-              pact_repository_uri = Pact::Provider::PactRepositoryUri.new(pact_url)
-              expect(Pact.provider_world.pact_verifications.first).to eq(Pact::Provider::PactVerification.new('some-consumer', pact_repository_uri, :head))
+              pact_uri = Pact::Provider::PactURI.new(pact_url)
+              expect(Pact.provider_world.pact_verifications.first).to eq(Pact::Provider::PactVerification.new('some-consumer', pact_uri, :head))
             end
           end
 
@@ -87,8 +87,8 @@ module Pact
             end
             it 'adds a verification to the Pact.provider_world' do
               subject
-              pact_repository_uri = Pact::Provider::PactRepositoryUri.new(pact_url, pact_uri_options)
-              expect(Pact.provider_world.pact_verifications.first).to eq(Pact::Provider::PactVerification.new('some-consumer', pact_repository_uri , :prod))
+              pact_uri = Pact::Provider::PactURI.new(pact_url, pact_uri_options)
+              expect(Pact.provider_world.pact_verifications.first).to eq(Pact::Provider::PactVerification.new('some-consumer', pact_uri , :prod))
             end
 
           end

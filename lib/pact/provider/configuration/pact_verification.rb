@@ -1,5 +1,5 @@
 require 'pact/provider/pact_verification'
-require 'pact/provider/pact_repository_uri'
+require 'pact/provider/pact_uri'
 require 'pact/shared/dsl'
 require 'pact/provider/world'
 
@@ -22,7 +22,7 @@ module Pact
 
         dsl do
           def pact_uri pact_uri, options = {}
-            self.pact_uri = ::Pact::Provider::PactRepositoryUri.new(pact_uri, options) if pact_uri
+            self.pact_uri = ::Pact::Provider::PactURI.new(pact_uri, options) if pact_uri
           end
         end
 

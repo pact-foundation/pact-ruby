@@ -11,7 +11,7 @@ module PactBroker
       end
 
       def pact_json
-        @pact_json ||= Pact::PactFile.read(uri, {})
+        @pact_json ||= Pact::PactFile.read(uri.uri, uri.options)
       end
 
     end

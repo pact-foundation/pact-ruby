@@ -25,6 +25,9 @@ module Pact
       command_parts << "-S pact verify"
       command_parts << "--pact-helper" << (pact_helper.end_with?(".rb") ? pact_helper : pact_helper + ".rb")
       (command_parts << "--pact-uri" << pact_uri) if pact_uri
+      command_parts << "--pact-broker-username" << ENV['PACT_BROKER_USERNAME'] if ENV['PACT_BROKER_USERNAME']
+      command_parts << "--pact-broker-password" << ENV['PACT_BROKER_PASSWORD'] if ENV['PACT_BROKER_PASSWORD']
+      command_parts << "--backtrace" if ENV['BACKTRACE'] == 'true'
       command_parts << "--backtrace" if ENV['BACKTRACE'] == 'true'
       command_parts << "--description #{Shellwords.escape(ENV['PACT_DESCRIPTION'])}" if ENV['PACT_DESCRIPTION']
       command_parts << "--provider-state #{Shellwords.escape(ENV['PACT_PROVIDER_STATE'])}" if ENV['PACT_PROVIDER_STATE']

@@ -8,6 +8,12 @@ module Pact
 
         describe 'create_verification' do
           let(:url) {'http://some/uri'}
+          let(:pact_repository_uri_options) do
+            {
+              username: 'pact_broker_username',
+              password: 'pact_broker_password'
+            }
+          end
           let(:consumer_name) {'some consumer'}
           let(:ref) {:prod}
           let(:options) { {:ref => :prod} }
@@ -15,12 +21,13 @@ module Pact
             subject do
               uri = url
               PactVerification.build(consumer_name, options) do
-                pact_uri uri
+                pact_uri uri, pact_repository_uri_options
               end
             end
 
             it "creates a Verification" do
-              expect(Pact::Provider::PactVerification).to receive(:new).with(consumer_name, url, ref)
+              pact_repository_uri = Pact::Provider::PactRepositoryUri.new(url, pact_repository_uri_options)
+              expect(Pact::Provider::PactVerification).to receive(:new).with(consumer_name, pact_repository_uri, ref)
               subject
             end
           end

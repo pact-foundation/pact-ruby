@@ -1,6 +1,11 @@
 Do this to generate your change history
 
-  git log --pretty=format:'  * %h - %s (%an, %ad)'
+  git log --pretty=format:'  * %h - %s (%an, %ad)' vX.Y.Z..HEAD
+
+### 1.7.0 (20 March 2015)
+
+* 61ce2da - Upgraded pact-support and pact-mock_service gems (Beth Skurrie, Fri Mar 20 15:05:14 2015 +1100)
+* 40666b6 - In pact verification DSL pass extra options for pact uri for http basic authentication.  In pact:verify:at[url] task pass http basic authentication info via environment variables (lifei zhou, Thu Feb 26 23:35:32 2015 +1100)
 
 ### 1.6.0 (17 February 2015)
 

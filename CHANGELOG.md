@@ -2,6 +2,11 @@ Do this to generate your change history
 
   git log --pretty=format:'  * %h - %s (%an, %ad)' vX.Y.Z..HEAD
 
+
+### 1.8.0 (27 April 2015)
+
+* 5c73acd - Upgrade pact-support (BrunoChauvet, Thu Apr 23 21:40:16 2015 +1000)
+
 ### 1.7.0 (20 March 2015)
 
 * 61ce2da - Upgraded pact-support and pact-mock_service gems (Beth Skurrie, Fri Mar 20 15:05:14 2015 +1100)

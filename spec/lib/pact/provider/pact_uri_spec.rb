@@ -27,7 +27,7 @@ describe Pact::Provider::PactURI do
       let(:password) { 'my_password' }
       let(:options) { {username: username, password: password}}
       it 'should include user name and password' do
-        expect(pact_uri.to_s).to eq('http://pact:my_password@uri')
+        expect(pact_uri.to_s).to eq('http://pact:*****@uri')
       end
     end
 

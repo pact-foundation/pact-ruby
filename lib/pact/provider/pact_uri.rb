@@ -16,7 +16,7 @@ module Pact
 
       def to_s
         if(options[:username])
-          URI(@uri).tap { |x| x.userinfo="#{options[:username]}:#{options[:password]}"}.to_s
+          URI(@uri).tap { |x| x.userinfo="#{options[:username]}:*****"}.to_s
         else
           @uri
         end

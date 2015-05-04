@@ -21,4 +21,21 @@ describe Pact::Provider::PactURI do
       expect(pact_uri == Pact::Provider::PactURI.new(uri, options)).to be true
     end
   end
+
+  describe '#to_s' do
+    context 'with userinfo provided' do
+      let(:password) { 'my_password' }
+      let(:options) { {username: username, password: password}}
+      it 'should include user name and password' do
+        expect(pact_uri.to_s).to eq('http://pact:*****@uri')
+      end
+    end
+
+    context 'without userinfo' do
+      let(:options) { {} }
+      it 'should return original uri string' do
+        expect(pact_uri.to_s).to eq(uri)
+      end
+    end
+  end
 end

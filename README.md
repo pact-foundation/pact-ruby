@@ -6,7 +6,7 @@ Pact provides an fluent API for service consumers to define the HTTP requests th
 
 This allows testing of both sides of an integration point using fast unit tests.
 
-This gem is inspired by the concept of "Consumer driven contracts". See [this article](http://martinfowler.com/articles/consumerDrivenContracts.html) by Martin Fowler for more information.
+This gem is inspired by the concept of "Consumer driven contracts". See [this article](http://martinfowler.com/articles/consumerDrivenContracts.html) by Ian Robinson for more information.
 
 Travis CI Status: [![travis-ci.org Build Status](https://travis-ci.org/realestate-com-au/pact.png)](https://travis-ci.org/realestate-com-au/pact)
 

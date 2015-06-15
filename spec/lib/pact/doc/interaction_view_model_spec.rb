@@ -15,6 +15,16 @@ module Pact
 
       subject { InteractionViewModel.new interaction, consumer_contract}
 
+      describe "id" do
+        context "with HTML characters in the description" do
+          let(:interaction) { InteractionFactory.create description: "an alligator with > 100 legs exists" }
+
+          it "escapes the HTML characters" do
+            expect(subject.id).to eq "an_alligator_with_&gt;_100_legs_exists_given_a_thing_exists"
+          end
+        end
+      end
+
       describe "request" do
 
         let(:interaction) { interaction_with_request_with_body_and_headers }

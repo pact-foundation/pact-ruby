@@ -1,5 +1,6 @@
 require 'pact/shared/active_support_support'
 require 'pact/reification'
+require 'cgi'
 
 module Pact
   module Doc
@@ -14,11 +15,12 @@ module Pact
 
       def id
         @id ||= begin
-          if has_provider_state?
+          full_desc = if has_provider_state?
             "#{description} given #{interaction.provider_state}"
           else
             description
-          end.gsub(/\s+/,'_')
+          end
+          CGI.escapeHTML(full_desc.gsub(/\s+/,'_'))
         end
       end
 

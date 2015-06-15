@@ -2,6 +2,11 @@ Do this to generate your change history
 
   git log --pretty=format:'  * %h - %s (%an, %ad)' vX.Y.Z..HEAD
 
+### 1.8.1 (15 June 2015)
+
+* 207a33d - Escape HTML characters in description when generating 'a' tag IDs. https://github.com/bethesque/pact_broker/issues/28 (Beth, Mon Jun 15 17:39:02 2015 +1000)
+* 2441e25 - hide the password in the pact uri to_s (lifei zhou, Mon May 4 19:21:40 2015 +1000)
+* 60ba514 - added to_s method on PactUri for printing out the uri when running the test (lifei zhou, Sun May 3 17:20:28 2015 +1000)
 
 ### 1.8.0 (27 April 2015)
 

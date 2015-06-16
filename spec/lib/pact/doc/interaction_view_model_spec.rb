@@ -5,13 +5,14 @@ module Pact
   module Doc
     describe InteractionViewModel do
 
-      let(:consumer_contract) { Pact::ConsumerContract.from_uri './spec/support/interaction_view_model.json'}
+      let(:consumer_contract) { Pact::ConsumerContract.from_uri './spec/support/interaction_view_model.json' }
 
       let(:interaction_with_request_with_body_and_headers) { consumer_contract.find_interaction description: "a request with a body and headers" }
       let(:interaction_with_request_without_body_and_headers) { consumer_contract.find_interaction description: "a request with an empty body and empty headers" }
       let(:interaction_with_response_with_body_and_headers) { consumer_contract.find_interaction description: "a response with a body and headers" }
       let(:interaction_with_response_without_body_and_headers) { consumer_contract.find_interaction description: "a response with an empty body and empty headers" }
 
+      let(:interaction) { consumer_contract.interactions.first }
 
       subject { InteractionViewModel.new interaction, consumer_contract}
 
@@ -21,6 +22,22 @@ module Pact
 
           it "escapes the HTML characters" do
             expect(subject.id).to eq "an_alligator_with_&gt;_100_legs_exists_given_a_thing_exists"
+          end
+        end
+      end
+
+      describe "consumer_name" do
+        context "with markdown characters in the name" do
+          it "escapes the markdown characters" do
+            expect(subject.consumer_name).to eq "a\\*consumer"
+          end
+        end
+      end
+
+      describe "provider_name" do
+        context "with markdown characters in the name" do
+          it "escapes the markdown characters" do
+            expect(subject.provider_name).to eq "a\\_provider"
           end
         end
       end

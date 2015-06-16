@@ -37,11 +37,11 @@ module Pact
       end
 
       def consumer_name
-        @consumer_contract.consumer.name
+        markdown_escape @consumer_contract.consumer.name
       end
 
       def provider_name
-        @consumer_contract.provider.name
+        markdown_escape @consumer_contract.provider.name
       end
 
       def has_provider_state?
@@ -115,6 +115,9 @@ module Pact
         string[0].downcase + string[1..-1]
       end
 
+      def markdown_escape string
+        string.gsub('*','\*').gsub('_','\_')
+      end
     end
   end
 end

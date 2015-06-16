@@ -1,0 +1,11 @@
+{
+  "provider": {
+    "name": "Some_Provider_App"
+  },
+  "consumer": {
+    "name": "Some*Consumer*App"
+  },
+  "interactions": [
+
+  ]
+}

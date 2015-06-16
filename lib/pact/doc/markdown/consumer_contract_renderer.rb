@@ -23,7 +23,7 @@ module Pact
         attr_reader :consumer_contract
 
         def title
-          "### A pact between #{consumer_contract.consumer.name} and #{consumer_contract.provider.name}\n\n"
+          "### A pact between #{consumer_name} and #{provider_name}\n\n"
         end
 
         def interaction_renderers
@@ -31,7 +31,7 @@ module Pact
         end
 
         def summaries_title
-          "#### Requests from #{consumer_contract.consumer.name} to #{consumer_contract.provider.name}\n\n"
+          "#### Requests from #{consumer_name} to #{provider_name}\n\n"
         end
 
         def interactions_title
@@ -48,6 +48,18 @@ module Pact
 
         def sorted_interactions
           SortInteractions.call(consumer_contract.interactions)
+        end
+
+        def consumer_name
+          markdown_escape consumer_contract.consumer.name
+        end
+
+        def provider_name
+          markdown_escape consumer_contract.provider.name
+        end
+
+        def markdown_escape string
+          string.gsub('*','\*').gsub('_','\_')
         end
 
       end

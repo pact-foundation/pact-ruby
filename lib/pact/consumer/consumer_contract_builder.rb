@@ -33,16 +33,6 @@ module Pact
         interaction_builder.upon_receiving(description)
       end
 
-      def interaction_builder
-        @interaction_builder ||=
-        begin
-          interaction_builder = InteractionBuilder.new do | interaction |
-            self.handle_interaction_fully_defined(interaction)
-          end
-          interaction_builder
-        end
-      end
-
       def verify example_description
         mock_service_client.verify example_description
       end
@@ -70,6 +60,16 @@ module Pact
 
       attr_reader :mock_service_client
       attr_writer :interaction_builder
+
+      def interaction_builder
+        @interaction_builder ||=
+        begin
+          interaction_builder = InteractionBuilder.new do | interaction |
+            self.handle_interaction_fully_defined(interaction)
+          end
+          interaction_builder
+        end
+      end
 
     end
   end

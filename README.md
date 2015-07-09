@@ -49,11 +49,12 @@ Pact is most valuable for designing and testing integrations where you (or your 
 * No separate integration environment required for automated integration tests - pact tests run in standalone CI builds.
 * Integration flows that would traditionally require running multiple services at the same time can be broken down and each integration point tested separately.
 
-## Contact
+## Getting help
 
+* Pact wiki: [https://github.com/realestate-com-au/pact/wiki](https://github.com/realestate-com-au/pact/wiki)
+* Google users group: [https://groups.google.com/forum/#!forum/pact-support](https://groups.google.com/forum/#!forum/pact-support)
 * Gitter: [![Join the chat at https://gitter.im/realestate-com-au/pact](https://badges.gitter.im/Join%20Chat.svg)](https://gitter.im/realestate-com-au/pact?utm_source=badge&utm_medium=badge&utm_campaign=pr-badge&utm_content=badge)
 * Twitter: [@pact_up](https://twitter.com/pact_up)
-* Google users group: https://groups.google.com/forum/#!forum/pact-support
 
 ## Installation
 

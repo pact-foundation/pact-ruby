@@ -12,7 +12,7 @@ Travis CI Status: [![travis-ci.org Build Status](https://travis-ci.org/realestat
 
 ## What is it good for?
 
-Pact is most valuable for designing and testing integrations where you (or your team/organisation/partner organisation) control the development of both the consumer and the provider. It is fantastic tool for testing intra-organisation microservices.
+Pact is most valuable for designing and testing integrations where you (or your team/organisation/partner organisation) control the development of both the consumer and the provider, and the requirements of the consumer are going to be used to drive the features of the provider. It is fantastic tool for developing and testing intra-organisation microservices.
 
 ## What is it not good for?
 

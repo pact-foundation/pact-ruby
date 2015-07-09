@@ -11,7 +11,7 @@ describe "running the pact verify CLI" do
         "bundle exec bin/pact verify",
         "--pact-uri spec/support/test_app_fail.json",
         "--pact-helper spec/support/pact_helper.rb",
-        "--backtrace"
+        "--backtrace 2>&1"
       ].join(" ")
     end
     it "displays the full backtrace" do
@@ -24,7 +24,7 @@ describe "running the pact verify CLI" do
       [
         "bundle exec bin/pact verify",
         "--pact-uri spec/support/test_app_fail.json",
-        "--pact-helper spec/support/pact_helper.rb"
+        "--pact-helper spec/support/pact_helper.rb 2>&1"
       ].join(" ")
     end
     xit "does not display the full backtrace - need to fix test to work with rspec2" do

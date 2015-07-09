@@ -3,12 +3,9 @@ module Pact
     module CLI
 
       def execute_command command, options = {}
-        stdin, stdout, stderr = Open3.popen3(command)
-        output = stdout.read + stderr.read
+        output = `#{command}`
         ensure_patterns_present(command, options, output) if options[:with]
         ensure_patterns_not_present(command, options, output) if options[:without]
-        status = $?.to_i
-        status == 0
       end
 
       def ensure_patterns_present command, options, output

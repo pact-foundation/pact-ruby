@@ -1,0 +1,36 @@
+{
+  "consumer": {
+    "name": "some-test-consumer"
+  },
+  "provider": {
+    "name": "an unknown provider"
+  },
+  "interactions": [
+    {
+      "description": "a test request",
+      "request": {
+        "method": "get",
+        "path": "/weather",
+        "query": ""
+      },
+      "response": {
+        "matchingRules": {
+          "$.headers.Content-Type" : {
+            "match": "regex", "regex": "json"
+          },
+          "$.body.message" : {
+            "match": "regex", "regex": "sun"
+          }
+        },
+        "status": 200,
+        "headers" : {
+          "Content-Type": "foo/json"
+        },
+        "body": {
+          "message" : "sunful"
+        }
+      },
+      "provider_state": "the weather is sunny"
+    }
+  ]
+}

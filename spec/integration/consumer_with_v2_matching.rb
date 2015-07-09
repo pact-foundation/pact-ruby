@@ -20,7 +20,6 @@ describe "When the pact_specification_version is set to 2", :pact => true  do
   end
 
   let(:body) { 'That is some good Mallory.' }
-  let(:zebra_header) { '*.zebra.com' }
 
   it "writes the pact with v2 matching rules" do
     zebra_service.

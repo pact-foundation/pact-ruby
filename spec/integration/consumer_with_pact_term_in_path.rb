@@ -23,7 +23,7 @@ describe "A service consumer side of a pact", :pact => true  do
       another_zebra_service.
         upon_receiving("a request for an alligator").with(
           method: :get,
-          path: Pact::Term.new(matcher: /alligators\/.*/, generate: '/alligators/Mary'),
+          path: term(/alligators\/.*/, '/alligators/Mary'),
         ).
         will_respond_with(status: 200)
 

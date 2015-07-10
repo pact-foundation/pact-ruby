@@ -47,7 +47,7 @@ describe Pact::Provider::Request::Replayable do
       end
     end
     context "when body is a Term" do
-      let(:body) { Pact::Term.new(generate: 'a', matcher: /a/) }
+      let(:body) { Pact.term(generate: 'a', matcher: /a/) }
       it "returns the generated value" do
         expect(subject.body).to eq "a"
       end

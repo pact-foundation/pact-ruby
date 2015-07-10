@@ -36,7 +36,7 @@ shared_examples "a request" do
       end
     end
     context "with a path and a query that is a Term" do
-      subject { described_class.from_hash({:path => '/path', :method => 'get', :headers => {}, :query => Pact::Term.new(generate: 'a', matcher: /a/)}) }
+      subject { described_class.from_hash({:path => '/path', :method => 'get', :headers => {}, :query => Pact.term(generate: 'a', matcher: /a/)}) }
       it "returns the full path with reified path" do
         expect(subject.full_path).to eq "/path?a"
       end

@@ -34,7 +34,7 @@ describe "When the pact_specification_version is set to 2", :pact => true  do
       headers: {
         'Content-Type' => 'text/html'
       },
-      body: Pact::Term.new(matcher: /Mallory/, generate: body)
+      body: term(/Mallory/, body)
     )
 
     response = Faraday.get(zebra_service.mock_service_base_url + "/mallory", nil, {'Accept' => 'text/html'})

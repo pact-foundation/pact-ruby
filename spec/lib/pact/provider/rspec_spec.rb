@@ -22,15 +22,15 @@ describe "the match_term matcher" do
   end
 
   it 'matches pact terms' do
-    expect('wootle').to match_term Pact::Term.new(generate:'wootle', matcher:/woot../), with: Pact::JsonDiffer, diff_formatter: diff_formatter
+    expect('wootle').to match_term Pact.term(generate:'wootle', matcher:/woot../), with: Pact::JsonDiffer, diff_formatter: diff_formatter
   end
 
   it 'matches all elements of arrays' do
-    expect(['one', 'two', ['three']]).to match_term [/one/, 'two', [Pact::Term.new(generate:'three', matcher:/thr../)]], with: Pact::JsonDiffer, diff_formatter: diff_formatter
+    expect(['one', 'two', ['three']]).to match_term [/one/, 'two', [Pact.term(generate:'three', matcher:/thr../)]], with: Pact::JsonDiffer, diff_formatter: diff_formatter
   end
 
   it 'matches all values of hashes' do
-    expect({1 => 'one', 2 => 2, 3 => 'three'}).to match_term({1 => /one/, 2 => 2, 3 => Pact::Term.new(generate:'three', matcher:/thr../)}, with: Pact::JsonDiffer, diff_formatter: diff_formatter)
+    expect({1 => 'one', 2 => 2, 3 => 'three'}).to match_term({1 => /one/, 2 => 2, 3 => Pact.term(generate:'three', matcher:/thr../)}, with: Pact::JsonDiffer, diff_formatter: diff_formatter)
   end
 
   it 'matches all other objects using ==' do

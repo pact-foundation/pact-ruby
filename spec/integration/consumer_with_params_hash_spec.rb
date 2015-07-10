@@ -46,7 +46,7 @@ describe "A service consumer side of a pact", :pact => true  do
         will_respond_with({
           status: 200,
           headers: { 'Content-Type' => 'application/json' },
-          body: Pact::Term.new(matcher: /Mallory/, generate: body)
+          body: term(/Mallory/, body)
       })
 
     end
@@ -97,12 +97,12 @@ describe "A service consumer side of a pact", :pact => true  do
            method: :get,
            path: '/mallory',
            headers: {'Accept' => 'application/json', 'Content-Type' => 'application/x-www-form-urlencoded'},
-           query: { size: ['small',Pact::Term.new(matcher: /med.*/, generate: 'medium'),'large'], colour: 'brown', weight: '5'}
+           query: { size: ['small',term(/med.*/, 'medium'),'large'], colour: 'brown', weight: '5'}
         }).
         will_respond_with({
           status: 200,
           headers: { 'Content-Type' => 'application/json' },
-          body: Pact::Term.new(matcher: /Mallory/, generate: body)
+          body: term(/Mallory/, body)
       })
     end
 

@@ -25,7 +25,7 @@ describe "A service consumer side of a pact", :pact => true  do
           method: :put,
           path: '/alligators/John',
           headers: {
-            'Content-Type' => Pact::Term.new(matcher: /json/, generate: 'application/json')
+            'Content-Type' => term(/json/, 'application/json')
           }
         ).
         will_respond_with(status: 200)

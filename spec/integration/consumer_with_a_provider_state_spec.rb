@@ -33,9 +33,9 @@ describe "A service consumer side of a pact", :pact => true  do
         status: 200,
         headers: {
           'Content-Type' => 'text/html',
-          'Zebra-Origin' => Pact::Term.new(matcher: /\*/, generate: zebra_header)
+          'Zebra-Origin' => term(/\*/, zebra_header)
         },
-        body: Pact::Term.new(matcher: /Mallory/, generate: body)
+        body: term(/Mallory/, body)
       )
 
       response = Faraday.get(zebra_service.mock_service_base_url + "/mallory", nil, {'Accept' => 'text/html'})

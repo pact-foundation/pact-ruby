@@ -1,11 +1,13 @@
 require 'pact/consumer'
 require 'pact/consumer/spec_hooks'
 require 'pact/rspec'
+require 'pact/helpers'
 
 module Pact
   module Consumer
     module RSpec
       include Pact::Consumer::ConsumerContractBuilders
+      include Pact::Helpers
     end
   end
 end

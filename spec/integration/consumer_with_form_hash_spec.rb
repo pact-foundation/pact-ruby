@@ -32,7 +32,7 @@ describe "A service consumer side of a pact", :pact => true  do
           path: '/mallory',
           headers: {'Content-Type' => 'application/x-www-form-urlencoded'},
           body: {
-            param1: Pact::Term.new(generate: 'woger', matcher: /w/),
+            param1: term('woger', /w/),
             param2: 'penguin'
           }
         }).

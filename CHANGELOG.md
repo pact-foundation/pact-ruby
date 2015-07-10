@@ -2,6 +2,16 @@ Do this to generate your change history
 
   git log --pretty=format:'  * %h - %s (%an, %ad)' vX.Y.Z..HEAD
 
+### 1.9.0 (10 July 2015)
+
+* 3e9f310 - Include Pact helper methods to create Terms, ArrayLikes and SomethingLikes. (Beth Skurrie, Fri Jul 10 13:33:50 2015 +1000)
+* 583b03d - Added spec to show v2 provider verification works (Beth Skurrie, Thu Jul 9 15:54:09 2015 +1000)
+* 1871e91 - Upgraded an losened pact-support and pact-mock_service dependencies (Beth Skurrie, Thu Jul 9 15:53:03 2015 +1000)
+* d8010e4 - Updated .ruby-version to 2.2.2 (Beth Skurrie, Thu Jul 9 14:25:04 2015 +1000)
+* c1881c4 - Added test to show mock service will use v2 matching rules when the pact specification version is set to 2 (Beth Skurrie, Thu Jul 9 14:01:13 2015
+* 5d44285 - Fixed hanging CLI spec (Beth Skurrie, Thu Jul 9 13:33:10 2015 +1000)
+* dbf26f2 - Escape markdown chars in consumer and provider names when rendering markdown docs (Beth Skurrie, Tue Jun 16 10:56:43 2015 +1000)
+
 ### 1.8.1 (15 June 2015)
 
 * 207a33d - Escape HTML characters in description when generating 'a' tag IDs. https://github.com/bethesque/pact_broker/issues/28 (Beth, Mon Jun 15 17:39:02 2015 +1000)

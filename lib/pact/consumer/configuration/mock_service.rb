@@ -89,7 +89,7 @@ module Pact
         end
 
         def validate
-          raise "Please provide a port for service #{name}" unless port
+          raise "Please provide a port for service #{@name}" unless port
         end
 
         def mock_service_options

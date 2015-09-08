@@ -2,7 +2,7 @@
 
 Define a pact between service consumers and providers, enabling "consumer driven contract" testing.
 
-Pact provides an fluent API for service consumers to define the HTTP requests they will make to a service provider and the HTTP responses they expect back. These expectations are used in the consumer specs to provide a mock service provider. The interactions are recorded, and played back in the service provider specs to ensure the service provider actually does provide the response the consumer expects.
+Pact provides a fluent API for service consumers to define the HTTP requests they will make to a service provider and the HTTP responses they expect back. These expectations are used in the consumer specs to provide a mock service provider. The interactions are recorded, and played back in the service provider specs to ensure the service provider actually does provide the response the consumer expects.
 
 This allows testing of both sides of an integration point using fast unit tests.
 

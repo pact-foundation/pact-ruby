@@ -49,12 +49,12 @@ module Pact
       end
 
       def provider_state start_of_sentence = false
-        apply_capitals(@interaction.provider_state.strip, start_of_sentence)
+        markdown_escape apply_capitals(@interaction.provider_state.strip, start_of_sentence)
       end
 
       def description start_of_sentence = false
         return '' unless @interaction.description
-        apply_capitals(@interaction.description.strip, start_of_sentence)
+        markdown_escape apply_capitals(@interaction.description.strip, start_of_sentence)
       end
 
       def request
@@ -116,6 +116,7 @@ module Pact
       end
 
       def markdown_escape string
+        return nil unless string
         string.gsub('*','\*').gsub('_','\_')
       end
     end

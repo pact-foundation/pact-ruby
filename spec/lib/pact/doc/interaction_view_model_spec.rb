@@ -165,6 +165,28 @@ module Pact
             expect(subject.description(false)).to eq ''
           end
         end
+
+        context "with markdown characters in the name" do
+          let(:interaction) do
+            interaction_with_request_with_body_and_headers.description = 'a *description'
+            interaction_with_request_with_body_and_headers
+          end
+          it "escapes the markdown characters" do
+            expect(subject.description).to eq "a \\*description"
+          end
+        end
+      end
+
+      describe "provider_state" do
+        context "with markdown characters in the name" do
+          let(:interaction) do
+            interaction_with_request_with_body_and_headers.provider_state = 'a *provider state'
+            interaction_with_request_with_body_and_headers
+          end
+          it "escapes the markdown characters" do
+            expect(subject.provider_state).to eq "a \\*provider state"
+          end
+        end
       end
 
     end

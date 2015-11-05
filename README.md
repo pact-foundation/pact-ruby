@@ -58,7 +58,17 @@ Pact is most valuable for designing and testing integrations where you (or your 
 
 ## Installation
 
-Put it in your Gemfile. You know how.
+Add this line to your application's Gemfile:
+
+    gem 'pact'
+
+And then execute:
+
+    $ bundle
+
+Or install it yourself as:
+
+    $ gem install pact
 
 ## Usage - an example scenario
 

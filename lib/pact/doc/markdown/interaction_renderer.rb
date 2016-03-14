@@ -1,3 +1,4 @@
+require 'erb'
 require 'pact/doc/interaction_view_model'
 
 module Pact

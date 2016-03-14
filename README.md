@@ -298,9 +298,9 @@ As in all things, there are good ways to implement Pacts, and there are not so g
 
 [Simplifying microservices testing with pacts](http://dius.com.au/2014/05/19/simplifying-micro-service-testing-with-pacts/) - Ron Holshausen (one of the original pact authors)
 
-[Pact specification](https://github.com/bethesque/pact-specification)
+[Pact specification](https://github.com/pact-foundation/pact-specification)
 
-[Integrated tests are a scam](http://vimeo.com/80533536) - J.B. Rainsberger
+[Integrated tests are a scam](https://vimeo.com/80533536) - J.B. Rainsberger
 
 [Consumer Driven Contracts](http://martinfowler.com/articles/consumerDrivenContracts.html) - Ian Robinson
 
@@ -314,7 +314,7 @@ See [ROADMAP.md](/ROADMAP.md).
 
 See [CONTRIBUTING.md](/CONTRIBUTING.md).
 
-[webmachine]: https://github.com/seancribbs/webmachine-ruby
+[webmachine]: https://github.com/webmachine/webmachine-ruby
 [roar]: https://github.com/apotonick/roar
 [pact_broker]: https://github.com/bethesque/pact_broker
 [pact_broker-client]: https://github.com/bethesque/pact_broker-client

@@ -1,3 +1,4 @@
+require 'pact/mock_service/version'
 require 'pact/mock_service/app_manager'
 require 'pact/consumer/consumer_contract_builder'
 require 'pact/consumer/consumer_contract_builders'
@@ -20,6 +21,7 @@ module Pact
           @standalone = false
           @verify = true
           @pact_specification_version = nil
+          @finalized = false
         end
 
         dsl do
@@ -41,16 +43,20 @@ module Pact
         end
 
         def finalize
-          validate
+          raise 'Already finalized!' if @finalized
           register_mock_service
           configure_consumer_contract_builder
+          @finalized = true
         end
 
         private
 
         def register_mock_service
           unless standalone
-            Pact::MockService::AppManager.instance.register_mock_service_for provider_name, "http://localhost:#{port}", mock_service_options
+            url = "http://localhost#{port.nil? ? '' : ":#{port}"}"
+            ret = Pact::MockService::AppManager.instance.register_mock_service_for(provider_name, url, mock_service_options)
+            raise "pact-mock_service(v#{Pact::MockService::VERSION}) does not support 'find available port' feature" unless ret
+            @port = ret
           end
         end
 
@@ -88,12 +94,11 @@ module Pact
           Pact.consumer_world.add_consumer_contract_builder consumer_contract_builder
         end
 
-        def validate
-          raise "Please provide a port for service #{@name}" unless port
-        end
-
         def mock_service_options
-          { pact_specification_version: pact_specification_version }
+          {
+            pact_specification_version: pact_specification_version,
+            find_available_port: port.nil?,
+          }
         end
       end
     end

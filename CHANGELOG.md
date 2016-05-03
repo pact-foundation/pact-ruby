@@ -2,6 +2,17 @@ Do this to generate your change history
 
   git log --pretty=format:'  * %h - %s (%an, %ad)' vX.Y.Z..HEAD
 
+### 1.9.1 (3 May 2016)
+* b3409a7 - Accept nil port as find and use available port (Taiki Ono, Wed Mar 16 19:34:46 2016 +0900)
+* a7f644f - Update README URLs based on HTTP redirects (ReadmeCritic, Mon Mar 14 07:03:52 2016 -0700)
+* 9cbf0f0 - Load missing dependent library (Taiki Ono, Mon Mar 14 17:43:13 2016 +0900)
+* 34e6ef9 - Update Travis CI setting with new Rubies (Taiki Ono, Sun Mar 13 21:11:27 2016 +0900)
+* 04f80c4 - Update doc about pactfile_write_mode (Taiki Ono, Thu Mar 3 14:25:49 2016 +0900)
+* a1c8b6d - Add instructions to put pact gem in Gemfile. (Beth Skurrie, Thu Nov 5 11:16:38 2015 +1100)
+* 5f76726 - Escape markdown characters in description and provider state (Beth, Thu Oct 22 09:07:53 2015 +1100)
+* 4922ad3 - README.md tiny typo (Leo Gallucci, Tue Sep 8 13:33:58 2015 +0200)
+* f4f7276 - there is no attr_reader for :name (Jacob Evans, Mon Jul 27 15:05:31 2015 +1000)
+
 ### 1.9.0 (10 July 2015)
 
 * 3e9f310 - Include Pact helper methods to create Terms, ArrayLikes and SomethingLikes. (Beth Skurrie, Fri Jul 10 13:33:50 2015 +1000)

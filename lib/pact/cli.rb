@@ -1,5 +1,6 @@
 require 'thor'
 require 'pact/consumer/configuration'
+require 'pact/provider/configuration'
 
 module Pact
   class CLI < Thor
@@ -10,6 +11,9 @@ module Pact
     method_option :pact_broker_username, aliases: "-u", desc: "Pact broker user name"
     method_option :pact_broker_password, aliases: "-w", desc: "Pact broker password"
     method_option :backtrace, aliases: "-b", desc: "Show full backtrace", :default => false, :type => :boolean
+    method_option :interactions_replay_order, aliases: "-o",
+                  desc: "Interactions replay order: randomised or recorded (default)",
+                  default: Pact.configuration.interactions_replay_order
     method_option :description, aliases: "-d", desc: "Interaction description filter"
     method_option :provider_state, aliases: "-s", desc: "Provider state filter"
 

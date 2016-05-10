@@ -121,8 +121,16 @@ module Pact
           options = {
             criteria: @options[:criteria]
           }
-          honour_pactfile pact_source.uri, pact_source.pact_json, options
+          honour_pactfile pact_source.uri, ordered_pact_json(pact_source.pact_json), options
         end
+      end
+
+      def ordered_pact_json(pact_json)
+        return pact_json if Pact.configuration.interactions_replay_order == :recorded
+
+        consumer_contract = JSON.parse(pact_json)
+        consumer_contract["interactions"] = consumer_contract["interactions"].shuffle
+        consumer_contract.to_json
       end
 
       def class_exists? name

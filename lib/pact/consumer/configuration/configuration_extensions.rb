@@ -70,6 +70,14 @@ module Pact
           @pactfile_write_mode = pactfile_write_mode
         end
 
+        def pactfile_write_order
+          @pactfile_write_order ||= :chronological #or :alphabetical
+        end
+
+        def pactfile_write_order= pactfile_write_order
+          @pactfile_write_order = pactfile_write_order.to_sym
+        end
+
         private
 
         #Would love a better way of determining this! It sure won't work on windows.

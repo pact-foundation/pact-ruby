@@ -29,6 +29,14 @@ module Pact
           @config_ru_path = config_ru_path
         end
 
+        def interactions_replay_order
+          @interactions_replay_order ||= :recorder #or :randomised
+        end
+
+        def interactions_replay_order= interactions_replay_order
+          @interactions_replay_order = interactions_replay_order.to_sym
+        end
+
         def include mod
           Pact::Provider::State::ProviderStateConfiguredModules.instance_eval do
             include mod

@@ -2,6 +2,14 @@ Do this to generate your change history
 
   git log --pretty=format:'  * %h - %s (%an, %ad)' vX.Y.Z..HEAD
 
+### 1.9.2 (26 May 2016)
+* 88741ac - Merge pull request #104 from reevoo/randomise_contract_interactions (Sergei Matheson, Thu May 26 15:09:31 2016 +1000)
+* 67c2b30 - Add interactions_replay_order and pactfile_write_order into Pact.configuration (Alex Malkov, Tue May 10 01:44:04 2016 +0100)
+* 983a505 - Merge pull request #105 from elgalu/patch-2 (Beth Skurrie, Thu May 12 07:52:21 2016 +1000)
+* 60d8b5c - "to need to need" README.md typo (Leo Gallucci, Wed May 11 17:39:49 2016 +0200)
+* 2cb57f7 - Test on ruby 2.3.1 (Sergei Matheson, Tue May 3 16:37:40 2016 +1000)
+* 4594a97 - Use at least v0.5.7 of pact-support (Sergei Matheson, Tue May 3 16:36:39 2016 +1000)
+
 ### 1.9.1 (3 May 2016)
 * b3409a7 - Accept nil port as find and use available port (Taiki Ono, Wed Mar 16 19:34:46 2016 +0900)
 * a7f644f - Update README URLs based on HTTP redirects (ReadmeCritic, Mon Mar 14 07:03:52 2016 -0700)

@@ -12,6 +12,8 @@ Gem::Specification.new do |gem|
   gem.summary       = %q{Enables consumer driven contract testing, providing a mock service and DSL for the consumer project, and interaction playback and verification for the service provider project.}
   gem.homepage      = "https://github.com/realestate-com-au/pact"
 
+  gem.required_ruby_version = '>= 2.0'
+
   gem.files         = `git ls-files bin lib pact.gemspec CHANGELOG.md LICENSE.txt`.split($/)
   gem.executables   = gem.files.grep(%r{^bin/}).map{ |f| File.basename(f) }
   gem.test_files    = gem.files.grep(%r{^(test|spec|features)/})

@@ -2,6 +2,10 @@ Do this to generate your change history
 
   git log --pretty=format:'  * %h - %s (%an, %ad)' vX.Y.Z..HEAD
 
+### 1.9.3 (27 Jun 2016)
+* edb2208 - Clarify that pact will only work with ruby >= 2.0 (Sergei Matheson, Mon Jun 27 10:53:08 2016 +1000)
+* 52de989 - remove duplicated `--backtrace` option (Takuto Wada, Tue Jun 7 15:51:12 2016 +0900)
+
 ### 1.9.2 (26 May 2016)
 * 88741ac - Merge pull request #104 from reevoo/randomise_contract_interactions (Sergei Matheson, Thu May 26 15:09:31 2016 +1000)
 * 67c2b30 - Add interactions_replay_order and pactfile_write_order into Pact.configuration (Alex Malkov, Tue May 10 01:44:04 2016 +0100)

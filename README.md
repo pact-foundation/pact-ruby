@@ -219,7 +219,7 @@ Create a `pact_helper.rb` in your service provider project. The recommended plac
 See [Verifying Pacts](https://github.com/realestate-com-au/pact/wiki/Verifying-pacts) and the [Provider](documentation/configuration.md#provider) section of the Configuration documentation for more information.
 
 ```ruby
-# In specs/service_consumers/pact_helper.rb
+# In spec/service_consumers/pact_helper.rb
 
 require 'pact/provider/rspec'
 
@@ -231,7 +231,7 @@ Pact.service_provider "Animal Service" do
     # integration box, you would use a [Pact Broker](https://github.com/bethesque/pact_broker) or publish your pacts as artifacts,
     # and point the pact_uri to the pact published by the last successful build.
 
-    pact_uri '../zoo-app/specs/pacts/zoo_app-animal_service.json'
+    pact_uri '../zoo-app/spec/pacts/zoo_app-animal_service.json'
   end
 end
 ```

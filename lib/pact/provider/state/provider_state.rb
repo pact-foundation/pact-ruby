@@ -33,8 +33,8 @@ module Pact
 
       def self.base_provider_state
         fullname = namespaced_name BASE_PROVIDER_STATE_NAME, {:for => current_namespaces.first }
-        provider_states[fullname] ||
-          ProviderState.new(BASE_PROVIDER_STATE_NAME, current_namespaces.join('.'))
+        provider_states[fullname] ||= ProviderState.new(BASE_PROVIDER_STATE_NAME, current_namespaces.join('.'))
+        provider_states[fullname]
       end
 
       def self.register name, provider_state

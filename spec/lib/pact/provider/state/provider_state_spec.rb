@@ -153,7 +153,6 @@ module Pact
             ProviderStates.get_base(:for => "a consumer with base state").set_up
             expect(MESSAGES).to eq ["setting up base provider state"]
           end
-
         end
 
         context "when a base state has not been declared" do
@@ -163,6 +162,19 @@ module Pact
           end
         end
 
+      end
+
+      describe "base_provider_state with a teardown and no setup" do
+        Pact.provider_states_for "a consumer with base state with only a tear down" do
+          tear_down do
+            MESSAGES << "tearing down without a set up"
+          end
+        end
+
+        it "creates a base state for the provider" do
+          ProviderStates.get_base(:for => "a consumer with base state with only a tear down").tear_down
+          expect(MESSAGES).to eq ["tearing down without a set up"]
+        end
       end
 
       describe "global base_provider_state" do

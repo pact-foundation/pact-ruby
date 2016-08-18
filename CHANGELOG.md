@@ -2,6 +2,9 @@ Do this to generate your change history
 
   git log --pretty=format:'  * %h - %s (%an, %ad)' vX.Y.Z..HEAD
 
+### 1.9.4 (19 Aug 2016)
+* 93a1c42 - Ensure consumer level teardown gets called when set up is not defined. https://github.com/realestate-com-au/pact/issues/111 (Beth Skurrie, Fri Aug 19 08:56:20 2016 +1000)
+
 ### 1.9.3 (27 Jun 2016)
 * edb2208 - Clarify that pact will only work with ruby >= 2.0 (Sergei Matheson, Mon Jun 27 10:53:08 2016 +1000)
 * 52de989 - remove duplicated `--backtrace` option (Takuto Wada, Tue Jun 7 15:51:12 2016 +0900)

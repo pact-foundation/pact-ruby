@@ -7,7 +7,7 @@
   },
   "interactions": [
     {
-      "description": "a request for alligators",
+      "description": "a request for alligators in Brüssel",
       "provider_state": "alligators exist",
       "request": {
         "method": "get",

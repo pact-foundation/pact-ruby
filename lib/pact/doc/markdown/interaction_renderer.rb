@@ -25,8 +25,12 @@ module Pact
           ERB.new(template_string(template_file)).result(binding)
         end
 
+        # The template file is written with only ASCII range characters, so we
+        # can read as UTF-8. But rendered strings must have same encoding as
+        # script encoding because it will joined to strings which are produced by
+        # string literal.
         def template_string(template_file)
-          File.read( template_contents(template_file) )
+          File.read(template_contents(template_file), external_encoding: Encoding::UTF_8).force_encoding(__ENCODING__)
         end
 
         def template_contents(template_file)

@@ -10,6 +10,7 @@ require 'pact/provider/rspec'
 WebMock.disable_net_connect!(allow_localhost: true)
 
 require './spec/support/active_support_if_configured'
+require './spec/support/warning_silencer'
 
 RSpec.configure do | config |
   config.include(FakeFS::SpecHelpers, :fakefs => true)

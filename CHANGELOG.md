@@ -2,6 +2,9 @@ Do this to generate your change history
 
   git log --pretty=format:'  * %h - %s (%an, %ad)' vX.Y.Z..HEAD
 
+## 1.9.5 (9 Nov 2016)
+* b794881 - Read template file with script encoding (Taiki Ono, Wed Nov 2 20:18:50 2016 +0900)
+
 ### 1.9.4 (19 Aug 2016)
 * 93a1c42 - Ensure consumer level teardown gets called when set up is not defined. https://github.com/realestate-com-au/pact/issues/111 (Beth Skurrie, Fri Aug 19 08:56:20 2016 +1000)
 

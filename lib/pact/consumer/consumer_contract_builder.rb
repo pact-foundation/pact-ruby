@@ -51,7 +51,9 @@ module Pact
         mock_service_client.wait_for_interactions wait_max_seconds, poll_interval
       end
 
+      # @raise Pact::InvalidInteractionError
       def handle_interaction_fully_defined interaction
+        interaction.validate! if interaction.respond_to?(:validate!)
         mock_service_client.add_expected_interaction interaction #TODO: What will happen if duplicate added?
         self.interaction_builder = nil
       end
@@ -65,7 +67,7 @@ module Pact
         @interaction_builder ||=
         begin
           interaction_builder = InteractionBuilder.new do | interaction |
-            self.handle_interaction_fully_defined(interaction)
+            handle_interaction_fully_defined(interaction)
           end
           interaction_builder
         end

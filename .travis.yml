@@ -6,5 +6,30 @@ rvm:
   - 2.3.1
   - jruby-9.0.5.0
 gemfile:
-  - Gemfile
+  - gemfiles/default.gemfile
   - gemfiles/rspec_2.gemfile
+  - gemfiles/ruby_under_22.gemfile
+  - gemfiles/ruby_under_22_with_rspec_2.gemfile
+matrix:
+  exclude:
+    # rack 2.0 and activesupport 5.0 no longer support ruby under 2.2.
+    - rvm: 2.0.0
+      gemfile: gemfiles/default.gemfile
+    - rvm: 2.0.0
+      gemfile: gemfiles/rspec_2.gemfile
+    - rvm: 2.1.8
+      gemfile: gemfiles/default.gemfile
+    - rvm: 2.1.8
+      gemfile: gemfiles/rspec_2.gemfile
+    - rvm: 2.2.4
+      gemfile: gemfiles/ruby_under_22.gemfile
+    - rvm: 2.2.4
+      gemfile: gemfiles/ruby_under_22_with_rspec_2.gemfile
+    - rvm: 2.3.1
+      gemfile: gemfiles/ruby_under_22.gemfile
+    - rvm: 2.3.1
+      gemfile: gemfiles/ruby_under_22_with_rspec_2.gemfile
+    - rvm: jruby-9.0.5.0
+      gemfile: gemfiles/ruby_under_22.gemfile
+    - rvm: jruby-9.0.5.0
+      gemfile: gemfiles/ruby_under_22_with_rspec_2.gemfile

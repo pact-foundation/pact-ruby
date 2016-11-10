@@ -181,8 +181,8 @@ To make modules available in the provider state set_up and tear_down blocks, inc
 
 ### interactions_replay_order
 
-Default value: `:recorder`
-Options: `:recorder`, `:random`
+Default value: `:recorded`
+Options: `:recorded`, `:random`
 
 Replays interactions in a specific order. In combination with pactfile_write_order will allow you to have a consistent pact contract replayed in random order.  
 

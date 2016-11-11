@@ -16,6 +16,8 @@ Pact is most valuable for designing and testing integrations where you (or your 
 
 ## What is it not good for?
 
+* Testing new or existing providers where the functionality is not being driven by the needs of the consumer (eg. public APIs)
+* Testing providers where the consumer and provider teams do not have good communication channels.
 * Performance and load testing.
 * Functional testing of the provider - that is what the provider's own tests should do. Pact is about checking the contents and format of requests and responses.
 * Situations where you cannot load data into the provider without using the API that you're actually testing (eg. public APIs). [Why?][pact-public-apis]

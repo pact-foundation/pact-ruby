@@ -31,7 +31,6 @@ Gem::Specification.new do |gem|
   gem.add_runtime_dependency 'pact-support', '~> 0.5.7'
   gem.add_runtime_dependency 'pact-mock_service', '~> 0.8'
 
-  gem.add_development_dependency 'awesome_print', '~> 1.1'
   gem.add_development_dependency 'rake', '~> 10.0.3'
   gem.add_development_dependency 'webmock', '~> 1.18.0'
   gem.add_development_dependency 'pry'

@@ -30,7 +30,7 @@ module Pact
         end
 
         def interactions_replay_order
-          @interactions_replay_order ||= :recorder #or :randomised
+          @interactions_replay_order ||= :recorded #or :random
         end
 
         def interactions_replay_order= interactions_replay_order

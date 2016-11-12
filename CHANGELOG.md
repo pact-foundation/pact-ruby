@@ -2,6 +2,9 @@ Do this to generate your change history
 
   git log --pretty=format:'  * %h - %s (%an, %ad)' vX.Y.Z..HEAD
 
+## 1.9.6 (12 Nov 2016)
+* 63d4b81 - Fix bug in default interactions replay order (Yury Tsarev, Sat Nov 12 17:53:14 2016 +1100)
+
 ## 1.9.5 (9 Nov 2016)
 * b794881 - Read template file with script encoding (Taiki Ono, Wed Nov 2 20:18:50 2016 +0900)
 

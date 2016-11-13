@@ -33,3 +33,6 @@ matrix:
       gemfile: gemfiles/ruby_under_22.gemfile
     - rvm: jruby-9.0.5.0
       gemfile: gemfiles/ruby_under_22_with_rspec_2.gemfile
+    # Need to work out why jruby is failing with the default gemset, issue raised here: https://github.com/realestate-com-au/pact/issues/121
+    - rvm: jruby-9.0.5.0
+      gemfile: gemfiles/default.gemfile

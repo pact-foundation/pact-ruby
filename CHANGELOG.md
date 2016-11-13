@@ -2,6 +2,9 @@ Do this to generate your change history
 
   git log --pretty=format:'  * %h - %s (%an, %ad)' vX.Y.Z..HEAD
 
+## 1.10.0 (14 Nov 2016)
+* 1e8c0bc - Updating pact-support and pact-mock_service versions (Beth Skurrie, Mon Nov 14 10:16:38 2016 +1100)
+
 ## 1.9.6 (12 Nov 2016)
 * 63d4b81 - Fix bug in default interactions replay order (Yury Tsarev, Sat Nov 12 17:53:14 2016 +1100)
 

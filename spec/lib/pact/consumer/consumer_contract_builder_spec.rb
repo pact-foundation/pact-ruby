@@ -56,18 +56,9 @@ module Pact
           subject.handle_interaction_fully_defined interaction
         end
 
-        if defined?(Pact::InvalidInteractionError)
-          context "when interaction is not defined correctly" do
-            before { interaction_hash.delete(:description) }
-
-            it "raises Pact::InvalidInteractionError" do
-              expect {
-                subject.handle_interaction_fully_defined(interaction)
-              }.to(raise_error(Pact::InvalidInteractionError) do |e|
-                expect(e.message).to include("description")
-              end)
-            end
-          end
+        it "validates the interaction" do
+          expect(interaction).to receive(:validate!)
+          subject.handle_interaction_fully_defined(interaction)
         end
       end
 

@@ -53,7 +53,7 @@ module Pact
 
       # @raise Pact::InvalidInteractionError
       def handle_interaction_fully_defined interaction
-        interaction.validate! if interaction.respond_to?(:validate!)
+        interaction.validate!
         mock_service_client.add_expected_interaction interaction #TODO: What will happen if duplicate added?
         self.interaction_builder = nil
       end

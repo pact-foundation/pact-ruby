@@ -19,8 +19,7 @@ module Pact
           :pact_dir => pact_dir)
       end
 
-      describe "handle_interaction_fully_defined" do
-
+      describe "#handle_interaction_fully_defined" do
 
         let(:interaction_hash) {
           {
@@ -56,6 +55,20 @@ module Pact
           expect(subject).to receive(:interaction_builder=).with(nil)
           subject.handle_interaction_fully_defined interaction
         end
+
+        if defined?(Pact::InvalidInteractionError)
+          context "when interaction is not defined correctly" do
+            before { interaction_hash.delete(:description) }
+
+            it "raises Pact::InvalidInteractionError" do
+              expect {
+                subject.handle_interaction_fully_defined(interaction)
+              }.to(raise_error(Pact::InvalidInteractionError) do |e|
+                expect(e.message).to include("description")
+              end)
+            end
+          end
+        end
       end
 
       describe "#mock_service_base_url" do
@@ -73,7 +86,7 @@ module Pact
       	end
       end
 
-      describe "write_pact" do
+      describe "#write_pact" do
 
         let(:body) do
           {

@@ -12,11 +12,11 @@ module Pact
 
       subject do
         Pact::Consumer::ConsumerContractBuilder.new(
-          :consumer_name => consumer_name,
-          :provider_name => provider_name,
-          :pactfile_write_mode => :overwrite,
-          :port => 2222,
-          :pact_dir => pact_dir)
+          consumer_name: consumer_name,
+          provider_name: provider_name,
+          pactfile_write_mode: :overwrite,
+          port: 2222,
+          pact_dir: pact_dir)
       end
 
       describe "#handle_interaction_fully_defined" do
@@ -64,13 +64,15 @@ module Pact
 
       describe "#mock_service_base_url" do
 
-      	subject {
+      	subject do
       		ConsumerContractBuilder.new(
-      			:pactfile_write_mode => :overwrite,
-            :pact_dir => './spec/pacts',
-            :consumer_name => consumer_name,
-            :provider_name => provider_name,
-        		:port => 1234) }
+      			pactfile_write_mode: :overwrite,
+            pact_dir: './spec/pacts',
+            consumer_name: consumer_name,
+            provider_name: provider_name,
+        		port: 1234
+          )
+        end
 
       	it "returns the mock service base URL" do
       		expect(subject.mock_service_base_url).to eq("http://localhost:1234")

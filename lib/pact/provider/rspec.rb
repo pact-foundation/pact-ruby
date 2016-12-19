@@ -23,13 +23,13 @@ module Pact
           puts "Reading pact at #{pact_uri}"
           puts "Filtering interactions by: #{options[:criteria]}" if options[:criteria] && options[:criteria].any?
           consumer_contract = Pact::ConsumerContract.from_json(pact_json)
-          ::RSpec.describe "Verifying a pact between #{consumer_contract.consumer.name} and #{consumer_contract.provider.name}", :pactfile_uri => pact_uri do
+          ::RSpec.describe "Verifying a pact between #{consumer_contract.consumer.name} and #{consumer_contract.provider.name}", pactfile_uri: pact_uri do
             honour_consumer_contract consumer_contract, options.merge(pact_json: pact_json)
           end
         end
 
         def honour_consumer_contract consumer_contract, options = {}
-          describe_consumer_contract consumer_contract, options.merge(:consumer => consumer_contract.consumer.name)
+          describe_consumer_contract consumer_contract, options.merge(consumer: consumer_contract.consumer.name)
         end
 
         private
@@ -61,10 +61,10 @@ module Pact
         def describe_interaction interaction, options
 
           metadata = {
-            :pact => :verify,
-            :pact_interaction => interaction,
-            :pact_interaction_example_description => interaction_description_for_rerun_command(interaction),
-            :pact_json => options[:pact_json]
+            pact: :verify,
+            pact_interaction: interaction,
+            pact_interaction_example_description: interaction_description_for_rerun_command(interaction),
+            pact_json: options[:pact_json]
           }
 
           describe description_for(interaction), metadata do

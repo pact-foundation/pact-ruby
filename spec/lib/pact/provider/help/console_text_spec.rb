@@ -8,7 +8,7 @@ module Pact
       describe ConsoleText do
 
         describe ".call" do
-          let(:help_path) { File.join(reports_dir, Write::HELP_FILE_NAME)}
+          let(:help_path) { File.join(reports_dir, Write::HELP_FILE_NAME) }
           let(:reports_dir) { "./tmp/reports/pacts" }
           let(:color) { false }
 

@@ -18,8 +18,9 @@ module Pact
                 app 'blah'
               end
             end
+
             it "raises an error" do
-              expect{ subject }.to raise_error /wrong number of arguments/
+              expect { subject }.to raise_error /wrong number of arguments/
             end
           end
 
@@ -32,18 +33,21 @@ module Pact
                 app { Object.new }
               end
             end
+
             it "raises an error" do
-              expect{ subject.send(:validate)}.to raise_error("Please provide a name for the Provider")
+              expect { subject.send(:validate) }.to raise_error("Please provide a name for the Provider")
             end
           end
+
           context "when nil name is provided" do
             subject do
               ServiceProviderDSL.new nil do
                 app { Object.new }
               end
             end
+
             it "raises an error" do
-              expect{ subject.send(:validate)}.to raise_error("Please provide a name for the Provider")
+              expect { subject.send(:validate) }.to raise_error("Please provide a name for the Provider")
             end
           end
         end
@@ -52,7 +56,7 @@ module Pact
           before do
             Pact.clear_provider_world
           end
-          let(:pact_url) { 'blah'}
+          let(:pact_url) { 'blah' }
 
           context "with no optional params" do
             subject do
@@ -63,10 +67,12 @@ module Pact
                 end
               end
             end
+
             it 'adds a verification to the Pact.provider_world' do
               subject
               pact_uri = Pact::Provider::PactURI.new(pact_url)
-              expect(Pact.provider_world.pact_verifications.first).to eq(Pact::Provider::PactVerification.new('some-consumer', pact_uri, :head))
+              expect(Pact.provider_world.pact_verifications.first)
+                .to eq(Pact::Provider::PactVerification.new('some-consumer', pact_uri, :head))
             end
           end
 
@@ -80,15 +86,17 @@ module Pact
             subject do
               ServiceProviderDSL.build 'some-provider' do
                 app {}
-                honours_pact_with 'some-consumer', :ref => :prod do
+                honours_pact_with 'some-consumer', ref: :prod do
                   pact_uri pact_url, pact_uri_options
                 end
               end
             end
+
             it 'adds a verification to the Pact.provider_world' do
               subject
               pact_uri = Pact::Provider::PactURI.new(pact_url, pact_uri_options)
-              expect(Pact.provider_world.pact_verifications.first).to eq(Pact::Provider::PactVerification.new('some-consumer', pact_uri , :prod))
+              expect(Pact.provider_world.pact_verifications.first)
+                .to eq(Pact::Provider::PactVerification.new('some-consumer', pact_uri , :prod))
             end
 
           end
@@ -105,7 +113,8 @@ module Pact
             end
 
             it "raises an error with some helpful text" do
-              expect{ ServiceProviderDSL::CONFIG_RU_APP.call }.to raise_error /Could not find config\.ru file.*#{Regexp.escape(path_that_does_not_exist)}/
+              expect { ServiceProviderDSL::CONFIG_RU_APP.call }
+                .to raise_error /Could not find config\.ru file.*#{Regexp.escape(path_that_does_not_exist)}/
             end
 
           end
@@ -115,4 +124,3 @@ module Pact
     end
   end
 end
-

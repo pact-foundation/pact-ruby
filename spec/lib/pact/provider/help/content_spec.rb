@@ -7,8 +7,8 @@ module Pact
 
         describe "#text" do
 
-          let(:pact_1_json) { {some: 'json'}.to_json }
-          let(:pact_2_json) { {some: 'other json'}.to_json }
+          let(:pact_1_json) { { some: 'json'}.to_json }
+          let(:pact_2_json) { { some: 'other json'}.to_json }
           let(:pact_jsons) { [pact_1_json, pact_2_json] }
 
           before do

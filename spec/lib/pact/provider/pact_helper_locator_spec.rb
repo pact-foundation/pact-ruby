@@ -25,7 +25,7 @@ module Pact::Provider
         ''
       ]
 
-      PACT_HELPER_FILE_DIRS.each do | dir |
+      PACT_HELPER_FILE_DIRS.each do |dir|
         context "the pact_helper is stored in #{dir}" do
           it "finds the pact_helper" do
             make_pactfile dir

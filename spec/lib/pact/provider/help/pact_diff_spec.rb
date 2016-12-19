@@ -24,8 +24,8 @@ module Pact
         describe ".call" do
 
           before do
-            stub_request(:get, "http://pact-broker/diff").
-              to_return(:status => 200, :body => diff, :headers => {})
+            stub_request(:get, "http://pact-broker/diff")
+              .to_return(status: 200, body: diff, headers: {})
           end
 
           subject { PactDiff.(pact_json) }
@@ -90,6 +90,7 @@ module Pact
               subject
               expect(output).to include("The following changes")
             end
+
             it "returns the diff" do
               subject
               expect(output).to include('some')
@@ -99,8 +100,8 @@ module Pact
 
           context "when the diff resource doesn't exist" do
             before do
-              stub_request(:get, "http://pact-broker/diff").
-                to_return(:status => 404)
+              stub_request(:get, "http://pact-broker/diff")
+                .to_return(status: 404)
             end
 
             it "returns a warning" do
@@ -111,9 +112,8 @@ module Pact
 
           context "when a redirect is received" do
             before do
-              stub_request(:get, "http://pact-broker/diff").
-                to_return(:status => 301, :body => diff, :headers => {})
-
+              stub_request(:get, "http://pact-broker/diff")
+                .to_return(status: 301, body: diff, headers: {})
             end
 
             xit "follows the redirect" do

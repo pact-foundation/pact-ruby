@@ -7,7 +7,7 @@ module Pact
       describe PactVerification do
 
         describe 'create_verification' do
-          let(:url) {'http://some/uri'}
+          let(:url) { 'http://some/uri' }
           let(:pact_repository_uri_options) do
             {
               username: 'pact_broker_username',
@@ -15,8 +15,9 @@ module Pact
             }
           end
           let(:consumer_name) {'some consumer'}
-          let(:ref) {:prod}
-          let(:options) { {:ref => :prod} }
+          let(:ref) { :prod }
+          let(:options) { { ref: :prod } }
+
           context "with valid values" do
             subject do
               uri = url
@@ -40,7 +41,7 @@ module Pact
             end
 
             it "raises a validation error" do
-              expect{ subject }.to raise_error /Please provide a pact_uri/
+              expect { subject }.to raise_error /Please provide a pact_uri/
             end
           end
         end

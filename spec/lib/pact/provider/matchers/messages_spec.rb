@@ -41,7 +41,7 @@ module Pact
 
         context "when the actual is not a string" do
 
-          let(:actual) { {the: "actual"} }
+          let(:actual) { { the: "actual" } }
 
           it "includes the actual as json" do
             expect(subject).to include(actual.to_json)

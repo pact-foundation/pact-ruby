@@ -10,10 +10,11 @@ describe "A service consumer side of a pact", :pact => true  do
   # Helper to make Faraday requests.
   # Faraday::FlatParamsEncoder may only be needed with our current version of Faraday 0.9
   # and ensures that when there are multiple parameters of the same name, they are encoded properly. e.g. colour=blue&colour=green
-  def faraday_mallory(base_url,params, headers = {})
-    (Faraday.new base_url, :request => {
-       :params_encoder => Faraday::FlatParamsEncoder,
-    }).get '/mallory', params, {'Accept' => 'application/json'}.merge(headers)
+  def faraday_mallory(base_url, params, headers = {})
+    Faraday.new(
+      base_url,
+      request: { params_encoder: Faraday::FlatParamsEncoder }
+    ).get '/mallory', params, { 'Accept' => 'application/json' }.merge(headers)
   end
 
   let(:body) { 'That is some good Mallory.' }
@@ -35,24 +36,24 @@ describe "A service consumer side of a pact", :pact => true  do
 
     before do
 
-      zebra_service2.
-        given(:the_zebras_are_here).
-        upon_receiving("a retrieve Mallory request").with({
+      zebra_service2
+        .given(:the_zebras_are_here)
+        .upon_receiving("a retrieve Mallory request")
+        .with(
           method: :get,
           path: '/mallory',
-          headers: {'Accept' => 'application/json'},
-          query: {colour: 'brown', size: ['small', 'large']}
-        }).
-        will_respond_with({
+          headers: { 'Accept' => 'application/json' },
+          query: { colour: 'brown', size: ['small', 'large'] }
+        )
+        .will_respond_with(
           status: 200,
           headers: { 'Content-Type' => 'application/json' },
           body: term(/Mallory/, body)
-      })
-
+        )
     end
 
     it "matches when all instances are provided" do
-      response= faraday_mallory(zebra_service2.mock_service_base_url, { size: ['small','large'], colour: 'brown'})
+      response = faraday_mallory(zebra_service2.mock_service_base_url, size: ['small', 'large'], colour: 'brown')
       expect(response.body).to eq body
 
       interactions = Pact::ConsumerContract.from_json(zebra_service2.write_pact).interactions
@@ -60,17 +61,17 @@ describe "A service consumer side of a pact", :pact => true  do
     end
 
     it "does not match when only the first instance is provided" do
-      response = Faraday.get(zebra_service2.mock_service_base_url + "/mallory?colour=brown&size=small", nil, {'Accept' => 'application/json'})
+      response = Faraday.get(zebra_service2.mock_service_base_url + "/mallory?colour=brown&size=small", nil, 'Accept' => 'application/json')
       expect(response.body).not_to eq body
     end
 
     it "does not match when only the last instance is provided" do
-      response = Faraday.get(zebra_service2.mock_service_base_url + "/mallory?colour=brown&size=large", nil, {'Accept' => 'application/json'})
+      response = Faraday.get(zebra_service2.mock_service_base_url + "/mallory?colour=brown&size=large", nil, 'Accept' => 'application/json')
       expect(response.body).not_to eq body
     end
 
     it "does not match when they are out of order" do
-      response= faraday_mallory(zebra_service2.mock_service_base_url, { size: ['large','small'], colour: 'brown'})
+      response = faraday_mallory(zebra_service2.mock_service_base_url, size: ['large', 'small'], colour: 'brown')
       expect(response.body).not_to eq body
     end
   end
@@ -96,8 +97,8 @@ describe "A service consumer side of a pact", :pact => true  do
         with({
            method: :get,
            path: '/mallory',
-           headers: {'Accept' => 'application/json', 'Content-Type' => 'application/x-www-form-urlencoded'},
-           query: { size: ['small',term(/med.*/, 'medium'),'large'], colour: 'brown', weight: '5'}
+           headers: { 'Accept' => 'application/json', 'Content-Type' => 'application/x-www-form-urlencoded' },
+           query: { size: ['small', term(/med.*/, 'medium'), 'large'], colour: 'brown', weight: '5' }
         }).
         will_respond_with({
           status: 200,
@@ -109,8 +110,8 @@ describe "A service consumer side of a pact", :pact => true  do
     let(:response) do
       faraday_mallory(
         zebra_service.mock_service_base_url,
-        { weight: 5, size: ['small','medium','large'], colour: 'brown'},
-        {'Content-Type' => 'application/x-www-form-urlencoded'}
+        { weight: 5, size: ['small','medium','large'], colour: 'brown' },
+        { 'Content-Type' => 'application/x-www-form-urlencoded' }
       )
     end
 

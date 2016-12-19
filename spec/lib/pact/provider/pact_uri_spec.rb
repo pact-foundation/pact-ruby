@@ -1,10 +1,10 @@
 describe Pact::Provider::PactURI do
-  let(:uri) { 'http://uri'}
-  let(:username) { 'pact'}
-  let(:options) { {username: username}}
-  let(:pact_uri) { Pact::Provider::PactURI.new(uri, options)}
-  describe '#==' do
+  let(:uri) { 'http://uri' }
+  let(:username) { 'pact' }
+  let(:options) { { username: username } }
+  let(:pact_uri) { Pact::Provider::PactURI.new(uri, options) }
 
+  describe '#==' do
     it 'should return false if object is not PactURI' do
       expect(pact_uri == Object.new).to be false
     end
@@ -14,7 +14,7 @@ describe Pact::Provider::PactURI do
     end
 
     it 'should return false if uri options are not equal' do
-      expect(pact_uri == Pact::Provider::PactURI.new(uri, {username: 'wrong user'})).to be false
+      expect(pact_uri == Pact::Provider::PactURI.new(uri, username: 'wrong user')).to be false
     end
 
     it 'should return true if uri and options are equal' do
@@ -25,7 +25,8 @@ describe Pact::Provider::PactURI do
   describe '#to_s' do
     context 'with userinfo provided' do
       let(:password) { 'my_password' }
-      let(:options) { {username: username, password: password}}
+      let(:options) { { username: username, password: password } }
+
       it 'should include user name and password' do
         expect(pact_uri.to_s).to eq('http://pact:*****@uri')
       end
@@ -33,6 +34,7 @@ describe Pact::Provider::PactURI do
 
     context 'without userinfo' do
       let(:options) { {} }
+
       it 'should return original uri string' do
         expect(pact_uri.to_s).to eq(uri)
       end

@@ -13,7 +13,6 @@ module Pact
 
       describe 'global ProviderState' do
 
-
         Pact.provider_state :no_alligators do
           set_up do
             MESSAGES << 'set_up'
@@ -26,7 +25,6 @@ module Pact
         Pact.provider_state 'some alligators' do
           no_op
         end
-
 
         subject { ProviderStates.get('no_alligators') }
 
@@ -50,6 +48,7 @@ module Pact
               expect(ProviderStates.get('no_alligators')).to_not be_nil
             end
           end
+
           context 'when the name is a matching string' do
             it 'will return the ProviderState' do
               expect(ProviderStates.get('some alligators')).to_not be_nil
@@ -68,6 +67,7 @@ module Pact
             ProviderStates.get('with_no_op').tear_down
           end
         end
+
         context "when a no_op is defined with a set_up" do
           it "raises an error" do
             expect do
@@ -80,6 +80,7 @@ module Pact
             end
           end
         end
+
         context "when a no_op is defined with a tear_down" do
           it "raises an error" do
             expect do
@@ -94,7 +95,6 @@ module Pact
         end
 
       end
-
 
       describe 'namespaced ProviderStates' do
 
@@ -121,11 +121,11 @@ module Pact
         describe '.get' do
           context 'for a consumer' do
             it 'has a namespaced name' do
-              expect(ProviderStates.get('the weather is sunny', :for => 'a consumer')).to_not be_nil
+              expect(ProviderStates.get('the weather is sunny', for: 'a consumer')).to_not be_nil
             end
 
             it 'falls back to a global state of the same name if one is not found for the specified consumer' do
-              expect(ProviderStates.get('the weather is cloudy', :for => 'a consumer')).to_not be_nil
+              expect(ProviderStates.get('the weather is cloudy', for: 'a consumer')).to_not be_nil
             end
           end
 
@@ -134,7 +134,7 @@ module Pact
         describe 'set_up' do
           context 'for a consumer' do
             it 'runs its own setup' do
-              ProviderStates.get('the weather is sunny', :for => 'a consumer').set_up
+              ProviderStates.get('the weather is sunny', for: 'a consumer').set_up
               expect(NAMESPACED_MESSAGES).to eq ['sunny!']
             end
           end
@@ -150,15 +150,15 @@ module Pact
 
         context "when the base state has been declared" do
           it "creates a base state for the provider" do
-            ProviderStates.get_base(:for => "a consumer with base state").set_up
+            ProviderStates.get_base(for: "a consumer with base state").set_up
             expect(MESSAGES).to eq ["setting up base provider state"]
           end
         end
 
         context "when a base state has not been declared" do
           it "returns a no op state" do
-            ProviderStates.get_base(:for => "a consumer that does not exist").set_up
-            ProviderStates.get_base(:for => "a consumer that does not exist").tear_down
+            ProviderStates.get_base(for: "a consumer that does not exist").set_up
+            ProviderStates.get_base(for: "a consumer that does not exist").tear_down
           end
         end
 
@@ -172,7 +172,7 @@ module Pact
         end
 
         it "creates a base state for the provider" do
-          ProviderStates.get_base(:for => "a consumer with base state with only a tear down").tear_down
+          ProviderStates.get_base(for: "a consumer with base state with only a tear down").tear_down
           expect(MESSAGES).to eq ["tearing down without a set up"]
         end
       end
@@ -210,6 +210,7 @@ module Pact
             end.to raise_error(/Please provide a set_up or tear_down block for provider state \"invalid\"/)
           end
         end
+
         context "when a no_op is defined" do
           it "does not raise an error" do
             expect do

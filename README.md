@@ -8,7 +8,7 @@ This allows testing of both sides of an integration point using fast unit tests.
 
 This gem is inspired by the concept of "Consumer driven contracts". See [this article](http://martinfowler.com/articles/consumerDrivenContracts.html) by Ian Robinson for more information.
 
-Travis CI Status: [![travis-ci.org Build Status](https://travis-ci.org/realestate-com-au/pact.png)](https://travis-ci.org/realestate-com-au/pact)
+Travis CI Status: [![travis-ci.org Build Status](https://travis-ci.org/realestate-com-au/pact.svg)](https://travis-ci.org/realestate-com-au/pact)
 
 ## What is it good for?
 

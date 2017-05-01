@@ -26,6 +26,7 @@ module Pact
 
 		Pact.service_provider "Some Provider" do
 			app { TestApp.new }
+			app_version '1.2.3'
 
 			honours_pact_with 'some-test-consumer' do
 				pact_uri './spec/support/test_app_pass.json'

@@ -9,6 +9,8 @@ module Pact
 
       module ConfigurationExtension
 
+        attr_accessor :provider_application_version
+
         def provider= provider
           @provider = provider
         end

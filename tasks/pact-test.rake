@@ -17,6 +17,10 @@ Pact::VerificationTask.new(:fail) do | pact |
 	pact.uri './spec/support/test_app_fail.json'
 end
 
+Pact::VerificationTask.new(:using_broker) do | pact |
+	pact.uri 'http://127.0.0.1:9292/pacts/provider/Bar/consumer/Foo/latest'
+end
+
 Pact::VerificationTask.new(:term) do | pact |
 	pact.uri './spec/support/term.json'
 end

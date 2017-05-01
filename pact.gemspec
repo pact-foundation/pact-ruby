@@ -24,7 +24,7 @@ Gem::Specification.new do |gem|
   gem.add_runtime_dependency 'rspec', '>=2.14'
   gem.add_runtime_dependency 'rack-test', '~> 0.6.2'
   gem.add_runtime_dependency 'thor'
-  gem.add_runtime_dependency 'json' #Not locking down a version because buncher gem requires 1.6, while other projects use 1.7.
+  gem.add_runtime_dependency 'json','> 1.8.5'
   gem.add_runtime_dependency 'webrick'
   gem.add_runtime_dependency 'term-ansicolor', '~> 1.0'
 
@@ -32,7 +32,7 @@ Gem::Specification.new do |gem|
   gem.add_runtime_dependency 'pact-mock_service', '~> 1.2'
 
   gem.add_development_dependency 'rake', '~> 10.0.3'
-  gem.add_development_dependency 'webmock', '~> 1.18.0'
+  gem.add_development_dependency 'webmock', '~> 3.0'
   gem.add_development_dependency 'pry'
   gem.add_development_dependency 'fakefs', '0.5' # 0.6.0 blows up
   gem.add_development_dependency 'hashie', '~> 2.0'

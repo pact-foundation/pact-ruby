@@ -9,7 +9,7 @@ module Pact
           let(:pact_source) { instance_double("Pact::Provider::PactSource", pact_hash: pact_hash, uri: pact_url)}
           let(:pact_url) { instance_double("Pact::Provider::PactURI", basic_auth?: basic_auth, username: 'username', password: 'password')}
           let(:basic_auth) { false }
-          let(:pact_hash) { {'consumer' => {'name' => 'Foo'}, '_links' => {'pb:publish-verification'=> {'href' => publish_verification_url}}} }
+          let(:pact_hash) { {'consumer' => {'name' => 'Foo'}, '_links' => {'pb:publish-verification-result'=> {'href' => publish_verification_url}}} }
           let(:app_version_set) { false }
           let(:verification_json) { '{"foo": "bar"}' }
           let(:publish_verification_results) { false }

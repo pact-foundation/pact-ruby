@@ -23,7 +23,7 @@ module Pact
             if publication_url
               publish
             else
-              puts "WARNING: Cannot publish verification for #{consumer_name} as there is no link named pb:publish-verification in the pact JSON. If you are using a pact broker, please upgrade to version 2.0.0 or later."
+              puts "WARNING: Cannot publish verification for #{consumer_name} as there is no link named pb:publish-verification-result in the pact JSON. If you are using a pact broker, please upgrade to version 2.0.0 or later."
             end
           end
         end
@@ -31,7 +31,7 @@ module Pact
         private
 
         def publication_url
-          @publication_url ||= pact_source.pact_hash.fetch('_links', {}).fetch('pb:publish-verification', {})['href']
+          @publication_url ||= pact_source.pact_hash.fetch('_links', {}).fetch('pb:publish-verification-result', {})['href']
         end
 
         def publish
@@ -63,7 +63,7 @@ module Pact
             request.basic_auth pact_source.uri.username, pact_source.uri.password
             debug_uri = URI(uri.to_s).tap { |x| x.userinfo="#{pact_source.uri.username}:*****"}
           end
-          puts "Publishing verification #{verification_result.to_json} to #{debug_uri}"
+          puts "Publishing verification result #{verification_result.to_json} to #{debug_uri}"
           request
         end
 

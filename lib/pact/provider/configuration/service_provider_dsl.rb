@@ -11,7 +11,7 @@ module Pact
 
         extend Pact::DSL
 
-        attr_accessor :name, :app_block, :application_version, :auto_publish_verifications
+        attr_accessor :name, :app_block, :application_version, :publish_verifications
 
         CONFIG_RU_APP = lambda {
           unless File.exist? Pact.configuration.config_ru_path
@@ -22,7 +22,7 @@ module Pact
 
         def initialize name
           @name = name
-          @auto_publish_verifications = false
+          @publish_verifications = false
           @app_block = CONFIG_RU_APP
         end
 
@@ -35,8 +35,8 @@ module Pact
             self.application_version = application_version
           end
 
-          def auto_publish_verifications auto_publish_verifications
-            self.auto_publish_verifications = auto_publish_verifications
+          def publish_verifications publish_verifications
+            self.publish_verifications = publish_verifications
           end
 
           def honours_pact_with consumer_name, options = {}, &block
@@ -60,7 +60,7 @@ module Pact
         end
 
         def create_service_provider
-          Pact.configuration.provider = ServiceProviderConfig.new(application_version, auto_publish_verifications, &@app_block)
+          Pact.configuration.provider = ServiceProviderConfig.new(application_version, publish_verifications, &@app_block)
         end
       end
     end

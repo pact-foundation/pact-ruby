@@ -17,10 +17,10 @@ Pact.service_provider "Foo" do
   app_version "1.2.#\{ENV.fetch('BUILD_NUMBER', 'dev')\}"
 end
 
-Alternatively, disable auto_publish_verifications by setting `auto_publish_verifications false`.
+Alternatively, disable publish_verifications by setting `publish_verifications false`.
 
 Pact.service_provider "Foo" do
-  auto_publish_verifications false
+  publish_verifications false
 end
 
 EOM
@@ -35,11 +35,15 @@ EOM
         end
 
         def call
-          if Pact.configuration.provider.auto_publish_verifications? && publication_url
-            if verification.provider_application_version_set?
-              publish
+          if Pact.configuration.provider.publish_verifications?
+            if publication_url
+              if verification.provider_application_version_set?
+                publish
+              else
+                raise PublicationError.new(CANNOT_PUBLISH_VERIFICATION_ERROR_MESSAGE)
+              end
             else
-              raise PublicationError.new(CANNOT_PUBLISH_VERIFICATION_ERROR_MESSAGE)
+              puts "WARNING: Cannot publish verification for #{consumer_name} as there is no link named pb:publish-verification in the pact JSON. If you are using a pact broker, please upgrade to version 2.0.0 or later."
             end
           end
         end
@@ -81,6 +85,10 @@ EOM
           end
           puts "Publishing verification #{verification.to_json} to #{debug_uri}"
           request
+        end
+
+        def consumer_name
+          pact_source.pact_hash['consumer']['name']
         end
 
         attr_reader :pact_source, :verification

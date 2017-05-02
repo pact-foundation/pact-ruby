@@ -9,10 +9,10 @@ module Pact
           let(:pact_source) { instance_double("Pact::Provider::PactSource", pact_hash: pact_hash, uri: pact_url)}
           let(:pact_url) { instance_double("Pact::Provider::PactURI", basic_auth?: basic_auth, username: 'username', password: 'password')}
           let(:basic_auth) { false }
-          let(:pact_hash) { {'_links' => {'pb:publish-verification'=> {'href' => publish_verification_url}}} }
+          let(:pact_hash) { {'consumer' => {'name' => 'Foo'}, '_links' => {'pb:publish-verification'=> {'href' => publish_verification_url}}} }
           let(:app_version_set) { false }
           let(:verification_json) { '{"foo": "bar"}' }
-          let(:auto_publish_verifications) { false }
+          let(:publish_verifications) { false }
           let(:verification) do
             instance_double("Pact::Verifications::Verification",
               to_json: verification_json,
@@ -21,7 +21,7 @@ module Pact
           end
 
           let(:provider_configuration) do
-            double('provider config', auto_publish_verifications?: auto_publish_verifications)
+            double('provider config', publish_verifications?: publish_verifications)
           end
 
           before do
@@ -32,20 +32,25 @@ module Pact
 
           subject { Publish.call(pact_source, verification)}
 
-          context "when auto_publish_verifications is false" do
+          context "when publish_verifications is false" do
             it "does not publish the verification" do
               subject
               expect(WebMock).to_not have_requested(:post, 'http://broker/verifications')
             end
           end
 
-          context "when auto_publish_verifications is true" do
-            let(:auto_publish_verifications) { true }
+          context "when publish_verifications is true" do
+            let(:publish_verifications) { true }
 
             context "when the publish-verification link is not present" do
               it "does not publish the verification" do
                 subject
                 expect(WebMock).to_not have_requested(:post, 'http://broker/verifications')
+              end
+
+              it "outputs a warning" do
+                subject
+                expect($stdout).to have_received(:puts).with(/WARNING.*Foo.*no link/)
               end
             end
 

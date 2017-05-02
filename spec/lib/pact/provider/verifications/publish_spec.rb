@@ -6,7 +6,10 @@ module Pact
       describe Publish do
         describe "call" do
           let(:publish_verification_url) { nil }
-          let(:pact_json) { {_links: {'pb:publish-verification': {href: publish_verification_url}}}.to_json }
+          let(:pact_source) { instance_double("Pact::Provider::PactSource", pact_hash: pact_hash, uri: pact_url)}
+          let(:pact_url) { instance_double("Pact::Provider::PactURI", basic_auth?: basic_auth, username: 'username', password: 'password')}
+          let(:basic_auth) { false }
+          let(:pact_hash) { {'_links' => {'pb:publish-verification'=> {'href' => publish_verification_url}}} }
           let(:app_version_set) { false }
           let(:verification_json) { '{"foo": "bar"}' }
           let(:auto_publish_verifications) { false }
@@ -27,7 +30,7 @@ module Pact
             stub_request(:post, 'http://broker/verifications')
           end
 
-          subject { Publish.call(pact_json, verification)}
+          subject { Publish.call(pact_source, verification)}
 
           context "when auto_publish_verifications is false" do
             it "does not publish the verification" do
@@ -61,6 +64,14 @@ module Pact
                 it "publishes the verification" do
                   subject
                   expect(WebMock).to have_requested(:post, publish_verification_url).with(body: verification_json, headers: {'Content-Type' => 'application/json'})
+                end
+
+                context "when basic auth is configured on the pact URL" do
+                  let(:basic_auth) { true }
+                  it "sets the username and password for the pubication URL" do
+                    subject
+                    expect(WebMock).to have_requested(:post, publish_verification_url).with(basic_auth: ['username', 'password'])
+                  end
                 end
 
                 context "when an HTTP error is returned" do

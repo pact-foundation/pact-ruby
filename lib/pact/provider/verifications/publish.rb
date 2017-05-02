@@ -25,12 +25,12 @@ end
 
 EOM
 
-        def self.call pact_json, verification
-          new(pact_json, verification).call
+        def self.call pact_source, verification
+          new(pact_source, verification).call
         end
 
-        def initialize pact_json, verification
-          @pact_json = pact_json
+        def initialize pact_source, verification
+          @pact_source = pact_source
           @verification = verification
         end
 
@@ -46,26 +46,15 @@ EOM
 
         private
 
-        def pact_hash
-          @pact_hash ||= json_load(pact_json)
-        end
-
-        def json_load json
-          JSON.load(json, nil, { max_nesting: 50 })
-        end
-
         def publication_url
-          @publication_url ||= pact_hash.fetch('_links', {}).fetch('pb:publish-verification', {})['href']
+          @publication_url ||= pact_source.pact_hash.fetch('_links', {}).fetch('pb:publish-verification', {})['href']
         end
 
         def publish
           #TODO https
           #TODO username/password
-          puts "Publishing verification #{verification.to_json} to #{publication_url}"
           uri = URI(publication_url)
-          request = Net::HTTP::Post.new(uri.path)
-          request['Content-Type'] = "application/json"
-          request.body = verification.to_json
+          request = build_request(uri)
           response = nil
           begin
             response = Net::HTTP.start(uri.host, uri.port) do |http|
@@ -81,7 +70,20 @@ EOM
           end
         end
 
-        attr_reader :pact_json, :verification
+        def build_request uri
+          request = Net::HTTP::Post.new(uri.path)
+          request['Content-Type'] = "application/json"
+          request.body = verification.to_json
+          debug_uri = uri
+          if pact_source.uri.basic_auth?
+            request.basic_auth pact_source.uri.username, pact_source.uri.password
+            debug_uri = URI(uri.to_s).tap { |x| x.userinfo="#{pact_source.uri.username}:*****"}
+          end
+          puts "Publishing verification #{verification.to_json} to #{debug_uri}"
+          request
+        end
+
+        attr_reader :pact_source, :verification
       end
     end
   end

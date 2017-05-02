@@ -6,12 +6,12 @@ module Pact
     module Verifications
       class PublishAll
 
-        def self.call pact_jsons, rspec_summary
-          new(pact_jsons, rspec_summary).call
+        def self.call pact_sources, rspec_summary
+          new(pact_sources, rspec_summary).call
         end
 
-        def initialize pact_jsons, rspec_summary
-          @pact_jsons = pact_jsons
+        def initialize pact_sources, rspec_summary
+          @pact_sources = pact_sources
           @rspec_summary = rspec_summary
         end
 
@@ -24,12 +24,12 @@ module Pact
         private
 
         def verifications
-          pact_jsons.collect do | pact_json |
-            [pact_json, Create.call(pact_json, rspec_summary)]
+          pact_sources.collect do | pact_source |
+            [pact_source, Create.call(pact_source.pact_json, rspec_summary)]
           end
         end
 
-        attr_reader :pact_jsons, :rspec_summary
+        attr_reader :pact_sources, :rspec_summary
       end
     end
   end

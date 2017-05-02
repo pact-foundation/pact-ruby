@@ -1,6 +1,6 @@
 require 'pact/consumer_contract/pact_file'
 
-module PactBroker
+module Pact
   module Provider
     class PactSource
 
@@ -14,6 +14,9 @@ module PactBroker
         @pact_json ||= Pact::PactFile.read(uri.uri, uri.options)
       end
 
+      def pact_hash
+        @pact_hash ||= JSON.load(pact_json, nil, { max_nesting: 50 })
+      end
     end
   end
 end

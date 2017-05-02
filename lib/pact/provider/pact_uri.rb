@@ -14,13 +14,24 @@ module Pact
           options == other.options
       end
 
+      def basic_auth?
+        !!username
+      end
+
+      def username
+        options[:username]
+      end
+
+      def password
+        options[:password]
+      end
+
       def to_s
-        if(options[:username])
-          URI(@uri).tap { |x| x.userinfo="#{options[:username]}:*****"}.to_s
+        if(basic_auth?)
+          URI(@uri).tap { |x| x.userinfo="#{username}:*****"}.to_s
         else
           @uri
         end
-
       end
     end
   end

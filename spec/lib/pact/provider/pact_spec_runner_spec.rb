@@ -45,7 +45,7 @@ describe Pact::Provider::PactSpecRunner do
       allow(subject).to receive(:configure_rspec)
       allow(subject).to receive(:run_specs)
 
-      expect(PactBroker::Provider::PactSource).to receive(:new).with(pact_url).and_return(pact_source)
+      expect(Pact::Provider::PactSource).to receive(:new).with(pact_url).and_return(pact_source)
     end
 
     context 'with multiple interactions' do

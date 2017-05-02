@@ -78,10 +78,11 @@ module Pact
         end
 
         jsons = pact_jsons
+        sources = pact_sources
 
         config.after(:suite) do | suite |
           Pact::Provider::Help::Write.call(jsons)
-          Pact::Provider::Verifications::PublishAll.call(jsons, suite)
+          Pact::Provider::Verifications::PublishAll.call(sources, suite)
         end
 
       end
@@ -109,7 +110,7 @@ module Pact
       def pact_sources
         @pact_sources ||= begin
           pact_urls.collect do | pact_url |
-            PactBroker::Provider::PactSource.new(pact_url)
+            Pact::Provider::PactSource.new(pact_url)
           end
         end
       end

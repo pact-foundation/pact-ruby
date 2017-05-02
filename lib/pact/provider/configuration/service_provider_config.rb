@@ -5,9 +5,9 @@ module Pact
 
         attr_accessor :application_version
 
-        def initialize application_version, publish_verifications, &app_block
+        def initialize application_version, publish_verification_results, &app_block
           @application_version = application_version
-          @publish_verifications = publish_verifications
+          @publish_verification_results = publish_verification_results
           @app_block = app_block
         end
 
@@ -15,8 +15,8 @@ module Pact
           @app_block.call
         end
 
-        def publish_verifications?
-          @publish_verifications
+        def publish_verification_results?
+          @publish_verification_results
         end
       end
     end

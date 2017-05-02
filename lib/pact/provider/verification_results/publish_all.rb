@@ -1,9 +1,9 @@
-require'pact/provider/verifications/create'
-require'pact/provider/verifications/publish'
+require'pact/provider/verification_results/create'
+require'pact/provider/verification_results/publish'
 
 module Pact
   module Provider
-    module Verifications
+    module VerificationResults
       class PublishAll
 
         def self.call pact_sources, rspec_summary
@@ -16,14 +16,14 @@ module Pact
         end
 
         def call
-          verifications.collect do | pair |
+          verification_results.collect do | pair |
             Publish.call(pair.first, pair.last)
           end
         end
 
         private
 
-        def verifications
+        def verification_results
           pact_sources.collect do | pact_source |
             [pact_source, Create.call(pact_source.pact_json, rspec_summary)]
           end

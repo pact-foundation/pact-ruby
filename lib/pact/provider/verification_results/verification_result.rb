@@ -1,7 +1,7 @@
 module Pact
   module Provider
-    module Verifications
-      class Verification
+    module VerificationResults
+      class VerificationResult
 
         def initialize success, provider_application_version
           @success = success

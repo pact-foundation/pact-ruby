@@ -51,16 +51,16 @@ module Pact
             end
           end
 
-          context "when publish_verifications is true" do
+          context "when publish_verification_results is true" do
             context "when no application version is provided" do
               subject do
                 ServiceProviderDSL.build "name" do
-                  publish_verifications true
+                  publish_verification_results true
                 end
               end
 
               it "raises an error" do
-                expect { subject.send(:validate) }.to raise_error(Pact::Provider::Configuration::Error, "Please set the app_version when publish_verifications is true")
+                expect { subject.send(:validate) }.to raise_error(Pact::Provider::Configuration::Error, "Please set the app_version when publish_verification_results is true")
               end
             end
 
@@ -68,7 +68,7 @@ module Pact
               subject do
                 ServiceProviderDSL.build "name" do
                   app_version "1.2.3"
-                  publish_verifications true
+                  publish_verification_results true
                 end
               end
 

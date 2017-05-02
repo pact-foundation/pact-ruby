@@ -1,7 +1,7 @@
-require 'pact/provider/verifications/verification'
+require 'pact/provider/verification_results/verification_result'
 module Pact
   module Provider
-    module Verifications
+    module VerificationResults
       class Create
 
         def self.call pact_json, suite_context
@@ -14,7 +14,7 @@ module Pact
         end
 
         def call
-          Verification.new(!any_failures?, Pact.configuration.provider.application_version)
+          VerificationResult.new(!any_failures?, Pact.configuration.provider.application_version)
         end
 
         private

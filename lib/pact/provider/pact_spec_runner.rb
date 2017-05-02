@@ -7,7 +7,7 @@ require 'pact/project_root'
 require 'pact/rspec'
 require 'pact/provider/pact_source'
 require 'pact/provider/help/write'
-require 'pact/provider/verifications/publish_all'
+require 'pact/provider/verification_results/publish_all'
 
 require_relative 'rspec'
 
@@ -82,7 +82,7 @@ module Pact
 
         config.after(:suite) do | suite |
           Pact::Provider::Help::Write.call(jsons)
-          Pact::Provider::Verifications::PublishAll.call(sources, suite)
+          Pact::Provider::VerificationResults::PublishAll.call(sources, suite)
         end
 
       end

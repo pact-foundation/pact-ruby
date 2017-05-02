@@ -1,8 +1,8 @@
-require 'pact/provider/verifications/publish'
+require 'pact/provider/verification_results/publish'
 
 module Pact
   module Provider
-    module Verifications
+    module VerificationResults
       describe Publish do
         describe "call" do
           let(:publish_verification_url) { nil }
@@ -12,7 +12,7 @@ module Pact
           let(:pact_hash) { {'consumer' => {'name' => 'Foo'}, '_links' => {'pb:publish-verification'=> {'href' => publish_verification_url}}} }
           let(:app_version_set) { false }
           let(:verification_json) { '{"foo": "bar"}' }
-          let(:publish_verifications) { false }
+          let(:publish_verification_results) { false }
           let(:verification) do
             instance_double("Pact::Verifications::Verification",
               to_json: verification_json,
@@ -21,7 +21,7 @@ module Pact
           end
 
           let(:provider_configuration) do
-            double('provider config', publish_verifications?: publish_verifications)
+            double('provider config', publish_verification_results?: publish_verification_results)
           end
 
           before do
@@ -32,15 +32,15 @@ module Pact
 
           subject { Publish.call(pact_source, verification)}
 
-          context "when publish_verifications is false" do
+          context "when publish_verification_results is false" do
             it "does not publish the verification" do
               subject
               expect(WebMock).to_not have_requested(:post, 'http://broker/verifications')
             end
           end
 
-          context "when publish_verifications is true" do
-            let(:publish_verifications) { true }
+          context "when publish_verification_results is true" do
+            let(:publish_verification_results) { true }
 
             context "when the publish-verification link is present" do
               let(:publish_verification_url) { 'http://broker/verifications' }

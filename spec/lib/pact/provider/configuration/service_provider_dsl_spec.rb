@@ -50,6 +50,33 @@ module Pact
               expect { subject.send(:validate) }.to raise_error("Please provide a name for the Provider")
             end
           end
+
+          context "when publish_verifications is true" do
+            context "when no application version is provided" do
+              subject do
+                ServiceProviderDSL.build "name" do
+                  publish_verifications true
+                end
+              end
+
+              it "raises an error" do
+                expect { subject.send(:validate) }.to raise_error("Please set the app_version when publish_verifications is true")
+              end
+            end
+
+            context "when an application version is provided" do
+              subject do
+                ServiceProviderDSL.build "name" do
+                  app_version "1.2.3"
+                  publish_verifications true
+                end
+              end
+
+              it "does not raise an error" do
+                expect { subject.send(:validate) }.to_not raise_error
+              end
+            end
+          end
         end
 
         describe 'honours_pact_with' do

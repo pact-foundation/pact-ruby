@@ -57,6 +57,11 @@ module Pact
 
         def validate
           raise "Please provide a name for the Provider" unless name && !name.strip.empty?
+          raise "Please set the app_version when publish_verifications is true" if publish_verifications && application_version_blank?
+        end
+
+        def application_version_blank?
+          application_version.nil? || application_version.strip.empty?
         end
 
         def create_service_provider

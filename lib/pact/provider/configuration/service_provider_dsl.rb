@@ -7,6 +7,8 @@ module Pact
 
     module Configuration
 
+      class Error < ::Pact::Error; end
+
       class ServiceProviderDSL
 
         extend Pact::DSL
@@ -56,8 +58,8 @@ module Pact
         private
 
         def validate
-          raise "Please provide a name for the Provider" unless name && !name.strip.empty?
-          raise "Please set the app_version when publish_verifications is true" if publish_verifications && application_version_blank?
+          raise Error.new("Please provide a name for the Provider") unless name && !name.strip.empty?
+          raise Error.new("Please set the app_version when publish_verifications is true") if publish_verifications && application_version_blank?
         end
 
         def application_version_blank?

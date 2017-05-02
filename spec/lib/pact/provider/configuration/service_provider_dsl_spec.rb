@@ -47,7 +47,7 @@ module Pact
             end
 
             it "raises an error" do
-              expect { subject.send(:validate) }.to raise_error("Please provide a name for the Provider")
+              expect { subject.send(:validate) }.to raise_error(Pact::Provider::Configuration::Error, "Please provide a name for the Provider")
             end
           end
 
@@ -60,7 +60,7 @@ module Pact
               end
 
               it "raises an error" do
-                expect { subject.send(:validate) }.to raise_error("Please set the app_version when publish_verifications is true")
+                expect { subject.send(:validate) }.to raise_error(Pact::Provider::Configuration::Error, "Please set the app_version when publish_verifications is true")
               end
             end
 

@@ -2,6 +2,14 @@ Do this to generate your change history
 
   git log --pretty=format:'  * %h - %s (%an, %ad)' vX.Y.Z..HEAD
 
+## 1.11.0 (8 May 2017)
+* 2a54388 - Only publish verification results when using spec 3. (Beth Skurrie, Mon May 8 12:08:48 2017 +1000)
+* a82d919 - Remove build for ruby 2.0.0! (Beth Skurrie, Tue May 2 15:16:40 2017 +1000)
+* 37437db - Use basic auth to publish verification if basic auth was configured on the pact URL. (Beth Skurrie, Tue May 2 10:22:15 2017 +1000)
+* 3038354 - Enable verifications to be automatically published to the pact broker. (Beth Skurrie, Tue May 2 08:44:19 2017 +1000)
+* 527f27f - Update gem dependency versions. (Beth Skurrie, Tue May 2 08:24:37 2017 +1000)
+* 041f107 - Updated pact-mock_service version in gemspec (Beth Skurrie, Tue Apr 4 16:20:10 2017 +1000)
+
 ## 1.10.0 (14 Nov 2016)
 * 1e8c0bc - Updating pact-support and pact-mock_service versions (Beth Skurrie, Mon Nov 14 10:16:38 2016 +1100)
 

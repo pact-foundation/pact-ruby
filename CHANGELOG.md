@@ -2,6 +2,9 @@ Do this to generate your change history
 
   git log --pretty=format:'  * %h - %s (%an, %ad)' vX.Y.Z..HEAD
 
+## 1.11.1 (9 May 2017)
+* 85f5716 - Add support for publishing verifications over HTTPS. (Beth Skurrie, Tue May 9 14:21:28 2017 +1000)
+
 ## 1.11.0 (8 May 2017)
 * 2a54388 - Only publish verification results when using spec 3. (Beth Skurrie, Mon May 8 12:08:48 2017 +1000)
 * a82d919 - Remove build for ruby 2.0.0! (Beth Skurrie, Tue May 2 15:16:40 2017 +1000)

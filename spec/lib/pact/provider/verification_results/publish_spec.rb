@@ -71,8 +71,19 @@ module Pact
                   expect{ subject }.to raise_error(PublicationError, /Failed to publish verification/)
                 end
               end
-            end
 
+              context "with https" do
+                before do
+                  stub_request(:post, publish_verification_url)
+                end
+                let(:publish_verification_url) { 'https://broker/verifications' }
+
+                it "uses ssl" do
+                  subject
+                  expect(WebMock).to have_requested(:post, publish_verification_url)
+                end
+              end
+            end
           end
         end
       end

@@ -41,7 +41,8 @@ module Pact
           request = build_request(uri)
           response = nil
           begin
-            response = Net::HTTP.start(uri.host, uri.port) do |http|
+            options = {:use_ssl => uri.scheme == 'https'}
+            response = Net::HTTP.start(uri.host, uri.port, options) do |http|
               http.request request
             end
           rescue StandardError => e

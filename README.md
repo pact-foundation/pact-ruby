@@ -53,10 +53,10 @@ Pact is most valuable for designing and testing integrations where you (or your 
 
 ## Getting help
 
-* Pact docs: [http://docs.pact.io](http://docs.pact.io)
-* Ruby Pact wiki: [https://github.com/realestate-com-au/pact/wiki](https://github.com/realestate-com-au/pact/wiki)
-* Stackoverflow: [https://stackoverflow.com/questions/tagged/pact-ruby](ruby pact questions) or [https://stackoverflow.com/questions/tagged/pact](general pact questions)
-* Google users group: [https://groups.google.com/forum/#!forum/pact-support](for ongoing discussions rather than questions)
+* Pact docs: [docs.pact.io](http://docs.pact.io)
+* Ruby Pact wiki: [github.com/realestate-com-au/pact/wiki](https://github.com/realestate-com-au/pact/wiki)
+* Stackoverflow: [ruby pact questions](https://stackoverflow.com/questions/tagged/pact-ruby) or [general pact questions](https://stackoverflow.com/questions/tagged/pact)
+* Google users group: [for ongoing discussions rather than questions](https://groups.google.com/forum/#!forum/pact-support)
 * Gitter: [![Join the chat at https://gitter.im/realestate-com-au/pact](https://badges.gitter.im/Join%20Chat.svg)](https://gitter.im/realestate-com-au/pact?utm_source=badge&utm_medium=badge&utm_campaign=pr-badge&utm_content=badge)
 * Twitter: [@pact_up](https://twitter.com/pact_up)
 

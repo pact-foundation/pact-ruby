@@ -3,6 +3,9 @@
 * Unset X_PACT_DEVELOPMENT if it was set.
 * Ensure all tests are passing and everything is committed.
 * Update lib/pact/version.rb
+* `bundle update`
+* `bundle exec appraisal update`
+* `bundle exec rake`
 * Update CHANGELOG.md
  * Generate the git log using the command shown in the CHANGELOG.md
  * Delete commit comments that won't be interesting for a user of the gem (refactorings, tests etc).

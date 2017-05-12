@@ -2,6 +2,9 @@ Do this to generate your change history
 
   git log --pretty=format:'  * %h - %s (%an, %ad)' vX.Y.Z..HEAD
 
+## 1.12.0 (12 May 2017)
+* e12ce11 - Updated pact-mock_service and pact-support gems. Major change: provider_state is now providerState in pact files. (Beth Skurrie, Fri May 12 08:43:04 2017 +1000)
+
 ## 1.11.1 (9 May 2017)
 * 85f5716 - Add support for publishing verifications over HTTPS. (Beth Skurrie, Tue May 9 14:21:28 2017 +1000)
 

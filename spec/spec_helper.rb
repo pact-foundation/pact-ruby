@@ -14,6 +14,13 @@ require './spec/support/warning_silencer'
 
 is_jruby = defined? RUBY_ENGINE && RUBY_ENGINE == 'jruby'
 
+puts "is_jruby is #{is_jruby}"
+if defined? RUBY_ENGINE
+  puts "RUBY_ENGINE is #{RUBY_ENGINE}"
+else
+  puts "RUBY_ENGINE is not defined"
+end
+
 RSpec.configure do | config |
   config.include(FakeFS::SpecHelpers, :fakefs => true)
 

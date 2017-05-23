@@ -62,10 +62,10 @@ describe Pact::Provider::PactSpecRunner do
         subject.run
       end
 
-      context 'and interactions_replay_order option set to random' do
+      context 'and interactions_replay_order option set to random', skip_jruby: true do
         let(:interactions_replay_order) { :random }
 
-        it 'randomised interactions within consumer contract', skip_jruby: true do
+        it 'randomised interactions within consumer contract' do
           allow(subject).to receive(:honour_pactfile).and_return([])
           expect_any_instance_of(Array).to receive(:shuffle).and_call_original
 

@@ -2,6 +2,11 @@ Do this to generate your change history
 
   git log --pretty=format:'  * %h - %s (%an, %ad)' vX.Y.Z..HEAD
 
+## 1.12.1 (23 May 2017)
+* 47140b7 - Update .travis.yml to publish to rubygems (Beth Skurrie, Tue May 23 16:23:21 2017 +1000)
+* 16c40bd - Use RSpec.configuration.reporter.failed_examples to get failed examples instead of the suite, as it is backwards compatible with rspec 3.0.0 (Beth Skurrie, Tue May 23 15:59:36 2017 +1000)
+* c54a3a9 - Add specs and tasks for doing manual end to end testing (create, publish, verify, publish verification) (Beth Skurrie, Tue May 23 15:45:41 2017 +1000)
+
 ## 1.12.0 (12 May 2017)
 * e12ce11 - Updated pact-mock_service and pact-support gems. Major change: provider_state is now providerState in pact files. (Beth Skurrie, Fri May 12 08:43:04 2017 +1000)
 

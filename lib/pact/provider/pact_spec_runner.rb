@@ -83,7 +83,7 @@ module Pact
         config.after(:suite) do | suite |
           Pact::Provider::Help::Write.call(jsons)
           Pact::RSpec.with_rspec_3 do
-            Pact::Provider::VerificationResults::PublishAll.call(sources, suite)
+            Pact::Provider::VerificationResults::PublishAll.call(sources, ::RSpec.configuration.reporter.failed_examples)
           end
         end
 

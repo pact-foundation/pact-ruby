@@ -4,13 +4,13 @@ module Pact
     module VerificationResults
       class Create
 
-        def self.call pact_json, suite_context
-          new(pact_json, suite_context).call
+        def self.call pact_json, failed_examples
+          new(pact_json, failed_examples).call
         end
 
-        def initialize pact_json, suite_context
+        def initialize pact_json, failed_examples
           @pact_json = pact_json
-          @suite_context = suite_context
+          @failed_examples = failed_examples
         end
 
         def call
@@ -28,14 +28,14 @@ module Pact
         end
 
         def count_failures_for_pact_json
-          suite_context.reporter.failed_examples.collect{ |e| e.metadata[:pact_json] == pact_json }.uniq.size
+          failed_examples.collect{ |e| e.metadata[:pact_json] == pact_json }.uniq.size
         end
 
         def any_failures?
           count_failures_for_pact_json > 0
         end
 
-        attr_reader :pact_json, :suite_context
+        attr_reader :pact_json, :failed_examples
       end
     end
   end

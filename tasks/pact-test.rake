@@ -17,28 +17,6 @@ Pact::VerificationTask.new(:fail) do | pact |
 	pact.uri './spec/support/test_app_fail.json'
 end
 
-task 'pact:publish_pact_to_broker' do
-	# Can't require pact_broker-client because it requires pact - circular dependency
-	require 'net/http'
-	uri = URI('http://127.0.0.1:9292/pacts/provider/Bar/consumer/Foo/version/1.0.0')
-	put_request = Net::HTTP::Put.new(uri.path)
-	put_request['Content-Type'] = "application/json"
-	put_request.body = File.read("spec/pacts/foo-bar.json")
-	response = Net::HTTP.start(uri.hostname, uri.port) do |http|
-	  http.request put_request
-	end
-	puts response.code
-	puts response.body
-end
-
-
-Pact::VerificationTask.new(:using_broker) do | pact |
-	pact.uri 'http://127.0.0.1:9292/pacts/provider/Bar/consumer/Foo/version/1.0.0', :pact_helper => './spec/support/broker_app.rb'
-end
-
-task 'pact:verify:using_broker' => ['pact:publish_pact_to_broker']
-
-
 Pact::VerificationTask.new(:term) do | pact |
 	pact.uri './spec/support/term.json'
 end
@@ -69,10 +47,6 @@ end
 
 Pact::VerificationTask.new('test_app:fail') do | pact |
 	pact.uri './spec/support/test_app_fail.json', pact_helper: './spec/support/pact_helper.rb'
-end
-
-Pact::VerificationTask.new('foobar') do | pact |
-	pact.uri './spec/pacts/foo-bar.json', pact_helper: './spec/support/bar_pact_helper.rb'
 end
 
 task :bethtest => ['pact:tests:all','pact:tests:all:with_active_support']

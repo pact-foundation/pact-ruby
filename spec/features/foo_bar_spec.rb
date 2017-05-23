@@ -6,8 +6,9 @@ load 'pact/consumer/world.rb'
 # Use this test along with `rake pact:verify:foobar` to debug end to end issues.
 # The Bar app is in spec/support/bar_pact_helper.rb
 
-describe "bethtest" do
-  it "foo", :pact => true  do
+describe "Bar", :pact => true do
+
+  it "can retrieve a thing"  do
 
       Pact.clear_configuration
       Pact.clear_consumer_world

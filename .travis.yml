@@ -1,38 +1,44 @@
 language: ruby
 rvm:
-  - 2.1.8
-  - 2.2.4
-  - 2.3.1
-  - jruby-9.0.5.0
+- 2.1.8
+- 2.2.4
+- 2.3.1
+- jruby-9.0.5.0
 gemfile:
-  - gemfiles/default.gemfile
-  - gemfiles/rspec_2.gemfile
-  - gemfiles/rspec_3.0.gemfile
-  - gemfiles/ruby_under_22.gemfile
-  - gemfiles/ruby_under_22_with_rspec_2.gemfile
+- gemfiles/default.gemfile
+- gemfiles/rspec_2.gemfile
+- gemfiles/rspec_3.0.gemfile
+- gemfiles/ruby_under_22.gemfile
+- gemfiles/ruby_under_22_with_rspec_2.gemfile
 matrix:
   exclude:
-    # rack 2.0 and activesupport 5.0 no longer support ruby under 2.2.
-    - rvm: 2.0.0
-      gemfile: gemfiles/default.gemfile
-    - rvm: 2.0.0
-      gemfile: gemfiles/rspec_2.gemfile
-    - rvm: 2.1.8
-      gemfile: gemfiles/default.gemfile
-    - rvm: 2.1.8
-      gemfile: gemfiles/rspec_2.gemfile
-    - rvm: 2.2.4
-      gemfile: gemfiles/ruby_under_22.gemfile
-    - rvm: 2.2.4
-      gemfile: gemfiles/ruby_under_22_with_rspec_2.gemfile
-    - rvm: 2.3.1
-      gemfile: gemfiles/ruby_under_22.gemfile
-    - rvm: 2.3.1
-      gemfile: gemfiles/ruby_under_22_with_rspec_2.gemfile
-    - rvm: jruby-9.0.5.0
-      gemfile: gemfiles/ruby_under_22.gemfile
-    - rvm: jruby-9.0.5.0
-      gemfile: gemfiles/ruby_under_22_with_rspec_2.gemfile
-    # Need to work out why jruby is failing with the default gemset, issue raised here: https://github.com/realestate-com-au/pact/issues/121
-    - rvm: jruby-9.0.5.0
-      gemfile: gemfiles/default.gemfile
+  - rvm: 2.0.0
+    gemfile: gemfiles/default.gemfile
+  - rvm: 2.0.0
+    gemfile: gemfiles/rspec_2.gemfile
+  - rvm: 2.1.8
+    gemfile: gemfiles/default.gemfile
+  - rvm: 2.1.8
+    gemfile: gemfiles/rspec_2.gemfile
+  - rvm: 2.2.4
+    gemfile: gemfiles/ruby_under_22.gemfile
+  - rvm: 2.2.4
+    gemfile: gemfiles/ruby_under_22_with_rspec_2.gemfile
+  - rvm: 2.3.1
+    gemfile: gemfiles/ruby_under_22.gemfile
+  - rvm: 2.3.1
+    gemfile: gemfiles/ruby_under_22_with_rspec_2.gemfile
+  - rvm: jruby-9.0.5.0
+    gemfile: gemfiles/ruby_under_22.gemfile
+  - rvm: jruby-9.0.5.0
+    gemfile: gemfiles/ruby_under_22_with_rspec_2.gemfile
+  - rvm: jruby-9.0.5.0
+    gemfile: gemfiles/default.gemfile
+deploy:
+  provider: rubygems
+  api_key:
+    secure: AzTHDbKRr1ZO4E2mRyvU054Tx8c2cZbKkoDBZjSAQ2CY3E7oH137NTAIGd4BthH/E9mbEXtGpZIDfWPbaOcUJQ5Bz24CWTKmGyic6FrPhJnOW5CKVSLGCDPzpmqHULv/GTN16YN0Dh1HLeGYZzlHlxT0+4AVvbvBAleHrAFeJs8=
+  gem: pact
+  on:
+    tags: true
+    repo: realestate-com-au/pact

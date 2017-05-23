@@ -7,6 +7,7 @@ rvm:
 gemfile:
   - gemfiles/default.gemfile
   - gemfiles/rspec_2.gemfile
+  - gemfiles/rspec_3.0.gemfile
   - gemfiles/ruby_under_22.gemfile
   - gemfiles/ruby_under_22_with_rspec_2.gemfile
 matrix:

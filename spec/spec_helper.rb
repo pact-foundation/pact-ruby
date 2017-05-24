@@ -12,14 +12,7 @@ WebMock.disable_net_connect!(allow_localhost: true)
 require './spec/support/active_support_if_configured'
 require './spec/support/warning_silencer'
 
-is_jruby = defined? RUBY_ENGINE && RUBY_ENGINE == 'jruby'
-
-puts "is_jruby is #{is_jruby}"
-if defined? RUBY_ENGINE
-  puts "RUBY_ENGINE is #{RUBY_ENGINE}"
-else
-  puts "RUBY_ENGINE is not defined"
-end
+is_jruby = defined?(RUBY_ENGINE) && RUBY_ENGINE == 'jruby'
 
 RSpec.configure do | config |
   config.include(FakeFS::SpecHelpers, :fakefs => true)

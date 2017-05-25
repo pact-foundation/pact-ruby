@@ -4,7 +4,7 @@ Please provide the following information with your issue to enable us to respond
 
 * The relevant versions of the gems you are using.
 * The steps to recreate your issue.
-* An executable code example where possible. You can use the [pact-ruby-end-to-end-example] codebase to quickly recreate your code.
+* An executable code example where possible. You can use the [pact-ruby-end-to-end-example] codebase to quickly recreate your issue.
 
 # Contributing
 

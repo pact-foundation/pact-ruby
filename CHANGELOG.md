@@ -2,6 +2,9 @@ Do this to generate your change history
 
   git log --pretty=format:'  * %h - %s (%an, %ad)' vX.Y.Z..HEAD
 
+## 1.13.0 (26 May 2017)
+* c9800b0 - Make the code to call for provider state set up and tear down configurable. (Beth Skurrie, Fri May 26 14:32:34 2017 +1000)
+
 ## 1.12.1 (23 May 2017)
 * 47140b7 - Update .travis.yml to publish to rubygems (Beth Skurrie, Tue May 23 16:23:21 2017 +1000)
 * 16c40bd - Use RSpec.configuration.reporter.failed_examples to get failed examples instead of the suite, as it is backwards compatible with rspec 3.0.0 (Beth Skurrie, Tue May 23 15:59:36 2017 +1000)

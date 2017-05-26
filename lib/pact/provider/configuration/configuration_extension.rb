@@ -12,7 +12,6 @@ module Pact
       module ConfigurationExtension
 
         attr_accessor :provider_application_version
-        attr_accessor :provider_state_set_up, :provider_state_tear_down
 
         def provider= provider
           @provider = provider
@@ -46,8 +45,16 @@ module Pact
           @provider_state_set_up ||= Pact::Provider::State::SetUp
         end
 
+        def provider_state_set_up= provider_state_set_up
+          @provider_state_set_up = provider_state_set_up
+        end
+
         def provider_state_tear_down
           @provider_state_tear_down ||= Pact::Provider::State::TearDown
+        end
+
+        def provider_state_tear_down= provider_state_tear_down
+          @provider_state_tear_down = provider_state_tear_down
         end
 
         def include mod

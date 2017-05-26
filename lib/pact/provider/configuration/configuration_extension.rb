@@ -1,5 +1,7 @@
 require 'pact/provider/state/provider_state'
 require 'pact/provider/state/provider_state_configured_modules'
+require 'pact/provider/state/set_up'
+require 'pact/provider/state/tear_down'
 
 module Pact
 
@@ -10,6 +12,7 @@ module Pact
       module ConfigurationExtension
 
         attr_accessor :provider_application_version
+        attr_accessor :provider_state_set_up, :provider_state_tear_down
 
         def provider= provider
           @provider = provider
@@ -37,6 +40,14 @@ module Pact
 
         def interactions_replay_order= interactions_replay_order
           @interactions_replay_order = interactions_replay_order.to_sym
+        end
+
+        def provider_state_set_up
+          @provider_state_set_up ||= Pact::Provider::State::SetUp
+        end
+
+        def provider_state_tear_down
+          @provider_state_tear_down ||= Pact::Provider::State::TearDown
         end
 
         def include mod

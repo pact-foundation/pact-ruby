@@ -34,14 +34,13 @@ module Pact
         end
       end
 
-      def set_up_provider_state provider_state_name, consumer
-        State::ProviderStateManager.new(provider_state_name, consumer).set_up_provider_state
+      def set_up_provider_state provider_state_name, consumer, options = {}
+        Pact.configuration.provider_state_set_up.call(provider_state_name, consumer, options)
       end
 
-      def tear_down_provider_state provider_state_name, consumer
-        State::ProviderStateManager.new(provider_state_name, consumer).tear_down_provider_state
+      def tear_down_provider_state provider_state_name, consumer, options = {}
+        Pact.configuration.provider_state_tear_down.call(provider_state_name, consumer, options)
       end
-
     end
   end
 end

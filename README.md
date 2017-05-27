@@ -65,6 +65,7 @@ Pact is most valuable for designing and testing integrations where you (or your 
 Add this line to your application's Gemfile:
 
     gem 'pact'
+    # gem 'pact-consumer-minitest' for minitest
 
 And then execute:
 

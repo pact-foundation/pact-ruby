@@ -5,8 +5,11 @@ module Pact
   module Matchers
     module Messages
 
+      C = ::Term::ANSIColor
+
       def match_term_failure_message diff, actual, diff_formatter, color_enabled
-        message = "Actual: #{(String === actual ? actual : actual.to_json)}\n\n"
+        actual_string = String === actual ? actual : actual.to_json
+        message = "Actual: #{C.white(actual_string)}\n\n"
         formatted_diff = diff_formatter.call(diff)
         message + colorize_if_enabled(formatted_diff, color_enabled)
       end

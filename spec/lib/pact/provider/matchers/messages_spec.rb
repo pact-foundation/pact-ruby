@@ -12,7 +12,7 @@ module Pact
         let(:diff_formatter) { Pact::Matchers::UnixDiffFormatter }
         let(:message) { "line1\nline2"}
         let(:output_message) { "Actual: actual\n\n#{message}"}
-        let(:output_message_with_resets) { "Actual: actual\n\n#{r}line1\n#{r}line2"}
+        let(:output_message_with_resets) { "Actual: \e[37mactual\e[0m\n\n#{r}line1\n#{r}line2"}
         let(:r) { ::Term::ANSIColor.reset }
         let(:diff) { double("diff") }
         let(:actual) { "actual" }

@@ -9,7 +9,8 @@ module Pact
 
       def match_term_failure_message diff, actual, diff_formatter, color_enabled
         actual_string = String === actual ? actual : actual.to_json
-        message = "Actual: #{C.white(actual_string)}\n\n"
+        maybe_coloured_string = color_enabled ? C.white(actual_string) : actual_string
+        message = "Actual: #{maybe_coloured_string}\n\n"
         formatted_diff = diff_formatter.call(diff)
         message + colorize_if_enabled(formatted_diff, color_enabled)
       end

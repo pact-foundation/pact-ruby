@@ -1,6 +1,11 @@
 Do this to generate your change history
 
-  git log --pretty=format:'  * %h - %s (%an, %ad)' vX.Y.Z..HEAD
+  git log --pretty=format:'  * %h - %s (%an, %ad)'
+
+## 1.14.0 (19 June 2017)
+* eb44499 - Updated pact-support version (Beth Skurrie, Mon Jun 19 09:51:13 2017 +1000)
+* 8835496 - Changed colour of acutal response body output (Beth Skurrie, Tue Jun 6 10:44:45 2017 +1000)
+* f675d50 - Mention pact-consumer-minitest in Readme (azul, Sat May 27 09:53:25 2017 +0200)
 
 ## 1.13.0 (26 May 2017)
 * c9800b0 - Make the code to call for provider state set up and tear down configurable. (Beth Skurrie, Fri May 26 14:32:34 2017 +1000)

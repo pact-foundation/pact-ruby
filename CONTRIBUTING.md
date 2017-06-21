@@ -5,7 +5,7 @@ Please provide the following information with your issue to enable us to respond
 * The relevant versions of the gems you are using.
 * The steps to recreate your issue.
 * The full stacktrace if there is an exception.
-* An executable code example where possible. You can use the [pact-ruby-e2e-example] codebase to quickly recreate your issue.
+* An executable code example where possible. You can fork and modify the [pact-ruby-e2e-example] codebase to quickly recreate your issue.
 
 # Contributing
 

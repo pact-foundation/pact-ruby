@@ -55,26 +55,35 @@ module Pact
         end
 
         def print_missing_provider_states
-          PrintMissingProviderStates.call Pact.provider_world.provider_states.missing_provider_states, output
+          if executing_with_ruby?
+            PrintMissingProviderStates.call Pact.provider_world.provider_states.missing_provider_states, output
+          end
         end
 
         def interaction_rerun_commands summary
           summary.failed_examples.collect do |example|
             interaction_rerun_command_for example
-          end.uniq
+          end.uniq.compact
         end
 
         def interaction_rerun_command_for example
-          provider_state = example.metadata[:pact_interaction].provider_state
-          description = example.metadata[:pact_interaction].description
-          pactfile_uri = example.metadata[:pactfile_uri]
           example_description = example.metadata[:pact_interaction_example_description]
-          colorizer.wrap("bundle exec rake pact:verify:at[#{pactfile_uri}] PACT_DESCRIPTION=\"#{description}\" PACT_PROVIDER_STATE=\"#{provider_state}\" ", ::RSpec.configuration.failure_color) +
-            colorizer.wrap("# #{example_description}", ::RSpec.configuration.detail_color)
+          if ENV['PACT_INTERACTION_RERUN_COMMAND']
+            cmd = String.new(ENV['PACT_INTERACTION_RERUN_COMMAND'])
+            provider_state = example.metadata[:pact_interaction].provider_state
+            description = example.metadata[:pact_interaction].description
+            pactfile_uri = example.metadata[:pactfile_uri]
+            cmd.gsub!("<PACT_URI>", pactfile_uri.to_s)
+            cmd.gsub!("<PACT_DESCRIPTION>", description)
+            cmd.gsub!("<PACT_PROVIDER_STATE>", "#{provider_state}")
+            colorizer.wrap("#{cmd} ", ::RSpec.configuration.failure_color) + colorizer.wrap("# #{example_description}", ::RSpec.configuration.detail_color)
+          else
+            colorizer.wrap("* #{example_description}", ::RSpec.configuration.failure_color)
+          end
         end
 
         def print_failure_message
-          output.puts failure_message
+          output.puts(failure_message) if executing_with_ruby?
         end
 
         def failure_message
@@ -85,11 +94,11 @@ module Pact
           @colorizer ||= ::RSpec::Core::Formatters::ConsoleCodes
         end
 
+        def executing_with_ruby?
+          ENV['PACT_EXECUTING_LANGUAGE'] == 'ruby'
+        end
       end
-
     end
-
   end
 end
-
 

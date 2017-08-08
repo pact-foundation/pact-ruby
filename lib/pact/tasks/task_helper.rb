@@ -5,6 +5,8 @@ require 'shellwords'
 module Pact
   module TaskHelper
 
+    PACT_INTERACTION_RERUN_COMMAND = "bundle exec rake pact:verify:at[<PACT_URI>] PACT_DESCRIPTION=\"<PACT_DESCRIPTION>\" PACT_PROVIDER_STATE=\"<PACT_PROVIDER_STATE>\""
+
     extend self
 
     def execute_pact_verify pact_uri = nil, pact_helper = nil, rspec_opts = nil
@@ -35,8 +37,11 @@ module Pact
 
     def execute_cmd command
       $stdout.puts command
+      ENV['PACT_EXECUTING_LANGUAGE'] = 'ruby'
+      ENV['PACT_INTERACTION_RERUN_COMMAND'] = PACT_INTERACTION_RERUN_COMMAND
       system(command) ? 0 : 1
+      ENV['PACT_INTERACTION_RERUN_COMMAND'] = nil
+      ENV['PACT_EXECUTING_LANGUAGE'] = nil
     end
-
   end
 end

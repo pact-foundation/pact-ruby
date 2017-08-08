@@ -99,7 +99,7 @@ Pact::RSpec.with_rspec_3 do
 
               it "does not print missing provider states as these are set up dynamically" do
                 expect(PrintMissingProviderStates).to_not receive(:call)
-                subject.dump_commands_to_rerun_failed_examples
+                subject.dump_summary summary
               end
             end
           end

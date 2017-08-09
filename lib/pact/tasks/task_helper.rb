@@ -37,11 +37,19 @@ module Pact
 
     def execute_cmd command
       $stdout.puts command
-      ENV['PACT_EXECUTING_LANGUAGE'] = 'ruby'
-      ENV['PACT_INTERACTION_RERUN_COMMAND'] = PACT_INTERACTION_RERUN_COMMAND
-      system(command) ? 0 : 1
-      ENV['PACT_INTERACTION_RERUN_COMMAND'] = nil
-      ENV['PACT_EXECUTING_LANGUAGE'] = nil
+      temporarily_set_env_var 'PACT_EXECUTING_LANGUAGE', 'ruby' do
+        temporarily_set_env_var 'PACT_INTERACTION_RERUN_COMMAND', PACT_INTERACTION_RERUN_COMMAND do
+          exit_status = system(command) ? 0 : 1
+        end
+      end
+    end
+
+    def temporarily_set_env_var name, value
+      original_value = ENV[name]
+      ENV[name] ||= value
+      yield
+    ensure
+      ENV[name] = original_value
     end
   end
 end

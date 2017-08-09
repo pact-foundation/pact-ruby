@@ -4,8 +4,6 @@ require 'rake/file_utils'
 
 module Pact
   describe TaskHelper do
-
-
     describe ".execute_pact_verify" do
       let(:ruby_path) { "/path/to/ruby" }
       let(:pact_uri) { "/pact/uri" }
@@ -14,6 +12,57 @@ module Pact
       before do
         stub_const("FileUtils::RUBY", ruby_path)
         allow(Pact::Provider::PactHelperLocater).to receive(:pact_helper_path).and_return(default_pact_helper_path)
+      end
+
+      it "returns an exit status based on the return value of the system command" do
+        allow(TaskHelper).to receive(:system).and_return(true)
+        expect(TaskHelper.execute_pact_verify(pact_uri, "pact_helper")).to eq 0
+      end
+
+      context "when PACT_EXECUTING_LANGUAGE is not set" do
+        it "sets PACT_EXECUTING_LANGUAGE to ruby" do
+          expect(TaskHelper).to receive(:system) do | command |
+            expect(ENV['PACT_EXECUTING_LANGUAGE']).to eq 'ruby'
+          end
+          TaskHelper.execute_pact_verify(pact_uri)
+        end
+      end
+
+      context "when PACT_EXECUTING_LANGUAGE is set" do
+        it "keeps the value of PACT_EXECUTING_LANGUAGE" do
+          ENV['PACT_EXECUTING_LANGUAGE'] = 'foo'
+          expect(TaskHelper).to receive(:system) do | command |
+            expect(ENV['PACT_EXECUTING_LANGUAGE']).to eq 'foo'
+          end
+          TaskHelper.execute_pact_verify(pact_uri)
+        end
+
+        after do
+          ENV['PACT_EXECUTING_LANGUAGE'] = nil
+        end
+      end
+
+      context "when PACT_INTERACTION_RERUN_COMMAND is not set" do
+        it "sets PACT_INTERACTION_RERUN_COMMAND to TaskHelper::PACT_INTERACTION_RERUN_COMMAND" do
+          expect(TaskHelper).to receive(:system) do | command |
+            expect(ENV['PACT_INTERACTION_RERUN_COMMAND']).to eq TaskHelper::PACT_INTERACTION_RERUN_COMMAND
+          end
+          TaskHelper.execute_pact_verify(pact_uri)
+        end
+      end
+
+      context "when PACT_INTERACTION_RERUN_COMMAND is set" do
+        it "keeps the value of PACT_INTERACTION_RERUN_COMMAND" do
+          ENV['PACT_INTERACTION_RERUN_COMMAND'] = 'foo'
+          expect(TaskHelper).to receive(:system) do | command |
+            expect(ENV['PACT_INTERACTION_RERUN_COMMAND']).to eq 'foo'
+          end
+          TaskHelper.execute_pact_verify(pact_uri)
+        end
+
+        after do
+          ENV['PACT_INTERACTION_RERUN_COMMAND'] = nil
+        end
       end
 
       context "with no pact_helper or pact URI" do
@@ -156,9 +205,6 @@ module Pact
           ENV.delete('PACT_PROVIDER_STATE')
         end
       end
-
     end
-
-
   end
 end

@@ -1,6 +1,6 @@
 require 'pact/provider/pact_spec_runner'
 
-describe Pact::Provider::PactSpecRunner do
+describe Pact::Provider::PactSpecRunner, skip_jruby: true do
   let(:options) { {provider: double(:provider)} }
   let(:pact_url) { double(:pact_url, uri: 'uri', options: {}) }
   let(:pact_urls) { [pact_url] }
@@ -62,7 +62,7 @@ describe Pact::Provider::PactSpecRunner do
         subject.run
       end
 
-      context 'and interactions_replay_order option set to random', skip_jruby: true do
+      context 'and interactions_replay_order option set to random' do
         let(:interactions_replay_order) { :random }
 
         it 'randomised interactions within consumer contract' do

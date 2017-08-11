@@ -1,13 +1,15 @@
 require 'rspec/mocks'
 
 module Pact
-  module Provider::State
-    module ProviderStateConfiguredModules
+  module Provider
+    module State
+      module ProviderStateConfiguredModules
 
-      include ::RSpec::Mocks::ExampleMethods
+        include ::RSpec::Mocks::ExampleMethods
 
-      # Placeholder for modules configured using config.include
+        # Placeholder for modules configured using config.include
 
+      end
     end
   end
 end

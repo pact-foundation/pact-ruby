@@ -2,6 +2,10 @@ Do this to generate your change history
 
   git log --pretty=format:'  * %h - %s (%an, %ad)'
 
+## 1.15.0 (11 August 2017)
+* a950a16 - fix: Fix module declaration (Beth Skurrie, Fri Aug 11 11:47:46 2017 +1000)
+* 14cd969 - feat(output): Remove ruby specific text from pact verification output. (Beth Skurrie, Tue Aug 8 17:12:50 2017 +1000)
+
 ## 1.14.0 (19 June 2017)
 * eb44499 - Updated pact-support version (Beth Skurrie, Mon Jun 19 09:51:13 2017 +1000)
 * 8835496 - Changed colour of acutal response body output (Beth Skurrie, Tue Jun 6 10:44:45 2017 +1000)

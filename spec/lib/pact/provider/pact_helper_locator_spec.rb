@@ -4,7 +4,7 @@ require 'pact/provider/pact_helper_locator'
 module Pact::Provider
 
   describe PactHelperLocater do
-    describe "pact_helper_path", :fakefs => true do
+    describe "pact_helper_path", :fakefs => true, skip_jruby: true do
 
       subject { PactHelperLocater.pact_helper_path }
 

@@ -92,7 +92,7 @@ namespace :pact do
 
 		expect_to_fail "bundle exec rake pact:verify:test_app:fail", with: [/Could not find one or more provider states/]
 		expect_to_fail "bundle exec rake spec:standalone:fail", with: [/Actual interactions do not match expected interactions/]
-		expect_to_fail "bundle exec rake pact:verify:term", with: [%r{"Content-type" with value /text/}]
+		expect_to_fail "bundle exec rake pact:verify:term", with: [%r{"Content-type" which matches /text/}]
 		expect_to_fail "bundle exec rake pact:verify:response_body_term", with: [%r{-      "at": "2016-02-11T12:00:00Z"}]
 	end
 

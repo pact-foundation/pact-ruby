@@ -19,6 +19,20 @@ module Pact
         "Expected header \"#{header_name}\" to #{expected_desc(expected)}, but was #{actual_desc(actual)}"
       end
 
+      def expected_desc_for_it expected
+        case expected
+        when NilClass then "is nil"
+        when Regexp
+          "matches #{expected.inspect}"
+        when Pact::Term
+          "matches #{expected.matcher.inspect}"
+        when Pact::SomethingLike
+          "is an instance of #{Pact::Reification.from_term(expected).class}"
+        else
+          "equals #{expected.inspect}"
+        end
+      end
+
       private
 
       def colorize_if_enabled formatted_diff, color_enabled
@@ -35,15 +49,20 @@ module Pact
       def expected_desc expected
         case expected
         when NilClass then "be nil"
-        else
+        when Regexp
           "match #{expected.inspect}"
+        when Pact::Term
+          "match #{expected.matcher.inspect}"
+        when Pact::SomethingLike
+          "be an instance of #{Pact::Reification.from_term(expected).class}"
+        else
+          "equal #{expected.inspect}"
         end
       end
 
       def actual_desc actual
         actual.nil? ? 'nil' : '"' + actual + '"'
       end
-
     end
   end
 end

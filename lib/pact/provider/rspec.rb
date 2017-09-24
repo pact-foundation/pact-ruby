@@ -3,6 +3,8 @@ require 'pact/consumer_contract'
 require 'pact/provider/rspec/matchers'
 require 'pact/provider/test_methods'
 require 'pact/provider/configuration'
+require 'pact/provider/matchers/messages'
+
 
 module Pact
   module Provider
@@ -90,7 +92,7 @@ module Pact
                 end
               end
 
-              describe_response Pact::Response.new(Pact::Term.unpack_regexps(interaction.response)), interaction_context
+              describe_response Pact::Response.new(interaction.response), interaction_context
 
             end
 
@@ -103,6 +105,7 @@ module Pact
           describe "returns a response which" do
 
             include Pact::RSpec::Matchers
+            extend Pact::Matchers::Messages
 
             let(:expected_response_status) { expected_response.status }
             let(:expected_response_body) { expected_response.body }
@@ -125,7 +128,7 @@ module Pact
             if expected_response.headers
               describe "includes headers" do
                 expected_response.headers.each do |name, expected_header_value|
-                  it "\"#{name}\" with value #{expected_header_value.inspect}" do
+                  it "\"#{name}\" which #{expected_desc_for_it(expected_header_value)}" do
                     header_value = response.headers[name]
                     expect(header_value).to match_header(name, expected_header_value)
                   end

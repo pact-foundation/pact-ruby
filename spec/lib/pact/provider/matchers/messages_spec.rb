@@ -67,30 +67,31 @@ module Pact
         let(:actual) { "text/plain" }
 
         subject { match_header_failure_message header_name, expected, actual }
+        let(:description_for_it) { expected_desc_for_it(expected) }
 
         context "when the expected value is a string" do
 
-          let(:expected_message) { "Expected header \"Content-Type\" to match \"application/json\", but was \"text/plain\"" }
+          let(:expected_message) { "Expected header \"Content-Type\" to equal \"application/json\", but was \"text/plain\"" }
 
           it "creates a message" do
             expect(subject).to eq(expected_message)
           end
 
+          it "has a description for the it block" do
+            expect(description_for_it).to eq "equals \"application/json\""
+          end
         end
 
         context "when the actual is nil" do
-
           let(:actual) { nil }
-          let(:expected_message) { "Expected header \"Content-Type\" to match \"application/json\", but was nil" }
+          let(:expected_message) { "Expected header \"Content-Type\" to equal \"application/json\", but was nil" }
 
           it "creates a message" do
             expect(subject).to eq(expected_message)
           end
-
         end
 
         context "when the expected is nil" do
-
           let(:expected) { nil }
           let(:expected_message) { "Expected header \"Content-Type\" to be nil, but was \"text/plain\"" }
 
@@ -98,17 +99,49 @@ module Pact
             expect(subject).to eq(expected_message)
           end
 
+          it "has a description for the it block" do
+            expect(description_for_it).to eq "is nil"
+          end
         end
 
         context "when the expected is a regexp" do
-
           let(:expected) { /hal/ }
+          let(:expected_message) { "Expected header \"Content-Type\" to match /hal/, but was \"text/plain\"" }
+
+          it "creates a message with the regexp" do
+            expect(subject).to eq(expected_message)
+          end
+
+          it "has a description for the it block" do
+            expect(description_for_it).to eq "matches /hal/"
+          end
+        end
+
+        context "when the expected is a Term" do
+          let(:expected) { Pact.term("application/hal+json", /hal/) }
           let(:expected_message) { "Expected header \"Content-Type\" to match /hal/, but was \"text/plain\"" }
 
           it "creates a message with the term's matcher" do
             expect(subject).to eq(expected_message)
           end
 
+          it "has a description for the it block" do
+            expect(description_for_it).to eq "matches /hal/"
+          end
+        end
+
+        context "when the expected is a SomethingLike" do
+          let(:actual) { nil }
+          let(:expected) { Pact.like("foo") }
+          let(:expected_message) { "Expected header \"Content-Type\" to be an instance of String, but was nil" }
+
+          it "creates a message with the expected class" do
+            expect(subject).to eq(expected_message)
+          end
+
+          it "has a description for the it block" do
+            expect(description_for_it).to eq "is an instance of String"
+          end
         end
       end
     end

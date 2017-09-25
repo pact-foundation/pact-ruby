@@ -2,6 +2,10 @@ Do this to generate your change history
 
   git log --pretty=format:'  * %h - %s (%an, %ad)'
 
+## 1.16.0 (25 September 2017)
+* 70e67cf - feat: improve description of rspec header matching 'it' blocks and failure text (Beth Skurrie, Mon Sep 25 08:46:06 2017 +1000)
+* 85d8e09 - fix: correctly display pact term when parent key is missing (Beth Skurrie, Mon Sep 25 08:43:02 2017 +1000)
+
 ## 1.15.0 (11 August 2017)
 * a950a16 - fix: Fix module declaration (Beth Skurrie, Fri Aug 11 11:47:46 2017 +1000)
 * 14cd969 - feat(output): Remove ruby specific text from pact verification output. (Beth Skurrie, Tue Aug 8 17:12:50 2017 +1000)

@@ -61,15 +61,22 @@ module Pact
 
       describe "will_respond_with" do
         let(:response) { {a: 'response'} }
+        let(:provider) { double(callback: nil) }
+        let(:pact_response) { instance_double('Pact::Response') }
 
-        let(:provider) do
-          double(callback: nil)
+        before do
+          allow(Pact::Response).to receive(:new).and_return(pact_response)
         end
 
-        subject { InteractionBuilder.new {|interaction| provider.callback interaction } }
+        subject { InteractionBuilder.new {|interaction| provider.callback(interaction) } }
 
-        it "sets the response on the interaction" do
-          expect(interaction).to receive(:response=).with(response)
+        it "creates a Pact::Response object from the given hash" do
+          expect(Pact::Response).to receive(:new).with(response)
+          subject.will_respond_with(response)
+        end
+
+        it "sets the Pact::Response object on the interaction" do
+          expect(interaction).to receive(:response=).with(pact_response)
           subject.will_respond_with(response)
         end
 
@@ -78,7 +85,6 @@ module Pact
         end
 
         it "invokes the 'on_interaction_fully_defined' callback" do
-          expect(provider).to receive(:callback).with(interaction)
           subject.will_respond_with response
         end
       end

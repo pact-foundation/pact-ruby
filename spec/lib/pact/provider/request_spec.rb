@@ -72,6 +72,8 @@ describe Pact::Provider::Request::Replayable do
     end
   end
 
+  describe ""
+
   describe "headers" do
     context "when headers are expected" do
       let(:headers) do
@@ -102,6 +104,26 @@ describe Pact::Provider::Request::Replayable do
 
       it "returns an empty hash" do
         expect(subject.headers).to eq({})
+      end
+    end
+
+    context "when a Term is used"do
+      let(:headers) do
+        { "Authorization" => Pact.term("A", /A|B/) }
+      end
+
+      it "reifies the headers" do
+        expect(subject.headers['HTTP_AUTHORIZATION']).to eq "A"
+      end
+    end
+
+    context "when a header is nil"do
+      let(:headers) do
+        { "Authorization" => nil }
+      end
+
+      it "reifies the headers" do
+        expect(subject.headers['HTTP_AUTHORIZATION']).to eq nil
       end
     end
   end

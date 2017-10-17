@@ -35,12 +35,13 @@ module Pact
           request_headers = {}
           return request_headers if expected_request.headers.is_a?(Pact::NullExpectation)
           expected_request.headers.each do |key, value|
-            request_headers[rack_request_header_for(key)] = value
+            request_headers[rack_request_header_for(key)] = Pact::Reification.from_term(value)
           end
           request_headers
         end
 
         private
+
         attr_reader :expected_request
 
         def reified_body
@@ -63,7 +64,6 @@ module Pact
         def with_http_prefix header
           NO_HTTP_PREFIX.include?(header) ? header : "HTTP_#{header}"
         end
-
       end
     end
   end

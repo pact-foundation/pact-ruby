@@ -2,6 +2,11 @@ Do this to generate your change history
 
   git log --pretty=format:'  * %h - %s (%an, %ad)'
 
+<a name="v1.16.1"></a>
+## 1.16.1 (2017-10-18)
+
+* 7b1747b - fix: reify terms in headers when replaying request (Beth Skurrie, Wed Oct 18 09:01:26 2017 +1100)
+
 ## 1.16.0 (25 September 2017)
 * 70e67cf - feat: improve description of rspec header matching 'it' blocks and failure text (Beth Skurrie, Mon Sep 25 08:46:06 2017 +1000)
 * 85d8e09 - fix: correctly display pact term when parent key is missing (Beth Skurrie, Mon Sep 25 08:43:02 2017 +1000)

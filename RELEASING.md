@@ -11,6 +11,6 @@
  * Delete commit comments that won't be interesting for a user of the gem (refactorings, tests etc).
 * `git add CHANGELOG.md lib/pact/version.rb gemfiles`
 * `git commit -m "chore(release): version $(ruby -r ./lib/pact/version.rb -e "puts Pact::VERSION")" && git push`
-* `rake release`
+* `bundle exec rake release`
 * Announce new version on @pact_up twitter account.
 * Update any relevant wiki pages or documentation.

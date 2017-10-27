@@ -1,0 +1,32 @@
+{
+  "provider": {
+    "name": "a provider"
+  },
+  "consumer": {
+    "name": "a consumer"
+  },
+  "interactions": [
+    {
+      "description": "request one",
+      "request": {
+        "method": "get",
+        "path": "/path_one"
+      },
+      "response": {
+      },
+      "provider_state": "state one"
+    },
+    {
+      "description": "request two",
+      "request": {
+        "method": "get",
+        "path": "/path_two"
+      },
+      "response": {
+      }
+    }
+  ],
+  "metadata": {
+    "pactSpecificationVersion": "1.0"
+  }
+}

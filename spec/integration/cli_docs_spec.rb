@@ -10,7 +10,7 @@ describe "running the pact docs CLI" do
     FileUtils.rm_rf "tmp/docs"
   end
 
-  let(:command) { "bundle exec bin/pact docs --doc-dir tmp/docs" }
+  let(:command) { "bundle exec bin/pact docs --pact-dir spec/support/docs --doc-dir tmp/docs" }
 
   it "writes some docs" do
     execute_command command

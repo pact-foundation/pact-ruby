@@ -22,7 +22,7 @@ Gem::Specification.new do |gem|
 
   gem.add_runtime_dependency 'randexp', '~> 0.1.7'
   gem.add_runtime_dependency 'rspec', '>=2.14'
-  gem.add_runtime_dependency 'rack-test', '>= 0.6.4'
+  gem.add_runtime_dependency 'rack-test', '>= 0.6.2'
   gem.add_runtime_dependency 'thor'
   gem.add_runtime_dependency 'json','> 1.8.5'
   gem.add_runtime_dependency 'webrick'

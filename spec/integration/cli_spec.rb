@@ -31,4 +31,19 @@ describe "running the pact verify CLI" do
       execute_command command, without: [/describe_interaction/]
     end
   end
+
+  describe "running with json output" do
+    let(:command) do
+      [
+        "bundle exec bin/pact verify",
+        "--pact-uri spec/support/test_app_pass.json",
+        "--pact-helper spec/support/pact_helper.rb",
+        "--format json"
+      ].join(" ")
+    end
+    it "formats the output as json" do
+      output = `#{command}`
+      expect(JSON.parse(output)["examples"].size).to be > 1
+    end
+  end
 end

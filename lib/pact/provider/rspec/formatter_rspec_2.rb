@@ -8,6 +8,11 @@ module Pact
     module RSpec
       class Formatter2 < ::RSpec::Core::Formatters::DocumentationFormatter
 
+        class NilFormatter < ::RSpec::Core::Formatters::DocumentationFormatter
+          def dump_commands_to_rerun_failed_examples
+          end
+        end
+
         C = ::Term::ANSIColor
 
         def dump_commands_to_rerun_failed_examples

@@ -20,7 +20,6 @@ module Pact
 
       attr_reader :pact_urls
       attr_reader :options
-      attr_reader :output
 
       def initialize pact_urls, options = {}
         @pact_urls = pact_urls
@@ -62,10 +61,16 @@ module Pact
           config.output_stream = Pact.configuration.output_stream
         end
 
-        # Sometimes the formatter set in the cli.rb get set with an output of StringIO.. don't know why
-        formatter_class = Pact::RSpec.formatter_class
-        pact_formatter = ::RSpec.configuration.formatters.find {|f| f.class == formatter_class && f.output == ::RSpec.configuration.output_stream}
-        ::RSpec.configuration.add_formatter formatter_class unless pact_formatter
+        if options[:format]
+          ::RSpec.configuration.add_formatter options[:format]
+          # Don't want to mess up the JSON parsing with messages to stdout, so send it to stderr
+          Pact.configuration.output_stream = Pact.configuration.error_stream
+        else
+          # Sometimes the formatter set in the cli.rb get set with an output of StringIO.. don't know why
+          formatter_class = Pact::RSpec.formatter_class
+          pact_formatter = ::RSpec.configuration.formatters.find {|f| f.class == formatter_class && f.output == ::RSpec.configuration.output_stream}
+          ::RSpec.configuration.add_formatter formatter_class unless pact_formatter
+        end
         ::RSpec.configuration.full_backtrace = @options[:full_backtrace]
 
         config.before(:suite) do

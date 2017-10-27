@@ -40,7 +40,7 @@ module Pact
           def publish_verification_results publish_verification_results
             self.publish_verification_results = publish_verification_results
             Pact::RSpec.with_rspec_2 do
-              puts "WARNING: Publishing of verification results is currently not supported with rspec 2. If you would like this functionality, please feel free to submit a PR!"
+              Pact.configuration.error_stream.puts "WARN: Publishing of verification results is currently not supported with rspec 2. If you would like this functionality, please feel free to submit a PR!"
             end
           end
 

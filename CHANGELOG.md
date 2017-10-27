@@ -2,6 +2,11 @@ Do this to generate your change history
 
   git log --pretty=format:'  * %h - %s (%an, %ad)'
 
+<a name="v1.17.0"></a>
+## 1.17.0 (2017-10-27)
+
+* 4ae8417 - feat: allow json formatter to be configured for pact verify (Beth Skurrie, Fri Oct 27 16:08:41 2017 +1100)
+
 <a name="v1.16.1"></a>
 ## 1.16.1 (2017-10-18)
 

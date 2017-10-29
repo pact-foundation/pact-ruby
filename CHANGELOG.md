@@ -2,6 +2,10 @@ Do this to generate your change history
 
   git log --pretty=format:'  * %h - %s (%an, %ad)'
 
+<a name="v1.18.0"></a>
+## 1.18.0 (2017-10-30)
+* 7cde586 - feat: correct rack-test dependency for rails 5 support (Beth Skurrie, Mon Oct 30 10:09:07 2017 +1100)
+
 <a name="v1.17.0"></a>
 ## 1.17.0 (2017-10-27)
 

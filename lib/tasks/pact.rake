@@ -31,5 +31,4 @@ namespace :pact do
     require 'pact/provider/help/console_text'
     puts Pact::Provider::Help::ConsoleText.(args[:reports_dir])
   end
-
 end

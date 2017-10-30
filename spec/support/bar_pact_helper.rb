@@ -16,6 +16,7 @@ module Pact
 		Pact.service_provider "Bar" do
 			app { BarApp.new }
 			app_version '1.2.3'
+			app_version_tags ['master']
 			publish_verification_results true
 
 			honours_pact_with 'Foo' do

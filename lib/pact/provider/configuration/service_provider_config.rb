@@ -5,8 +5,9 @@ module Pact
 
         attr_accessor :application_version
 
-        def initialize application_version, publish_verification_results, &app_block
+        def initialize application_version, tags, publish_verification_results, &app_block
           @application_version = application_version
+          @tags = [*tags]
           @publish_verification_results = publish_verification_results
           @app_block = app_block
         end
@@ -17,6 +18,10 @@ module Pact
 
         def publish_verification_results?
           @publish_verification_results
+        end
+
+        def tags
+          @tags
         end
       end
     end

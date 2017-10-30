@@ -1,11 +1,10 @@
 require 'pact/tasks/verification_task'
 # Use for end to end manual debugging of issues.
 
-BROKER_BASE_URL = 'http://127.0.0.1:9292'
+BROKER_BASE_URL = 'http://localhost:9292'
 
 RSpec::Core::RakeTask.new('pact:foobar:create') do | task |
   task.pattern = "spec/features/foo_bar_spec.rb"
-
 end
 
 task 'pact:foobar:publish' do

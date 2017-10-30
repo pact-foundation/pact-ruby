@@ -15,6 +15,7 @@ module Pact
           @rspec_summary = rspec_summary
         end
 
+        # TODO do not publish unless all interactions have been run
         def call
           verification_results.collect do | pair |
             Publish.call(pair.first, pair.last)

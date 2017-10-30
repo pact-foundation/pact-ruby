@@ -6,13 +6,27 @@ module Pact
       describe Publish do
         describe "call" do
           let(:publish_verification_url) { nil }
+          let(:tag_version_url) { 'http://tag-me/{tag}' }
           let(:pact_source) { instance_double("Pact::Provider::PactSource", pact_hash: pact_hash, uri: pact_url)}
           let(:pact_url) { instance_double("Pact::Provider::PactURI", basic_auth?: basic_auth, username: 'username', password: 'password')}
           let(:basic_auth) { false }
-          let(:pact_hash) { {'consumer' => {'name' => 'Foo'}, '_links' => {'pb:publish-verification-results'=> {'href' => publish_verification_url}}} }
+          let(:pact_hash) do
+            {
+              'consumer' => {
+                'name' => 'Foo'
+              },
+              '_links' => {
+                'pb:publish-verification-results'=> {
+                  'href' => publish_verification_url
+                },
+                'pb:tag-version'=> {'href' => tag_version_url}
+              }
+            }
+          end
           let(:app_version_set) { false }
           let(:verification_json) { '{"foo": "bar"}' }
           let(:publish_verification_results) { false }
+          let(:tags) { [] }
           let(:verification) do
             instance_double("Pact::Verifications::Verification",
               to_json: verification_json,
@@ -21,13 +35,14 @@ module Pact
           end
 
           let(:provider_configuration) do
-            double('provider config', publish_verification_results?: publish_verification_results)
+            double('provider config', publish_verification_results?: publish_verification_results, tags: tags)
           end
 
           before do
             allow($stdout).to receive(:puts)
             allow(Pact.configuration).to receive(:provider).and_return(provider_configuration)
             stub_request(:post, 'http://broker/verifications')
+            stub_request(:put, /tag-me/)
           end
 
           subject { Publish.call(pact_source, verification)}
@@ -48,6 +63,26 @@ module Pact
               it "publishes the verification" do
                 subject
                 expect(WebMock).to have_requested(:post, publish_verification_url).with(body: verification_json, headers: {'Content-Type' => 'application/json'})
+              end
+
+              context "with tags" do
+                let(:tags) { ['foo'] }
+
+                it "tags the provider version" do
+                  subject
+                  expect(WebMock).to have_requested(:put, 'http://tag-me/foo').with(headers: {'Content-Type' => 'application/json'})
+                end
+
+                context "when there is no pb:tag-version link" do
+                  before do
+                    pact_hash['_links'].delete('pb:tag-version')
+                  end
+
+                  it "prints a warning" do
+                    expect($stderr).to receive(:puts).with /WARN: Cannot tag provider version/
+                    subject
+                  end
+                end
               end
 
               context "when basic auth is configured on the pact URL" do

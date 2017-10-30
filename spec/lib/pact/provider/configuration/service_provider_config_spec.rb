@@ -10,7 +10,7 @@ module Pact
 
           let(:app_block) { ->{ Object.new } }
 
-          subject { ServiceProviderConfig.new("1.2.3'", true, &app_block) }
+          subject { ServiceProviderConfig.new("1.2.3'", [], true, &app_block) }
 
           it "should execute the app_block each time" do
             expect(subject.app.object_id).to_not equal(subject.app.object_id)

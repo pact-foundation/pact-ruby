@@ -13,7 +13,7 @@ module Pact
 
         extend Pact::DSL
 
-        attr_accessor :name, :app_block, :application_version, :publish_verification_results
+        attr_accessor :name, :app_block, :application_version, :tags, :publish_verification_results
 
         CONFIG_RU_APP = lambda {
           unless File.exist? Pact.configuration.config_ru_path
@@ -25,6 +25,7 @@ module Pact
         def initialize name
           @name = name
           @publish_verification_results = false
+          @tags = []
           @app_block = CONFIG_RU_APP
         end
 
@@ -35,6 +36,10 @@ module Pact
 
           def app_version application_version
             self.application_version = application_version
+          end
+
+          def app_version_tags tags
+            self.tags = tags
           end
 
           def publish_verification_results publish_verification_results
@@ -70,7 +75,7 @@ module Pact
         end
 
         def create_service_provider
-          Pact.configuration.provider = ServiceProviderConfig.new(application_version, publish_verification_results, &@app_block)
+          Pact.configuration.provider = ServiceProviderConfig.new(application_version, tags, publish_verification_results, &@app_block)
         end
       end
     end

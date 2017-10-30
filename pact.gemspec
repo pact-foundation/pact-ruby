@@ -37,6 +37,8 @@ Gem::Specification.new do |gem|
   gem.add_development_dependency 'fakefs', '0.5' # 0.6.0 blows up
   gem.add_development_dependency 'hashie', '~> 2.0'
   gem.add_development_dependency 'activesupport'
-  gem.add_development_dependency 'faraday'
-  gem.add_development_dependency 'appraisal'
+  gem.add_development_dependency 'faraday', '~> 0.13'
+  gem.add_development_dependency 'appraisal', '~> 2.2'
+  gem.add_development_dependency 'conventional-changelog', '~> 1.3'
+  gem.add_development_dependency 'bump', '~> 0.5'
 end

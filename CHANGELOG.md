@@ -1,3 +1,13 @@
+<a name="v1.19.0"></a>
+### v1.19.0 (2017-10-30)
+
+
+#### Features
+
+* **verifications**
+  * allow provider version tags to be specified	 ([bff4611](/../../commit/bff4611))
+
+
 <a name="v1.18.0"></a>
 ## 1.18.0 (2017-10-30)
 * 7cde586 - feat: correct rack-test dependency for rails 5 support (Beth Skurrie, Mon Oct 30 10:09:07 2017 +1100)

@@ -43,7 +43,7 @@ module Pact
         end
 
         def tag_url tag
-          href = pact_source.pact_hash.dig('_links', 'pb:tag-version', 'href')
+          href = pact_source.pact_hash.fetch('_links', {}).fetch('pb:tag-version', {})['href']
           href ? href.gsub('{tag}', tag) : nil
         end
 

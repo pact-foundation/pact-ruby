@@ -85,6 +85,18 @@ module Pact
                 end
               end
 
+              context "when there are no tags specified and there is no pb:tag-version link" do
+                before do
+                  pact_hash['_links'].delete('pb:tag-version')
+                end
+                let(:tags) { [] }
+
+                it "does not print a warning" do
+                  expect($stderr).to_not receive(:puts).with /WARN: Cannot tag provider version/
+                  subject
+                end
+              end
+
               context "when basic auth is configured on the pact URL" do
                 let(:basic_auth) { true }
                 it "sets the username and password for the pubication URL" do

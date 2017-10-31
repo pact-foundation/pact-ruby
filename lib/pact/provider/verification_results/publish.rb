@@ -23,11 +23,14 @@ module Pact
 
         def call
           if Pact.configuration.provider.publish_verification_results?
-            if tag_url('')
-              tag
-            else
-              Pact.configuration.error_stream.puts "WARN: Cannot tag provider version as there is no link named pb:tag-version in the pact JSON."
+            if Pact.configuration.provider.tags.any?
+              if tag_url('')
+                tag_versions
+              else
+                Pact.configuration.error_stream.puts "WARN: Cannot tag provider version as there is no link named pb:tag-version in the pact JSON."
+              end
             end
+
             if publication_url
               publish
             else
@@ -47,7 +50,7 @@ module Pact
           href ? href.gsub('{tag}', tag) : nil
         end
 
-        def tag
+        def tag_versions
           Pact.configuration.provider.tags.each do | tag |
             uri = URI(tag_url(tag))
             request = build_request('Put', uri, nil, "Tagging provider version at")

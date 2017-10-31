@@ -1,3 +1,13 @@
+<a name="v1.19.1"></a>
+### v1.19.1 (2017-10-31)
+
+
+#### Bug Fixes
+
+* **verifications**
+  * do not print warning about missing pb:tag-version link when there are no tags configured	 ([ed9468a](/../../commit/ed9468a))
+
+
 <a name="v1.19.0"></a>
 ### v1.19.0 (2017-10-30)
 

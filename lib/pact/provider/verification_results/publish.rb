@@ -73,7 +73,7 @@ module Pact
 
         def publish
           uri = URI(publication_url)
-          request = build_request('Post', uri, verification_result.to_json, "Publishing verification result #{verification_result.to_json} to")
+          request = build_request('Post', uri, verification_result.to_json, "Publishing verification result #{verification_result} to")
           response = nil
           begin
             options = {:use_ssl => uri.scheme == 'https'}
@@ -81,12 +81,17 @@ module Pact
               http.request request
             end
           rescue StandardError => e
-            error_message = "Failed to publish verification result due to: #{e.class} #{e.message}"
+            error_message = "Failed to publish verification results due to: #{e.class} #{e.message}"
             raise PublicationError.new(error_message)
           end
 
-          unless response.code.start_with?("2")
-            raise PublicationError.new("Error returned from verification result publication #{response.code} #{response.body}")
+
+
+          if response.code.start_with?("2")
+            new_resource_url = JSON.parse(response.body)['_links']['self']['href']
+            $stdout.puts "INFO: Verification results published to #{new_resource_url}"
+          else
+            raise PublicationError.new("Error returned from verification results publication #{response.code} #{response.body}")
           end
         end
 

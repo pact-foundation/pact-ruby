@@ -6,13 +6,13 @@ module Pact
     module VerificationResults
       class PublishAll
 
-        def self.call pact_sources, rspec_summary
-          new(pact_sources, rspec_summary).call
+        def self.call pact_sources, test_results_hash
+          new(pact_sources, test_results_hash).call
         end
 
-        def initialize pact_sources, rspec_summary
+        def initialize pact_sources, test_results_hash
           @pact_sources = pact_sources
-          @rspec_summary = rspec_summary
+          @test_results_hash = test_results_hash
         end
 
         # TODO do not publish unless all interactions have been run
@@ -26,11 +26,11 @@ module Pact
 
         def verification_results
           pact_sources.collect do | pact_source |
-            [pact_source, Create.call(pact_source.pact_json, rspec_summary)]
+            [pact_source, Create.call(pact_source, test_results_hash)]
           end
         end
 
-        attr_reader :pact_sources, :rspec_summary
+        attr_reader :pact_sources, :test_results_hash
       end
     end
   end

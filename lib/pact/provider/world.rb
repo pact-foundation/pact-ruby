@@ -14,6 +14,8 @@ module Pact
   module Provider
     class World
 
+      attr_accessor :pact_sources
+
       def provider_states
         @provider_states_proxy ||= Pact::Provider::State::ProviderStateProxy.new
       end
@@ -29,7 +31,6 @@ module Pact
       def pact_urls
         pact_verifications.collect(&:uri)
       end
-
     end
   end
 end

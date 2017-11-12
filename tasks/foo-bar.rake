@@ -30,6 +30,10 @@ Pact::VerificationTask.new(:foobar_using_broker) do | pact |
   pact.uri "#{BROKER_BASE_URL}/pacts/provider/Bar/consumer/Foo/version/1.0.0", :pact_helper => './spec/support/bar_pact_helper.rb'
 end
 
+Pact::VerificationTask.new('foobar_using_broker:fail') do | pact |
+  pact.uri "#{BROKER_BASE_URL}/pacts/provider/Bar/consumer/Foo/version/1.0.0", :pact_helper => './spec/support/bar_fail_pact_helper.rb'
+end
+
 task 'pact:verify:foobar' => ['pact:foobar:create']
 task 'pact:verify:foobar_using_broker' => ['pact:foobar:create', 'pact:foobar:publish']
 

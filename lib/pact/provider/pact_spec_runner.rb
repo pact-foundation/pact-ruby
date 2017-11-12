@@ -8,6 +8,7 @@ require 'pact/rspec'
 require 'pact/provider/pact_source'
 require 'pact/provider/help/write'
 require 'pact/provider/verification_results/publish_all'
+require 'pact/provider/rspec/pact_broker_formatter'
 
 require_relative 'rspec'
 
@@ -61,6 +62,8 @@ module Pact
           config.output_stream = Pact.configuration.output_stream
         end
 
+        ::RSpec.configuration.add_formatter Pact::Provider::RSpec::PactBrokerFormatter, StringIO.new
+
         if options[:format]
           ::RSpec.configuration.add_formatter options[:format]
           # Don't want to mess up the JSON parsing with messages to stdout, so send it to stderr
@@ -82,14 +85,12 @@ module Pact
           Pact.configuration.provider.app
         end
 
+        # For the Pact::Provider::RSpec::PactBrokerFormatter
+        Pact.provider_world.pact_sources = pact_sources
         jsons = pact_jsons
-        sources = pact_sources
 
         config.after(:suite) do | suite |
           Pact::Provider::Help::Write.call(jsons)
-          Pact::RSpec.with_rspec_3 do
-            Pact::Provider::VerificationResults::PublishAll.call(sources, ::RSpec.configuration.reporter.failed_examples)
-          end
         end
 
       end

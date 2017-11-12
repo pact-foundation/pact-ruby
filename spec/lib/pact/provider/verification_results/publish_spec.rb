@@ -23,6 +23,15 @@ module Pact
               }
             }
           end
+          let(:created_verification_body) do
+            {
+              '_links' => {
+                'self' => {
+                  'href' => 'http://broker/new-verification'
+                }
+              }
+            }.to_json
+          end
           let(:app_version_set) { false }
           let(:verification_json) { '{"foo": "bar"}' }
           let(:publish_verification_results) { false }
@@ -41,11 +50,11 @@ module Pact
           before do
             allow($stdout).to receive(:puts)
             allow(Pact.configuration).to receive(:provider).and_return(provider_configuration)
-            stub_request(:post, 'http://broker/verifications')
+            stub_request(:post, 'http://broker/verifications').to_return(status: 200, body: created_verification_body)
             stub_request(:put, /tag-me/)
           end
 
-          subject { Publish.call(pact_source, verification)}
+          subject { Publish.call(pact_source, verification) }
 
           context "when publish_verification_results is false" do
             it "does not publish the verification" do
@@ -121,7 +130,7 @@ module Pact
 
               context "with https" do
                 before do
-                  stub_request(:post, publish_verification_url)
+                  stub_request(:post, publish_verification_url).to_return(status: 200, body: created_verification_body)
                 end
                 let(:publish_verification_url) { 'https://broker/verifications' }
 

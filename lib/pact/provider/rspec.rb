@@ -25,7 +25,7 @@ module Pact
           Pact.configuration.output_stream.puts "INFO: Filtering interactions by: #{options[:criteria]}" if options[:criteria] && options[:criteria].any?
           consumer_contract = Pact::ConsumerContract.from_json(pact_json)
           ::RSpec.describe "Verifying a pact between #{consumer_contract.consumer.name} and #{consumer_contract.provider.name}", pactfile_uri: pact_uri do
-            honour_consumer_contract consumer_contract, options.merge(pact_json: pact_json)
+            honour_consumer_contract consumer_contract, options.merge(pact_json: pact_json, pact_uri: pact_uri)
           end
         end
 
@@ -61,11 +61,16 @@ module Pact
 
         def describe_interaction interaction, options
 
+          # pact_uri, pact_provider_state and pact_description are used by
+          # Pact::Provider::RSpec::PactBrokerFormatter
           metadata = {
             pact: :verify,
             pact_interaction: interaction,
             pact_interaction_example_description: interaction_description_for_rerun_command(interaction),
-            pact_json: options[:pact_json]
+            pact_json: options[:pact_json],
+            pact_uri: options[:pact_uri],
+            pact_provider_state: interaction.provider_state,
+            pact_description: interaction.description
           }
 
           describe description_for(interaction), metadata do

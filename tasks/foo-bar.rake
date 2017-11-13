@@ -2,6 +2,9 @@ require 'pact/tasks/verification_task'
 # Use for end to end manual debugging of issues.
 
 BROKER_BASE_URL = 'http://localhost:9292'
+#BROKER_BASE_URL = 'https://test.pact.dius.com.au'
+BROKER_USERNAME = ENV['PACT_BROKER_USERNAME']
+BROKER_PASSWORD = ENV['PACT_BROKER_PASSWORD']
 
 RSpec::Core::RakeTask.new('pact:foobar:create') do | task |
   task.pattern = "spec/features/foo_bar_spec.rb"
@@ -14,11 +17,11 @@ task 'pact:foobar:publish' do
   put_request = Net::HTTP::Put.new(uri.path)
   put_request['Content-Type'] = "application/json"
   put_request.body = File.read("spec/pacts/foo-bar.json")
-  response = Net::HTTP.start(uri.hostname, uri.port) do |http|
+  put_request.basic_auth(BROKER_USERNAME, BROKER_PASSWORD) if BROKER_USERNAME
+  response = Net::HTTP.start(uri.hostname, uri.port, use_ssl: BROKER_BASE_URL.start_with?('https')) do |http|
     http.request put_request
   end
   puts response.code unless response.code == '200'
-  puts response.body
 end
 
 Pact::VerificationTask.new('foobar') do | pact |
@@ -27,11 +30,11 @@ end
 
 
 Pact::VerificationTask.new(:foobar_using_broker) do | pact |
-  pact.uri "#{BROKER_BASE_URL}/pacts/provider/Bar/consumer/Foo/version/1.0.0", :pact_helper => './spec/support/bar_pact_helper.rb'
+  pact.uri "#{BROKER_BASE_URL}/pacts/provider/Bar/consumer/Foo/version/1.0.0", :pact_helper => './spec/support/bar_pact_helper.rb', username: BROKER_USERNAME, password: BROKER_PASSWORD
 end
 
 Pact::VerificationTask.new('foobar_using_broker:fail') do | pact |
-  pact.uri "#{BROKER_BASE_URL}/pacts/provider/Bar/consumer/Foo/version/1.0.0", :pact_helper => './spec/support/bar_fail_pact_helper.rb'
+  pact.uri "#{BROKER_BASE_URL}/pacts/provider/Bar/consumer/Foo/version/1.0.0", :pact_helper => './spec/support/bar_fail_pact_helper.rb', username: BROKER_USERNAME, password: BROKER_PASSWORD
 end
 
 task 'pact:verify:foobar' => ['pact:foobar:create']

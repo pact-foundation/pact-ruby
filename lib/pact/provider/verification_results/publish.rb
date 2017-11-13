@@ -22,24 +22,28 @@ module Pact
         end
 
         def call
-          if Pact.configuration.provider.publish_verification_results?
-            if Pact.configuration.provider.tags.any?
-              if tag_url('')
-                tag_versions
-              else
-                Pact.configuration.error_stream.puts "WARN: Cannot tag provider version as there is no link named pb:tag-version in the pact JSON."
-              end
-            end
-
-            if publication_url
-              publish
-            else
-              Pact.configuration.error_stream.puts "WARN: Cannot publish verification for #{consumer_name} as there is no link named pb:publish-verification-results in the pact JSON. If you are using a pact broker, please upgrade to version 2.0.0 or later."
-            end
+          if can_publish_verification_results?
+            tag_versions_if_configured
+            publish_verification_results
           end
         end
 
         private
+
+        def can_publish_verification_results?
+          return false unless Pact.configuration.provider.publish_verification_results?
+
+          if publication_url.nil?
+            Pact.configuration.error_stream.puts "WARN: Cannot publish verification for #{consumer_name} as there is no link named pb:publish-verification-results in the pact JSON. If you are using a pact broker, please upgrade to version 2.0.0 or later."
+            return false
+          end
+
+          if !verification_result.publishable?
+            Pact.configuration.error_stream.puts "WARN: Cannot publish verification for #{consumer_name} as not all interactions have been verified. Re-run the verification without the filter parameters or environment variables to publish the verification."
+            return false
+          end
+          true
+        end
 
         def publication_url
           @publication_url ||= pact_source.pact_hash.fetch('_links', {}).fetch('pb:publish-verification-results', {})['href']
@@ -48,6 +52,16 @@ module Pact
         def tag_url tag
           href = pact_source.pact_hash.fetch('_links', {}).fetch('pb:tag-version', {})['href']
           href ? href.gsub('{tag}', tag) : nil
+        end
+
+        def tag_versions_if_configured
+          if Pact.configuration.provider.tags.any?
+            if tag_url('')
+              tag_versions
+            else
+              Pact.configuration.error_stream.puts "WARN: Cannot tag provider version as there is no link named pb:tag-version in the pact JSON."
+            end
+          end
         end
 
         def tag_versions
@@ -71,7 +85,7 @@ module Pact
           end
         end
 
-        def publish
+        def publish_verification_results
           uri = URI(publication_url)
           request = build_request('Post', uri, verification_result.to_json, "Publishing verification result #{verification_result} to")
           response = nil

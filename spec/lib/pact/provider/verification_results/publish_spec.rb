@@ -35,11 +35,13 @@ module Pact
           let(:app_version_set) { false }
           let(:verification_json) { '{"foo": "bar"}' }
           let(:publish_verification_results) { false }
+          let(:publishable) { true }
           let(:tags) { [] }
           let(:verification) do
             instance_double("Pact::Verifications::Verification",
               to_json: verification_json,
-              provider_application_version_set?: app_version_set
+              provider_application_version_set?: app_version_set,
+              publishable?: publishable
             )
           end
 
@@ -72,6 +74,15 @@ module Pact
               it "publishes the verification" do
                 subject
                 expect(WebMock).to have_requested(:post, publish_verification_url).with(body: verification_json, headers: {'Content-Type' => 'application/json'})
+              end
+
+              context "when the verification result is not publishable" do
+                let(:publishable) { false }
+
+                it "does not publish the verification" do
+                  subject
+                  expect(WebMock).to_not have_requested(:post, 'http://broker/verifications')
+                end
               end
 
               context "with tags" do

@@ -1,0 +1,113 @@
+require 'pact/provider/verification_results/create'
+
+module Pact
+  module Provider
+    module VerificationResults
+      describe Create do
+        before do
+          allow(Pact.configuration).to receive(:provider).and_return(provider_configuration)
+          allow(VerificationResult).to receive(:new).and_return(verification_result)
+        end
+
+        let(:verification_result) { double('VerificationResult') }
+        let(:provider_configuration) do
+          double('provider_configuration', application_version: '1.2.3')
+        end
+        let(:pact_source_1) do
+          instance_double('Pact::Provider::PactSource', uri: pact_uri_1, pact_hash: pact_hash_1)
+        end
+        let(:pact_uri_1) { instance_double('Pact::Provider::PactURI', uri: URI('foo')) }
+        let(:pact_uri_2) { instance_double('Pact::Provider::PactURI', uri: URI('bar')) }
+        let(:example_1) do
+          {
+            pact_uri: pact_uri_1,
+            pact_interaction: double('interaction'),
+            status: 'passed'
+          }
+        end
+        let(:example_2) do
+          {
+            pact_uri: pact_uri_2,
+            pact_interaction: double('interaction'),
+            status: 'passed'
+          }
+        end
+        let(:test_results_hash) do
+          {
+            examples: [example_1, example_2]
+          }
+        end
+        let(:pact_hash_1) do
+          {
+            'interactions' => [{}]
+          }
+        end
+
+        subject { Create.call(pact_source_1, test_results_hash) }
+
+        it "returns a verification result" do
+          expect(subject).to eq verification_result
+        end
+
+        it "creates a VerificationResult with the relevant test results" do
+          expected_test_results_hash = {
+            examples: [{ status: "passed" }],
+            summary: { exampleCount: 1, failureCount: 0}
+          }
+          expect(VerificationResult).to receive(:new).with(anything, anything, anything, expected_test_results_hash)
+          subject
+        end
+
+        it "creates a VerificationResult with the provider application version" do
+          expect(provider_configuration).to receive(:application_version)
+          expect(VerificationResult).to receive(:new).with(anything, anything, '1.2.3', anything)
+          subject
+        end
+
+        context "when every interaction has been executed" do
+          it "sets publishable to true" do
+            expect(VerificationResult).to receive(:new).with(true, anything, anything, anything)
+            subject
+          end
+        end
+
+        context "when not every interaction has been executed" do
+          let(:pact_hash_1) do
+            {
+              'interactions' => [{}, {}]
+            }
+          end
+          it "sets publishable to false" do
+            expect(VerificationResult).to receive(:new).with(false, anything, anything, anything)
+            subject
+          end
+        end
+
+        context "when all the examples passed" do
+          it "sets the success to true" do
+            expect(VerificationResult).to receive(:new).with(anything, true, anything, anything)
+            subject
+          end
+        end
+
+        context "when not all the examples passed" do
+          before do
+            example_1[:status] = 'notpassed'
+          end
+
+          it "sets the success to false" do
+            expect(VerificationResult).to receive(:new).with(anything, false, anything, anything)
+            subject
+          end
+
+          it "sets the failureCount" do
+            expect(VerificationResult).to receive(:new) do | _, _, _, test_results_hash|
+              expect(test_results_hash[:summary][:failureCount]).to eq 1
+            end
+            subject
+          end
+        end
+      end
+    end
+  end
+end

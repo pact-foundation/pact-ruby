@@ -61,23 +61,23 @@ module Pact
 
         def describe_interaction interaction, options
 
-          # pact_uri, pact_provider_state and pact_description are used by
+          # pact_uri and pact_interaction are used by
           # Pact::Provider::RSpec::PactBrokerFormatter
+
+          # pact_interaction_example_description is used by
+          # Pact::Provider::RSpec::Formatter and Pact::Provider::RSpec::Formatter2
+
+          # pact: verify is used to allow RSpec before and after hooks.
           metadata = {
             pact: :verify,
             pact_interaction: interaction,
             pact_interaction_example_description: interaction_description_for_rerun_command(interaction),
-            pact_json: options[:pact_json],
-            pact_uri: options[:pact_uri],
-            pact_provider_state: interaction.provider_state,
-            pact_description: interaction.description
+            pact_uri: options[:pact_uri]
           }
 
           describe description_for(interaction), metadata do
 
-
             describe "with #{interaction.request.method_and_path}" do
-
 
               interaction_context = InteractionContext.new
 

@@ -25,6 +25,7 @@ describe "publishing verifications" do
 
   let(:pact_hash) do
     {
+      'interactions' => [{}],
       '_links' => {
         'pb:publish-verification-results' => {
           'href' => 'http://publish/'

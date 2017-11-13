@@ -15,10 +15,9 @@ module Pact
           @test_results_hash = test_results_hash
         end
 
-        # TODO do not publish unless all interactions have been run
         def call
-          verification_results.collect do | pair |
-            Publish.call(pair.first, pair.last)
+          verification_results.collect do | (pact_source, verification_result) |
+            Publish.call(pact_source, verification_result)
           end
         end
 

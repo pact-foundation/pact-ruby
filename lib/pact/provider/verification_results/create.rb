@@ -14,7 +14,7 @@ module Pact
         end
 
         def call
-          VerificationResult.new(!any_failures?, Pact.configuration.provider.application_version, test_results_hash_for_pact_uri)
+          VerificationResult.new(publishable?, !any_failures?, Pact.configuration.provider.application_version, test_results_hash_for_pact_uri)
         end
 
         private
@@ -27,19 +27,32 @@ module Pact
           count_failures_for_pact_uri > 0
         end
 
+        def publishable?
+          executed_interactions_count == all_interactions_count && all_interactions_count > 0
+        end
+
         def examples_for_pact_uri
-          @examples_for_pact_uri ||= test_results_hash[:examples]
-                                      .select{ |e| e[:pact_uri] == pact_uri }
-                                      .collect{ |e| clean_example(e) }
+          @examples_for_pact_uri ||= test_results_hash[:examples].select{ |e| e[:pact_uri] == pact_uri }
         end
 
         def count_failures_for_pact_uri
           examples_for_pact_uri.count{ |e| e[:status] != 'passed' }
         end
 
+        def executed_interactions_count
+          examples_for_pact_uri
+            .collect { |e| e[:pact_interaction].object_id }
+            .uniq
+            .count
+        end
+
+        def all_interactions_count
+          pact_source.pact_hash['interactions'].count
+        end
+
         def test_results_hash_for_pact_uri
           {
-            examples: examples_for_pact_uri,
+            examples: examples_for_pact_uri.collect{ |e| clean_example(e) },
             summary: {
               exampleCount: examples_for_pact_uri.size,
               failureCount: count_failures_for_pact_uri
@@ -48,7 +61,7 @@ module Pact
         end
 
         def clean_example(example)
-          example.reject{ |k, v| k == :pact_uri }
+          example.reject{ |k, v| k == :pact_uri || k == :pact_interaction }
         end
 
         attr_reader :pact_source, :test_results_hash

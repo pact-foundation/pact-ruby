@@ -5,10 +5,15 @@ module Pact
     module VerificationResults
       class VerificationResult
 
-        def initialize success, provider_application_version, test_results_hash
+        def initialize publishable, success, provider_application_version, test_results_hash
+          @publishable = publishable
           @success = success
           @provider_application_version = provider_application_version
           @test_results_hash = test_results_hash
+        end
+
+        def publishable?
+          @publishable
         end
 
         def provider_application_version_set?

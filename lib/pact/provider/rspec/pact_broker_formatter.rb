@@ -53,11 +53,12 @@ module Pact
         def format_example(example)
           {
             exampleDescription: example.description,
-            fullDescription: example.full_description,
+            exampleFullDescription: example.full_description,
             status: example.execution_result.status.to_s,
-            interactionProviderState: example.metadata[:pact_provider_state],
-            interactionDescription: example.metadata[:pact_description],
-            pact_uri: example.metadata[:pact_uri]
+            interactionProviderState: example.metadata[:pact_interaction].provider_state,
+            interactionDescription: example.metadata[:pact_interaction].description,
+            pact_uri: example.metadata[:pact_uri],
+            pact_interaction: example.metadata[:pact_interaction]
           }
         end
       end

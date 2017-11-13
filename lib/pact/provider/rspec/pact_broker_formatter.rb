@@ -1,5 +1,6 @@
 require 'rspec/core/formatters'
 require 'pact/provider/verification_results/publish_all'
+require 'term/ansicolor'
 
 module Pact
   module Provider
@@ -32,7 +33,7 @@ module Pact
               if e
                 hash[:exception] =  {
                   class: e.class.name,
-                  message: e.message
+                  message: ::Term::ANSIColor.uncolor(e.message)
                 }
               end
             end

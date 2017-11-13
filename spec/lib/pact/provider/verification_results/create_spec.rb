@@ -34,7 +34,7 @@ module Pact
         end
         let(:test_results_hash) do
           {
-            examples: [example_1, example_2]
+            tests: [example_1, example_2]
           }
         end
         let(:pact_hash_1) do
@@ -51,8 +51,8 @@ module Pact
 
         it "creates a VerificationResult with the relevant test results" do
           expected_test_results_hash = {
-            examples: [{ status: "passed" }],
-            summary: { exampleCount: 1, failureCount: 0}
+            tests: [{ status: "passed" }],
+            summary: { testCount: 1, failureCount: 0}
           }
           expect(VerificationResult).to receive(:new).with(anything, anything, anything, expected_test_results_hash)
           subject

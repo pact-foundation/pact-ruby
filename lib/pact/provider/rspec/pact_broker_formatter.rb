@@ -27,17 +27,9 @@ module Pact
         end
 
         def stop(notification)
-          @output_hash[:examples] = notification.examples.map do |example|
-            format_example(example).tap do |hash|
-              e = example.exception
-              if e
-                hash[:exception] =  {
-                  class: e.class.name,
-                  message: ::Term::ANSIColor.uncolor(e.message)
-                }
-              end
-            end
-          end
+          @output_hash[:tests] = notification
+                                  .examples
+                                  .map { |example| format_example(example) }
         end
 
         def seed(notification)
@@ -53,14 +45,21 @@ module Pact
 
         def format_example(example)
           {
-            exampleDescription: example.description,
-            exampleFullDescription: example.full_description,
+            testDescription: example.description,
+            testFullDescription: example.full_description,
             status: example.execution_result.status.to_s,
             interactionProviderState: example.metadata[:pact_interaction].provider_state,
             interactionDescription: example.metadata[:pact_interaction].description,
             pact_uri: example.metadata[:pact_uri],
             pact_interaction: example.metadata[:pact_interaction]
-          }
+          }.tap do |hash|
+            if example.exception
+              hash[:exception] =  {
+                class: example.exception.class.name,
+                message: ::Term::ANSIColor.uncolor(example.exception.message)
+              }
+            end
+          end
         end
       end
     end

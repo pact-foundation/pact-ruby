@@ -46,9 +46,9 @@ describe "publishing verifications" do
 
   let(:test_results_hash) do
     {
-      examples: [
+      tests: [
         {
-          exampleDescription: '1',
+          testDescription: '1',
           status: 'passed',
           pact_uri: pact_uri
         }

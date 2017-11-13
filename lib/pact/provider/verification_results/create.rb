@@ -32,7 +32,7 @@ module Pact
         end
 
         def examples_for_pact_uri
-          @examples_for_pact_uri ||= test_results_hash[:examples].select{ |e| e[:pact_uri] == pact_uri }
+          @examples_for_pact_uri ||= test_results_hash[:tests].select{ |e| e[:pact_uri] == pact_uri }
         end
 
         def count_failures_for_pact_uri
@@ -52,9 +52,9 @@ module Pact
 
         def test_results_hash_for_pact_uri
           {
-            examples: examples_for_pact_uri.collect{ |e| clean_example(e) },
+            tests: examples_for_pact_uri.collect{ |e| clean_example(e) },
             summary: {
-              exampleCount: examples_for_pact_uri.size,
+              testCount: examples_for_pact_uri.size,
               failureCount: count_failures_for_pact_uri
             }
           }

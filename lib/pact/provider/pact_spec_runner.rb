@@ -62,7 +62,9 @@ module Pact
           config.output_stream = Pact.configuration.output_stream
         end
 
-        ::RSpec.configuration.add_formatter Pact::Provider::RSpec::PactBrokerFormatter, StringIO.new
+        Pact::RSpec.with_rspec_3 do
+          ::RSpec.configuration.add_formatter Pact::Provider::RSpec::PactBrokerFormatter, StringIO.new
+        end
 
         if options[:format]
           ::RSpec.configuration.add_formatter options[:format]

@@ -1,3 +1,23 @@
+<a name="v1.19.2"></a>
+### v1.19.2 (2017-11-16)
+
+
+#### Features
+
+* **publish test results**
+  * rename example to test in JSON	 ([cd2b79e](/../../commit/cd2b79e))
+  * remove ansi colours from error messages	 ([4416d04](/../../commit/4416d04))
+  * only publish for rspec 3	 ([31192d0](/../../commit/31192d0))
+  * only publish verification results when all interactions have been run	 ([0c56752](/../../commit/0c56752))
+  * enable test results to be published to the pact broker in the verification results	 ([e0dad27](/../../commit/e0dad27))
+
+
+#### Bug Fixes
+
+* **verifications**
+  * tag provider version, not consumer version	 ([b347588](/../../commit/b347588))
+
+
 <a name="v1.19.1"></a>
 ### v1.19.1 (2017-10-31)
 

@@ -50,17 +50,21 @@ module Pact
         end
 
         def tag_url tag
-          href = pact_source.pact_hash.fetch('_links', {}).fetch('pb:tag-version', {})['href']
-          href ? href.gsub('{tag}', tag) : nil
+          # This is so dodgey, need to use proper HAL
+          if publication_url
+            u = URI(publication_url)
+            if match = publication_url.match(%r{/provider/([^/]+)})
+              provider_name = match[1]
+              base_url = "#{u.scheme}://#{u.host}:#{u.host == u.default_port ? '' : u.port}"
+              provider_application_version = Pact.configuration.provider.application_version
+              "#{base_url}/pacticipants/#{provider_name}/versions/#{provider_application_version}/tags/#{tag}"
+            end
+          end
         end
 
         def tag_versions_if_configured
           if Pact.configuration.provider.tags.any?
-            if tag_url('')
-              tag_versions
-            else
-              Pact.configuration.error_stream.puts "WARN: Cannot tag provider version as there is no link named pb:tag-version in the pact JSON."
-            end
+            tag_versions if tag_url('')
           end
         end
 

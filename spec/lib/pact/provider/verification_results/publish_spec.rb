@@ -6,6 +6,7 @@ module Pact
       describe Publish do
         describe "call" do
           let(:publish_verification_url) { nil }
+          let(:stubbed_publish_verification_url) { 'http://broker/something/provider/Bar/verifications' }
           let(:tag_version_url) { 'http://tag-me/{tag}' }
           let(:pact_source) { instance_double("Pact::Provider::PactSource", pact_hash: pact_hash, uri: pact_url)}
           let(:pact_url) { instance_double("Pact::Provider::PactURI", basic_auth?: basic_auth, username: 'username', password: 'password')}
@@ -18,8 +19,7 @@ module Pact
               '_links' => {
                 'pb:publish-verification-results'=> {
                   'href' => publish_verification_url
-                },
-                'pb:tag-version'=> {'href' => tag_version_url}
+                }
               }
             }
           end
@@ -46,14 +46,14 @@ module Pact
           end
 
           let(:provider_configuration) do
-            double('provider config', publish_verification_results?: publish_verification_results, tags: tags)
+            double('provider config', publish_verification_results?: publish_verification_results, tags: tags, application_version: '1.2.3')
           end
 
           before do
             allow($stdout).to receive(:puts)
             allow(Pact.configuration).to receive(:provider).and_return(provider_configuration)
-            stub_request(:post, 'http://broker/verifications').to_return(status: 200, body: created_verification_body)
-            stub_request(:put, /tag-me/)
+            stub_request(:post, stubbed_publish_verification_url).to_return(status: 200, body: created_verification_body)
+            stub_request(:put, 'http://broker/pacticipants/Bar/versions/1.2.3/tags/foo')
           end
 
           subject { Publish.call(pact_source, verification) }
@@ -61,7 +61,7 @@ module Pact
           context "when publish_verification_results is false" do
             it "does not publish the verification" do
               subject
-              expect(WebMock).to_not have_requested(:post, 'http://broker/verifications')
+              expect(WebMock).to_not have_requested(:post, 'http://broker/something/provider/Bar/verifications')
             end
           end
 
@@ -69,7 +69,7 @@ module Pact
             let(:publish_verification_results) { true }
 
             context "when the publish-verification link is present" do
-              let(:publish_verification_url) { 'http://broker/verifications' }
+              let(:publish_verification_url) { stubbed_publish_verification_url }
 
               it "publishes the verification" do
                 subject
@@ -81,7 +81,7 @@ module Pact
 
                 it "does not publish the verification" do
                   subject
-                  expect(WebMock).to_not have_requested(:post, 'http://broker/verifications')
+                  expect(WebMock).to_not have_requested(:post, stubbed_publish_verification_url)
                 end
               end
 
@@ -90,17 +90,17 @@ module Pact
 
                 it "tags the provider version" do
                   subject
-                  expect(WebMock).to have_requested(:put, 'http://tag-me/foo').with(headers: {'Content-Type' => 'application/json'})
+                  expect(WebMock).to have_requested(:put, 'http://broker/pacticipants/Bar/versions/1.2.3/tags/foo').with(headers: {'Content-Type' => 'application/json'})
                 end
 
-                context "when there is no pb:tag-version link" do
+                context "when there is no pb:publish-verification-results link" do
                   before do
-                    pact_hash['_links'].delete('pb:tag-version')
+                    pact_hash['_links'].delete('pb:publish-verification-results')
                   end
 
-                  it "prints a warning" do
-                    expect($stderr).to receive(:puts).with /WARN: Cannot tag provider version/
+                  it "does not tag the version" do
                     subject
+                    expect(WebMock).to_not have_requested(:put, /.*/)
                   end
                 end
               end
@@ -127,7 +127,7 @@ module Pact
 
               context "when an HTTP error is returned" do
                 it "raises a PublicationError" do
-                  stub_request(:post, 'http://broker/verifications').to_return(status: 500, body: 'some error')
+                  stub_request(:post, stubbed_publish_verification_url).to_return(status: 500, body: 'some error')
                   expect{ subject }.to raise_error(PublicationError, /Error returned/)
                 end
               end
@@ -143,7 +143,7 @@ module Pact
                 before do
                   stub_request(:post, publish_verification_url).to_return(status: 200, body: created_verification_body)
                 end
-                let(:publish_verification_url) { 'https://broker/verifications' }
+                let(:publish_verification_url) { stubbed_publish_verification_url.gsub('http', 'https') }
 
                 it "uses ssl" do
                   subject

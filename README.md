@@ -54,7 +54,7 @@ Pact is most valuable for designing and testing integrations where you (or your 
 ## Getting help
 
 * Pact docs: [docs.pact.io](http://docs.pact.io)
-* Ruby Pact wiki: [github.com/realestate-com-au/pact/wiki](https://github.com/realestate-com-au/pact/wiki)
+* Ruby Pact wiki: [github.com/pact-foundation/pact-ruby/wiki](https://github.com/pact-foundation/pact-ruby/wiki)
 * Stackoverflow: [ruby pact questions](https://stackoverflow.com/questions/tagged/pact-ruby) or [general pact questions](https://stackoverflow.com/questions/tagged/pact)
 * Google users group: [for ongoing discussions rather than questions](https://groups.google.com/forum/#!forum/pact-support)
 * Gitter: [![Join the chat at https://gitter.im/realestate-com-au/pact](https://badges.gitter.im/Join%20Chat.svg)](https://gitter.im/realestate-com-au/pact?utm_source=badge&utm_medium=badge&utm_campaign=pr-badge&utm_content=badge)
@@ -221,7 +221,7 @@ require 'pact/tasks'
 
 Create a `pact_helper.rb` in your service provider project. The recommended place is `spec/service_consumers/pact_helper.rb`.
 
-See [Verifying Pacts](https://github.com/realestate-com-au/pact/wiki/Verifying-pacts) and the [Provider](documentation/configuration.md#provider) section of the Configuration documentation for more information.
+See [Verifying Pacts](https://github.com/pact-foundation/pact-ruby/wiki/Verifying-pacts) and the [Provider](documentation/configuration.md#provider) section of the Configuration documentation for more information.
 
 ```ruby
 # In spec/service_consumers/pact_helper.rb
@@ -261,7 +261,7 @@ Yay! Your Animal Service provider now honours the pact it has with your Zoo App 
 
 ### Using provider states
 
-Each interaction in a pact is verified in isolation, with no context maintained from the previous interactions. So how do you test a request that requires data to already exist on the provider? Read about provider states [here](https://github.com/realestate-com-au/pact/wiki/Provider-states).
+Each interaction in a pact is verified in isolation, with no context maintained from the previous interactions. So how do you test a request that requires data to already exist on the provider? Read about provider states [here](https://github.com/pact-foundation/pact-ruby/wiki/Provider-states).
 
 ## Configuration
 
@@ -269,23 +269,23 @@ See the [Configuration](/documentation/configuration.md) section of the document
 
 ## Pact best practices
 
-As in all things, there are good ways to implement Pacts, and there are not so good ways. There are also some Pact [GOTCHAS][gotchas] to beware of! Check out the [Best practices](https://github.com/realestate-com-au/pact/wiki/Best-practices) section of the documentation to make sure you're not Pacting it Wrong.
+As in all things, there are good ways to implement Pacts, and there are not so good ways. There are also some Pact [GOTCHAS][gotchas] to beware of! Check out the [Best practices](https://github.com/pact-foundation/pact-ruby/wiki/Best-practices) section of the documentation to make sure you're not Pacting it Wrong.
 
 ## Docs
 
 * [Example](example)
 * [Configuration](documentation/configuration.md)
-* [Terminology](https://github.com/realestate-com-au/pact/wiki/Terminology)
-* [Provider States](https://github.com/realestate-com-au/pact/wiki/Provider-states)
-* [Verifying pacts](https://github.com/realestate-com-au/pact/wiki/Verifying-pacts)
-* [Sharing pacts between consumer and provider](https://github.com/realestate-com-au/pact/wiki/Sharing-pacts-between-consumer-and-provider)
-* [Regular expressions and type matching with Pact](https://github.com/realestate-com-au/pact/wiki/Regular-expressions-and-type-matching-with-Pact)
-* [Frequently asked questions](https://github.com/realestate-com-au/pact/wiki/FAQ)
-* [Rarely asked questions](https://github.com/realestate-com-au/pact/wiki/RAQ)
-* [Best practices](https://github.com/realestate-com-au/pact/wiki/Best-practices)
-* [Troubleshooting](https://github.com/realestate-com-au/pact/wiki/Troubleshooting)
-* [Testing with pact diagram](https://github.com/realestate-com-au/pact/wiki/Testing with pact.png)
-* [News, blogs and articles](https://github.com/realestate-com-au/pact/wiki/News,-blogs-and-articles)
+* [Terminology](https://github.com/pact-foundation/pact-ruby/wiki/Terminology)
+* [Provider States](https://github.com/pact-foundation/pact-ruby/wiki/Provider-states)
+* [Verifying pacts](https://github.com/pact-foundation/pact-ruby/wiki/Verifying-pacts)
+* [Sharing pacts between consumer and provider](https://github.com/pact-foundation/pact-ruby/wiki/Sharing-pacts-between-consumer-and-provider)
+* [Regular expressions and type matching with Pact](https://github.com/pact-foundation/pact-ruby/wiki/Regular-expressions-and-type-matching-with-Pact)
+* [Frequently asked questions](https://github.com/pact-foundation/pact-ruby/wiki/FAQ)
+* [Rarely asked questions](https://github.com/pact-foundation/pact-ruby/wiki/RAQ)
+* [Best practices](https://github.com/pact-foundation/pact-ruby/wiki/Best-practices)
+* [Troubleshooting](https://github.com/pact-foundation/pact-ruby/wiki/Troubleshooting)
+* [Testing with pact diagram](https://github.com/pact-foundation/pact-ruby/wiki/Testing with pact.png)
+* [News, blogs and articles](https://github.com/pact-foundation/pact-ruby/wiki/News,-blogs-and-articles)
 
 ## Related libraries
 
@@ -297,7 +297,7 @@ As in all things, there are good ways to implement Pacts, and there are not so g
 
 [Shokkenki](https://github.com/brentsnook/shokkenki) - Another Consumer Driven Contract gem written by one of Pact's original authors, Brent Snook. Shokkenki allows matchers to be composed using jsonpath expressions and allows auto-generation of mock response values based on regular expressions.
 
-[A list of Pact implementations in other languages](https://github.com/realestate-com-au/pact/wiki#implementations-in-other-languages) - JVM, .Net, Javascript and Swift
+[A list of Pact implementations in other languages](https://github.com/pact-foundation/pact-ruby/wiki#implementations-in-other-languages) - JVM, .Net, Javascript and Swift
 
 ## Links
 
@@ -323,7 +323,6 @@ See [CONTRIBUTING.md](/CONTRIBUTING.md).
 [roar]: https://github.com/apotonick/roar
 [pact_broker]: https://github.com/pact-foundation/pact_broker
 [pact_broker-client]: https://github.com/pact-foundation/pact_broker-client
-[pact-public-apis]: https://github.com/realestate-com-au/pact/wiki/Why-Pact-may-not-be-the-best-tool-for-testing-public-APIs
-[pass-through-apis]: https://github.com/realestate-com-au/pact/wiki/Why-Pact-may-not-be-the-best-tool-for-testing-pass-through-APIs
-[gotchas]: https://github.com/realestate-com-au/pact/wiki/Matching-gotchas
-
+[pact-public-apis]: https://github.com/pact-foundation/pact-ruby/wiki/Why-Pact-may-not-be-the-best-tool-for-testing-public-APIs
+[pass-through-apis]: https://github.com/pact-foundation/pact-ruby/wiki/Why-Pact-may-not-be-the-best-tool-for-testing-pass-through-APIs
+[gotchas]: https://github.com/pact-foundation/pact-ruby/wiki/Matching-gotchas

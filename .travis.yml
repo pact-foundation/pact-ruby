@@ -16,4 +16,4 @@ deploy:
   gem: pact
   on:
     tags: true
-    repo: realestate-com-au/pact
+    repo: pact-foundation/pact-ruby

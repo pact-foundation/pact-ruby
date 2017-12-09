@@ -10,13 +10,11 @@ Please provide the following information with your issue to enable us to respond
 # Contributing
 
 1. Fork it
-2. Create your feature branch (`git checkout -b my-new-feature`)
-3. Commit your changes (`git commit -am 'Add some feature'`)
-4. Push to the branch (`git push origin my-new-feature`)
+2. Create your feature branch (`git checkout -b feat/my-new-feature`)
+3. Commit your changes. **Please use the contentional changelog format for [sematic commit messages](http://karma-runner.github.io/1.0/dev/git-commit-msg.html)** (`git commit -am 'feat(some new feat): add a thing'`)
+4. Push to the branch (`git push origin feat/my-new-feature`)
 5. Create new Pull Request
 
 All pull requests must have tests that cover the relevant behavioural changes and should conform to the existing code conventions.
-
-If you would like to implement pact in another language, please check out the [Pact specification](https://github.com/bethesque/pact-specification) and have a chat to one of us on the [pact-dev Google group](https://groups.google.com/forum/#!forum/pact-dev). The vision is to have a compatible pact implementation in all the commonly used languages, your help would be greatly appreciated!
 
 [pact-ruby-e2e-example]: https://github.com/pact-foundation/pact-ruby-e2e-example

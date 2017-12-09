@@ -1,3 +1,12 @@
+<a name="v1.20.0"></a>
+### v1.20.0 (2017-12-10)
+
+
+#### Bug Fixes
+
+* send verification publishing message to stderr when json output	 ([568f511](/../../commit/568f511))
+
+
 <a name="v1.19.2"></a>
 ### v1.19.2 (2017-11-16)
 

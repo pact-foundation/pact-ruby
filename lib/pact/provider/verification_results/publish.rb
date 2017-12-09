@@ -107,7 +107,7 @@ module Pact
 
           if response.code.start_with?("2")
             new_resource_url = JSON.parse(response.body)['_links']['self']['href']
-            $stdout.puts "INFO: Verification results published to #{new_resource_url}"
+            Pact.configuration.output_stream.puts "INFO: Verification results published to #{new_resource_url}"
           else
             raise PublicationError.new("Error returned from verification results publication #{response.code} #{response.body}")
           end

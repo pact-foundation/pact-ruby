@@ -1,3 +1,4 @@
+require 'pact/configuration'
 require 'pact/provider/pact_helper_locator'
 require 'rake/file_utils'
 require 'shellwords'
@@ -36,7 +37,7 @@ module Pact
     end
 
     def execute_cmd command
-      $stdout.puts command
+      Pact.configuration.output_stream.puts command
       temporarily_set_env_var 'PACT_EXECUTING_LANGUAGE', 'ruby' do
         temporarily_set_env_var 'PACT_INTERACTION_RERUN_COMMAND', PACT_INTERACTION_RERUN_COMMAND do
           exit_status = system(command) ? 0 : 1

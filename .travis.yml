@@ -1,6 +1,5 @@
 language: ruby
 rvm:
-- 2.1.8
 - 2.2.4
 - 2.3.1
 - 2.4
@@ -10,26 +9,6 @@ gemfile:
 - gemfiles/default.gemfile
 - gemfiles/rspec_2.gemfile
 - gemfiles/rspec_3.0.gemfile
-- gemfiles/ruby_under_22.gemfile
-- gemfiles/ruby_under_22_with_rspec_2.gemfile
-matrix:
-  exclude:
-  - rvm: 2.0.0
-    gemfile: gemfiles/default.gemfile
-  - rvm: 2.0.0
-    gemfile: gemfiles/rspec_2.gemfile
-  - rvm: 2.1.8
-    gemfile: gemfiles/default.gemfile
-  - rvm: 2.1.8
-    gemfile: gemfiles/rspec_2.gemfile
-  - rvm: 2.2.4
-    gemfile: gemfiles/ruby_under_22.gemfile
-  - rvm: 2.2.4
-    gemfile: gemfiles/ruby_under_22_with_rspec_2.gemfile
-  - rvm: 2.3.1
-    gemfile: gemfiles/ruby_under_22.gemfile
-  - rvm: 2.3.1
-    gemfile: gemfiles/ruby_under_22_with_rspec_2.gemfile
 deploy:
   provider: rubygems
   api_key:

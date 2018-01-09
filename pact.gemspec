@@ -10,7 +10,7 @@ Gem::Specification.new do |gem|
   gem.email         = ["james.fraser@alumni.swinburne.edu", "sergei.matheson@gmail.com", "brent@fuglylogic.com", "uglyog@gmail.com", "bskurrie@dius.com.au"]
   gem.description   = %q{Enables consumer driven contract testing, providing a mock service and DSL for the consumer project, and interaction playback and verification for the service provider project.}
   gem.summary       = %q{Enables consumer driven contract testing, providing a mock service and DSL for the consumer project, and interaction playback and verification for the service provider project.}
-  gem.homepage      = "https://github.com/realestate-com-au/pact"
+  gem.homepage      = "https://github.com/pact-foundation/pact-ruby"
 
   gem.required_ruby_version = '>= 2.0'
 

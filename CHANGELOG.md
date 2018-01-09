@@ -106,7 +106,7 @@
 * b794881 - Read template file with script encoding (Taiki Ono, Wed Nov 2 20:18:50 2016 +0900)
 
 ### 1.9.4 (19 Aug 2016)
-* 93a1c42 - Ensure consumer level teardown gets called when set up is not defined. https://github.com/realestate-com-au/pact/issues/111 (Beth Skurrie, Fri Aug 19 08:56:20 2016 +1000)
+* 93a1c42 - Ensure consumer level teardown gets called when set up is not defined. https://github.com/pact-foundation/pact-ruby/issues/111 (Beth Skurrie, Fri Aug 19 08:56:20 2016 +1000)
 
 ### 1.9.3 (27 Jun 2016)
 * edb2208 - Clarify that pact will only work with ruby >= 2.0 (Sergei Matheson, Mon Jun 27 10:53:08 2016 +1000)
@@ -143,7 +143,7 @@
 
 ### 1.8.1 (15 June 2015)
 
-* 207a33d - Escape HTML characters in description when generating 'a' tag IDs. https://github.com/bethesque/pact_broker/issues/28 (Beth, Mon Jun 15 17:39:02 2015 +1000)
+* 207a33d - Escape HTML characters in description when generating 'a' tag IDs. https://github.com/pact-foundation/pact_broker/issues/28 (Beth, Mon Jun 15 17:39:02 2015 +1000)
 * 2441e25 - hide the password in the pact uri to_s (lifei zhou, Mon May 4 19:21:40 2015 +1000)
 * 60ba514 - added to_s method on PactUri for printing out the uri when running the test (lifei zhou, Sun May 3 17:20:28 2015 +1000)
 
@@ -230,12 +230,12 @@
 
 ### 1.3.1 (11 August 2014)
 
-* 3432259 - Fixed 'pact:verify broken with rspec-core 3.0.3'  https://github.com/realestate-com-au/pact/issues/44 (bethesque, Mon Aug 11 10:14:42 2014 +1000)
+* 3432259 - Fixed 'pact:verify broken with rspec-core 3.0.3'  https://github.com/pact-foundation/pact-ruby/issues/44 (bethesque, Mon Aug 11 10:14:42 2014 +1000)
 * e2e8eff - Deleted documentation that has been moved to the wiki (bethesque, Thu Jul 24 15:20:07 2014 +1000)
-* bcc3143 - Fixing bug 'Method case should not matter when matching requests' https://github.com/realestate-com-au/pact/issues/41 (bethesque, Tue Jul 22 16:51:48 2014 +1000)
+* bcc3143 - Fixing bug 'Method case should not matter when matching requests' https://github.com/pact-foundation/pact-ruby/issues/41 (bethesque, Tue Jul 22 16:51:48 2014 +1000)
 * d4bfab9 - Adding ability to configure DiffFormatter based on content-type (bethesque, Mon Jun 23 21:22:47 2014 +1000)
 * eb330ea - Ensured content-type header works in a case insensitive way when looking up the right differ (bethesque, Mon Jun 23 17:23:04 2014 +1000)
-* 2733e8e - Made header matching case insensitive for requests. Fixing issue https://github.com/realestate-com-au/pact/issues/20 (bethesque, Mon May 26 19:15:48 2014 +1000)
+* 2733e8e - Made header matching case insensitive for requests. Fixing issue https://github.com/pact-foundation/pact-ruby/issues/20 (bethesque, Mon May 26 19:15:48 2014 +1000)
 * 2b8355d - Added nicer error message for scenario when a service provider app has not been configured, and there is no config.ru (bethesque, Mon Jun 23 09:42:18 2014 +1000)
 * 1e774bb - Defaulting to TextDiffer if response has no content-type (bethesque, Sat Jun 21 10:34:44 2014 +1000)
 * 863b093 - Added support for documents without content types (bethesque, Sat Jun 21 10:32:08 2014 +1000)
@@ -278,10 +278,10 @@
 
 ### 1.1.0.rc4 (1 May 2014)
 
-  * 5e1b78d - Display / in logs when path is empty https://github.com/realestate-com-au/pact/issues/14 (bethesque, Thu May 1 22:09:29 2014 +1000)
-  * 01c5414 - Fixing doc generation bug where Pact::Terms were being displayed https://github.com/realestate-com-au/pact/issues/13 (bethesque, Thu May 1 21:41:11 2014 +1000)
-  * 292a14b - Cleaning doc dir before generating new docs as per https://github.com/realestate-com-au/pact/issues/11 (bethesque, Tue Apr 29 12:44:47 2014 +1000)
-  * 73c15dd - Changed default doc_dir to ./doc/pacts as per https://github.com/realestate-com-au/pact/issues/12 (bethesque, Tue Apr 29 12:33:57 2014 +1000)
+  * 5e1b78d - Display / in logs when path is empty https://github.com/pact-foundation/pact-ruby/issues/14 (bethesque, Thu May 1 22:09:29 2014 +1000)
+  * 01c5414 - Fixing doc generation bug where Pact::Terms were being displayed https://github.com/pact-foundation/pact-ruby/issues/13 (bethesque, Thu May 1 21:41:11 2014 +1000)
+  * 292a14b - Cleaning doc dir before generating new docs as per https://github.com/pact-foundation/pact-ruby/issues/11 (bethesque, Tue Apr 29 12:44:47 2014 +1000)
+  * 73c15dd - Changed default doc_dir to ./doc/pacts as per https://github.com/pact-foundation/pact-ruby/issues/12 (bethesque, Tue Apr 29 12:33:57 2014 +1000)
   * 78ca78c - Fixed bug where log_dir was being ignored when set to a non default value (bethesque, Tue Apr 29 07:50:32 2014 +1000)
 
 ### 1.1.0.rc3 (28 April 2014)

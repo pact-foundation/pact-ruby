@@ -26,7 +26,7 @@ module Pact
       command_parts << "SPEC_OPTS=#{Shellwords.escape(rspec_opts || '')}"
       command_parts << FileUtils::RUBY
       command_parts << "-S pact verify"
-      command_parts << "--pact-helper" << (pact_helper.end_with?(".rb") ? pact_helper : pact_helper + ".rb")
+      command_parts << "--pact-helper" << Shellwords.escape(pact_helper.end_with?(".rb") ? pact_helper : pact_helper + ".rb")
       (command_parts << "--pact-uri" << pact_uri) if pact_uri
       command_parts << "--pact-broker-username" << ENV['PACT_BROKER_USERNAME'] if ENV['PACT_BROKER_USERNAME']
       command_parts << "--pact-broker-password" << ENV['PACT_BROKER_PASSWORD'] if ENV['PACT_BROKER_PASSWORD']

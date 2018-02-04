@@ -90,6 +90,16 @@ module Pact
         end
       end
 
+      context "with a pact_helper with whitespace in its path" do
+        let(:custom_pact_helper_path) { '/path/to the/pact_helper.rb' }
+        let(:escaped_custom_pact_helper_path) { '/path/to\\ the/pact_helper.rb' }
+        let(:command) { "SPEC_OPTS='' #{ruby_path} -S pact verify --pact-helper #{escaped_custom_pact_helper_path} --pact-uri #{pact_uri}" }
+        it "executes the command" do
+          expect(TaskHelper).to receive(:execute_cmd).with(command)
+          TaskHelper.execute_pact_verify(pact_uri, custom_pact_helper_path)
+        end
+      end
+
       context "with a pact_helper with no .rb on the end" do
         let(:custom_pact_helper_path) { '/custom/pact_helper' }
         let(:command) { "SPEC_OPTS='' #{ruby_path} -S pact verify --pact-helper #{custom_pact_helper_path}.rb --pact-uri #{pact_uri}" }

@@ -77,31 +77,52 @@ module Pact
 
           describe description_for(interaction), metadata do
 
-            describe "with #{interaction.request.method_and_path}" do
+            interaction_context = InteractionContext.new
 
-              interaction_context = InteractionContext.new
-
-              before do | example |
-                interaction_context.run_once :before do
-                  Pact.configuration.logger.info "Running example '#{Pact::RSpec.full_description(example)}'"
-                  set_up_provider_state interaction.provider_state, options[:consumer]
-                  replay_interaction interaction
-                  interaction_context.last_response = last_response
-                end
+            before do | example |
+              interaction_context.run_once :before do
+                Pact.configuration.logger.info "Running example '#{Pact::RSpec.full_description(example)}'"
+                set_up_provider_state interaction.provider_state, options[:consumer]
+                replay_interaction interaction
+                interaction_context.last_response = last_response
               end
-
-              after do
-                interaction_context.run_once :after do
-                  tear_down_provider_state interaction.provider_state, options[:consumer]
-                end
-              end
-
-              describe_response Pact::Response.new(interaction.response), interaction_context
-
             end
 
-          end
+            after do
+              interaction_context.run_once :after do
+                tear_down_provider_state interaction.provider_state, options[:consumer]
+              end
+            end
 
+            if interaction.respond_to?(:message?) && interaction.message?
+              describe_message Pact::Response.new(interaction.response), interaction_context
+            else
+              describe "with #{interaction.request.method_and_path}" do
+                describe_response Pact::Response.new(interaction.response), interaction_context
+              end
+            end
+          end
+        end
+
+        def describe_message expected_response, interaction_context
+          include Pact::RSpec::Matchers
+          extend Pact::Matchers::Messages
+
+          let(:expected_content) { expected_response.body[:content] }
+          let(:response) { interaction_context.last_response }
+          let(:differ) { Pact.configuration.body_differ_for_content_type diff_content_type }
+          let(:diff_formatter) { Pact.configuration.diff_formatter_for_content_type diff_content_type }
+          let(:diff_options) { { with: differ, diff_formatter: diff_formatter } }
+          let(:diff_content_type) { 'application/json' }
+          let(:response_body) { parse_body_from_response(response) }
+          let(:actual_content) { response_body['content'] }
+
+          it "has matching content" do
+            if response.status != 200
+              raise "An error was raised while verifying the message. The response body is: #{response.body}"
+            end
+            expect(actual_content).to match_term expected_content, diff_options
+          end
         end
 
         def describe_response expected_response, interaction_context

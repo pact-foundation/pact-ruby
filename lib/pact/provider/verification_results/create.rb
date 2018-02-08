@@ -47,7 +47,8 @@ module Pact
         end
 
         def all_interactions_count
-          pact_source.pact_hash['interactions'].count
+          interactions = (pact_source.pact_hash['interactions'] || pact_source.pact_hash['messages'])
+          interactions ? interactions.count : 0
         end
 
         def test_results_hash_for_pact_uri

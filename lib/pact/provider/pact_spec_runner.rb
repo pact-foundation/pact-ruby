@@ -90,11 +90,11 @@ module Pact
         # For the Pact::Provider::RSpec::PactBrokerFormatter
         Pact.provider_world.pact_sources = pact_sources
         jsons = pact_jsons
+        executing_with_ruby = executing_with_ruby?
 
         config.after(:suite) do | suite |
-          Pact::Provider::Help::Write.call(jsons)
+          Pact::Provider::Help::Write.call(jsons) if executing_with_ruby
         end
-
       end
 
       def run_specs
@@ -152,12 +152,15 @@ module Pact
         false
       end
 
+      def executing_with_ruby?
+        ENV['PACT_EXECUTING_LANGUAGE'] == 'ruby'
+      end
+
       class NoConfigurationOptions
         def method_missing(method, *args, &block)
           # Do nothing!
         end
       end
-
     end
   end
 end

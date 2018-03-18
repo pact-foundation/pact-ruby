@@ -1,3 +1,13 @@
+<a name="v1.21.0"></a>
+### v1.21.0 (2018-03-19)
+
+
+#### Features
+
+* update pact-support to ~>1.3	 ([17cfbf8](/../../commit/17cfbf8))
+* do not create reports/pacts/help.md when executing verify from a wrapper language	 ([ea6de47](/../../commit/ea6de47))
+
+
 <a name="v1.20.0"></a>
 ### v1.20.0 (2017-12-10)
 

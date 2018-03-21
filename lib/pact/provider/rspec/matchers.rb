@@ -25,15 +25,18 @@ module Pact
         include Pact::Matchers::Messages
         include RSpec2Delegator
 
-        def initialize expected, differ, diff_formatter
+        def initialize expected, differ, diff_formatter, example
           @expected = expected
           @differ = differ
           @diff_formatter = diff_formatter
+          @example = example
         end
 
         def matches? actual
           @actual = actual
-          (@difference = @differ.call(@expected, @actual)).empty?
+          @difference = @differ.call(@expected, @actual)
+          @example.metadata[:pact_diff] = @difference unless @difference.empty?
+          @difference.empty?
         end
 
         def failure_message
@@ -42,8 +45,8 @@ module Pact
 
       end
 
-      def match_term expected, options
-        MatchTerm.new(expected, options.fetch(:with), options.fetch(:diff_formatter))
+      def match_term expected, options, example
+        MatchTerm.new(expected, options.fetch(:with), options.fetch(:diff_formatter), example)
       end
 
       class MatchHeader

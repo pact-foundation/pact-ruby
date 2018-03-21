@@ -4,11 +4,9 @@ require 'pact/provider/matchers/messages'
 require 'pact/rspec'
 require 'pact/shared/json_differ'
 
-
 module Pact
   module RSpec
     module Matchers
-
       module RSpec2Delegator
         # For backwards compatiblity with rspec-2
         def method_missing(method, *args, &block)
@@ -21,7 +19,6 @@ module Pact
       end
 
       class MatchTerm
-
         include Pact::Matchers::Messages
         include RSpec2Delegator
 
@@ -35,14 +32,20 @@ module Pact
         def matches? actual
           @actual = actual
           @difference = @differ.call(@expected, @actual)
-          @example.metadata[:pact_diff] = @difference unless @difference.empty?
+          unless @difference.empty?
+            Pact::RSpec.with_rspec_3 do
+              @example.metadata[:pact_diff] = @difference
+            end
+            Pact::RSpec.with_rspec_2 do
+              @example.example.metadata[:pact_diff] = @difference
+            end
+          end
           @difference.empty?
         end
 
         def failure_message
           match_term_failure_message @difference, @actual, @diff_formatter, Pact::RSpec.color_enabled?
         end
-
       end
 
       def match_term expected, options, example
@@ -50,7 +53,6 @@ module Pact
       end
 
       class MatchHeader
-
         include Pact::Matchers
         include Pact::Matchers::Messages
         include RSpec2Delegator
@@ -68,33 +70,11 @@ module Pact
         def failure_message
           match_header_failure_message @header_name, @expected, @actual
         end
-
       end
 
       def match_header header_name, expected
         MatchHeader.new(header_name, expected)
       end
-
     end
   end
 end
-
-
-# RSpec::Matchers.define :match_header do |header_name, expected|
-
-#   include Pact::Matchers
-#   include Pact::Matchers::Messages
-
-#   match do |actual|
-#     diff(expected, actual).empty?
-#   end
-
-#   def failure_message_for_should(actual)
-#     match_header_failure_message header_name, expected, actual
-#   end
-
-#   # failure_message_for_should do | actual |
-#   #   match_header_failure_message header_name, expected, actual
-#   # end
-
-# end

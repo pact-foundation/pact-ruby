@@ -125,7 +125,7 @@ module Pact
 
             if expected_response.status
               it "has status code #{expected_response.status}" do | example |
-                example.metadata[:pact_actual_status] = response_status
+                set_metadata(example, :pact_actual_status, response_status)
                 expect(response_status).to eql expected_response_status
               end
             end
@@ -134,7 +134,7 @@ module Pact
               describe "includes headers" do
                 expected_response.headers.each do |name, expected_header_value|
                   it "\"#{name}\" which #{expected_desc_for_it(expected_header_value)}" do  | example |
-                    example.metadata[:pact_actual_headers] = response.headers
+                    set_metadata(example, :pact_actual_headers, response.headers)
                     header_value = response.headers[name]
                     expect(header_value).to match_header(name, expected_header_value)
                   end
@@ -144,7 +144,7 @@ module Pact
 
             if expected_response.body
               it "has a matching body" do | example |
-                example.metadata[:pact_actual_body] = response_body
+                set_metadata(example, :pact_actual_body, response_body)
                 expect(response_body).to match_term expected_response_body, diff_options, example
               end
             end
@@ -158,7 +158,6 @@ module Pact
         def interaction_description_for_rerun_command interaction
           description_for(interaction).capitalize + ( interaction.provider_state ? " given #{interaction.provider_state}" : "")
         end
-
       end
 
       # The "arrange" and "act" parts of the test really only need to be run once,

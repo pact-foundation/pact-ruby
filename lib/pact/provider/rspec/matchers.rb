@@ -36,9 +36,6 @@ module Pact
             Pact::RSpec.with_rspec_3 do
               @example.metadata[:pact_diff] = @difference
             end
-            Pact::RSpec.with_rspec_2 do
-              @example.example.metadata[:pact_diff] = @difference
-            end
           end
           @difference.empty?
         end

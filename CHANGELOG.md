@@ -1,3 +1,13 @@
+<a name="v1.22.0"></a>
+### v1.22.0 (2018-03-16)
+
+
+#### Features
+
+* do not create reports/pacts/help.md when executing verify from a wrapper language	 ([f1a2cd4](/../../commit/f1a2cd4))
+* add support for verifying message pacts	 ([fa98102](/../../commit/fa98102))
+
+
 <a name="v1.21.0"></a>
 ### v1.21.0 (2018-03-19)
 

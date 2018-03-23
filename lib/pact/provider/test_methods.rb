@@ -41,6 +41,16 @@ module Pact
       def tear_down_provider_state provider_state_name, consumer, options = {}
         Pact.configuration.provider_state_tear_down.call(provider_state_name, consumer, options)
       end
+
+      def set_metadata example, key, value
+        Pact::RSpec.with_rspec_3 do
+          example.metadata[key] = value
+        end
+
+        Pact::RSpec.with_rspec_2 do
+          example.example.metadata[key] = value
+        end
+      end
     end
   end
 end

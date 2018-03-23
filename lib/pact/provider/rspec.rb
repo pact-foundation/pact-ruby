@@ -145,7 +145,8 @@ module Pact
             let(:diff_options) { { with: differ, diff_formatter: diff_formatter } }
 
             if expected_response.status
-              it "has status code #{expected_response.status}" do
+              it "has status code #{expected_response.status}" do | example |
+                set_metadata(example, :pact_actual_status, response_status)
                 expect(response_status).to eql expected_response_status
               end
             end
@@ -153,7 +154,8 @@ module Pact
             if expected_response.headers
               describe "includes headers" do
                 expected_response.headers.each do |name, expected_header_value|
-                  it "\"#{name}\" which #{expected_desc_for_it(expected_header_value)}" do
+                  it "\"#{name}\" which #{expected_desc_for_it(expected_header_value)}" do  | example |
+                    set_metadata(example, :pact_actual_headers, response.headers)
                     header_value = response.headers[name]
                     expect(header_value).to match_header(name, expected_header_value)
                   end
@@ -162,8 +164,9 @@ module Pact
             end
 
             if expected_response.body
-              it "has a matching body" do
-                expect(response_body).to match_term expected_response_body, diff_options
+              it "has a matching body" do | example |
+                set_metadata(example, :pact_actual_body, response_body)
+                expect(response_body).to match_term expected_response_body, diff_options, example
               end
             end
           end
@@ -176,7 +179,6 @@ module Pact
         def interaction_description_for_rerun_command interaction
           description_for(interaction).capitalize + ( interaction.provider_state ? " given #{interaction.provider_state}" : "")
         end
-
       end
 
       # The "arrange" and "act" parts of the test really only need to be run once,

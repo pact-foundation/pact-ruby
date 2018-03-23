@@ -1,6 +1,7 @@
 require 'rspec/core/formatters'
 require 'pact/provider/verification_results/publish_all'
 require 'term/ansicolor'
+require 'pact/matchers/extract_diff_messages'
 
 module Pact
   module Provider
@@ -58,6 +59,24 @@ module Pact
                 class: example.exception.class.name,
                 message: ::Term::ANSIColor.uncolor(example.exception.message)
               }
+            end
+
+            if example.metadata[:pact_actual_status]
+              hash[:actualStatus] = example.metadata[:pact_actual_status]
+            end
+
+            if example.metadata[:pact_actual_headers]
+              hash[:actualHeaders] = example.metadata[:pact_actual_headers]
+            end
+
+            if example.metadata[:pact_actual_body]
+              hash[:actualBody] = example.metadata[:pact_actual_body]
+            end
+
+            if example.metadata[:pact_diff]
+              hash[:differences] = Pact::Matchers::ExtractDiffMessages.call(example.metadata[:pact_diff])
+                                    .to_a
+                                    .collect{ | description | {description: description} }
             end
           end
         end

@@ -108,7 +108,7 @@ module Pact
           include Pact::RSpec::Matchers
           extend Pact::Matchers::Messages
 
-          let(:expected_content) { expected_response.body[:content] }
+          let(:expected_content) { expected_response.body[:content].as_json }
           let(:response) { interaction_context.last_response }
           let(:differ) { Pact.configuration.body_differ_for_content_type diff_content_type }
           let(:diff_formatter) { Pact.configuration.diff_formatter_for_content_type diff_content_type }
@@ -117,11 +117,11 @@ module Pact
           let(:response_body) { parse_body_from_response(response) }
           let(:actual_content) { response_body['content'] }
 
-          it "has matching content" do
+          it "has matching content" do | example |
             if response.status != 200
               raise "An error was raised while verifying the message. The response body is: #{response.body}"
             end
-            expect(actual_content).to match_term expected_content, diff_options
+            expect(actual_content).to match_term expected_content, diff_options, example
           end
         end
 

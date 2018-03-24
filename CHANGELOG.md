@@ -1,3 +1,12 @@
+<a name="v1.22.2"></a>
+### v1.22.2 (2018-03-24)
+
+
+#### Bug Fixes
+
+* message pact verification code	 ([1bfa8f3](/../../commit/1bfa8f3))
+
+
 <a name="v1.22.0"></a>
 ### v1.22.0 (2018-03-16)
 

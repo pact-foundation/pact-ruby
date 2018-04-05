@@ -58,7 +58,7 @@ Pact is most valuable for designing and testing integrations where you (or your 
 * Ruby Pact wiki: [github.com/pact-foundation/pact-ruby/wiki](https://github.com/pact-foundation/pact-ruby/wiki)
 * Stackoverflow: [ruby pact questions](https://stackoverflow.com/questions/tagged/pact-ruby) or [general pact questions](https://stackoverflow.com/questions/tagged/pact)
 * Google users group: [for ongoing discussions rather than questions](https://groups.google.com/forum/#!forum/pact-support)
-* Gitter: [![Backers on Open Collective](https://opencollective.com/pact-ruby/backers/badge.svg)](#backers) [![Sponsors on Open Collective](https://opencollective.com/pact-ruby/sponsors/badge.svg)](#sponsors) [![Join the chat at https://gitter.im/realestate-com-au/pact](https://badges.gitter.im/Join%20Chat.svg)](https://gitter.im/realestate-com-au/pact?utm_source=badge&utm_medium=badge&utm_campaign=pr-badge&utm_content=badge)
+* Gitter: [![Join the chat at https://gitter.im/realestate-com-au/pact](https://badges.gitter.im/Join%20Chat.svg)](https://gitter.im/realestate-com-au/pact?utm_source=badge&utm_medium=badge&utm_campaign=pr-badge&utm_content=badge)
 * Twitter: [@pact_up](https://twitter.com/pact_up)
 
 ## Installation

@@ -1,5 +1,6 @@
 # Pact
-[![Backers on Open Collective](https://opencollective.com/pact-ruby/backers/badge.svg)](#backers)
+[![travis-ci.org Build Status](https://travis-ci.org/pact-foundation/pact-ruby.svg?branch=master)](https://travis-ci.org/pact-foundation/pact-ruby)
+ [![Backers on Open Collective](https://opencollective.com/pact-ruby/backers/badge.svg)](#backers)
  [![Sponsors on Open Collective](https://opencollective.com/pact-ruby/sponsors/badge.svg)](#sponsors) 
 
 Define a pact between service consumers and providers, enabling "consumer driven contract" testing.
@@ -9,8 +10,6 @@ Pact provides a fluent API for service consumers to define the HTTP requests the
 This allows testing of both sides of an integration point using fast unit tests.
 
 This gem is inspired by the concept of "Consumer driven contracts". See [this article](http://martinfowler.com/articles/consumerDrivenContracts.html) by Ian Robinson for more information.
-
-Travis CI Status: [![travis-ci.org Build Status](https://travis-ci.org/pact-foundation/pact-ruby.svg?branch=master)](https://travis-ci.org/pact-foundation/pact-ruby)
 
 ## What is it good for?
 

@@ -1,7 +1,7 @@
 # Pact
 [![travis-ci.org Build Status](https://travis-ci.org/pact-foundation/pact-ruby.svg?branch=master)](https://travis-ci.org/pact-foundation/pact-ruby)
- [![Backers on Open Collective](https://opencollective.com/pact-ruby/backers/badge.svg)](#backers)
- [![Sponsors on Open Collective](https://opencollective.com/pact-ruby/sponsors/badge.svg)](#sponsors) 
+ [![Backers on Open Collective](https://opencollective.com/pact-foundation/backers/badge.svg)](#backers)
+ [![Sponsors on Open Collective](https://opencollective.com/pact-foundation/sponsors/badge.svg)](#sponsors) 
 
 Define a pact between service consumers and providers, enabling "consumer driven contract" testing.
 
@@ -331,29 +331,29 @@ See [CONTRIBUTING.md](/CONTRIBUTING.md).
 ## Contributors
 
 This project exists thanks to all the people who contribute. [[Contribute](CONTRIBUTING.md)].
-<a href="graphs/contributors"><img src="https://opencollective.com/pact-ruby/contributors.svg?width=890&button=false" /></a>
+<a href="graphs/contributors"><img src="https://opencollective.com/pact-foundation/contributors.svg?width=890&button=false" /></a>
 
 
 ## Backers
 
-Thank you to all our backers! 🙏 [[Become a backer](https://opencollective.com/pact-ruby#backer)]
+Thank you to all our backers! 🙏 [[Become a backer](https://opencollective.com/pact-foundation#backer)]
 
-<a href="https://opencollective.com/pact-ruby#backers" target="_blank"><img src="https://opencollective.com/pact-ruby/backers.svg?width=890"></a>
+<a href="https://opencollective.com/pact-foundation#backers" target="_blank"><img src="https://opencollective.com/pact-foundation/backers.svg?width=890"></a>
 
 
 ## Sponsors
 
-Support this project by becoming a sponsor. Your logo will show up here with a link to your website. [[Become a sponsor](https://opencollective.com/pact-ruby#sponsor)]
+Support this project by becoming a sponsor. Your logo will show up here with a link to your website. [[Become a sponsor](https://opencollective.com/pact-foundation#sponsor)]
 
-<a href="https://opencollective.com/pact-ruby/sponsor/0/website" target="_blank"><img src="https://opencollective.com/pact-ruby/sponsor/0/avatar.svg"></a>
-<a href="https://opencollective.com/pact-ruby/sponsor/1/website" target="_blank"><img src="https://opencollective.com/pact-ruby/sponsor/1/avatar.svg"></a>
-<a href="https://opencollective.com/pact-ruby/sponsor/2/website" target="_blank"><img src="https://opencollective.com/pact-ruby/sponsor/2/avatar.svg"></a>
-<a href="https://opencollective.com/pact-ruby/sponsor/3/website" target="_blank"><img src="https://opencollective.com/pact-ruby/sponsor/3/avatar.svg"></a>
-<a href="https://opencollective.com/pact-ruby/sponsor/4/website" target="_blank"><img src="https://opencollective.com/pact-ruby/sponsor/4/avatar.svg"></a>
-<a href="https://opencollective.com/pact-ruby/sponsor/5/website" target="_blank"><img src="https://opencollective.com/pact-ruby/sponsor/5/avatar.svg"></a>
-<a href="https://opencollective.com/pact-ruby/sponsor/6/website" target="_blank"><img src="https://opencollective.com/pact-ruby/sponsor/6/avatar.svg"></a>
-<a href="https://opencollective.com/pact-ruby/sponsor/7/website" target="_blank"><img src="https://opencollective.com/pact-ruby/sponsor/7/avatar.svg"></a>
-<a href="https://opencollective.com/pact-ruby/sponsor/8/website" target="_blank"><img src="https://opencollective.com/pact-ruby/sponsor/8/avatar.svg"></a>
-<a href="https://opencollective.com/pact-ruby/sponsor/9/website" target="_blank"><img src="https://opencollective.com/pact-ruby/sponsor/9/avatar.svg"></a>
+<a href="https://opencollective.com/pact-foundation/sponsor/0/website" target="_blank"><img src="https://opencollective.com/pact-foundation/sponsor/0/avatar.svg"></a>
+<a href="https://opencollective.com/pact-foundation/sponsor/1/website" target="_blank"><img src="https://opencollective.com/pact-foundation/sponsor/1/avatar.svg"></a>
+<a href="https://opencollective.com/pact-foundation/sponsor/2/website" target="_blank"><img src="https://opencollective.com/pact-foundation/sponsor/2/avatar.svg"></a>
+<a href="https://opencollective.com/pact-foundation/sponsor/3/website" target="_blank"><img src="https://opencollective.com/pact-foundation/sponsor/3/avatar.svg"></a>
+<a href="https://opencollective.com/pact-foundation/sponsor/4/website" target="_blank"><img src="https://opencollective.com/pact-foundation/sponsor/4/avatar.svg"></a>
+<a href="https://opencollective.com/pact-foundation/sponsor/5/website" target="_blank"><img src="https://opencollective.com/pact-foundation/sponsor/5/avatar.svg"></a>
+<a href="https://opencollective.com/pact-foundation/sponsor/6/website" target="_blank"><img src="https://opencollective.com/pact-foundation/sponsor/6/avatar.svg"></a>
+<a href="https://opencollective.com/pact-foundation/sponsor/7/website" target="_blank"><img src="https://opencollective.com/pact-foundation/sponsor/7/avatar.svg"></a>
+<a href="https://opencollective.com/pact-foundation/sponsor/8/website" target="_blank"><img src="https://opencollective.com/pact-foundation/sponsor/8/avatar.svg"></a>
+<a href="https://opencollective.com/pact-foundation/sponsor/9/website" target="_blank"><img src="https://opencollective.com/pact-foundation/sponsor/9/avatar.svg"></a>
 
 

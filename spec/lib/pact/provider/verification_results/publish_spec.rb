@@ -54,6 +54,7 @@ module Pact
             allow(Pact.configuration).to receive(:provider).and_return(provider_configuration)
             stub_request(:post, stubbed_publish_verification_url).to_return(status: 200, body: created_verification_body)
             stub_request(:put, 'http://broker/pacticipants/Bar/versions/1.2.3/tags/foo')
+            allow(Retry).to receive(:until_true) { |&block| block.call }
           end
 
           subject { Publish.call(pact_source, verification) }
@@ -76,6 +77,11 @@ module Pact
                 expect(WebMock).to have_requested(:post, publish_verification_url).with(body: verification_json, headers: {'Content-Type' => 'application/json'})
               end
 
+              it "should call Retry.until_true once" do
+                subject
+                expect(Retry).to have_received(:until_true).once()
+              end
+
               context "when the verification result is not publishable" do
                 let(:publishable) { false }
 
@@ -91,6 +97,11 @@ module Pact
                 it "tags the provider version" do
                   subject
                   expect(WebMock).to have_requested(:put, 'http://broker/pacticipants/Bar/versions/1.2.3/tags/foo').with(headers: {'Content-Type' => 'application/json'})
+                end
+
+                it "should call Retry.until_true twice" do
+                  subject
+                  expect(Retry).to have_received(:until_true).twice()
                 end
 
                 context "when there is no pb:publish-verification-results link" do

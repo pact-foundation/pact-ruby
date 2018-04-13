@@ -62,21 +62,7 @@ module Pact
           config.output_stream = Pact.configuration.output_stream
         end
 
-        Pact::RSpec.with_rspec_3 do
-          ::RSpec.configuration.add_formatter Pact::Provider::RSpec::PactBrokerFormatter, StringIO.new
-        end
-
-        if options[:format]
-          ::RSpec.configuration.add_formatter options[:format]
-          # Don't want to mess up the JSON parsing with messages to stdout, so send it to stderr
-          Pact.configuration.output_stream = Pact.configuration.error_stream
-        else
-          # Sometimes the formatter set in the cli.rb get set with an output of StringIO.. don't know why
-          formatter_class = Pact::RSpec.formatter_class
-          pact_formatter = ::RSpec.configuration.formatters.find {|f| f.class == formatter_class && f.output == ::RSpec.configuration.output_stream}
-          ::RSpec.configuration.add_formatter formatter_class unless pact_formatter
-        end
-        ::RSpec.configuration.full_backtrace = @options[:full_backtrace]
+        configure_output
 
         config.before(:suite) do
           # Preload app before suite so the classes loaded in memory are consistent for
@@ -136,6 +122,28 @@ module Pact
           }
           honour_pactfile pact_source.uri, ordered_pact_json(pact_source.pact_json), options
         end
+      end
+
+      def configure_output
+        Pact::RSpec.with_rspec_3 do
+          ::RSpec.configuration.add_formatter Pact::Provider::RSpec::PactBrokerFormatter, StringIO.new
+        end
+
+        output = options[:out] || Pact.configuration.output_stream
+        if options[:format]
+          ::RSpec.configuration.add_formatter options[:format], output
+          if !options[:out]
+            # Don't want to mess up the JSON parsing with messages to stdout, so send it to stderr
+            Pact.configuration.output_stream = Pact.configuration.error_stream
+          end
+        else
+          # Sometimes the formatter set in the cli.rb get set with an output of StringIO.. don't know why
+          formatter_class = Pact::RSpec.formatter_class
+          pact_formatter = ::RSpec.configuration.formatters.find {|f| f.class == formatter_class && f.output == ::RSpec.configuration.output_stream}
+          ::RSpec.configuration.add_formatter(formatter_class, output) unless pact_formatter
+        end
+
+        ::RSpec.configuration.full_backtrace = @options[:full_backtrace]
       end
 
       def ordered_pact_json(pact_json)

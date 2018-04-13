@@ -17,6 +17,7 @@ module Pact
     method_option :description, aliases: "-d", desc: "Interaction description filter"
     method_option :provider_state, aliases: "-s", desc: "Provider state filter"
     method_option :format, aliases: "-f", banner: "FORMATTER", desc: "RSpec formatter. Defaults to custom Pact formatter. [j]son may also be used."
+    method_option :out, aliases: "-o", banner: "FILE", desc: "Write output to a file instead of $stdout."
 
     def verify
       require 'pact/cli/run_pact_verification'

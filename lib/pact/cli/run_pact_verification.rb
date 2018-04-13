@@ -14,7 +14,6 @@ module Pact
         new(options).call
       end
 
-
       def call
         initialize_rspec
         setup_load_path
@@ -71,10 +70,10 @@ module Pact
         {
           full_backtrace: options[:backtrace],
           criteria: SpecCriteria.call(options),
-          format: options[:format]
+          format: options[:format],
+          out: options[:out]
         }
       end
-
     end
   end
 end

@@ -5,6 +5,8 @@ describe "running the pact verify CLI" do
 
   include Pact::Support::CLI
 
+  let(:expected_test_output) { "2 interactions, 0 failures" }
+
   describe "running a failing test with --backtrace" do
     let(:command) do
       [
@@ -32,7 +34,29 @@ describe "running the pact verify CLI" do
     end
   end
 
-  describe "running with json output" do
+  describe "running with json output and an output path specified" do
+    before do
+      FileUtils.rm_rf 'tmp/foo.json'
+    end
+
+    let(:command) do
+      [
+        "bundle exec bin/pact verify",
+        "--pact-uri spec/support/test_app_pass.json",
+        "--pact-helper spec/support/pact_helper.rb",
+        "--format json",
+        "--out tmp/foo.json"
+      ].join(" ")
+    end
+
+    it "formats the output as json to the specified file" do
+      output = `#{command}`
+      expect(JSON.parse(File.read('tmp/foo.json'))["examples"].size).to be > 1
+      expect(output).to_not include expected_test_output
+    end
+  end
+
+  describe "running with json output and no output path specified" do
     let(:command) do
       [
         "bundle exec bin/pact verify",
@@ -41,9 +65,31 @@ describe "running the pact verify CLI" do
         "--format json"
       ].join(" ")
     end
-    it "formats the output as json" do
+
+    it "formats the output as json to stdout" do
       output = `#{command}`
       expect(JSON.parse(output)["examples"].size).to be > 1
+    end
+  end
+
+  describe "running with an output path specified" do
+    before do
+      FileUtils.rm_rf 'tmp/foo.out'
+    end
+
+    let(:command) do
+      [
+        "bundle exec bin/pact verify",
+        "--pact-uri spec/support/test_app_pass.json",
+        "--pact-helper spec/support/pact_helper.rb",
+        "--out tmp/foo.out"
+      ].join(" ")
+    end
+
+    it "writes the output to the specified path and not to stdout" do
+      output = `#{command}`
+      expect(File.read('tmp/foo.out')).to include expected_test_output
+      expect(output).to_not include expected_test_output
     end
   end
 end

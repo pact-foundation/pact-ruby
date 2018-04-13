@@ -22,7 +22,7 @@ module Pact
 		Pact.configure do | config |
 			config.logger.level = Logger::DEBUG
 			config.diff_formatter = :unix
-			config.reports_dir = 'spec_reports'
+			config.reports_dir = 'tmp/spec_reports'
 		end
 
 		Pact.service_provider "Some Provider" do

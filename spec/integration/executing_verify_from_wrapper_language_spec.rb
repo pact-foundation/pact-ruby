@@ -1,6 +1,6 @@
 RSpec.describe "executing pact verify" do
   let(:command) { "bundle exec rake pact:verify:test_app:fail > /dev/null" }
-  let(:reports_dir) { 'spec_reports' } # The config for this is in spec/support/pact_helper.rb
+  let(:reports_dir) { 'tmp/spec_reports' } # The config for this is in spec/support/pact_helper.rb
 
   before do
     FileUtils.rm_rf reports_dir

@@ -5,7 +5,8 @@ describe "running the pact verify CLI" do
 
   include Pact::Support::CLI
 
-  let(:expected_test_output) { "2 interactions, 0 failures" }
+  # Running this under RSpec 2 gives different output
+  let(:expected_test_output) { %r{(6 examples|2 interactions), 0 failures} }
 
   describe "running a failing test with --backtrace" do
     let(:command) do
@@ -52,7 +53,7 @@ describe "running the pact verify CLI" do
     it "formats the output as json to the specified file" do
       output = `#{command}`
       expect(JSON.parse(File.read('tmp/foo.json'))["examples"].size).to be > 1
-      expect(output).to_not include expected_test_output
+      expect(output).to_not match expected_test_output
     end
   end
 
@@ -88,8 +89,8 @@ describe "running the pact verify CLI" do
 
     it "writes the output to the specified path and not to stdout" do
       output = `#{command}`
-      expect(File.read('tmp/foo.out')).to include expected_test_output
-      expect(output).to_not include expected_test_output
+      expect(File.read('tmp/foo.out')).to match expected_test_output
+      expect(output).to_not match expected_test_output
     end
   end
 end

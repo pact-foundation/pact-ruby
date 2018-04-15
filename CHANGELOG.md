@@ -1,3 +1,17 @@
+<a name="v1.23.0"></a>
+### v1.23.0 (2018-04-16)
+
+
+#### Features
+
+* allow --out FILE to be specified for the output from pact verify	 ([ca19aa8](/../../commit/ca19aa8))
+
+
+#### Bug Fixes
+
+* URL escape file paths in index of generated markdown	 ([6af19d5](/../../commit/6af19d5))
+
+
 <a name="v1.22.2"></a>
 ### v1.22.2 (2018-03-24)
 

@@ -1,3 +1,5 @@
+require 'erb'
+
 module Pact
   module Doc
     module Markdown
@@ -32,7 +34,7 @@ module Pact
         end
 
         def item title, file_name
-          "* [#{title}](#{file_name})"
+          "* [#{title}](#{ERB::Util.url_encode(file_name)})"
         end
 
       end

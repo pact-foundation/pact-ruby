@@ -1,4 +1,4 @@
 ### Pacts for Some Consumer
 
-* [Some Provider](Some Provider.md)
-* [Some other provider](Some other provider.md)
+* [Some Provider](Some%20Provider.md)
+* [Some other provider](Some%20other%20provider.md)

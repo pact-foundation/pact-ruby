@@ -32,7 +32,7 @@
             "response": {}
         },
         {
-            "description": "a response with a body and headers",
+            "description": "a response with a body, matchers and headers",
             "request": {
                 "method": "get",
                 "path": "/"
@@ -44,11 +44,16 @@
                 "body": {
                     "key": "a body"
                 },
+                "matchingRules": {
+                  "$.body.key": {
+                    "match": "type"
+                  }
+                },
                 "status": 200
             }
         },
         {
-            "description": "a response with an empty body and empty headers",
+            "description": "a response with an empty body, matchers and empty headers",
             "request": {
                 "method": "get",
                 "path": "/"
@@ -56,7 +61,8 @@
             "response": {
                 "status": 200,
                 "headers": {},
-                "body": {}
+                "body": {},
+                "matchingRules": {}
             }
         }
     ]

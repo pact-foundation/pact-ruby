@@ -96,7 +96,7 @@ module Pact
       end
 
       def ordered_keys
-        [:method, :path, :query, :status, :headers, :body]
+        [:method, :path, :query, :status, :headers, :body, :matchingRules]
       end
 
       def remove_key_if_empty key, hash

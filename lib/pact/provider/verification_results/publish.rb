@@ -3,16 +3,13 @@ require 'pact/errors'
 require 'pact/retry'
 
 # TODO move this to the pact broker client
-# TODO retries
 
 module Pact
   module Provider
     module VerificationResults
-
       class PublicationError < Pact::Error; end
 
       class Publish
-
         def self.call pact_source, verification_result
           new(pact_source, verification_result).call
         end
@@ -107,8 +104,6 @@ module Pact
             error_message = "Failed to publish verification results due to: #{e.class} #{e.message}"
             raise PublicationError.new(error_message)
           end
-
-
 
           if response.code.start_with?("2")
             new_resource_url = JSON.parse(response.body)['_links']['self']['href']

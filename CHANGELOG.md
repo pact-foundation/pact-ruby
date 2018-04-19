@@ -1,3 +1,12 @@
+<a name="v1.24.0"></a>
+### v1.24.0 (2018-04-13)
+
+
+#### Features
+
+* Add retries to verification publishing	 ([6620165](/../../commit/6620165))
+
+
 <a name="v1.23.0"></a>
 ### v1.23.0 (2018-04-16)
 

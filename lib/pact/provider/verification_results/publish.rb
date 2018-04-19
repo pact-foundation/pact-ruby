@@ -1,5 +1,6 @@
 require 'json'
 require 'pact/errors'
+require 'pact/retry'
 
 # TODO move this to the pact broker client
 # TODO retries
@@ -75,8 +76,10 @@ module Pact
             response = nil
             begin
               options = {:use_ssl => uri.scheme == 'https'}
-              response = Net::HTTP.start(uri.host, uri.port, options) do |http|
-                http.request request
+              Retry.until_true do
+                response = Net::HTTP.start(uri.host, uri.port, options) do |http|
+                  http.request request
+                end
               end
             rescue StandardError => e
               error_message = "Failed to tag provider version due to: #{e.class} #{e.message}"
@@ -95,8 +98,10 @@ module Pact
           response = nil
           begin
             options = {:use_ssl => uri.scheme == 'https'}
-            response = Net::HTTP.start(uri.host, uri.port, options) do |http|
-              http.request request
+            Retry.until_true do
+              response = Net::HTTP.start(uri.host, uri.port, options) do |http|
+                http.request request
+              end
             end
           rescue StandardError => e
             error_message = "Failed to publish verification results due to: #{e.class} #{e.message}"

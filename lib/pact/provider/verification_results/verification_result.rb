@@ -20,12 +20,12 @@ module Pact
           !!provider_application_version
         end
 
-        def to_json
+        def to_json(options = {})
           {
             success: success,
             providerApplicationVersion: provider_application_version,
             #testResults: test_results_hash # not yet
-          }.to_json
+          }.to_json(options)
         end
 
         def to_s

@@ -10,6 +10,7 @@ module Pact
           let(:tag_version_url) { 'http://tag-me/{tag}' }
           let(:pact_source) { instance_double("Pact::Provider::PactSource", pact_hash: pact_hash, uri: pact_url)}
           let(:pact_url) { instance_double("Pact::Provider::PactURI", basic_auth?: basic_auth, username: 'username', password: 'password')}
+          let(:provider_url) { 'http://provider' }
           let(:basic_auth) { false }
           let(:pact_hash) do
             {
@@ -19,6 +20,9 @@ module Pact
               '_links' => {
                 'pb:publish-verification-results'=> {
                   'href' => publish_verification_url
+                },
+                'pb:provider' => {
+                  'href' => provider_url
                 }
               }
             }
@@ -28,6 +32,27 @@ module Pact
               '_links' => {
                 'self' => {
                   'href' => 'http://broker/new-verification'
+                }
+              }
+            }.to_json
+          end
+          let(:provider_body) do
+            {
+              '_links' => {
+                'self' => {
+                  'href' => provider_url
+                },
+                'pb:version-tag' => {
+                  'href' => 'http://provider/version/{version}/tag/{tag}'
+                }
+              }
+            }.to_json
+          end
+          let(:tag_body) do
+            {
+              '_links' => {
+                'self' => {
+                  'href' => 'http://tag-url'
                 }
               }
             }.to_json
@@ -51,9 +76,11 @@ module Pact
 
           before do
             allow($stdout).to receive(:puts)
+            allow($stderr).to receive(:puts)
             allow(Pact.configuration).to receive(:provider).and_return(provider_configuration)
             stub_request(:post, stubbed_publish_verification_url).to_return(status: 200, body: created_verification_body)
-            stub_request(:put, 'http://broker/pacticipants/Bar/versions/1.2.3/tags/foo')
+            stub_request(:put, 'http://provider/version/1.2.3/tag/foo').to_return(status: 200, headers: { 'Content-Type' => 'application/hal+json'}, body: tag_body)
+            stub_request(:get, provider_url).to_return(status: 200, headers: { 'Content-Type' => 'application/hal+json'}, body: provider_body)
             allow(Retry).to receive(:until_true) { |&block| block.call }
           end
 
@@ -77,11 +104,6 @@ module Pact
                 expect(WebMock).to have_requested(:post, publish_verification_url).with(body: verification_json, headers: {'Content-Type' => 'application/json'})
               end
 
-              it "should call Retry.until_true once" do
-                subject
-                expect(Retry).to have_received(:until_true).once()
-              end
-
               context "when the verification result is not publishable" do
                 let(:publishable) { false }
 
@@ -96,12 +118,7 @@ module Pact
 
                 it "tags the provider version" do
                   subject
-                  expect(WebMock).to have_requested(:put, 'http://broker/pacticipants/Bar/versions/1.2.3/tags/foo').with(headers: {'Content-Type' => 'application/json'})
-                end
-
-                it "should call Retry.until_true twice" do
-                  subject
-                  expect(Retry).to have_received(:until_true).twice()
+                  expect(WebMock).to have_requested(:put, 'http://provider/version/1.2.3/tag/foo').with(headers: {'Content-Type' => 'application/json'})
                 end
 
                 context "when there is no pb:publish-verification-results link" do
@@ -138,7 +155,7 @@ module Pact
 
               context "when an HTTP error is returned" do
                 it "raises a PublicationError" do
-                  stub_request(:post, stubbed_publish_verification_url).to_return(status: 500, body: 'some error')
+                  stub_request(:post, stubbed_publish_verification_url).to_return(status: 500, body: '{}')
                   expect{ subject }.to raise_error(PublicationError, /Error returned/)
                 end
               end

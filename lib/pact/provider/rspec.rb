@@ -108,7 +108,7 @@ module Pact
           include Pact::RSpec::Matchers
           extend Pact::Matchers::Messages
 
-          let(:expected_content) { expected_response.body[:content].as_json }
+          let(:expected_content) { expected_response.body[:contents].as_json }
           let(:response) { interaction_context.last_response }
           let(:differ) { Pact.configuration.body_differ_for_content_type diff_content_type }
           let(:diff_formatter) { Pact.configuration.diff_formatter_for_content_type diff_content_type }

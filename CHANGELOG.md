@@ -1,3 +1,13 @@
+<a name="v1.26.0"></a>
+### v1.26.0 (2018-05-08)
+
+
+#### Bug Fixes
+
+* **message**
+  * message body actual content should be 'contents'	 ([d0157b0](/../../commit/d0157b0))
+
+
 <a name="v1.25.0"></a>
 ### v1.25.0 (2018-05-07)
 

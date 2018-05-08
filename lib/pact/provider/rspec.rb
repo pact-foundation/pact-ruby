@@ -115,7 +115,7 @@ module Pact
           let(:diff_options) { { with: differ, diff_formatter: diff_formatter } }
           let(:diff_content_type) { 'application/json' }
           let(:response_body) { parse_body_from_response(response) }
-          let(:actual_content) { response_body['content'] }
+          let(:actual_content) { response_body['contents'] }
 
           it "has matching content" do | example |
             if response.status != 200

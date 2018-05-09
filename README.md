@@ -56,7 +56,7 @@ Pact is most valuable for designing and testing integrations where you (or your 
 
 * Pact docs: [docs.pact.io](http://docs.pact.io)
 * Ruby Pact wiki: [github.com/pact-foundation/pact-ruby/wiki](https://github.com/pact-foundation/pact-ruby/wiki)
-* Slack: <script async defer src="https://pact-slack.herokuapp.com/slackin.js?large"></script>
+* Slack: [slack.pact.io](http://slack.pact.io)
 * Stackoverflow: [ruby pact questions](https://stackoverflow.com/questions/tagged/pact-ruby) or [general pact questions](https://stackoverflow.com/questions/tagged/pact)
 * Twitter: [@pact_up](https://twitter.com/pact_up)
 

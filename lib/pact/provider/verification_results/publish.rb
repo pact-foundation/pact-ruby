@@ -93,7 +93,7 @@ module Pact
           begin
             verification_entity = pact_entity.post(PUBLISH_RELATION, verification_result)
           rescue StandardError => e
-            error_message = "Failed to publish verification results due to: #{e.class} #{e.message}"
+            error_message = "Failed to publish verification results due to: #{e.class} #{e.message} #{e.backtrace.join("\n")}"
             raise PublicationError.new(error_message)
           end
 

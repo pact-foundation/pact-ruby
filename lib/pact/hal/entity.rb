@@ -7,7 +7,7 @@ module Pact
     class Entity
       def initialize(data, http_client, response = nil)
         @data = data
-        @links = @data.fetch("_links", {})
+        @links = (@data || {}).fetch("_links", {})
         @client = http_client
         @response = response
       end

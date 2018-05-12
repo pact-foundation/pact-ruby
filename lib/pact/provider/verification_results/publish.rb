@@ -1,6 +1,8 @@
 require 'json'
 require 'pact/errors'
 require 'pact/retry'
+require 'pact/hal/entity'
+require 'pact/hal/http_client'
 
 # TODO move this to the pact broker client
 
@@ -10,6 +12,11 @@ module Pact
       class PublicationError < Pact::Error; end
 
       class Publish
+
+        PUBLISH_RELATION = 'pb:publish-verification-results'.freeze
+        PROVIDER_RELATION = 'pb:provider'.freeze
+        VERSION_TAG_RELATION = 'pb:version-tag'.freeze
+
         def self.call pact_source, verification_result
           new(pact_source, verification_result).call
         end
@@ -17,6 +24,15 @@ module Pact
         def initialize pact_source, verification_result
           @pact_source = pact_source
           @verification_result = verification_result
+
+          http_client_options = {}
+          if pact_source.uri.basic_auth?
+            http_client_options[:username] = pact_source.uri.username
+            http_client_options[:password] = pact_source.uri.password
+          end
+
+          @http_client = Pact::Hal::HttpClient.new(http_client_options)
+          @pact_entity = Pact::Hal::Entity.new(pact_source.pact_hash, http_client)
         end
 
         def call
@@ -27,11 +43,12 @@ module Pact
         end
 
         private
+        attr_reader :pact_source, :verification_result, :pact_entity, :http_client
 
         def can_publish_verification_results?
           return false unless Pact.configuration.provider.publish_verification_results?
 
-          if publication_url.nil?
+          if !pact_entity.can?(PUBLISH_RELATION)
             Pact.configuration.error_stream.puts "WARN: Cannot publish verification for #{consumer_name} as there is no link named pb:publish-verification-results in the pact JSON. If you are using a pact broker, please upgrade to version 2.0.0 or later."
             return false
           end
@@ -43,94 +60,54 @@ module Pact
           true
         end
 
-        def publication_url
-          @publication_url ||= pact_source.pact_hash.fetch('_links', {}).fetch('pb:publish-verification-results', {})['href']
-        end
-
-        def tag_url tag
-          # This is so dodgey, need to use proper HAL
-          if publication_url
-            u = URI(publication_url)
-            if match = publication_url.match(%r{/provider/([^/]+)})
-              provider_name = match[1]
-              base_url = "#{u.scheme}://#{u.host}:#{u.host == u.default_port ? '' : u.port}"
-              provider_application_version = Pact.configuration.provider.application_version
-              "#{base_url}/pacticipants/#{provider_name}/versions/#{provider_application_version}/tags/#{tag}"
-            end
-          end
+        def hacky_tag_url provider_entity
+          hacky_tag_url = provider_entity._link('self').href + "/versions/{version}/tags/{tag}"
+          Pact::Hal::Link.new('href' => hacky_tag_url)
         end
 
         def tag_versions_if_configured
           if Pact.configuration.provider.tags.any?
-            tag_versions if tag_url('')
+            if pact_entity.can?(PROVIDER_RELATION)
+              tag_versions
+            else
+              Pact.configuration.error_stream.puts "WARN: Could not tag provider version as the pb:provider link cannot be found"
+            end
           end
         end
 
         def tag_versions
-          Pact.configuration.provider.tags.each do | tag |
-            uri = URI(tag_url(tag))
-            request = build_request('Put', uri, nil, "Tagging provider version at")
-            response = nil
-            begin
-              options = {:use_ssl => uri.scheme == 'https'}
-              Retry.until_true do
-                response = Net::HTTP.start(uri.host, uri.port, options) do |http|
-                  http.request request
-                end
-              end
-            rescue StandardError => e
-              error_message = "Failed to tag provider version due to: #{e.class} #{e.message}"
-              raise PublicationError.new(error_message)
-            end
+          provider_entity = pact_entity.get(PROVIDER_RELATION)
+          tag_link = provider_entity._link(VERSION_TAG_RELATION) || hacky_tag_url(provider_entity)
+          provider_application_version = Pact.configuration.provider.application_version
 
-            unless response.code.start_with?("2")
-              raise PublicationError.new("Error returned from tagging request #{response.code} #{response.body}")
+          Pact.configuration.provider.tags.each do | tag |
+            tag_entity = tag_link.expand(version: provider_application_version, tag: tag).put
+            unless tag_entity.success?
+              raise PublicationError.new("Error returned from tagging request #{tag_entity.response.code} #{tag_entity.response.body}")
             end
           end
         end
 
         def publish_verification_results
-          uri = URI(publication_url)
-          request = build_request('Post', uri, verification_result.to_json, "Publishing verification result #{verification_result} to")
-          response = nil
+          verification_entity = nil
           begin
-            options = {:use_ssl => uri.scheme == 'https'}
-            Retry.until_true do
-              response = Net::HTTP.start(uri.host, uri.port, options) do |http|
-                http.request request
-              end
-            end
+            verification_entity = pact_entity.post(PUBLISH_RELATION, verification_result)
           rescue StandardError => e
             error_message = "Failed to publish verification results due to: #{e.class} #{e.message}"
             raise PublicationError.new(error_message)
           end
 
-          if response.code.start_with?("2")
-            new_resource_url = JSON.parse(response.body)['_links']['self']['href']
+          if verification_entity.success?
+            new_resource_url = verification_entity._link('self').href
             Pact.configuration.output_stream.puts "INFO: Verification results published to #{new_resource_url}"
           else
-            raise PublicationError.new("Error returned from verification results publication #{response.code} #{response.body}")
+            raise PublicationError.new("Error returned from verification results publication #{verification_entity.response.code} #{verification_entity.response.body}")
           end
-        end
-
-        def build_request meth, uri, body, action
-          request = Net::HTTP.const_get(meth).new(uri.path)
-          request['Content-Type'] = "application/json"
-          request.body = body if body
-          debug_uri = uri
-          if pact_source.uri.basic_auth?
-            request.basic_auth pact_source.uri.username, pact_source.uri.password
-            debug_uri = URI(uri.to_s).tap { |x| x.userinfo="#{pact_source.uri.username}:*****"}
-          end
-          Pact.configuration.output_stream.puts "INFO: #{action} #{debug_uri}"
-          request
         end
 
         def consumer_name
           pact_source.pact_hash['consumer']['name']
         end
-
-        attr_reader :pact_source, :verification_result
       end
     end
   end

@@ -14,10 +14,8 @@ module Pact
       def initialize(provider, tags, broker_base_url, basic_auth_options)
         @provider = provider
         @tags = tags
-
+        @broker_base_url = broker_base_url
         @http_client = Pact::Hal::HttpClient.new(basic_auth_options)
-        @response = @http_client.get(broker_base_url)
-        @pact_entity = Pact::Hal::Entity.new(@response.body, http_client)
       end
 
       def self.call(provider, tags = nil, broker_base_url, basic_auth_options)
@@ -25,6 +23,7 @@ module Pact
       end
 
       def call
+        get_index
         if tags
           get_latest_tagged_pacts_for_provider
         else
@@ -33,6 +32,11 @@ module Pact
       end
 
       private
+
+      def get_index
+        response = http_client.get(broker_base_url)
+        @pact_entity = Pact::Hal::Entity.new(response.body, http_client)
+      end
 
       def get_latest_tagged_pacts_for_provider
         link = pact_entity._link(LATEST_PROVIDER_TAG_RELATION)

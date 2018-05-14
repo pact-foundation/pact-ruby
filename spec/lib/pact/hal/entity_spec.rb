@@ -14,19 +14,19 @@ module Pact
 
       let(:provider_hash) do
         {
-          'name' => 'Provider'
+          "name" => "Provider"
         }
       end
       let(:pact_hash) do
         {
-          'name' => 'a name',
+          "name" => "a name",
 
-          '_links' => {
-            'pb:provider' => {
-              'href' => 'http://provider'
+          "_links" => {
+            "pb:provider" => {
+              "href" => "http://provider"
             },
-            'pb:version-tag' => {
-              'href' => 'http://provider/version/{version}/tag/{tag}'
+            "pb:version-tag" => {
+              "href" => "http://provider/version/{version}/tag/{tag}"
             }
           }
         }
@@ -34,41 +34,41 @@ module Pact
 
       subject(:entity) { Entity.new(pact_hash, http_client) }
 
-      it 'delegates to the properties in the data' do
-        expect(subject.name).to eq 'a name'
+      it "delegates to the properties in the data" do
+        expect(subject.name).to eq "a name"
       end
 
-      describe 'post' do
-        let(:post_provider) { entity.post('pb:provider', {'some' => 'data'} ) }
+      describe "post" do
+        let(:post_provider) { entity.post("pb:provider", {'some' => 'data'} ) }
 
-        it 'executes an http request' do
-          expect(http_client).to receive(:post).with('http://provider', '{"some":"data"}')
+        it "executes an http request" do
+          expect(http_client).to receive(:post).with("http://provider", '{"some":"data"}', {})
           post_provider
         end
 
-        it 'returns the entity for the relation' do
+        it "returns the entity for the relation" do
           expect(post_provider).to be_a(Entity)
         end
 
-        context 'with template params' do
-          let(:post_provider) { entity._link('pb:version-tag').expand(version: '1', tag: 'prod').post({'some' => 'data'} ) }
+        context "with template params" do
+          let(:post_provider) { entity._link("pb:version-tag").expand(version: "1", tag: "prod").post({'some' => 'data'} ) }
 
-          it 'posts to the expanded URL' do
-            expect(http_client).to receive(:post).with('http://provider/version/1/tag/prod', '{"some":"data"}')
+          it "posts to the expanded URL" do
+            expect(http_client).to receive(:post).with("http://provider/version/1/tag/prod", '{"some":"data"}', {})
             post_provider
           end
         end
       end
 
-      describe 'can?' do
-        context 'when the relation exists' do
-          it 'returns true' do
+      describe "can?" do
+        context "when the relation exists" do
+          it "returns true" do
             expect(subject.can?('pb:provider')).to be true
           end
         end
 
-        context 'when the relation does not exist' do
-          it 'returns false' do
+        context "when the relation does not exist" do
+          it "returns false" do
             expect(subject.can?('pb:consumer')).to be false
           end
         end

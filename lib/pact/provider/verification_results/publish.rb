@@ -91,9 +91,10 @@ module Pact
         def publish_verification_results
           verification_entity = nil
           begin
-            verification_entity = pact_entity.post(PUBLISH_RELATION, verification_result)
+            # The verifications resource didn't have the content_types_provided set correctly, so publishing fails if we don't have */*
+            verification_entity = pact_entity.post(PUBLISH_RELATION, verification_result, { "Accept" => "application/hal+json, */*" })
           rescue StandardError => e
-            error_message = "Failed to publish verification results due to: #{e.class} #{e.message}"
+            error_message = "Failed to publish verification results due to: #{e.class} #{e.message} #{e.backtrace.join("\n")}"
             raise PublicationError.new(error_message)
           end
 

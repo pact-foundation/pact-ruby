@@ -101,7 +101,7 @@ module Pact
 
               it "publishes the verification" do
                 subject
-                expect(WebMock).to have_requested(:post, publish_verification_url).with(body: verification_json, headers: {'Content-Type' => 'application/json'})
+                expect(WebMock).to have_requested(:post, publish_verification_url).with(body: verification_json, headers: {'Content-Type' => 'application/json', 'Accept' => 'application/hal+json, */*'} )
               end
 
               context "when the verification result is not publishable" do

@@ -10,8 +10,7 @@ module Pact
         stub_request(:get, broker_base_url)
           .with(headers: {
             Accept: 'application/hal+json',
-            Authorization: 'Basic Zm9vOmJhcg==',
-            'Content-Type' => 'application/json'
+            Authorization: 'Basic Zm9vOmJhcg=='
           })
           .to_return(status: 200, body: broker_response,
                      headers: {'Content-Type' => 'application/json'})
@@ -79,16 +78,14 @@ module Pact
             stub_request(:get, 'https://pact.broker.com.au/pacts/provider/provider-name/latest/tag-1')
               .with(headers: {
                 'Accept' => 'application/hal+json',
-                'Authorization' => 'Basic Zm9vOmJhcg==',
-                'Content-Type' => 'application/json'
+                'Authorization' => 'Basic Zm9vOmJhcg=='
               })
               .to_return(status: 200, body: pact_entities_for_tag_1, headers: {'Content-Type' => 'application/json'})
 
             stub_request(:get, 'https://pact.broker.com.au/pacts/provider/provider-name/latest/tag-2')
               .with(headers: {
                 'Accept' => 'application/hal+json',
-                'Authorization' => 'Basic Zm9vOmJhcg==',
-                'Content-Type' => 'application/json'
+                'Authorization' => 'Basic Zm9vOmJhcg=='
               })
               .to_return(status: 200, body: pact_entities_for_tag_2, headers: {'Content-Type' => 'application/json'})
           end
@@ -139,16 +136,14 @@ module Pact
             stub_request(:get, 'https://pact.broker.com.au/pacts/provider/provider-name/latest/tag-1')
               .with(headers: {
                 'Accept' => 'application/hal+json',
-                'Authorization' => 'Basic Zm9vOmJhcg==',
-                'Content-Type' => 'application/json'
+                'Authorization' => 'Basic Zm9vOmJhcg=='
               })
               .to_return(status: 200, body: pact_entities_for_tag_1, headers: {'Content-Type' => 'application/json'})
 
             stub_request(:get, 'https://pact.broker.com.au/pacts/provider/provider-name/latest/tag-2')
               .with(headers: {
                 'Accept' => 'application/hal+json',
-                'Authorization' => 'Basic Zm9vOmJhcg==',
-                'Content-Type' => 'application/json'
+                'Authorization' => 'Basic Zm9vOmJhcg=='
               })
               .to_return(status: 200, body: pact_entities_for_tag_2, headers: {'Content-Type' => 'application/json'})
           end
@@ -188,8 +183,7 @@ module Pact
           stub_request(:get, 'https://pact.broker.com.au/pacts/provider/provider-name/latest')
             .with(headers: {
               'Accept' => 'application/hal+json',
-              'Authorization' => 'Basic Zm9vOmJhcg==',
-              'Content-Type' => 'application/json'
+              'Authorization' => 'Basic Zm9vOmJhcg=='
             })
             .to_return(status: 200, body: pact_entities_for_provider_name, headers: {'Content-Type' => 'application/json'})
         end

@@ -1,5 +1,6 @@
 require 'pact/provider/configuration/pact_verification'
 require 'pact/provider/configuration/service_provider_config'
+require 'pact/errors'
 
 module Pact
 

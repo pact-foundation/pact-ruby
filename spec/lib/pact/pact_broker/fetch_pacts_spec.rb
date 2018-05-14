@@ -5,16 +5,8 @@ module Pact
     describe('call') do
       let(:provider) {'provider-name'}
       let(:broker_base_url) {'https://pact.broker.com.au/'}
-      let(:basic_auth_options) {{username: 'foo', password: 'bar'}}
-      let!(:broker_request) do
-        stub_request(:get, broker_base_url)
-          .with(headers: {
-            Accept: 'application/hal+json',
-            Authorization: 'Basic Zm9vOmJhcg=='
-          })
-          .to_return(status: 200, body: broker_response,
-                     headers: {'Content-Type' => 'application/json'})
-      end
+      let(:basic_auth_options) { { username: 'foo', password: 'bar' } }
+      let(:tags) { [] }
 
       let(:broker_response) do
         {
@@ -34,75 +26,112 @@ module Pact
         }.to_json
       end
 
+      let(:pact_entities_for_tag_1) do
+        {
+          '_links' => {
+            'pacts' => [
+              {
+                'href' => 'pact-brker-url-for-consumer-1-tag-1',
+                'title' => 'Pact between consumer-1-name (v1.0.625) and provider-name',
+                'name' => 'consumer-1-name'
+              },
+              {
+                'href' => 'pact-brker-url-for-consumer-2-tag-1',
+                'title' => 'Pact between consumer-2-name (v1.0.1138) and provider-name',
+                'name' => 'consumer-2-name'
+              }]
+          }
+        }.to_json
+      end
+
+      let(:pact_entities_for_tag_2) do
+        {
+          '_links' => {
+            'pacts' => [
+              {
+                'href' => 'pact-brker-url-for-consumer-1-tag-2',
+                'title' => 'Pact between consumer-1-name (v1.0.625) and provider-name',
+                'name' => 'consumer-1-name'
+              },
+              {
+                'href' => 'pact-brker-url-for-consumer-2-tag-2',
+                'title' => 'Pact between consumer-2-name (v1.0.1138) and provider-name',
+                'name' => 'consumer-2-name'
+              }]
+          }
+        }.to_json
+      end
+
+      let(:pact_entities_for_provider) do
+        {
+          '_links' => {
+            'pacts' => [
+              {
+                'href' => 'pact-brker-url-for-consumer-1',
+                'title' => 'Pact between consumer-1-name (v1.0.625) and provider-name',
+                'name' => 'consumer-1-name'
+              },
+              {
+                'href' => 'pact-brker-url-for-consumer-2',
+                'title' => 'Pact between consumer-2-name (v1.0.1138) and provider-name',
+                'name' => 'consumer-2-name'
+              }]
+          }
+        }.to_json
+      end
+
+      let!(:index_request) do
+        stub_request(:get, broker_base_url)
+          .with(headers: {
+            Accept: 'application/hal+json',
+            Authorization: 'Basic Zm9vOmJhcg=='
+          })
+          .to_return(status: 200, body: broker_response,
+                     headers: {'Content-Type' => 'application/json'})
+      end
+
+      let!(:latest_tagged_pacts_for_provider_request_1) do
+        stub_request(:get, 'https://pact.broker.com.au/pacts/provider/provider-name/latest/tag-1')
+          .with(headers: {
+            'Accept' => 'application/hal+json',
+            'Authorization' => 'Basic Zm9vOmJhcg=='
+          })
+          .to_return(status: 200, body: pact_entities_for_tag_1, headers: {'Content-Type' => 'application/json'})
+      end
+
+      let!(:latest_tagged_pacts_for_provider_request_2) do
+        stub_request(:get, 'https://pact.broker.com.au/pacts/provider/provider-name/latest/tag-2')
+          .with(headers: {
+            'Accept' => 'application/hal+json',
+            'Authorization' => 'Basic Zm9vOmJhcg=='
+          })
+          .to_return(status: 200, body: pact_entities_for_tag_2, headers: {'Content-Type' => 'application/json'})
+      end
+
+      let!(:latest_pacts_for_provider_request) do
+        stub_request(:get, 'https://pact.broker.com.au/pacts/provider/provider-name/latest')
+          .with(headers: {
+            'Accept' => 'application/hal+json',
+            'Authorization' => 'Basic Zm9vOmJhcg=='
+          })
+          .to_return(status: 200, body: pact_entities_for_provider, headers: {'Content-Type' => 'application/json'})
+      end
+
+      subject { FetchPacts.call(provider, tags, broker_base_url, basic_auth_options) }
+
+      it 'makes a get request to broker base url' do
+        subject
+        expect(index_request).to have_been_made
+      end
+
       context 'when tags are provided' do
         let(:tags) {%w[tag-1 tag-2]}
 
         context 'when pacts are available' do
-          let(:pact_entities_for_tag_1) do
-            {
-              '_links' => {
-                'pacts' => [
-                  {
-                    'href' => 'pact-brker-url-for-consumer-1-tag-1',
-                    'title' => 'Pact between consumer-1-name (v1.0.625) and provider-name',
-                    'name' => 'consumer-1-name'
-                  },
-                  {
-                    'href' => 'pact-brker-url-for-consumer-2-tag-1',
-                    'title' => 'Pact between consumer-2-name (v1.0.1138) and provider-name',
-                    'name' => 'consumer-2-name'
-                  }]
-              }
-            }.to_json
-          end
-
-          let(:pact_entities_for_tag_2) do
-            {
-              '_links' => {
-                'pacts' => [
-                  {
-                    'href' => 'pact-brker-url-for-consumer-1-tag-2',
-                    'title' => 'Pact between consumer-1-name (v1.0.625) and provider-name',
-                    'name' => 'consumer-1-name'
-                  },
-                  {
-                    'href' => 'pact-brker-url-for-consumer-2-tag-2',
-                    'title' => 'Pact between consumer-2-name (v1.0.1138) and provider-name',
-                    'name' => 'consumer-2-name'
-                  }]
-              }
-            }.to_json
-          end
-
-          let!(:provider_tag_request) do
-            stub_request(:get, 'https://pact.broker.com.au/pacts/provider/provider-name/latest/tag-1')
-              .with(headers: {
-                'Accept' => 'application/hal+json',
-                'Authorization' => 'Basic Zm9vOmJhcg=='
-              })
-              .to_return(status: 200, body: pact_entities_for_tag_1, headers: {'Content-Type' => 'application/json'})
-
-            stub_request(:get, 'https://pact.broker.com.au/pacts/provider/provider-name/latest/tag-2')
-              .with(headers: {
-                'Accept' => 'application/hal+json',
-                'Authorization' => 'Basic Zm9vOmJhcg=='
-              })
-              .to_return(status: 200, body: pact_entities_for_tag_2, headers: {'Content-Type' => 'application/json'})
-          end
-
-          subject do
-            FetchPacts.call(provider, tags, broker_base_url, basic_auth_options)
-          end
-
-          it 'makes a get request to broker base url' do
-            subject
-            expect(WebMock).to have_requested(:get, broker_base_url)
-          end
-
           it 'makes a get request for the latest pacts for each tag' do
             subject
-            expect(WebMock).to have_requested(:get, 'https://pact.broker.com.au/pacts/provider/provider-name/latest/tag-1')
-            expect(WebMock).to have_requested(:get, 'https://pact.broker.com.au/pacts/provider/provider-name/latest/tag-2')
+            expect(latest_tagged_pacts_for_provider_request_1).to have_been_made
+            expect(latest_tagged_pacts_for_provider_request_2).to have_been_made
           end
 
           it "returns an arrays of pact urls based on provider name and tag's latest version" do
@@ -127,104 +156,36 @@ module Pact
             }.to_json
           end
 
-          let!(:provider_tag_request) do
-            stub_request(:get, 'https://pact.broker.com.au/pacts/provider/provider-name/latest/tag-1')
-              .with(headers: {
-                'Accept' => 'application/hal+json',
-                'Authorization' => 'Basic Zm9vOmJhcg=='
-              })
-              .to_return(status: 200, body: pact_entities_for_tag_1, headers: {'Content-Type' => 'application/json'})
-
-            stub_request(:get, 'https://pact.broker.com.au/pacts/provider/provider-name/latest/tag-2')
-              .with(headers: {
-                'Accept' => 'application/hal+json',
-                'Authorization' => 'Basic Zm9vOmJhcg=='
-              })
-              .to_return(status: 200, body: pact_entities_for_tag_2, headers: {'Content-Type' => 'application/json'})
-          end
-
-          subject do
-            FetchPacts.call(provider, tags, broker_base_url, basic_auth_options)
-          end
-
           it 'returns an empty array' do
-            @result = subject
-            expect(@result).to be_a Array
-            expect(@result).to eq([])
+            expect(subject).to eq([])
           end
         end
       end
 
       context 'when tags is nil' do
-        let(:pact_entities_for_provider_name) do
-          {
-            '_links' => {
-              'pacts' => [
-                {
-                  'href' => 'pact-brker-url-for-consumer-1',
-                  'title' => 'Pact between consumer-1-name (v1.0.625) and provider-name',
-                  'name' => 'consumer-1-name'
-                },
-                {
-                  'href' => 'pact-brker-url-for-consumer-2',
-                  'title' => 'Pact between consumer-2-name (v1.0.1138) and provider-name',
-                  'name' => 'consumer-2-name'
-                }]
-            }
-          }.to_json
-        end
+        let(:tags) { nil }
 
-        let!(:provider_request) do
-          stub_request(:get, 'https://pact.broker.com.au/pacts/provider/provider-name/latest')
-            .with(headers: {
-              'Accept' => 'application/hal+json',
-              'Authorization' => 'Basic Zm9vOmJhcg=='
-            })
-            .to_return(status: 200, body: pact_entities_for_provider_name, headers: {'Content-Type' => 'application/json'})
-        end
-
-        subject do
-          FetchPacts.call(provider, nil, broker_base_url, basic_auth_options)
-        end
-
-        it 'makes a get request to broker base url' do
+        it 'makes a get request to the latest pacts for the provider url' do
           subject
-          expect(WebMock).to have_requested(:get, broker_base_url)
+          expect(latest_pacts_for_provider_request).to have_been_made
         end
 
-        it 'makes a get request to provider url' do
-          subject
-          expect(WebMock).to have_requested(:get, 'https://pact.broker.com.au/pacts/provider/provider-name/latest')
+        it 'returns array of the latest pact urls for the provider' do
+          expect(subject).to eq(%w(pact-brker-url-for-consumer-1 pact-brker-url-for-consumer-2))
         end
 
-        it 'returns array of pact urls by provider' do
-          @result = subject
-          expect(@result).to be_a Array
-          expect(@result).to eq(%w(pact-brker-url-for-consumer-1 pact-brker-url-for-consumer-2))
-        end
       end
 
       context 'when the tags array is empty' do
-        let!(:provider_request) do
-          stub_request(:get, 'https://pact.broker.com.au/pacts/provider/provider-name/latest')
-            .to_return(status: 200, body: pact_entities_for_provider_name, headers: {'Content-Type' => 'application/json'})
-        end
+        let(:tags) { [] }
 
-        let(:pact_entities_for_provider_name) do
-          {
-            '_links' => {
-              'pacts' => []
-            }
-          }.to_json
-        end
-
-        subject do
-          FetchPacts.call(provider, [], broker_base_url, basic_auth_options)
-        end
-
-        it 'fetches the latest pacts without tags' do
+        it 'makes a get request to the latest pacts for the provider url' do
           subject
-          expect(WebMock).to have_requested(:get, 'https://pact.broker.com.au/pacts/provider/provider-name/latest')
+          expect(latest_pacts_for_provider_request).to have_been_made
+        end
+
+        it 'returns array of the latest pact urls for the provider' do
+          expect(subject).to eq(%w(pact-brker-url-for-consumer-1 pact-brker-url-for-consumer-2))
         end
       end
     end

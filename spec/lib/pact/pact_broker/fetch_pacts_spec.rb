@@ -99,21 +99,18 @@ module Pact
             expect(WebMock).to have_requested(:get, broker_base_url)
           end
 
-          it 'makes a get request to provider tag-1 url' do
+          it 'makes a get request for the latest pacts for each tag' do
             subject
             expect(WebMock).to have_requested(:get, 'https://pact.broker.com.au/pacts/provider/provider-name/latest/tag-1')
-          end
-
-          it 'makes a get request to provider tag-2 url' do
-            subject
             expect(WebMock).to have_requested(:get, 'https://pact.broker.com.au/pacts/provider/provider-name/latest/tag-2')
           end
 
-          it "returns arrays of pact urls based on provider name and tag's latest version" do
+          it "returns an arrays of pact urls based on provider name and tag's latest version" do
             expect(subject).to eq(%w(pact-brker-url-for-consumer-1-tag-1 pact-brker-url-for-consumer-2-tag-1 pact-brker-url-for-consumer-1-tag-2 pact-brker-url-for-consumer-2-tag-2))
           end
         end
-        context 'when pacts are not available' do
+
+        context 'when there are no pacts for the specified tags' do
           let(:pact_entities_for_tag_1) do
             {
               '_links' => {
@@ -158,7 +155,7 @@ module Pact
         end
       end
 
-      context 'when tag is not provided' do
+      context 'when tags is nil' do
         let(:pact_entities_for_provider_name) do
           {
             '_links' => {

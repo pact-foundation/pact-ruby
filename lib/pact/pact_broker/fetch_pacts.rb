@@ -25,28 +25,29 @@ module Pact
       end
 
       def call
-        pact_urls = []
         if tags
-          link = pact_entity._link(LATEST_PROVIDER_TAG_RELATION)
-          tags.each do |tag|
-            link_by_tag = link.expand(provider: provider, tag: tag).get
-            get_pact_urls(link_by_tag, pact_urls)
-          end
+          get_latest_tagged_pacts_for_provider
         else
-          link = pact_entity._link(LATEST_PROVIDER_RELATION)
-          link_by_provider = link.expand(provider: provider).get
-          get_pact_urls(link_by_provider, pact_urls)
+          get_latest_pacts_for_provider
         end
-        pact_urls
       end
 
       private
 
-      def get_pact_urls(link_by_provider, pact_urls)
-        pacts = link_by_provider.fetch(PACTS)
-        pacts.each do |pact|
-          pact_urls.push(pact[HREF])
-        end
+      def get_latest_tagged_pacts_for_provider
+        link = pact_entity._link(LATEST_PROVIDER_TAG_RELATION)
+        tags.collect do | tag |
+          get_pact_urls(link.expand(provider: provider, tag: tag).get)
+        end.flatten
+      end
+
+      def get_latest_pacts_for_provider
+        link = pact_entity._link(LATEST_PROVIDER_RELATION)
+        get_pact_urls(link.expand(provider: provider).get)
+      end
+
+      def get_pact_urls(link_by_provider)
+        link_by_provider.fetch(PACTS).collect{ |pact | pact[HREF] }
       end
     end
   end

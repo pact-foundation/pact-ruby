@@ -110,9 +110,7 @@ module Pact
           end
 
           it "returns arrays of pact urls based on provider name and tag's latest version" do
-            @result = subject
-            expect(@result).to be_a Array
-            expect(@result).to eq(%w(pact-brker-url-for-consumer-1-tag-1 pact-brker-url-for-consumer-2-tag-1 pact-brker-url-for-consumer-1-tag-2 pact-brker-url-for-consumer-2-tag-2))
+            expect(subject).to eq(%w(pact-brker-url-for-consumer-1-tag-1 pact-brker-url-for-consumer-2-tag-1 pact-brker-url-for-consumer-1-tag-2 pact-brker-url-for-consumer-2-tag-2))
           end
         end
         context 'when pacts are not available' do

@@ -18,7 +18,7 @@ module Pact
         @http_client = Pact::Hal::HttpClient.new(basic_auth_options)
       end
 
-      def self.call(provider, tags = nil, broker_base_url, basic_auth_options)
+      def self.call(provider, tags, broker_base_url, basic_auth_options)
         new(provider, tags, broker_base_url, basic_auth_options).call
       end
 

@@ -208,6 +208,30 @@ module Pact
           expect(@result).to eq(%w(pact-brker-url-for-consumer-1 pact-brker-url-for-consumer-2))
         end
       end
+
+      context 'when the tags array is empty' do
+        let!(:provider_request) do
+          stub_request(:get, 'https://pact.broker.com.au/pacts/provider/provider-name/latest')
+            .to_return(status: 200, body: pact_entities_for_provider_name, headers: {'Content-Type' => 'application/json'})
+        end
+
+        let(:pact_entities_for_provider_name) do
+          {
+            '_links' => {
+              'pacts' => []
+            }
+          }.to_json
+        end
+
+        subject do
+          FetchPacts.call(provider, [], broker_base_url, basic_auth_options)
+        end
+
+        it 'should fetch the latest pacts without tags' do
+          subject
+          expect(WebMock).to have_requested(:get, 'https://pact.broker.com.au/pacts/provider/provider-name/latest')
+        end
+      end
     end
   end
 end

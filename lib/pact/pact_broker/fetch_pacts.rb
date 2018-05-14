@@ -24,7 +24,7 @@ module Pact
 
       def call
         get_index
-        if tags
+        if tags && tags.any?
           get_latest_tagged_pacts_for_provider
         else
           get_latest_pacts_for_provider

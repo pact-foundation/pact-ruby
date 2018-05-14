@@ -35,11 +35,11 @@ module Pact
 
       subject { Link.new(attrs, http_client) }
 
-      describe "#run" do
-        before do
-          allow(Pact::Hal::Entity).to receive(:new).and_return(entity)
-        end
+      before do
+        allow(Pact::Hal::Entity).to receive(:new).and_return(entity)
+      end
 
+      describe "#run" do
         let(:do_run) { subject.run('foo' => 'bar') }
 
         it "executes the configured http request" do
@@ -71,11 +71,27 @@ module Pact
       end
 
       describe "#get" do
+        before do
+          allow(http_client).to receive(:get).and_return(response)
+        end
 
+        let(:do_get) { subject.get({ 'foo' => 'bar' }) }
+
+        it "executes an HTTP Get request" do
+          expect(http_client).to receive(:get).with('http://foo/{bar}', { 'foo' => 'bar' }, {})
+          do_get
+        end
       end
 
-      describe "#put" do
+      describe "#post" do
+        let(:do_post) { subject.post({ 'foo' => 'bar' }, { 'Accept' => 'foo' }) }
 
+        context "with custom headers" do
+          it "executes an HTTP Post request with the custom headers" do
+            expect(http_client).to receive(:post).with('http://foo/{bar}', '{"foo":"bar"}', { 'Accept' => 'foo' })
+            do_post
+          end
+        end
       end
 
       describe "#expand" do

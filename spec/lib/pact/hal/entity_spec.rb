@@ -42,7 +42,7 @@ module Pact
         let(:post_provider) { entity.post("pb:provider", {'some' => 'data'} ) }
 
         it "executes an http request" do
-          expect(http_client).to receive(:post).with("http://provider", '{"some":"data"}')
+          expect(http_client).to receive(:post).with("http://provider", '{"some":"data"}', {})
           post_provider
         end
 
@@ -54,7 +54,7 @@ module Pact
           let(:post_provider) { entity._link("pb:version-tag").expand(version: "1", tag: "prod").post({'some' => 'data'} ) }
 
           it "posts to the expanded URL" do
-            expect(http_client).to receive(:post).with("http://provider/version/1/tag/prod", '{"some":"data"}')
+            expect(http_client).to receive(:post).with("http://provider/version/1/tag/prod", '{"some":"data"}', {})
             post_provider
           end
         end

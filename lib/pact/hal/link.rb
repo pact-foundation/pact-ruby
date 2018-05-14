@@ -24,16 +24,16 @@ module Pact
           end
       end
 
-      def get(payload = {})
-        wrap_response(@http_client.get(href, payload))
+      def get(payload = {}, headers = {})
+        wrap_response(@http_client.get(href, payload, headers))
       end
 
-      def put(payload = nil)
-        wrap_response(@http_client.put(href, payload ? JSON.dump(payload) : nil))
+      def put(payload = nil, headers = {})
+        wrap_response(@http_client.put(href, payload ? JSON.dump(payload) : nil, headers))
       end
 
-      def post(payload = nil)
-        wrap_response(@http_client.post(href, payload ? JSON.dump(payload) : nil))
+      def post(payload = nil, headers = {})
+        wrap_response(@http_client.post(href, payload ? JSON.dump(payload) : nil, headers))
       end
 
       def expand(params)

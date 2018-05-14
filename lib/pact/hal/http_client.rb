@@ -10,27 +10,31 @@ module Pact
         @password = options[:password]
       end
 
-      def get href, params = {}
+      def get href, params = {}, headers = {}
+        query = params.collect{ |(key, value)| "#{CGI::escape(key)}=#{CGI::escape(value)}" }.join("&")
         uri = URI(href)
-        perform_request(create_request(uri, 'Get'), uri)
+        uri.query = query
+        perform_request(create_request(uri, 'Get', nil, headers), uri)
       end
 
-      def put href, body = nil
+      def put href, body = nil, headers = {}
         uri = URI(href)
-        perform_request(create_request(uri, 'Put', body), uri)
+        perform_request(create_request(uri, 'Put', body, headers), uri)
       end
 
-      def post href, body = nil
+      def post href, body = nil, headers = {}
         uri = URI(href)
-        perform_request(create_request(uri, 'Post', body), uri)
+        perform_request(create_request(uri, 'Post', body, headers), uri)
       end
 
-      def create_request uri, http_method, body = nil
-        path = uri.path.size == 0 ? "/" : uri.path
-        request = Net::HTTP.const_get(http_method).new(path)
-        request['Content-Type'] = "application/json;charset=utf-8" if ['Post', 'Put', 'Patch'].include?(http_method)
-        # The verifications resource didn't have the content_types_provided set, so publishing fails if we don't have */*
-        request['Accept'] = "application/hal+json, */*"
+      def create_request uri, http_method, body = nil, headers = {}
+        request = Net::HTTP.const_get(http_method).new(uri.to_s)
+        request['Content-Type'] = "application/json" if ['Post', 'Put', 'Patch'].include?(http_method)
+        request['Accept'] = "application/hal+json"
+        headers.each do | key, value |
+          request[key] = value
+        end
+
         request.body = body if body
         request.basic_auth username, password if username
         request

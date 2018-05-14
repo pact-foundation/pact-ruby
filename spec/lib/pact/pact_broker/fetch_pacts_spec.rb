@@ -94,22 +94,22 @@ module Pact
             FetchPacts.call(provider, tags, broker_base_url, basic_auth_options)
           end
 
-          it 'should make a get request to broker base url' do
+          it 'makes a get request to broker base url' do
             subject
             expect(WebMock).to have_requested(:get, broker_base_url)
           end
 
-          it 'should make a get request to provider tag-1 url' do
+          it 'makes a get request to provider tag-1 url' do
             subject
             expect(WebMock).to have_requested(:get, 'https://pact.broker.com.au/pacts/provider/provider-name/latest/tag-1')
           end
 
-          it 'should make a get request to provider tag-2 url' do
+          it 'makes a get request to provider tag-2 url' do
             subject
             expect(WebMock).to have_requested(:get, 'https://pact.broker.com.au/pacts/provider/provider-name/latest/tag-2')
           end
 
-          it "should return arrays of pact urls based on provider name and tag's latest version" do
+          it "returns arrays of pact urls based on provider name and tag's latest version" do
             @result = subject
             expect(@result).to be_a Array
             expect(@result).to eq(%w(pact-brker-url-for-consumer-1-tag-1 pact-brker-url-for-consumer-2-tag-1 pact-brker-url-for-consumer-1-tag-2 pact-brker-url-for-consumer-2-tag-2))
@@ -152,7 +152,7 @@ module Pact
             FetchPacts.call(provider, tags, broker_base_url, basic_auth_options)
           end
 
-          it 'should return empty array' do
+          it 'returns an empty array' do
             @result = subject
             expect(@result).to be_a Array
             expect(@result).to eq([])
@@ -192,17 +192,17 @@ module Pact
           FetchPacts.call(provider, nil, broker_base_url, basic_auth_options)
         end
 
-        it 'should make a get request to broker base url' do
+        it 'makes a get request to broker base url' do
           subject
           expect(WebMock).to have_requested(:get, broker_base_url)
         end
 
-        it 'should make a get request to provider url' do
+        it 'makes a get request to provider url' do
           subject
           expect(WebMock).to have_requested(:get, 'https://pact.broker.com.au/pacts/provider/provider-name/latest')
         end
 
-        it 'should return array of pact urls by provider' do
+        it 'returns array of pact urls by provider' do
           @result = subject
           expect(@result).to be_a Array
           expect(@result).to eq(%w(pact-brker-url-for-consumer-1 pact-brker-url-for-consumer-2))
@@ -227,7 +227,7 @@ module Pact
           FetchPacts.call(provider, [], broker_base_url, basic_auth_options)
         end
 
-        it 'should fetch the latest pacts without tags' do
+        it 'fetches the latest pacts without tags' do
           subject
           expect(WebMock).to have_requested(:get, 'https://pact.broker.com.au/pacts/provider/provider-name/latest')
         end

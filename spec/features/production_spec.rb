@@ -30,6 +30,11 @@ module Pact::Provider
       end
 
       def call(env)
+        if (env['HTTP_AUTHORIZATION'])
+          if env['HTTP_AUTHORIZATION'] != 'password'
+            return [401, {'Content-Type' => 'application/json'}, {error: "The password is 'password'"}.to_json]
+          end
+        end
         case env['PATH_INFO']
         when "/zebra_names"
             [200, {'Content-Type' => 'application/json'}, { names: find_zebra_names }.to_json]
@@ -150,6 +155,37 @@ module Pact::Provider
 
         honour_consumer_contract consumer_contract
     end
+
+    context "with a header being added by call_params" do
+      consumer_contract = Pact::ConsumerContract.from_json <<-EOS
+      {
+           "consumer" : { "name" : "some consumer"},
+            "provider" : { "name" : "provider"},
+            "interactions" : [
+                {
+                    "description": "donut creation request",
+                    "request": {
+                        "method": "post",
+                        "path": "/zebra_names"
+                    },
+                    "response": {
+                        "body": {"names": ["Mark", "Gertrude"]},
+                        "status": 200
+                    },
+                    "provider_state" : "some other zebras are here"
+                }
+            ]
+      }
+      EOS
+
+      before :all do
+        Pact.service_provider "ServiceUnderTestWithFixture" do
+          app { ServiceUnderTestWithFixture.new }
+        end
+      end
+
+      honour_consumer_contract consumer_contract
+end
 
   end
 end

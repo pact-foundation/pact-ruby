@@ -1,6 +1,4 @@
-RSpec::Core::RakeTask.new(:spec) do | task |
-  task.exclude_pattern = "spec/service_providers/**/*.rb"
-end
+RSpec::Core::RakeTask.new(:spec)
 
 # Need to run this in separate process because left over state from
 # testing the actual pact framework messes up the tests that actually

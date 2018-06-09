@@ -81,6 +81,7 @@ module Pact
           provider_application_version = Pact.configuration.provider.application_version
 
           Pact.configuration.provider.tags.each do | tag |
+            Pact.configuration.output_stream.puts "INFO: Tagging version #{provider_application_version} of #{provider_name} as #{tag.inspect}"
             tag_entity = tag_link.expand(version: provider_application_version, tag: tag).put
             unless tag_entity.success?
               raise PublicationError.new("Error returned from tagging request #{tag_entity.response.code} #{tag_entity.response.body}")
@@ -108,6 +109,10 @@ module Pact
 
         def consumer_name
           pact_source.pact_hash['consumer']['name']
+        end
+
+        def provider_name
+          pact_source.pact_hash['provider']['name']
         end
       end
     end

@@ -17,6 +17,9 @@ module Pact
               'consumer' => {
                 'name' => 'Foo'
               },
+              'provider' => {
+                'name' => 'Bar'
+              },
               '_links' => {
                 'pb:publish-verification-results'=> {
                   'href' => publish_verification_url
@@ -119,6 +122,11 @@ module Pact
                 it "tags the provider version" do
                   subject
                   expect(WebMock).to have_requested(:put, 'http://provider/version/1.2.3/tag/foo').with(headers: {'Content-Type' => 'application/json'})
+                end
+
+                it "logs the tagging to stdout" do
+                  expect($stdout).to receive(:puts).with("INFO: Tagging version 1.2.3 of Bar as \"foo\"")
+                  subject
                 end
 
                 context "when there is no pb:publish-verification-results link" do

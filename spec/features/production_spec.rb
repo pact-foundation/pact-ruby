@@ -156,36 +156,5 @@ module Pact::Provider
         honour_consumer_contract consumer_contract
     end
 
-    context "with a header being added by call_params" do
-      consumer_contract = Pact::ConsumerContract.from_json <<-EOS
-      {
-           "consumer" : { "name" : "some consumer"},
-            "provider" : { "name" : "provider"},
-            "interactions" : [
-                {
-                    "description": "donut creation request",
-                    "request": {
-                        "method": "post",
-                        "path": "/zebra_names"
-                    },
-                    "response": {
-                        "body": {"names": ["Mark", "Gertrude"]},
-                        "status": 200
-                    },
-                    "provider_state" : "some other zebras are here"
-                }
-            ]
-      }
-      EOS
-
-      before :all do
-        Pact.service_provider "ServiceUnderTestWithFixture" do
-          app { ServiceUnderTestWithFixture.new }
-        end
-      end
-
-      honour_consumer_contract consumer_contract
-end
-
   end
 end

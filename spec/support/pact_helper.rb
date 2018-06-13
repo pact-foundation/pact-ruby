@@ -13,9 +13,9 @@ module Pact
 					[200, {'Content-Type' => 'text/plain'}, ['some text']]
 				elsif env['PATH_INFO'] == '/content_type_is_important'
 						[200, {'Content-Type' => 'application/json'}, [{message: "A message", note: "This will cause verify to fail if it using the wrong content type differ."}.to_json]]
-        elsif env['PATH_INFO'] == '/food_item/7'
-          [200, {'Content-Type' => 'application/json'}, [{message: 'One apple'}.to_json]]
-        else
+				elsif env['PATH_INFO'] == '/food_item/7'
+					[200, {'Content-Type' => 'application/json'}, [{message: 'One apple'}.to_json]]
+				else
 					raise "unexpected path #{env['PATH_INFO']}!!!"
 				end
 			end

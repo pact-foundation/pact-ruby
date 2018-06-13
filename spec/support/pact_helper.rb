@@ -49,12 +49,12 @@ module Pact
 					WEATHER[:current_state] = 'sunny'
 				end
 
-        provider_state 'create one apple' do
-          set_up do
-            provider_param :item, 'apple'
-            provider_param :id, '7'
-          end
-        end
+				provider_state 'create one apple' do
+					set_up do
+						provider_param :item, 'apple'
+						provider_param :id, '7'
+					end
+				end
 			end
 		end
 

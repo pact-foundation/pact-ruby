@@ -48,12 +48,6 @@ describe Pact::PactBroker::FetchPacts, pact: true do
                   generate: broker_base_url + 'pacts/provider/{provider}/tag/{tag}',
                   matcher: %r{/pacts/provider/{provider}/tag/{tag}$}
                 )
-              },
-              'pb:provider-pacts' => {
-                href: Pact.term(
-                  generate: broker_base_url + 'pacts/provider/{provider}',
-                  matcher: %r{/pacts/provider/{provider}$}
-                )
               }
             }
           }
@@ -62,7 +56,6 @@ describe Pact::PactBroker::FetchPacts, pact: true do
 
     context 'retrieving latest pacts by provider' do
       let(:tags) { nil }
-      let(:all_pacts) { false }
 
       before do
         pact_broker
@@ -91,15 +84,14 @@ describe Pact::PactBroker::FetchPacts, pact: true do
       end
 
       it 'returns the array of pact urls' do
-        pacts = Pact::PactBroker::FetchPacts.call(provider, tags, broker_base_url, basic_auth_options, all_pacts)
+        pacts = Pact::PactBroker::FetchPacts.call(provider, tags, broker_base_url, basic_auth_options)
 
         expect(pacts).to eq(%w[http://pact-broker-url-for-consumer-1 http://pact-broker-url-for-consumer-2])
       end
     end
 
     context 'retrieving latest pacts by provider with the specified tag' do
-      let(:tags) { %w[tag-1 tag-2] }
-      let(:all_pacts) { false }
+      let(:tags) { ['tag-1', { name: 'tag-2', all: false }] }
 
       before do
         pact_broker
@@ -151,21 +143,20 @@ describe Pact::PactBroker::FetchPacts, pact: true do
       end
 
       it 'returns the array of pact urls' do
-        pacts = Pact::PactBroker::FetchPacts.call(provider, tags, broker_base_url, basic_auth_options, all_pacts)
+        pacts = Pact::PactBroker::FetchPacts.call(provider, tags, broker_base_url, basic_auth_options)
 
         expect(pacts).to eq(%w[http://pact-broker-url-for-consumer-1-tag-1 http://pact-broker-url-for-consumer-2-tag-1
                                http://pact-broker-url-for-consumer-1-tag-2 http://pact-broker-url-for-consumer-2-tag-2])
       end
     end
 
-    context 'retrieving all pact versions for the provider with the specified consumer version tag' do
+    context 'retrieving all pact versions for tag-2 and latest pact versions for tag-1 for the provider with the specified consumer version tag' do
       let(:tags) { ['tag-1', { name: 'tag-2', all: true }] }
-      let(:all_pacts) { true }
 
       before do
         pact_broker
           .given('consumer-1 and consumer-2 have 2 pacts with provider provider-1 tagged with tag-1')
-          .upon_receiving('a request to retrieve all pact versions for the provider with the specified consumer version tag (tag-1)')
+          .upon_receiving('a request to retrieve latest pact versions for the provider with the specified consumer version tag (tag-1)')
           .with(
             method: :get,
             path: '/pacts/provider/provider-1/latest/tag-1',
@@ -186,6 +177,7 @@ describe Pact::PactBroker::FetchPacts, pact: true do
               }
             }
           )
+
         pact_broker
           .given('consumer-1 and consumer-2 have 2 pacts with provider provider-1 tagged with tag-2')
           .upon_receiving('a request to retrieve all pact versions for the provider with the specified consumer version tag (tag-2)')
@@ -212,24 +204,23 @@ describe Pact::PactBroker::FetchPacts, pact: true do
       end
 
       it 'returns the array of pact urls' do
-        pacts = Pact::PactBroker::FetchPacts.call(provider, tags, broker_base_url, basic_auth_options, all_pacts)
+        pacts = Pact::PactBroker::FetchPacts.call(provider, tags, broker_base_url, basic_auth_options)
 
         expect(pacts).to eq(%w[http://pact-broker-url-for-consumer-1-tag-1 http://pact-broker-url-for-consumer-2-tag-1
                                http://pact-broker-url-for-consumer-1-tag-2-all http://pact-broker-url-for-consumer-2-tag-2-all])
       end
     end
 
-    context 'retrieving all pact versions for the specified provider' do
+    context 'retrieving all the latest pact versions for the specified provider' do
       let(:tags) { nil }
-      let(:all_pacts) { true }
 
       before do
         pact_broker
           .given('consumer-1 and consumer-2 have 2 pacts with provider provider-1')
-          .upon_receiving('a request to retrieve all pact versions for the specified provider')
+          .upon_receiving('a request to retrieve latest pacts for the specified provider')
           .with(
             method: :get,
-            path: '/pacts/provider/provider-1',
+            path: '/pacts/provider/provider-1/latest',
             headers: get_headers
           )
           .will_respond_with(
@@ -250,7 +241,7 @@ describe Pact::PactBroker::FetchPacts, pact: true do
       end
 
       it 'returns the array of pact urls' do
-        pacts = Pact::PactBroker::FetchPacts.call(provider, tags, broker_base_url, basic_auth_options, all_pacts)
+        pacts = Pact::PactBroker::FetchPacts.call(provider, tags, broker_base_url, basic_auth_options)
 
         expect(pacts).to eq(%w[http://pact-broker-url-for-consumer-1-all http://pact-broker-url-for-consumer-2-all])
       end

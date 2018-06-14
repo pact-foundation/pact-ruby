@@ -21,7 +21,7 @@ describe Pact::PactBroker::FetchPacts, pact: true do
 
     before do
       pact_broker
-        .given('all the relations exists in the index resource')
+        .given('the relations for retrieving pacts exist in the index resource')
         .upon_receiving('a request for the index resource')
         .with(
           method: :get,

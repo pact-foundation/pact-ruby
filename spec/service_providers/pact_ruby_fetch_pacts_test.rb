@@ -82,10 +82,10 @@ describe Pact::PactBroker::FetchPacts, pact: true do
               _links: {
                 pacts: [
                   {
-                    href: Pact.like('pact-broker-url-for-consumer-1')
+                    href: Pact.term('http://pact-broker-url-for-consumer-1', %r{http://.*})
                   },
                   {
-                    href: Pact.like('pact-broker-url-for-consumer-2')
+                    href: Pact.term('http://pact-broker-url-for-consumer-2', %r{http://.*})
                   }
                 ]
               }
@@ -96,7 +96,7 @@ describe Pact::PactBroker::FetchPacts, pact: true do
       it 'returns the array of pact urls' do
         pacts = Pact::PactBroker::FetchPacts.call(provider, tags, broker_base_url, basic_auth_options, all_pacts)
 
-        expect(pacts).to eq(%w[pact-broker-url-for-consumer-1 pact-broker-url-for-consumer-2])
+        expect(pacts).to eq(%w[http://pact-broker-url-for-consumer-1 http://pact-broker-url-for-consumer-2])
       end
     end
 
@@ -119,10 +119,10 @@ describe Pact::PactBroker::FetchPacts, pact: true do
               _links: {
                 pacts: [
                   {
-                    href: Pact.like('pact-broker-url-for-consumer-1-tag-1')
+                    href: Pact.term('http://pact-broker-url-for-consumer-1-tag-1', %r{http://.*})
                   },
                   {
-                    href: Pact.like('pact-broker-url-for-consumer-2-tag-1')
+                    href: Pact.term('http://pact-broker-url-for-consumer-2-tag-1', %r{http://.*})
                   }
                 ]
               }
@@ -142,10 +142,10 @@ describe Pact::PactBroker::FetchPacts, pact: true do
               _links: {
                 pacts: [
                   {
-                    href: Pact.like('pact-broker-url-for-consumer-1-tag-2')
+                    href: Pact.term('http://pact-broker-url-for-consumer-1-tag-2', %r{http://.*})
                   },
                   {
-                    href: Pact.like('pact-broker-url-for-consumer-2-tag-2')
+                    href: Pact.term('http://pact-broker-url-for-consumer-2-tag-2', %r{http://.*})
                   }
                 ]
               }
@@ -156,8 +156,8 @@ describe Pact::PactBroker::FetchPacts, pact: true do
       it 'returns the array of pact urls' do
         pacts = Pact::PactBroker::FetchPacts.call(provider, tags, broker_base_url, basic_auth_options, all_pacts)
 
-        expect(pacts).to eq(%w[pact-broker-url-for-consumer-1-tag-1 pact-broker-url-for-consumer-2-tag-1
-                               pact-broker-url-for-consumer-1-tag-2 pact-broker-url-for-consumer-2-tag-2])
+        expect(pacts).to eq(%w[http://pact-broker-url-for-consumer-1-tag-1 http://pact-broker-url-for-consumer-2-tag-1
+                               http://pact-broker-url-for-consumer-1-tag-2 http://pact-broker-url-for-consumer-2-tag-2])
       end
     end
 
@@ -180,10 +180,10 @@ describe Pact::PactBroker::FetchPacts, pact: true do
               _links: {
                 pacts: [
                   {
-                    href: Pact.like('pact-broker-url-for-consumer-1-tag-1-all')
+                    href: Pact.term('http://pact-broker-url-for-consumer-1-tag-1-all', %r{http://.*})
                   },
                   {
-                    href: Pact.like('pact-broker-url-for-consumer-2-tag-1-all')
+                    href: Pact.term('http://pact-broker-url-for-consumer-2-tag-1-all', %r{http://.*})
                   }
                 ]
               }
@@ -203,10 +203,10 @@ describe Pact::PactBroker::FetchPacts, pact: true do
               _links: {
                 pacts: [
                   {
-                    href: Pact.like('pact-broker-url-for-consumer-1-tag-2-all')
+                    href: Pact.term('http://pact-broker-url-for-consumer-1-tag-2-all', %r{http://.*})
                   },
                   {
-                    href: Pact.like('pact-broker-url-for-consumer-2-tag-2-all')
+                    href: Pact.term('http://pact-broker-url-for-consumer-2-tag-2-all', %r{http://.*})
                   }
                 ]
               }
@@ -217,8 +217,8 @@ describe Pact::PactBroker::FetchPacts, pact: true do
       it 'returns the array of pact urls' do
         pacts = Pact::PactBroker::FetchPacts.call(provider, tags, broker_base_url, basic_auth_options, all_pacts)
 
-        expect(pacts).to eq(%w[pact-broker-url-for-consumer-1-tag-1-all pact-broker-url-for-consumer-2-tag-1-all
-            pact-broker-url-for-consumer-1-tag-2-all pact-broker-url-for-consumer-2-tag-2-all])
+        expect(pacts).to eq(%w[http://pact-broker-url-for-consumer-1-tag-1-all http://pact-broker-url-for-consumer-2-tag-1-all
+            http://pact-broker-url-for-consumer-1-tag-2-all http://pact-broker-url-for-consumer-2-tag-2-all])
       end
     end
 
@@ -241,10 +241,10 @@ describe Pact::PactBroker::FetchPacts, pact: true do
               _links: {
                 pacts: [
                   {
-                    href: Pact.like('pact-broker-url-for-consumer-1-all')
+                    href: Pact.term('http://pact-broker-url-for-consumer-1-all', %r{http://.*})
                   },
                   {
-                    href: Pact.like('pact-broker-url-for-consumer-2-all')
+                    href: Pact.term('http://pact-broker-url-for-consumer-2-all', %r{http://.*})
                   }
                 ]
               }
@@ -255,7 +255,7 @@ describe Pact::PactBroker::FetchPacts, pact: true do
       it 'returns the array of pact urls' do
         pacts = Pact::PactBroker::FetchPacts.call(provider, tags, broker_base_url, basic_auth_options, all_pacts)
 
-        expect(pacts).to eq(%w[pact-broker-url-for-consumer-1-all pact-broker-url-for-consumer-2-all])
+        expect(pacts).to eq(%w[http://pact-broker-url-for-consumer-1-all http://pact-broker-url-for-consumer-2-all])
       end
     end
   end

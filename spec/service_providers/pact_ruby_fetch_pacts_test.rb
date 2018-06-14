@@ -15,7 +15,7 @@ describe Pact::PactBroker::FetchPacts, pact: true do
   let(:get_headers) { {Accept: 'application/hal+json'} }
 
   describe 'fetch pacts' do
-    let(:provider) { 'pact-broker' }
+    let(:provider) { 'provider-1' }
     let(:broker_base_url) { pact_broker.mock_service_base_url + '/' }
     let(:basic_auth_options) { {username: 'foo', password: 'bar'} }
 
@@ -69,11 +69,11 @@ describe Pact::PactBroker::FetchPacts, pact: true do
 
       before do
         pact_broker
-          .given('consumer-1 and consumer-2 have pacts with provider pact-broker')
+          .given('consumer-1 and consumer-2 have pacts with provider provider-1')
           .upon_receiving('a request to retrieve the latest pacts for provider')
           .with(
             method: :get,
-            path: '/pacts/provider/pact-broker/latest',
+            path: '/pacts/provider/provider-1/latest',
             headers: get_headers
           ).
           will_respond_with(
@@ -106,11 +106,11 @@ describe Pact::PactBroker::FetchPacts, pact: true do
 
       before do
         pact_broker
-          .given('consumer-1 and consumer-2 have pacts with provider pact-broker tagged with tag-1')
+          .given('consumer-1 and consumer-2 have pacts with provider provider-1 tagged with tag-1')
           .upon_receiving('a request to retrieve the latest tagged (tag-1) pacts for provider')
           .with(
             method: :get,
-            path: '/pacts/provider/pact-broker/latest/tag-1',
+            path: '/pacts/provider/provider-1/latest/tag-1',
             headers: get_headers
           ).
           will_respond_with(
@@ -129,11 +129,11 @@ describe Pact::PactBroker::FetchPacts, pact: true do
             }
           )
         pact_broker
-          .given('consumer-1 and consumer-2 have pacts with provider pact-broker tagged with tag-2')
+          .given('consumer-1 and consumer-2 have pacts with provider provider-1 tagged with tag-2')
           .upon_receiving('a request to retrieve the latest tagged (tag-2) pacts for provider')
           .with(
             method: :get,
-            path: '/pacts/provider/pact-broker/latest/tag-2',
+            path: '/pacts/provider/provider-1/latest/tag-2',
             headers: get_headers
           ).
           will_respond_with(
@@ -167,11 +167,11 @@ describe Pact::PactBroker::FetchPacts, pact: true do
 
       before do
         pact_broker
-          .given('consumer-1 and consumer-2 have 2 pacts with provider pact-broker tagged with tag-1')
+          .given('consumer-1 and consumer-2 have 2 pacts with provider provider-1 tagged with tag-1')
           .upon_receiving('a request to retrieve all pact versions for the provider with the specified consumer version tag (tag-1)')
           .with(
             method: :get,
-            path: '/pacts/provider/pact-broker/tag/tag-1',
+            path: '/pacts/provider/provider-1/tag/tag-1',
             headers: get_headers
           ).
           will_respond_with(
@@ -190,11 +190,11 @@ describe Pact::PactBroker::FetchPacts, pact: true do
             }
           )
         pact_broker
-          .given('consumer-1 and consumer-2 have 2 pacts with provider pact-broker tagged with tag-2')
+          .given('consumer-1 and consumer-2 have 2 pacts with provider provider-1 tagged with tag-2')
           .upon_receiving('a request to retrieve all pact versions for the provider with the specified consumer version tag (tag-2)')
           .with(
             method: :get,
-            path: '/pacts/provider/pact-broker/tag/tag-2',
+            path: '/pacts/provider/provider-1/tag/tag-2',
             headers: get_headers
           ).
           will_respond_with(
@@ -228,11 +228,11 @@ describe Pact::PactBroker::FetchPacts, pact: true do
 
       before do
         pact_broker
-          .given('consumer-1 and consumer-2 have 2 pacts with provider pact-broker')
+          .given('consumer-1 and consumer-2 have 2 pacts with provider provider-1')
           .upon_receiving('a request to retrieve all pact versions for the specified provider')
           .with(
             method: :get,
-            path: '/pacts/provider/pact-broker',
+            path: '/pacts/provider/provider-1',
             headers: get_headers
           ).
           will_respond_with(

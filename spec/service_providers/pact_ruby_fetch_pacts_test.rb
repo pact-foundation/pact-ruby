@@ -11,13 +11,12 @@ Pact.service_consumer 'Pact Ruby' do
 end
 
 describe Pact::PactBroker::FetchPacts, pact: true do
-
-  let(:get_headers) { {Accept: 'application/hal+json'} }
+  let(:get_headers) { { Accept: 'application/hal+json' } }
 
   describe 'fetch pacts' do
     let(:provider) { 'provider-1' }
     let(:broker_base_url) { pact_broker.mock_service_base_url + '/' }
-    let(:basic_auth_options) { {username: 'foo', password: 'bar'} }
+    let(:basic_auth_options) { { username: 'foo', password: 'bar' } }
 
     before do
       pact_broker
@@ -27,8 +26,8 @@ describe Pact::PactBroker::FetchPacts, pact: true do
           method: :get,
           path: '/',
           headers: get_headers
-        ).
-        will_respond_with(
+        )
+        .will_respond_with(
           status: 200,
           body: {
             _links: {
@@ -43,14 +42,12 @@ describe Pact::PactBroker::FetchPacts, pact: true do
                   generate: broker_base_url + 'pacts/provider/{provider}/latest/{tag}',
                   matcher: %r{/pacts/provider/{provider}/latest/{tag}$}
                 )
-
               },
               :'pb:provider-pacts-with-tag' => {
                 href: Pact.term(
                   generate: broker_base_url + 'pacts/provider/{provider}/tag/{tag}',
                   matcher: %r{/pacts/provider/{provider}/tag/{tag}$}
                 )
-
               },
               'pb:provider-pacts' => {
                 href: Pact.term(
@@ -75,8 +72,8 @@ describe Pact::PactBroker::FetchPacts, pact: true do
             method: :get,
             path: '/pacts/provider/provider-1/latest',
             headers: get_headers
-          ).
-          will_respond_with(
+          )
+          .will_respond_with(
             status: 200,
             body: {
               _links: {
@@ -112,8 +109,8 @@ describe Pact::PactBroker::FetchPacts, pact: true do
             method: :get,
             path: '/pacts/provider/provider-1/latest/tag-1',
             headers: get_headers
-          ).
-          will_respond_with(
+          )
+          .will_respond_with(
             status: 200,
             body: {
               _links: {
@@ -135,8 +132,8 @@ describe Pact::PactBroker::FetchPacts, pact: true do
             method: :get,
             path: '/pacts/provider/provider-1/latest/tag-2',
             headers: get_headers
-          ).
-          will_respond_with(
+          )
+          .will_respond_with(
             status: 200,
             body: {
               _links: {
@@ -162,7 +159,7 @@ describe Pact::PactBroker::FetchPacts, pact: true do
     end
 
     context 'retrieving all pact versions for the provider with the specified consumer version tag' do
-      let(:tags) { %w[tag-1 tag-2] }
+      let(:tags) { ['tag-1', { name: 'tag-2', all: true }] }
       let(:all_pacts) { true }
 
       before do
@@ -171,19 +168,19 @@ describe Pact::PactBroker::FetchPacts, pact: true do
           .upon_receiving('a request to retrieve all pact versions for the provider with the specified consumer version tag (tag-1)')
           .with(
             method: :get,
-            path: '/pacts/provider/provider-1/tag/tag-1',
+            path: '/pacts/provider/provider-1/latest/tag-1',
             headers: get_headers
-          ).
-          will_respond_with(
+          )
+          .will_respond_with(
             status: 200,
             body: {
               _links: {
                 pacts: [
                   {
-                    href: Pact.term('http://pact-broker-url-for-consumer-1-tag-1-all', %r{http://.*})
+                    href: Pact.term('http://pact-broker-url-for-consumer-1-tag-1', %r{http://.*})
                   },
                   {
-                    href: Pact.term('http://pact-broker-url-for-consumer-2-tag-1-all', %r{http://.*})
+                    href: Pact.term('http://pact-broker-url-for-consumer-2-tag-1', %r{http://.*})
                   }
                 ]
               }
@@ -196,8 +193,8 @@ describe Pact::PactBroker::FetchPacts, pact: true do
             method: :get,
             path: '/pacts/provider/provider-1/tag/tag-2',
             headers: get_headers
-          ).
-          will_respond_with(
+          )
+          .will_respond_with(
             status: 200,
             body: {
               _links: {
@@ -217,8 +214,8 @@ describe Pact::PactBroker::FetchPacts, pact: true do
       it 'returns the array of pact urls' do
         pacts = Pact::PactBroker::FetchPacts.call(provider, tags, broker_base_url, basic_auth_options, all_pacts)
 
-        expect(pacts).to eq(%w[http://pact-broker-url-for-consumer-1-tag-1-all http://pact-broker-url-for-consumer-2-tag-1-all
-            http://pact-broker-url-for-consumer-1-tag-2-all http://pact-broker-url-for-consumer-2-tag-2-all])
+        expect(pacts).to eq(%w[http://pact-broker-url-for-consumer-1-tag-1 http://pact-broker-url-for-consumer-2-tag-1
+                               http://pact-broker-url-for-consumer-1-tag-2-all http://pact-broker-url-for-consumer-2-tag-2-all])
       end
     end
 
@@ -234,8 +231,8 @@ describe Pact::PactBroker::FetchPacts, pact: true do
             method: :get,
             path: '/pacts/provider/provider-1',
             headers: get_headers
-          ).
-          will_respond_with(
+          )
+          .will_respond_with(
             status: 200,
             body: {
               _links: {

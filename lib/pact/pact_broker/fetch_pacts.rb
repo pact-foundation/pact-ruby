@@ -45,30 +45,32 @@ module Pact
       end
 
       def get_tagged_pacts_for_provider
-        if all_pacts
-          get_all_tagged_pacts_for_provider
+        tags.collect do |tag|
+          link = get_link(tag)
+          tag_name = get_tag_name(tag)
+          get_pact_urls(link.expand(provider: provider, tag: tag_name).get)
+        end.flatten
+      end
+
+      def get_link(tag)
+        if tag.is_a?(String) || tag[:all] == false
+          index_entity._link(LATEST_PROVIDER_TAG_RELATION)
         else
-          get_latest_tagged_pacts_for_provider
+          index_entity._link(ALL_PROVIDER_TAG_RELATION)
+        end
+      end
+
+      def get_tag_name(tag)
+        if tag.is_a?(String)
+          tag
+        else
+          tag[:name]
         end
       end
 
       def get_index
         response = http_client.get(broker_base_url)
         @index_entity = Pact::Hal::Entity.new(response.body, http_client)
-      end
-
-      def get_latest_tagged_pacts_for_provider
-        link = index_entity._link(LATEST_PROVIDER_TAG_RELATION)
-        tags.collect do | tag |
-          get_pact_urls(link.expand(provider: provider, tag: tag).get)
-        end.flatten
-      end
-
-      def get_all_tagged_pacts_for_provider
-        link = index_entity._link(ALL_PROVIDER_TAG_RELATION)
-        tags.collect do |tag|
-          get_pact_urls(link.expand(provider: provider, tag: tag).get)
-        end.flatten
       end
 
       def get_latest_pacts_for_provider
@@ -82,7 +84,7 @@ module Pact
       end
 
       def get_pact_urls(link_by_provider)
-        link_by_provider.fetch(PACTS).collect{ |pact | pact[HREF] }
+        link_by_provider.fetch(PACTS).collect { |pact| pact[HREF] }
       end
     end
   end

@@ -34,10 +34,14 @@ module Pact
 
       def call
         get_index
-        tags&.any? ? get_tagged_pacts_for_provider : get_latest_pacts_for_provider
+        tag_exist ? get_tagged_pacts_for_provider : get_latest_pacts_for_provider
       end
 
       private
+
+      def tag_exist
+        tags && tags.any?
+      end
 
       def get_tagged_pacts_for_provider
         tags.collect do |tag|

@@ -14,7 +14,16 @@ module Pact
 
       def initialize(provider, tags, broker_base_url, basic_auth_options)
         @provider = provider
-        @tags = tags
+        @tags = []
+        if tags
+          tags.collect do |tag|
+            if tag.is_a?(String)
+              @tags.push({name: tag, all: false})
+            else
+              @tags.push(tag)
+            end
+          end
+        end
         @broker_base_url = broker_base_url
         @http_client = Pact::Hal::HttpClient.new(basic_auth_options)
       end
@@ -33,24 +42,15 @@ module Pact
       def get_tagged_pacts_for_provider
         tags.collect do |tag|
           link = get_link(tag)
-          tag_name = get_tag_name(tag)
-          get_pact_urls(link.expand(provider: provider, tag: tag_name).get)
+          get_pact_urls(link.expand(provider: provider, tag: tag[:name]).get)
         end.flatten
       end
 
       def get_link(tag)
-        if tag.is_a?(String) || tag[:all] == false
+        if !tag[:all]
           index_entity._link(LATEST_PROVIDER_TAG_RELATION)
         else
           index_entity._link(ALL_PROVIDER_TAG_RELATION)
-        end
-      end
-
-      def get_tag_name(tag)
-        if tag.is_a?(String)
-          tag
-        else
-          tag[:name]
         end
       end
 

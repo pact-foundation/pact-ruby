@@ -17,6 +17,7 @@ describe Pact::PactBroker::FetchPacts, pact: true do
     let(:provider) { 'provider-1' }
     let(:broker_base_url) { pact_broker.mock_service_base_url + '/' }
     let(:basic_auth_options) { { username: 'foo', password: 'bar' } }
+    let(:fallback_tag) { nil }
 
     before do
       pact_broker
@@ -84,7 +85,7 @@ describe Pact::PactBroker::FetchPacts, pact: true do
       end
 
       it 'returns the array of pact urls' do
-        pacts = Pact::PactBroker::FetchPacts.call(provider, tags, broker_base_url, basic_auth_options)
+        pacts = Pact::PactBroker::FetchPacts.call(provider, tags, broker_base_url, basic_auth_options, fallback_tag)
 
         expect(pacts).to eq(%w[http://pact-broker-url-for-consumer-1 http://pact-broker-url-for-consumer-2])
       end
@@ -143,10 +144,92 @@ describe Pact::PactBroker::FetchPacts, pact: true do
       end
 
       it 'returns the array of pact urls' do
-        pacts = Pact::PactBroker::FetchPacts.call(provider, tags, broker_base_url, basic_auth_options)
+        pacts = Pact::PactBroker::FetchPacts.call(provider, tags, broker_base_url, basic_auth_options, fallback_tag)
 
         expect(pacts).to eq(%w[http://pact-broker-url-for-consumer-1-tag-1 http://pact-broker-url-for-consumer-2-tag-1
                                http://pact-broker-url-for-consumer-1-tag-2 http://pact-broker-url-for-consumer-2-tag-2])
+      end
+    end
+
+    context 'retrieving latest pacts by provider with the fallback tag' do
+      let(:tags) { ['tag-1'] }
+      let(:fallback_tag) { 'master' }
+
+      before do
+        pact_broker
+          .given('consumer-1 and consumer-2 have no pacts with provider provider-1 tagged with tag-1')
+          .upon_receiving('a request to retrieve the latest tagged (tag-1) pacts for provider')
+          .with(
+            method: :get,
+            path: '/pacts/provider/provider-1/latest/tag-1',
+            headers: get_headers
+          )
+          .will_respond_with(
+            status: 200,
+            body: {
+              _links: {
+                pacts: []
+              }
+            }
+          )
+        pact_broker
+          .given('consumer-1 and consumer-2 have pacts with provider provider-1 tagged with master')
+          .upon_receiving('a request to retrieve the latest tagged (master) pacts for provider')
+          .with(
+            method: :get,
+            path: '/pacts/provider/provider-1/latest/master',
+            headers: get_headers
+          )
+          .will_respond_with(
+            status: 200,
+            body: {
+              _links: {
+                pacts: [
+                  {
+                    href: Pact.term('http://pact-broker-url-for-consumer-1-master', %r{http://.*})
+                  },
+                  {
+                    href: Pact.term('http://pact-broker-url-for-consumer-2-master', %r{http://.*})
+                  }
+                ]
+              }
+            }
+          )
+      end
+
+      it 'returns the array of pact urls' do
+        pacts = Pact::PactBroker::FetchPacts.call(provider, tags, broker_base_url, basic_auth_options, fallback_tag)
+
+        expect(pacts).to eq(%w[http://pact-broker-url-for-consumer-1-master http://pact-broker-url-for-consumer-2-master])
+      end
+    end
+
+    context 'when neither pacts are available for a tag nor fallback tag is available' do
+      let(:tags) { ['tag-1'] }
+
+      before do
+        pact_broker
+          .given('consumer-1 has no pacts with provider provider-1 tagged with tag-1')
+          .upon_receiving('a request to retrieve the latest tagged (tag-1) pacts for provider')
+          .with(
+            method: :get,
+            path: '/pacts/provider/provider-1/latest/tag-1',
+            headers: get_headers
+          )
+          .will_respond_with(
+            status: 200,
+            body: {
+              _links: {
+                pacts: []
+              }
+            }
+          )
+      end
+
+      it 'returns empty array' do
+        pacts = Pact::PactBroker::FetchPacts.call(provider, tags, broker_base_url, basic_auth_options, fallback_tag)
+
+        expect(pacts).to eq([])
       end
     end
 
@@ -204,7 +287,7 @@ describe Pact::PactBroker::FetchPacts, pact: true do
       end
 
       it 'returns the array of pact urls' do
-        pacts = Pact::PactBroker::FetchPacts.call(provider, tags, broker_base_url, basic_auth_options)
+        pacts = Pact::PactBroker::FetchPacts.call(provider, tags, broker_base_url, basic_auth_options, fallback_tag)
 
         expect(pacts).to eq(%w[http://pact-broker-url-for-consumer-1-tag-1 http://pact-broker-url-for-consumer-2-tag-1
                                http://pact-broker-url-for-consumer-1-tag-2-all http://pact-broker-url-for-consumer-2-tag-2-all])
@@ -241,7 +324,7 @@ describe Pact::PactBroker::FetchPacts, pact: true do
       end
 
       it 'returns the array of pact urls' do
-        pacts = Pact::PactBroker::FetchPacts.call(provider, tags, broker_base_url, basic_auth_options)
+        pacts = Pact::PactBroker::FetchPacts.call(provider, tags, broker_base_url, basic_auth_options, fallback_tag)
 
         expect(pacts).to eq(%w[http://pact-broker-url-for-consumer-1-all http://pact-broker-url-for-consumer-2-all])
       end

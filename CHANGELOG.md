@@ -1,3 +1,19 @@
+<a name="v1.27.0"></a>
+### v1.27.0 (2018-06-22)
+
+
+#### Features
+
+* log tagging to stdout when publishing verification results	 ([2387424](/../../commit/2387424))
+* Dynamically retrieve pacts for a given provider	 ([5aca966](/../../commit/5aca966))
+
+
+#### Bug Fixes
+
+* correct request url in http client	 ([1fb22b6](/../../commit/1fb22b6))
+* correctly escape expanded URL in the HAL client	 ([821238d](/../../commit/821238d))
+
+
 <a name="v1.26.0"></a>
 ### v1.26.0 (2018-05-08)
 

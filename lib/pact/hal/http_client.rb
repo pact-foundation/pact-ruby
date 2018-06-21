@@ -28,7 +28,7 @@ module Pact
       end
 
       def create_request uri, http_method, body = nil, headers = {}
-        request = Net::HTTP.const_get(http_method).new(uri.to_s)
+        request = Net::HTTP.const_get(http_method).new(uri.request_uri)
         request['Content-Type'] = "application/json" if ['Post', 'Put', 'Patch'].include?(http_method)
         request['Accept'] = "application/hal+json"
         headers.each do | key, value |

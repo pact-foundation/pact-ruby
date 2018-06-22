@@ -4,7 +4,7 @@ require 'pact/hal/http_client'
 module Pact
   module PactBroker
     class FetchPacts
-      attr_reader :provider, :tags, :broker_base_url, :basic_auth_options, :http_client, :index_entity, :fallback_tag
+      attr_reader :provider, :tags, :broker_base_url, :basic_auth_options, :http_client, :index_entity
 
       ALL_PROVIDER_TAG_RELATION = 'pb:provider-pacts-with-tag'.freeze
       LATEST_PROVIDER_TAG_RELATION = 'pb:latest-provider-pacts-with-tag'.freeze
@@ -12,37 +12,27 @@ module Pact
       PACTS = 'pacts'.freeze
       HREF = 'href'.freeze
 
-      def initialize(provider, tags, broker_base_url, basic_auth_options, fallback_tag)
+      def initialize(provider, tags, broker_base_url, basic_auth_options)
         @provider = provider
-        @tags = []
-        if tags
-          tags.collect do |tag|
-            if tag.is_a?(String)
-              @tags.push(name: tag, all: false)
-            else
-              @tags.push(tag)
-            end
+        @tags = (tags || []).collect do |tag|
+          if tag.is_a?(String)
+            { name: tag, all: false, fallback: nil }
+          else
+            tag
           end
         end
         @broker_base_url = broker_base_url
         @http_client = Pact::Hal::HttpClient.new(basic_auth_options)
-        @fallback_tag = fallback_tag
       end
 
-      def self.call(provider, tags, broker_base_url, basic_auth_options, fallback_tag)
-        new(provider, tags, broker_base_url, basic_auth_options, fallback_tag).call
+      def self.call(provider, tags, broker_base_url, basic_auth_options)
+        new(provider, tags, broker_base_url, basic_auth_options).call
       end
 
       def call
         get_index
         if tag_exist
-          pacts = get_tagged_pacts_for_provider
-          if pacts == [] && fallback_tag
-            link = index_entity._link(LATEST_PROVIDER_TAG_RELATION)
-            pacts = get_pact_urls(link.expand(provider: provider,
-                                              tag: fallback_tag).get)
-          end
-          pacts
+          get_tagged_pacts_for_provider
         else
           get_latest_pacts_for_provider
         end
@@ -57,7 +47,11 @@ module Pact
       def get_tagged_pacts_for_provider
         tags.collect do |tag|
           link = get_link(tag)
-          get_pact_urls(link.expand(provider: provider, tag: tag[:name]).get)
+          urls = get_pact_urls(link.expand(provider: provider, tag: tag[:name]).get)
+          if urls == [] && tag[:fallback]
+            urls = get_pact_urls(link.expand(provider: provider, tag: tag[:fallback]).get)
+          end
+          urls
         end.flatten
       end
 

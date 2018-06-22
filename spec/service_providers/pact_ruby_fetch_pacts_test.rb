@@ -17,7 +17,6 @@ describe Pact::PactBroker::FetchPacts, pact: true do
     let(:provider) { 'provider-1' }
     let(:broker_base_url) { pact_broker.mock_service_base_url + '/' }
     let(:basic_auth_options) { { username: 'foo', password: 'bar' } }
-    let(:fallback_tag) { nil }
 
     before do
       pact_broker
@@ -85,7 +84,7 @@ describe Pact::PactBroker::FetchPacts, pact: true do
       end
 
       it 'returns the array of pact urls' do
-        pacts = Pact::PactBroker::FetchPacts.call(provider, tags, broker_base_url, basic_auth_options, fallback_tag)
+        pacts = Pact::PactBroker::FetchPacts.call(provider, tags, broker_base_url, basic_auth_options)
 
         expect(pacts).to eq(%w[http://pact-broker-url-for-consumer-1 http://pact-broker-url-for-consumer-2])
       end
@@ -144,7 +143,7 @@ describe Pact::PactBroker::FetchPacts, pact: true do
       end
 
       it 'returns the array of pact urls' do
-        pacts = Pact::PactBroker::FetchPacts.call(provider, tags, broker_base_url, basic_auth_options, fallback_tag)
+        pacts = Pact::PactBroker::FetchPacts.call(provider, tags, broker_base_url, basic_auth_options)
 
         expect(pacts).to eq(%w[http://pact-broker-url-for-consumer-1-tag-1 http://pact-broker-url-for-consumer-2-tag-1
                                http://pact-broker-url-for-consumer-1-tag-2 http://pact-broker-url-for-consumer-2-tag-2])
@@ -152,8 +151,7 @@ describe Pact::PactBroker::FetchPacts, pact: true do
     end
 
     context 'retrieving latest pacts by provider with the fallback tag' do
-      let(:tags) { ['tag-1'] }
-      let(:fallback_tag) { 'master' }
+      let(:tags) { [{ name: 'tag-1', all: false, fallback: 'master' }] }
 
       before do
         pact_broker
@@ -198,7 +196,7 @@ describe Pact::PactBroker::FetchPacts, pact: true do
       end
 
       it 'returns the array of pact urls' do
-        pacts = Pact::PactBroker::FetchPacts.call(provider, tags, broker_base_url, basic_auth_options, fallback_tag)
+        pacts = Pact::PactBroker::FetchPacts.call(provider, tags, broker_base_url, basic_auth_options)
 
         expect(pacts).to eq(%w[http://pact-broker-url-for-consumer-1-master http://pact-broker-url-for-consumer-2-master])
       end
@@ -227,7 +225,7 @@ describe Pact::PactBroker::FetchPacts, pact: true do
       end
 
       it 'returns empty array' do
-        pacts = Pact::PactBroker::FetchPacts.call(provider, tags, broker_base_url, basic_auth_options, fallback_tag)
+        pacts = Pact::PactBroker::FetchPacts.call(provider, tags, broker_base_url, basic_auth_options)
 
         expect(pacts).to eq([])
       end
@@ -287,7 +285,7 @@ describe Pact::PactBroker::FetchPacts, pact: true do
       end
 
       it 'returns the array of pact urls' do
-        pacts = Pact::PactBroker::FetchPacts.call(provider, tags, broker_base_url, basic_auth_options, fallback_tag)
+        pacts = Pact::PactBroker::FetchPacts.call(provider, tags, broker_base_url, basic_auth_options)
 
         expect(pacts).to eq(%w[http://pact-broker-url-for-consumer-1-tag-1 http://pact-broker-url-for-consumer-2-tag-1
                                http://pact-broker-url-for-consumer-1-tag-2-all http://pact-broker-url-for-consumer-2-tag-2-all])
@@ -324,7 +322,7 @@ describe Pact::PactBroker::FetchPacts, pact: true do
       end
 
       it 'returns the array of pact urls' do
-        pacts = Pact::PactBroker::FetchPacts.call(provider, tags, broker_base_url, basic_auth_options, fallback_tag)
+        pacts = Pact::PactBroker::FetchPacts.call(provider, tags, broker_base_url, basic_auth_options)
 
         expect(pacts).to eq(%w[http://pact-broker-url-for-consumer-1-all http://pact-broker-url-for-consumer-2-all])
       end

@@ -125,7 +125,66 @@ module Pact
               expect(Pact.provider_world.pact_verifications.first)
                 .to eq(Pact::Provider::PactVerification.new('some-consumer', pact_uri , :prod))
             end
+          end
+        end
 
+        describe 'honours_pacts_from_pact_broker' do
+          before do
+            Pact.clear_provider_world
+          end
+          let(:pact_url) { 'blah' }
+
+          context 'with no optional params' do
+            subject do
+              ServiceProviderDSL.build 'some-provider' do
+                app {}
+                honours_pacts_from_pact_broker nil do
+                  pact_uri pact_url
+                end
+              end
+            end
+
+            it 'adds a verification to the Pact.provider_world' do
+              subject
+              pact_uri = Pact::Provider::PactURI.new(pact_url)
+              expect(Pact.provider_world.pact_verifications.first)
+                .to eq(Pact::Provider::PactVerificationWithTags.new(nil, pact_uri))
+            end
+          end
+
+          context 'with all params specified' do
+            let(:pact_uri_options) do
+              {
+                username: 'pact_user',
+                password: 'pact_pw'
+              }
+            end
+            let(:tag_1) { 'master' }
+
+            let(:tag_2) do
+              {
+                name: 'tag-name',
+                all: false,
+                fallback: 'master'
+              }
+            end
+
+            subject do
+              ServiceProviderDSL.build 'some-provider' do
+                app {}
+                honours_pacts_from_pact_broker [tag_1, tag_2] do
+                  pact_uri pact_url, pact_uri_options
+                end
+              end
+            end
+
+            it 'adds a verification to the Pact.provider_world' do
+              subject
+              pact_uri = Pact::Provider::PactURI.new(pact_url, pact_uri_options)
+              tags = [tag_1, tag_2]
+              expect(Pact.provider_world.pact_verifications.first)
+                .to eq(Pact::Provider::PactVerificationWithTags.new(tags, pact_uri))
+            end
           end
 
         end

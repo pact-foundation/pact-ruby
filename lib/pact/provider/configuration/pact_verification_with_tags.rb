@@ -12,10 +12,14 @@ module Pact
 
         extend Pact::DSL
 
-        attr_accessor :tags, :pact_uri
+        attr_accessor :name, :pact_broker_base_url, :tags, :pact_uri
 
-        def initialize tags, options = {}
-          @tags = tags
+        def initialize(name, options = {})
+          puts options
+          @tags = options.fetch(:consumer_version_tags) || []
+          @pact_broker_base_url = options.fetch(:pact_broker_base_url)
+          @provider_name = name
+          @options = options
           @pact_uri = nil
         end
 
@@ -33,8 +37,11 @@ module Pact
         private
 
         def create_pact_verification
-          verification = Pact::Provider::PactVerificationWithTags.new(tags, pact_uri)
-          Pact.provider_world.add_pact_verification verification
+          pacts = Pact::PactBroker::FetchPacts.call(@provider_name, tags, pact_broker_base_url, @options)
+          pacts.each do |pact_uri|
+            verification = Pact::Provider::PactVerificationWithTags.new(pact_uri)
+            Pact.provider_world.add_pact_verification verification
+          end
         end
 
         def validate

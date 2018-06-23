@@ -55,8 +55,8 @@ module Pact
             create_pact_verification consumer_name, options, &block
           end
 
-          def honours_pacts_from_pact_broker(tags, options = {}, &block)
-            create_pact_verification_with_tags tags, options, &block
+          def honours_pacts_from_pact_broker options = {}, &block
+            create_pact_verification_with_tags options, &block
           end
         end
 
@@ -64,8 +64,8 @@ module Pact
           PactVerification.build(consumer_name, options, &block)
         end
 
-        def create_pact_verification_with_tags(tags, options, &block)
-          PactVerificationWithTags.build(tags, options, &block)
+        def create_pact_verification_with_tags(options, &block)
+          PactVerificationWithTags.build(name, options, &block)
         end
 
         def finalize

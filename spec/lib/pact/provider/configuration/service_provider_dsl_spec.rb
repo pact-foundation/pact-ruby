@@ -1,6 +1,7 @@
 require 'spec_helper'
 require 'pact/provider/configuration/service_provider_dsl'
 require 'pact/provider/pact_uri'
+require 'pact/pact_broker/fetch_pacts'
 
 module Pact
 
@@ -134,31 +135,7 @@ module Pact
           end
           let(:pact_url) { 'blah' }
 
-          context 'with no optional params' do
-            subject do
-              ServiceProviderDSL.build 'some-provider' do
-                app {}
-                honours_pacts_from_pact_broker nil do
-                  pact_uri pact_url
-                end
-              end
-            end
-
-            it 'adds a verification to the Pact.provider_world' do
-              subject
-              pact_uri = Pact::Provider::PactURI.new(pact_url)
-              expect(Pact.provider_world.pact_verifications.first)
-                .to eq(Pact::Provider::PactVerificationWithTags.new(nil, pact_uri))
-            end
-          end
-
           context 'with all params specified' do
-            let(:pact_uri_options) do
-              {
-                username: 'pact_user',
-                password: 'pact_pw'
-              }
-            end
             let(:tag_1) { 'master' }
 
             let(:tag_2) do
@@ -169,44 +146,47 @@ module Pact
               }
             end
 
+            let(:options) do
+              {
+                pact_broker_base_url: 'some-url',
+                consumer_version_tags: [tag_1, tag_2]
+              }
+            end
+
             subject do
               ServiceProviderDSL.build 'some-provider' do
                 app {}
-                honours_pacts_from_pact_broker [tag_1, tag_2] do
-                  pact_uri pact_url, pact_uri_options
+                honours_pacts_from_pact_broker options do
                 end
               end
             end
 
             it 'adds a verification to the Pact.provider_world' do
+              allow(Pact::PactBroker::FetchPacts).to receive(:call).and_return(['pact-urls'])
+
               subject
-              pact_uri = Pact::Provider::PactURI.new(pact_url, pact_uri_options)
-              tags = [tag_1, tag_2]
+
               expect(Pact.provider_world.pact_verifications.first)
-                .to eq(Pact::Provider::PactVerificationWithTags.new(tags, pact_uri))
+                .to eq(Pact::Provider::PactVerificationWithTags.new('pact-urls'))
             end
           end
-
         end
 
-        describe "CONFIG_RU_APP" do
-          context "when a config.ru file does not exist" do
-
+        describe 'CONFIG_RU_APP' do
+          context 'when a config.ru file does not exist' do
             let(:path_that_does_not_exist) { './tmp/this/path/does/not/exist/probably' }
 
             before do
               allow(Pact.configuration).to receive(:config_ru_path).and_return(path_that_does_not_exist)
             end
 
-            it "raises an error with some helpful text" do
+            it 'raises an error with some helpful text' do
               expect { ServiceProviderDSL::CONFIG_RU_APP.call }
                 .to raise_error /Could not find config\.ru file.*#{Regexp.escape(path_that_does_not_exist)}/
             end
-
           end
         end
       end
-
     end
   end
 end

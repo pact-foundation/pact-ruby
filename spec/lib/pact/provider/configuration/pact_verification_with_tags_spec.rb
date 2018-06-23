@@ -1,5 +1,6 @@
 require 'spec_helper'
 require 'pact/provider/configuration/pact_verification_with_tags'
+require 'pact/pact_broker/fetch_pacts'
 
 module Pact
   module Provider
@@ -8,6 +9,7 @@ module Pact
 
         describe 'create_verification' do
           let(:url) { 'http://some/uri' }
+          let(:provider_name) {'provider-name'}
           let(:pact_repository_uri_options) do
             {
               username: 'pact_broker_username',
@@ -22,19 +24,24 @@ module Pact
             }
           end
 
+          let(:options) do
+            {
+              pact_broker_base_url: url,
+              consumer_version_tags: [tag]
+            }
+          end
           context "with valid values" do
             subject do
-              uri = url
-              tags = [tag]
-              PactVerificationWithTags.build(tags, options) do
-                pact_uri uri, pact_repository_uri_options
+              PactVerificationWithTags.build(provider_name, options) do
               end
             end
 
             it "creates a Verification" do
-              pact_uri = Pact::Provider::PactURI.new(url, pact_repository_uri_options)
+              allow(Pact::PactBroker::FetchPacts).to receive(:call).and_return(['pact-urls'])
+
               tags = [tag]
-              expect(Pact::Provider::PactVerificationWithTags).to receive(:new).with(tags, pact_uri)
+              expect(Pact::PactBroker::FetchPacts).to receive(:call).with(provider_name, tags, url, options)
+              expect(Pact::Provider::PactVerificationWithTags).to receive(:new).with('pact-urls')
               subject
             end
           end

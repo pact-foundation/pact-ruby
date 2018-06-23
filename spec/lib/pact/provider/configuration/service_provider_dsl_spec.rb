@@ -167,7 +167,7 @@ module Pact
               subject
 
               expect(Pact.provider_world.pact_verifications.first)
-                .to eq(Pact::Provider::PactVerificationWithTags.new('pact-urls'))
+                .to eq(Pact::Provider::PactVerification.new(nil, 'pact-urls', nil))
             end
           end
         end

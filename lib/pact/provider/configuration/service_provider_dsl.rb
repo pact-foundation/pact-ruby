@@ -1,5 +1,5 @@
 require 'pact/provider/configuration/pact_verification'
-require 'pact/provider/configuration/pact_verification_with_tags'
+require 'pact/provider/configuration/pact_verification_from_broker'
 require 'pact/provider/configuration/service_provider_config'
 require 'pact/errors'
 
@@ -56,7 +56,7 @@ module Pact
           end
 
           def honours_pacts_from_pact_broker options = {}, &block
-            create_pact_verification_with_tags options, &block
+            create_pact_verification_from_broker options, &block
           end
         end
 
@@ -64,8 +64,8 @@ module Pact
           PactVerification.build(consumer_name, options, &block)
         end
 
-        def create_pact_verification_with_tags(options, &block)
-          PactVerificationWithTags.build(name, options, &block)
+        def create_pact_verification_from_broker(options, &block)
+          PactVerificationFromBroker.build(name, options, &block)
         end
 
         def finalize

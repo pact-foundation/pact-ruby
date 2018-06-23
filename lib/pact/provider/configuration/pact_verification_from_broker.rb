@@ -1,4 +1,4 @@
-require 'pact/provider/pact_verification_with_tags'
+require 'pact/provider/pact_verification'
 require 'pact/provider/pact_uri'
 require 'pact/shared/dsl'
 require 'pact/provider/world'
@@ -8,24 +8,23 @@ module Pact
 
     module Configuration
 
-      class PactVerificationWithTags
+      class PactVerificationFromBroker
 
         extend Pact::DSL
 
-        attr_accessor :name, :pact_broker_base_url, :tags, :pact_uri
+        attr_accessor :name, :pact_broker_base_url, :tags
 
         def initialize(name, options = {})
-          puts options
           @tags = options.fetch(:consumer_version_tags) || []
-          @pact_broker_base_url = options.fetch(:pact_broker_base_url)
+          @pact_broker_base_url = options.fetch(:pact_broker_base_url) || ''
           @provider_name = name
           @options = options
-          @pact_uri = nil
         end
 
         dsl do
-          def pact_uri pact_uri, options = {}
-            self.pact_uri = ::Pact::Provider::PactURI.new(pact_uri, options) if pact_uri
+          def pact_broker_base_url pact_broker_base_url, options
+            @pact_broker_base_url = URI(pact_broker_base_url)
+            @pact_broker_base_url.set_user(options[:username]) if options[:username] # not sure about this exactly, I'll work it out when I get there.
           end
         end
 
@@ -39,13 +38,13 @@ module Pact
         def create_pact_verification
           pacts = Pact::PactBroker::FetchPacts.call(@provider_name, tags, pact_broker_base_url, @options)
           pacts.each do |pact_uri|
-            verification = Pact::Provider::PactVerificationWithTags.new(pact_uri)
+            verification = Pact::Provider::PactVerification.new(nil, pact_uri, nil)
             Pact.provider_world.add_pact_verification verification
           end
         end
 
         def validate
-          raise "Please provide a pact_uri for the verification" unless pact_uri
+          raise "Please provide a pact_broker_base_url for the verification" unless pact_broker_base_url
         end
 
       end

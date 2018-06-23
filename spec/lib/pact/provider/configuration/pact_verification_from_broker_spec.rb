@@ -1,5 +1,5 @@
 require 'spec_helper'
-require 'pact/provider/configuration/pact_verification_with_tags'
+require 'pact/provider/configuration/pact_verification'
 require 'pact/pact_broker/fetch_pacts'
 
 module Pact
@@ -32,7 +32,7 @@ module Pact
           end
           context "with valid values" do
             subject do
-              PactVerificationWithTags.build(provider_name, options) do
+              PactVerificationFromBroker.build(provider_name, options) do
               end
             end
 
@@ -41,7 +41,7 @@ module Pact
 
               tags = [tag]
               expect(Pact::PactBroker::FetchPacts).to receive(:call).with(provider_name, tags, url, options)
-              expect(Pact::Provider::PactVerificationWithTags).to receive(:new).with('pact-urls')
+              expect(Pact::Provider::PactVerification).to receive(:new).with(nil, 'pact-urls', nil)
               subject
             end
           end

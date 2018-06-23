@@ -1,5 +1,6 @@
 require 'pact/hal/entity'
 require 'pact/hal/http_client'
+require 'pact/provider/pact_uri'
 
 module Pact
   module PactBroker
@@ -21,6 +22,7 @@ module Pact
             tag
           end
         end
+        @basic_auth_options = basic_auth_options
         @broker_base_url = broker_base_url
         @http_client = Pact::Hal::HttpClient.new(basic_auth_options)
       end
@@ -74,7 +76,9 @@ module Pact
       end
 
       def get_pact_urls(link_by_provider)
-        link_by_provider.fetch(PACTS).collect { |pact| pact[HREF] }
+        link_by_provider.fetch(PACTS).collect do |pact|
+          Pact::Provider::PactURI.new(pact[HREF], basic_auth_options)
+        end
       end
     end
   end

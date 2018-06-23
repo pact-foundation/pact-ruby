@@ -1,5 +1,6 @@
 require 'pact/consumer/rspec'
 require 'pact/pact_broker/fetch_pacts'
+require 'pact/provider/pact_uri'
 
 Pact.service_consumer 'Pact Ruby' do
   has_pact_with 'Pact Broker' do
@@ -85,8 +86,12 @@ describe Pact::PactBroker::FetchPacts, pact: true do
 
       it 'returns the array of pact urls' do
         pacts = Pact::PactBroker::FetchPacts.call(provider, tags, broker_base_url, basic_auth_options)
-
-        expect(pacts).to eq(%w[http://pact-broker-url-for-consumer-1 http://pact-broker-url-for-consumer-2])
+        expect(pacts).to eq(
+          [
+            Pact::Provider::PactURI.new('http://pact-broker-url-for-consumer-1', basic_auth_options),
+            Pact::Provider::PactURI.new('http://pact-broker-url-for-consumer-2', basic_auth_options)
+          ]
+        )
       end
     end
 
@@ -145,8 +150,14 @@ describe Pact::PactBroker::FetchPacts, pact: true do
       it 'returns the array of pact urls' do
         pacts = Pact::PactBroker::FetchPacts.call(provider, tags, broker_base_url, basic_auth_options)
 
-        expect(pacts).to eq(%w[http://pact-broker-url-for-consumer-1-tag-1 http://pact-broker-url-for-consumer-2-tag-1
-                               http://pact-broker-url-for-consumer-1-tag-2 http://pact-broker-url-for-consumer-2-tag-2])
+        expect(pacts).to eq(
+          [
+            Pact::Provider::PactURI.new('http://pact-broker-url-for-consumer-1-tag-1', basic_auth_options),
+            Pact::Provider::PactURI.new('http://pact-broker-url-for-consumer-2-tag-1', basic_auth_options),
+            Pact::Provider::PactURI.new('http://pact-broker-url-for-consumer-1-tag-2', basic_auth_options),
+            Pact::Provider::PactURI.new('http://pact-broker-url-for-consumer-2-tag-2', basic_auth_options)
+          ]
+        )
       end
     end
 
@@ -197,8 +208,12 @@ describe Pact::PactBroker::FetchPacts, pact: true do
 
       it 'returns the array of pact urls' do
         pacts = Pact::PactBroker::FetchPacts.call(provider, tags, broker_base_url, basic_auth_options)
-
-        expect(pacts).to eq(%w[http://pact-broker-url-for-consumer-1-master http://pact-broker-url-for-consumer-2-master])
+        expect(pacts).to eq(
+          [
+            Pact::Provider::PactURI.new('http://pact-broker-url-for-consumer-1-master', basic_auth_options),
+            Pact::Provider::PactURI.new('http://pact-broker-url-for-consumer-2-master', basic_auth_options)
+          ]
+        )
       end
     end
 
@@ -287,8 +302,14 @@ describe Pact::PactBroker::FetchPacts, pact: true do
       it 'returns the array of pact urls' do
         pacts = Pact::PactBroker::FetchPacts.call(provider, tags, broker_base_url, basic_auth_options)
 
-        expect(pacts).to eq(%w[http://pact-broker-url-for-consumer-1-tag-1 http://pact-broker-url-for-consumer-2-tag-1
-                               http://pact-broker-url-for-consumer-1-tag-2-all http://pact-broker-url-for-consumer-2-tag-2-all])
+        expect(pacts).to eq(
+          [
+            Pact::Provider::PactURI.new('http://pact-broker-url-for-consumer-1-tag-1', basic_auth_options),
+            Pact::Provider::PactURI.new('http://pact-broker-url-for-consumer-2-tag-1', basic_auth_options),
+            Pact::Provider::PactURI.new('http://pact-broker-url-for-consumer-1-tag-2-all', basic_auth_options),
+            Pact::Provider::PactURI.new('http://pact-broker-url-for-consumer-2-tag-2-all', basic_auth_options)
+          ]
+        )
       end
     end
 
@@ -324,7 +345,12 @@ describe Pact::PactBroker::FetchPacts, pact: true do
       it 'returns the array of pact urls' do
         pacts = Pact::PactBroker::FetchPacts.call(provider, tags, broker_base_url, basic_auth_options)
 
-        expect(pacts).to eq(%w[http://pact-broker-url-for-consumer-1-all http://pact-broker-url-for-consumer-2-all])
+        expect(pacts).to eq(
+          [
+            Pact::Provider::PactURI.new('http://pact-broker-url-for-consumer-1-all', basic_auth_options),
+            Pact::Provider::PactURI.new('http://pact-broker-url-for-consumer-2-all', basic_auth_options)
+          ]
+        )
       end
     end
   end

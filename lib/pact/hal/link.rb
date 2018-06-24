@@ -49,7 +49,7 @@ module Pact
         if http_response.success?
           Entity.new(http_response.body, @http_client, http_response)
         else
-          ErrorEntity.new(http_response.body, @http_client, http_response)
+          ErrorEntity.new(http_response.raw_body, @http_client, http_response)
         end
       end
 

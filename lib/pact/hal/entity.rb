@@ -68,6 +68,14 @@ module Pact
     end
 
     class ErrorEntity < Entity
+
+      def initialize(data, http_client, response = nil)
+        @data = data
+        @links = {}
+        @client = http_client
+        @response = response
+      end
+
       def success?
         false
       end

@@ -3,11 +3,12 @@ require 'pact/retry'
 module Pact
   module Hal
     class HttpClient
-      attr_accessor :username, :password
+      attr_accessor :username, :password, :verbose
 
       def initialize options
         @username = options[:username]
         @password = options[:password]
+        @verbose = options[:verbose]
       end
 
       def get href, params = {}, headers = {}
@@ -41,9 +42,11 @@ module Pact
       end
 
       def perform_request request, uri
-        options = {:use_ssl => uri.scheme == 'https'}
         response = Retry.until_true do
-          Net::HTTP.start(uri.host, uri.port, :ENV, options) do |http|
+          http = Net::HTTP.new(uri.host, uri.port, :ENV)
+          http.set_debug_output(Pact.configuration.output_stream) if verbose
+          http.use_ssl = (uri.scheme == 'https')
+          http.start do |http|
             http.request request
           end
         end
@@ -52,12 +55,16 @@ module Pact
 
       class Response < SimpleDelegator
         def body
-          bod = __getobj__().body
+          bod = raw_body
           if bod && bod != ''
             JSON.parse(bod)
           else
             nil
           end
+        end
+
+        def raw_body
+          __getobj__().body
         end
 
         def success?

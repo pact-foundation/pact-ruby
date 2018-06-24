@@ -24,8 +24,9 @@ task 'pact:foobar:publish' do
   puts response.code unless response.code == '200'
 end
 
+#'./spec/pacts/foo-bar.json'
 Pact::VerificationTask.new('foobar') do | pact |
-  pact.uri './spec/pacts/foo-bar.json', pact_helper: './spec/support/bar_pact_helper.rb'
+  pact.uri nil, pact_helper: './spec/support/bar_pact_helper.rb'
 end
 
 

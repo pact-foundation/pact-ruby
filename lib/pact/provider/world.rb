@@ -29,7 +29,21 @@ module Pact
       end
 
       def pact_urls
-        pact_verifications.collect(&:uri)
+        (pact_verifications.collect(&:uri) + pact_uris_from_pact_uri_sources).compact
+      end
+
+      def add_pact_uri_source pact_uri_source
+        pact_uri_sources << pact_uri_source
+      end
+
+      private
+
+      def pact_uri_sources
+        @pact_uri_sources ||= []
+      end
+
+      def pact_uris_from_pact_uri_sources
+        pact_uri_sources.collect{| pact_uri_source| pact_uri_source.call }.flatten
       end
     end
   end

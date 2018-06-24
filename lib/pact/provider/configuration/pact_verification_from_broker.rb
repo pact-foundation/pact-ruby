@@ -1,30 +1,33 @@
-require 'pact/provider/pact_verification'
-require 'pact/provider/pact_uri'
 require 'pact/shared/dsl'
 require 'pact/provider/world'
+require 'pact/pact_broker/fetch_pacts'
 
 module Pact
   module Provider
-
     module Configuration
-
       class PactVerificationFromBroker
 
         extend Pact::DSL
 
-        attr_accessor :name, :pact_broker_base_url, :tags
+        # If user declares a variable with the same name as one of these attributes
+        # in parent scope, it will clash with these ones,
+        # so put an underscore in front of the name to be safer.
 
-        def initialize(name, options = {})
-          @tags = options.fetch(:consumer_version_tags) || []
-          @pact_broker_base_url = options.fetch(:pact_broker_base_url) || ''
-          @provider_name = name
-          @options = options
+        attr_accessor :_provider_name, :_pact_broker_base_url, :_consumer_version_tags, :_basic_auth_options
+
+        def initialize(provider_name)
+          @_provider_name = provider_name
+          @_consumer_version_tags = []
         end
 
         dsl do
-          def pact_broker_base_url pact_broker_base_url, options
-            @pact_broker_base_url = URI(pact_broker_base_url)
-            @pact_broker_base_url.set_user(options[:username]) if options[:username] # not sure about this exactly, I'll work it out when I get there.
+          def pact_broker_base_url pact_broker_base_url, basic_auth_options = {}
+            self._pact_broker_base_url = pact_broker_base_url
+            self._basic_auth_options = basic_auth_options
+          end
+
+          def consumer_version_tags consumer_version_tags
+            self._consumer_version_tags = *consumer_version_tags
           end
         end
 
@@ -36,17 +39,13 @@ module Pact
         private
 
         def create_pact_verification
-          pacts = Pact::PactBroker::FetchPacts.call(@provider_name, tags, pact_broker_base_url, @options)
-          pacts.each do |pact_uri|
-            verification = Pact::Provider::PactVerification.new(nil, pact_uri, nil)
-            Pact.provider_world.add_pact_verification verification
-          end
+          fetch_pacts = Pact::PactBroker::FetchPacts.new(_provider_name, _consumer_version_tags, _pact_broker_base_url, _basic_auth_options)
+          Pact.provider_world.add_pact_uri_source fetch_pacts
         end
 
         def validate
-          raise "Please provide a pact_broker_base_url for the verification" unless pact_broker_base_url
+          raise Pact::Error.new("Please provide a pact_broker_base_url from which to retrieve the pacts") unless _pact_broker_base_url
         end
-
       end
     end
   end

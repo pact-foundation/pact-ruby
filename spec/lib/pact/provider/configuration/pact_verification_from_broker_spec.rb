@@ -1,47 +1,87 @@
-require 'spec_helper'
 require 'pact/provider/configuration/pact_verification'
-require 'pact/pact_broker/fetch_pacts'
 
 module Pact
   module Provider
     module Configuration
-      describe PactVerification do
-
-        describe 'create_verification' do
-          let(:url) { 'http://some/uri' }
+      describe PactVerificationFromBroker do
+        describe 'build' do
           let(:provider_name) {'provider-name'}
-          let(:pact_repository_uri_options) do
+          let(:base_url) { "http://broker.org" }
+          let(:basic_auth_options) do
             {
               username: 'pact_broker_username',
               password: 'pact_broker_password'
             }
           end
-          let(:tag) do
-            {
-              name: 'tag-name',
-              all: false,
-              fallback: 'master'
-            }
+          let(:tags) { ['master'] }
+
+          before do
+            allow(Pact::PactBroker::FetchPacts).to receive(:new).and_return(fetch_pacts)
+            allow(Pact.provider_world).to receive(:add_pact_uri_source)
           end
 
-          let(:options) do
-            {
-              pact_broker_base_url: url,
-              consumer_version_tags: [tag]
-            }
-          end
           context "with valid values" do
             subject do
-              PactVerificationFromBroker.build(provider_name, options) do
+              PactVerificationFromBroker.build(provider_name) do
+                pact_broker_base_url base_url, basic_auth_options
+                consumer_version_tags tags
               end
             end
 
-            it "creates a Verification" do
-              allow(Pact::PactBroker::FetchPacts).to receive(:call).and_return(['pact-urls'])
+            let(:fetch_pacts) { double('FetchPacts') }
 
-              tags = [tag]
-              expect(Pact::PactBroker::FetchPacts).to receive(:call).with(provider_name, tags, url, options)
-              expect(Pact::Provider::PactVerification).to receive(:new).with(nil, 'pact-urls', nil)
+            it "creates a instance of Pact::PactBroker::FetchPacts" do
+              expect(Pact::PactBroker::FetchPacts).to receive(:new).with(provider_name, tags, base_url, basic_auth_options)
+              subject
+            end
+
+            it "adds a pact_uri_source to the provider world" do
+              expect(Pact.provider_world).to receive(:add_pact_uri_source).with(fetch_pacts)
+              subject
+            end
+          end
+
+          context "with a missing base url" do
+            subject do
+              PactVerificationFromBroker.build(provider_name) do
+
+              end
+            end
+
+            let(:fetch_pacts) { double('FetchPacts') }
+
+            it "raises an error" do
+              expect { subject }.to raise_error Pact::Error, /Please provide a pact_broker_base_url/
+            end
+          end
+
+          context "with a non array object for consumer_version_tags" do
+            subject do
+              PactVerificationFromBroker.build(provider_name) do
+                pact_broker_base_url base_url
+                consumer_version_tags "master"
+              end
+            end
+
+            let(:fetch_pacts) { double('FetchPacts') }
+
+            it "coerces the value into an array" do
+              expect(Pact::PactBroker::FetchPacts).to receive(:new).with(anything, ["master"], anything, anything)
+              subject
+            end
+          end
+
+          context "when no consumer_version_tags are provided" do
+            subject do
+              PactVerificationFromBroker.build(provider_name) do
+                pact_broker_base_url base_url
+              end
+            end
+
+            let(:fetch_pacts) { double('FetchPacts') }
+
+            it "creates an instance of FetchPacts with an emtpy array for the consumer_version_tags" do
+              expect(Pact::PactBroker::FetchPacts).to receive(:new).with(anything, [], anything, anything)
               subject
             end
           end

@@ -5,7 +5,7 @@ require 'pact/provider/pact_uri'
 module Pact
   module PactBroker
     class FetchPacts
-      attr_reader :provider, :tags, :broker_base_url, :basic_auth_options, :http_client, :index_entity
+      attr_reader :provider, :tags, :broker_base_url, :http_client_options, :http_client, :index_entity
 
       ALL_PROVIDER_TAG_RELATION = 'pb:provider-pacts-with-tag'.freeze
       LATEST_PROVIDER_TAG_RELATION = 'pb:latest-provider-pacts-with-tag'.freeze
@@ -13,7 +13,7 @@ module Pact
       PACTS = 'pacts'.freeze
       HREF = 'href'.freeze
 
-      def initialize(provider, tags, broker_base_url, basic_auth_options)
+      def initialize(provider, tags, broker_base_url, http_client_options)
         @provider = provider
         @tags = (tags || []).collect do |tag|
           if tag.is_a?(String)
@@ -22,27 +22,31 @@ module Pact
             tag
           end
         end
-        @basic_auth_options = basic_auth_options
+        @http_client_options = http_client_options
         @broker_base_url = broker_base_url
-        @http_client = Pact::Hal::HttpClient.new(basic_auth_options)
+        @http_client = Pact::Hal::HttpClient.new(http_client_options)
       end
 
-      def self.call(provider, tags, broker_base_url, basic_auth_options)
-        new(provider, tags, broker_base_url, basic_auth_options).call
+      def self.call(provider, tags, broker_base_url, http_client_options)
+        new(provider, tags, broker_base_url, http_client_options).call
       end
 
       def call
-        get_index
-        if tag_exist
-          get_tagged_pacts_for_provider
+        log_message
+        if get_index.success?
+          if any_tags?
+            get_tagged_pacts_for_provider
+          else
+            get_latest_pacts_for_provider
+          end
         else
-          get_latest_pacts_for_provider
+          raise Pact::Error.new("Error retrieving #{broker_base_url} status=#{index_entity.response.code} #{index_entity.response.raw_body}")
         end
       end
 
       private
 
-      def tag_exist
+      def any_tags?
         tags && tags.any?
       end
 
@@ -66,8 +70,7 @@ module Pact
       end
 
       def get_index
-        response = http_client.get(broker_base_url)
-        @index_entity = Pact::Hal::Entity.new(response.body, http_client)
+        @index_entity = Pact::Hal::Link.new({ "href" => broker_base_url }, http_client).get
       end
 
       def get_latest_pacts_for_provider
@@ -77,8 +80,21 @@ module Pact
 
       def get_pact_urls(link_by_provider)
         link_by_provider.fetch(PACTS).collect do |pact|
-          Pact::Provider::PactURI.new(pact[HREF], basic_auth_options)
+          Pact::Provider::PactURI.new(pact[HREF], http_client_options)
         end
+      end
+
+      def log_message
+        message = "INFO: Fetching pacts for #{provider} from #{broker_base_url}"
+        if tags.any?
+          desc = tags.collect do |tag|
+            all_or_latest = tag[:all] ? "all" : "latest"
+            name = tag[:fallback] ? "#{tag[:name]} (or #{tag[:fallback]} if not found)" : tag[:name]
+            "#{all_or_latest} #{name}"
+          end.join(", ")
+          message << " for tags: #{desc}"
+        end
+        Pact.configuration.output_stream.puts message
       end
     end
   end

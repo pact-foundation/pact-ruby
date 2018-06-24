@@ -10,7 +10,7 @@ module Pact
       end
 
       let(:response) do
-        instance_double('Pact::Hal::HttpClient::Response', success?: success, body: response_body)
+        instance_double('Pact::Hal::HttpClient::Response', success?: success, body: response_body, raw_body: response_body.to_json)
       end
 
       let(:success) { true }

@@ -156,18 +156,14 @@ module Pact
             subject do
               ServiceProviderDSL.build 'some-provider' do
                 app {}
-                honours_pacts_from_pact_broker options do
+                honours_pacts_from_pact_broker do
                 end
               end
             end
 
-            it 'adds a verification to the Pact.provider_world' do
-              allow(Pact::PactBroker::FetchPacts).to receive(:call).and_return(['pact-urls'])
-
+            it 'builds a PactVerificationFromBroker' do
+              expect(PactVerificationFromBroker).to receive(:build).with('some-provider')
               subject
-
-              expect(Pact.provider_world.pact_verifications.first)
-                .to eq(Pact::Provider::PactVerification.new(nil, 'pact-urls', nil))
             end
           end
         end

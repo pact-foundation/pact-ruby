@@ -25,13 +25,15 @@ module Pact
               PactVerificationFromBroker.build(provider_name) do
                 pact_broker_base_url base_url, basic_auth_options
                 consumer_version_tags tags
+                verbose true
               end
             end
 
             let(:fetch_pacts) { double('FetchPacts') }
+            let(:options) { basic_auth_options.merge(verbose: true) }
 
             it "creates a instance of Pact::PactBroker::FetchPacts" do
-              expect(Pact::PactBroker::FetchPacts).to receive(:new).with(provider_name, tags, base_url, basic_auth_options)
+              expect(Pact::PactBroker::FetchPacts).to receive(:new).with(provider_name, tags, base_url, options)
               subject
             end
 
@@ -82,6 +84,21 @@ module Pact
 
             it "creates an instance of FetchPacts with an emtpy array for the consumer_version_tags" do
               expect(Pact::PactBroker::FetchPacts).to receive(:new).with(anything, [], anything, anything)
+              subject
+            end
+          end
+
+          context "when no verbose flag is provided" do
+            subject do
+              PactVerificationFromBroker.build(provider_name) do
+                pact_broker_base_url base_url
+              end
+            end
+
+            let(:fetch_pacts) { double('FetchPacts') }
+
+            it "creates an instance of FetchPacts with verbose: false" do
+              expect(Pact::PactBroker::FetchPacts).to receive(:new).with(anything, anything, anything, hash_including(verbose: false))
               subject
             end
           end

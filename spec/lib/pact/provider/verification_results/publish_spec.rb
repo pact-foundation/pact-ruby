@@ -170,7 +170,7 @@ module Pact
 
               context "when the connection can't be made" do
                 it "raises a PublicationError error" do
-                  allow(Net::HTTP).to receive(:start).and_raise(SocketError)
+                  allow(Net::HTTP).to receive(:new).and_raise(SocketError)
                   expect{ subject }.to raise_error(PublicationError, /Failed to publish verification/)
                 end
               end

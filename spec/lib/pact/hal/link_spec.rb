@@ -64,7 +64,7 @@ module Pact
           let(:success) { false }
 
           it "creates an ErrorEntity" do
-            expect(Pact::Hal::ErrorEntity).to receive(:new).with(response_body, http_client, response)
+            expect(Pact::Hal::ErrorEntity).to receive(:new).with(response_body.to_json, http_client, response)
             do_run
           end
         end

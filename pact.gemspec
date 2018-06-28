@@ -33,7 +33,7 @@ Gem::Specification.new do |gem|
 
   gem.add_development_dependency 'rake', '~> 10.0.3'
   gem.add_development_dependency 'webmock', '~> 3.0'
-  gem.add_development_dependency 'pry-byebug'
+  #gem.add_development_dependency 'pry-byebug'
   gem.add_development_dependency 'fakefs', '0.5' # 0.6.0 blows up
   gem.add_development_dependency 'hashie', '~> 2.0'
   gem.add_development_dependency 'activesupport'

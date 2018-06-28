@@ -1,3 +1,26 @@
+<a name="v1.28.0"></a>
+### v1.28.0 (2018-06-24)
+
+
+#### Features
+
+* all logging to indicate which pacts are being fetched from the broker	 ([06fa615](/../../commit/06fa615))
+* allow verbose http logging to be turned on when fetching pacts URLs from the broker	 ([436f3f2](/../../commit/436f3f2))
+* allow pacts to be dynamically fetched from a pact broker by provider name and tags	 ([ef97898](/../../commit/ef97898))
+* FetchPacts is not returning pactUri array instead of string array. Other PR feedback.	 ([fca52f2](/../../commit/fca52f2))
+* wiring up fetch_pacts with honours_pacts_from_pact_broker DSL.	 ([b609289](/../../commit/b609289))
+* DSL for fetch_pacts	 ([81fd0ed](/../../commit/81fd0ed))
+* adding fallback per tag [{name: tag, all: false, fallback: "value"}]	 ([625df02](/../../commit/625df02))
+* adding fallback tag incase consumer tag does not exist.	 ([7e40778](/../../commit/7e40778))
+* handling tags ['tag-1', {name: 'tag-2', all: true}]	 ([3b49f03](/../../commit/3b49f03))
+* handling tags ['tag-1', {name: 'tag-2', all: true}]	 ([7313818](/../../commit/7313818))
+
+
+#### Bug Fixes
+
+* reverting safe navigation operator to chained calls.	 ([8194ed6](/../../commit/8194ed6))
+
+
 <a name="v1.27.0"></a>
 ### v1.27.0 (2018-06-22)
 

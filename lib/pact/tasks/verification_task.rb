@@ -30,9 +30,11 @@ module Pact
 
     attr_reader :pact_spec_configs
     attr_accessor :rspec_opts
+    attr_accessor :wip
 
     def initialize(name)
       @rspec_opts = nil
+      @wip = false
       @pact_spec_configs = []
       @name = name
       yield self
@@ -74,7 +76,7 @@ module Pact
           require 'pact/tasks/task_helper'
 
           exit_statuses = pact_spec_configs.collect do | config |
-            Pact::TaskHelper.execute_pact_verify config[:uri], config[:pact_helper], rspec_opts
+            Pact::TaskHelper.execute_pact_verify config[:uri], config[:pact_helper], rspec_opts, { wip: wip }
           end
 
           Pact::TaskHelper.handle_verification_failure do

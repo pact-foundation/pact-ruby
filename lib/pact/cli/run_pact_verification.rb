@@ -71,7 +71,8 @@ module Pact
           full_backtrace: options[:backtrace],
           criteria: SpecCriteria.call(options),
           format: options[:format],
-          out: options[:out]
+          out: options[:out],
+          wip: options[:wip]
         }
       end
     end

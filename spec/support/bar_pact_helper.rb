@@ -25,7 +25,7 @@ module Pact
       end
 
       honours_pact_with 'Foo' do
-        pact_uri './spec/support/foo-bar.json'
+        pact_uri './spec/pacts/foo-bar.json'
       end
     end
   end

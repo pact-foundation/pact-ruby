@@ -19,7 +19,8 @@ Pact::RSpec.with_rspec_3 do
               pact_interaction: interaction,
               pactfile_uri: pactfile_uri,
               pact_interaction_example_description: description,
-              pact_json: pact_json
+              pact_json: pact_json,
+              pact_wip: wip
             }
           end
           let(:metadata_2) { metadata.merge(pact_interaction_example_description: 'another interaction')}
@@ -33,6 +34,7 @@ Pact::RSpec.with_rspec_3 do
           let(:summary) { double("summary", failure_count: 1, failed_examples: failed_examples, examples: examples)}
           let(:pact_executing_language) { 'ruby' }
           let(:pact_interaction_rerun_command) { Pact::TaskHelper::PACT_INTERACTION_RERUN_COMMAND }
+          let(:wip) { nil }
 
           subject { Formatter.new output }
 
@@ -100,6 +102,19 @@ Pact::RSpec.with_rspec_3 do
               it "does not print missing provider states as these are set up dynamically" do
                 expect(PrintMissingProviderStates).to_not receive(:call)
                 subject.dump_summary summary
+              end
+            end
+
+            context "when wip is true" do
+              let(:wip) { true }
+
+              it "reports failures as pending" do
+                expect(output_result).to include("1 pending")
+                expect(output_result).to_not include("1 failure")
+              end
+
+              it "explains that failures will not affect the test results" do
+                expect(output_result).to include "Pending interactions: (Failures listed here are expected and do not affect your suite's status)"
               end
             end
           end

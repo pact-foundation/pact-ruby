@@ -1,5 +1,6 @@
 require 'spec_helper'
 require 'pact/tasks/verification_task'
+require 'pact/tasks/task_helper'
 
 module Pact
   describe VerificationTask do
@@ -8,6 +9,7 @@ module Pact
       @pact_uri = 'http://example.org/pact.json'
       @task_name = 'pact:verify:pact_rake_spec'
       @task_name_with_explict_pact_helper = 'pact:verify:pact_rake_spec_with_explict_pact_helper'
+      @task_name_wip = 'pact:verify:pact_rake_spec_wip'
       @consumer = 'some-consumer'
       @criteria = {:description => /wiffle/}
 
@@ -18,14 +20,16 @@ module Pact
       VerificationTask.new(:pact_rake_spec) do | pact |
         pact.uri @pact_uri
       end
+
+      VerificationTask.new(:pact_rake_spec_wip) do | pact |
+        pact.uri @pact_uri
+        pact.wip = true
+      end
     end
 
     before do
       allow(Pact::TaskHelper).to receive(:execute_pact_verify).and_return(0)
     end
-
-    let(:exit_code) {0}
-
 
     describe '.initialize' do
       context 'with an explict pact_helper' do
@@ -41,29 +45,33 @@ module Pact
     end
 
     describe 'execute' do
-
       context "with no explicit pact_helper" do
         it 'verifies the pacts using the TaskHelper' do
-          expect(Pact::TaskHelper).to receive(:execute_pact_verify).with(@pact_uri, nil, nil)
+          expect(Pact::TaskHelper).to receive(:execute_pact_verify).with(@pact_uri, nil, nil, { wip: false })
           Rake::Task[@task_name].execute
         end
       end
 
       context "with an explict pact_helper" do
         let(:verification_config) { [ uri: @pact_uri, pact_helper: @pact_helper] }
-        it 'verifies the pacts using the TaskHelper' do
-          expect(Pact::TaskHelper).to receive(:execute_pact_verify).with(@pact_uri, @pact_helper, nil)
+        it 'verifies the pacts using specified pact_helper' do
+          expect(Pact::TaskHelper).to receive(:execute_pact_verify).with(@pact_uri, @pact_helper, nil,  { wip: false })
           Rake::Task[@task_name_with_explict_pact_helper].execute
         end
       end
 
-      context 'when all specs pass' do
+      context "with wip: true" do
+        it 'verifies the pacts with wip: true' do
+          expect(Pact::TaskHelper).to receive(:execute_pact_verify).with(@pact_uri, anything, anything,  { wip: true })
+          Rake::Task[@task_name_wip].execute
+        end
+      end
 
+      context 'when all specs pass' do
         it 'does not raise an exception' do
           Rake::Task[@task_name].execute
         end
       end
-
     end
   end
 end

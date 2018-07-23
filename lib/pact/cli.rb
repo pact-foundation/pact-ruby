@@ -8,6 +8,7 @@ module Pact
     desc 'verify', "Verify a pact"
     method_option :pact_helper, aliases: "-h", desc: "Pact helper file", :required => true
     method_option :pact_uri, aliases: "-p", desc: "Pact URI"
+    method_option :wip, type: :boolean, default: false, desc: "If WIP, process will always exit with exit code 0", hide: true
     method_option :pact_broker_username, aliases: "-u", desc: "Pact broker user name"
     method_option :pact_broker_password, aliases: "-w", desc: "Pact broker password"
     method_option :backtrace, aliases: "-b", desc: "Show full backtrace", :default => false, :type => :boolean
@@ -33,6 +34,5 @@ module Pact
       require 'pact/doc/generator'
       Pact::Doc::Generate.call(options[:pact_dir], options[:doc_dir], [Pact::Doc::Markdown::Generator])
     end
-
   end
 end

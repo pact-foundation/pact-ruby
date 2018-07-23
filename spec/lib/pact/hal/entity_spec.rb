@@ -75,16 +75,29 @@ module Pact
       end
 
       describe 'fetch' do
-        context 'when the key exist' do
+        context 'when the key exists' do
           it 'returns fetched value' do
-            expect(subject.fetch('pb:provider')).to be do
-              {href: 'http://provider'}
-            end
+            expect(subject.fetch('pb:provider')).to eq("href" => 'http://provider')
           end
         end
+
         context "when the key doesn't not exist" do
           it 'returns nil' do
             expect(subject.fetch('i-dont-exist')).to be nil
+          end
+        end
+
+        context "when a fallback key is provided" do
+          context "when the fallback value exists" do
+            it "returns the fallback value" do
+              expect(subject.fetch('i-dont-exist', 'pb:provider')).to eq("href" => 'http://provider')
+            end
+          end
+
+          context "when the fallback value does not exist" do
+            it "returns nil" do
+              expect(subject.fetch('i-dont-exist', 'i-also-dont-exist')).to be nil
+            end
           end
         end
       end

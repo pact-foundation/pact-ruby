@@ -5,14 +5,15 @@ module Pact
     describe FetchPacts do
 
       describe "call" do
+        before do
+          allow(Pact.configuration).to receive(:output_stream).and_return(double('output stream').as_null_object)
+          stub_request(:get, "http://broker.org/").to_return(status: 500, body: "foo", headers: {})
+        end
+
         let(:provider) { "Foo"}
         let(:tags) { ["master", "prod"] }
         let(:broker_base_url) { "http://broker.org" }
         let(:http_client_options) { {} }
-
-        before do
-          stub_request(:get, "http://broker.org/").to_return(status: 500, body: "foo", headers: {})
-        end
 
         subject { FetchPacts.call(provider, tags, broker_base_url, http_client_options)}
 

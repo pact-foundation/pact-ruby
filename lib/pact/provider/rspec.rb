@@ -21,10 +21,11 @@ module Pact
         include ::RSpec::Core::DSL
 
         def honour_pactfile pact_uri, pact_json, options
-          Pact.configuration.output_stream.puts "INFO: Reading pact at #{pact_uri}"
+          pact_description = options[:wip] ? "WIP pact" : "pact"
+          Pact.configuration.output_stream.puts "INFO: Reading #{pact_description} at #{pact_uri}"
           Pact.configuration.output_stream.puts "INFO: Filtering interactions by: #{options[:criteria]}" if options[:criteria] && options[:criteria].any?
           consumer_contract = Pact::ConsumerContract.from_json(pact_json)
-          ::RSpec.describe "Verifying a pact between #{consumer_contract.consumer.name} and #{consumer_contract.provider.name}", pactfile_uri: pact_uri do
+          ::RSpec.describe "Verifying a #{pact_description} between #{consumer_contract.consumer.name} and #{consumer_contract.provider.name}", pactfile_uri: pact_uri do
             honour_consumer_contract consumer_contract, options.merge(pact_json: pact_json, pact_uri: pact_uri)
           end
         end
@@ -72,7 +73,8 @@ module Pact
             pact: :verify,
             pact_interaction: interaction,
             pact_interaction_example_description: interaction_description_for_rerun_command(interaction),
-            pact_uri: options[:pact_uri]
+            pact_uri: options[:pact_uri],
+            pact_wip: options[:wip]
           }
 
           describe description_for(interaction), metadata do

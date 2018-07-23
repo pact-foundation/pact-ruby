@@ -1,17 +1,13 @@
-require 'pact/consumer/rspec'
+require_relative 'helper'
 require 'pact/pact_broker/fetch_pacts'
-require 'pact/provider/pact_uri'
 
-Pact.service_consumer 'Pact Ruby' do
-  has_pact_with 'Pact Broker' do
-    mock_service :pact_broker do
-      port 1234
-      pact_specification_version '2.0.0'
-    end
-  end
-end
 
 describe Pact::PactBroker::FetchPacts, pact: true do
+
+  before do
+    allow($stdout).to receive(:puts)
+  end
+
   let(:get_headers) { { Accept: 'application/hal+json' } }
 
   describe 'fetch pacts' do
@@ -71,7 +67,7 @@ describe Pact::PactBroker::FetchPacts, pact: true do
             status: 200,
             body: {
               _links: {
-                pacts: [
+                'pb:pacts' => [
                   {
                     href: Pact.term('http://pact-broker-url-for-consumer-1', %r{http://.*})
                   },
@@ -111,7 +107,7 @@ describe Pact::PactBroker::FetchPacts, pact: true do
             status: 200,
             body: {
               _links: {
-                pacts: [
+                'pb:pacts' => [
                   {
                     href: Pact.term('http://pact-broker-url-for-consumer-1-tag-1', %r{http://.*})
                   },
@@ -134,7 +130,7 @@ describe Pact::PactBroker::FetchPacts, pact: true do
             status: 200,
             body: {
               _links: {
-                pacts: [
+                'pb:pacts' => [
                   {
                     href: Pact.term('http://pact-broker-url-for-consumer-1-tag-2', %r{http://.*})
                   },
@@ -177,7 +173,7 @@ describe Pact::PactBroker::FetchPacts, pact: true do
             status: 200,
             body: {
               _links: {
-                pacts: []
+                'pb:pacts' => []
               }
             }
           )
@@ -193,7 +189,7 @@ describe Pact::PactBroker::FetchPacts, pact: true do
             status: 200,
             body: {
               _links: {
-                pacts: [
+                'pb:pacts' => [
                   {
                     href: Pact.term('http://pact-broker-url-for-consumer-1-master', %r{http://.*})
                   },
@@ -233,7 +229,7 @@ describe Pact::PactBroker::FetchPacts, pact: true do
             status: 200,
             body: {
               _links: {
-                pacts: []
+                'pb:pacts' => []
               }
             }
           )
@@ -262,7 +258,7 @@ describe Pact::PactBroker::FetchPacts, pact: true do
             status: 200,
             body: {
               _links: {
-                pacts: [
+                'pb:pacts' => [
                   {
                     href: Pact.term('http://pact-broker-url-for-consumer-1-tag-1', %r{http://.*})
                   },
@@ -286,7 +282,7 @@ describe Pact::PactBroker::FetchPacts, pact: true do
             status: 200,
             body: {
               _links: {
-                pacts: [
+                'pb:pacts' => [
                   {
                     href: Pact.term('http://pact-broker-url-for-consumer-1-tag-2-all', %r{http://.*})
                   },
@@ -329,7 +325,7 @@ describe Pact::PactBroker::FetchPacts, pact: true do
             status: 200,
             body: {
               _links: {
-                pacts: [
+                'pb:pacts' => [
                   {
                     href: Pact.term('http://pact-broker-url-for-consumer-1-all', %r{http://.*})
                   },

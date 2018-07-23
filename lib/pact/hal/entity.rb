@@ -48,8 +48,8 @@ module Pact
         @response
       end
 
-      def fetch(key)
-        @links[key]
+      def fetch(key, fallback_key = nil)
+        @links[key] || (fallback_key && @links[fallback_key])
       end
 
       def method_missing(method_name, *args, &block)

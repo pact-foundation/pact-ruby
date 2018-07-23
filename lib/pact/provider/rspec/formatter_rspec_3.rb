@@ -42,9 +42,21 @@ module Pact
           summary.failed_examples.collect{ |e| e.metadata[:pact_interaction_example_description] }.uniq.size
         end
 
+        def wip?(summary)
+          summary.failed_examples.any?{ |e| e.metadata[:pact_wip] }
+        end
+
+        def failure_title summary
+          if wip?(summary)
+            "#{failed_interactions_count(summary)} pending"
+          else
+            ::RSpec::Core::Formatters::Helpers.pluralize(failed_interactions_count(summary), "failure")
+          end
+        end
+
         def totals_line summary
           line = ::RSpec::Core::Formatters::Helpers.pluralize(interactions_count(summary), "interaction")
-          line << ", " << ::RSpec::Core::Formatters::Helpers.pluralize(failed_interactions_count(summary), "failure")
+          line << ", " << failure_title(summary)
           line
         end
 
@@ -57,7 +69,11 @@ module Pact
         end
 
         def print_rerun_commands summary
-          output.puts("\nFailed interactions:\n\n")
+          if wip?(summary)
+            output.puts("\nPending interactions: (Failures listed here are expected and do not affect your suite's status)\n\n")
+          else
+            output.puts("\nFailed interactions:\n\n")
+          end
           interaction_rerun_commands(summary).each do | message |
             output.puts(message)
           end

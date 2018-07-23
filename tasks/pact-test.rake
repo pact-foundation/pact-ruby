@@ -53,6 +53,12 @@ Pact::VerificationTask.new('test_app:fail') do | pact |
 	pact.uri './spec/support/test_app_fail.json', pact_helper: './spec/support/pact_helper.rb'
 end
 
+Pact::VerificationTask.new('test_app:wip') do | pact |
+	pact.uri './spec/support/test_app_fail.json', pact_helper: './spec/support/pact_helper.rb'
+	pact.wip = true
+end
+
+
 task :bethtest => ['pact:tests:all','pact:tests:all:with_active_support']
 
 namespace :pact do
@@ -68,6 +74,7 @@ namespace :pact do
 		Rake::Task['pact:verify:test_app:content_type'].execute
 		Rake::Task['pact:verify:case_insensitive_response_header_matching'].execute
 		Rake::Task['pact:verify:term_v2'].execute
+		Rake::Task['pact:verify:test_app:wip'].execute
 	end
 
 	desc "All the verification tests with active support loaded"

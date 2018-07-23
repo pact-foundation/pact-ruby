@@ -11,6 +11,7 @@ module Pact
       LATEST_PROVIDER_TAG_RELATION = 'pb:latest-provider-pacts-with-tag'.freeze
       LATEST_PROVIDER_RELATION = 'pb:latest-provider-pacts'.freeze
       PACTS = 'pacts'.freeze
+      PB_PACTS = 'pb:pacts'.freeze
       HREF = 'href'.freeze
 
       def initialize(provider, tags, broker_base_url, http_client_options)
@@ -79,7 +80,7 @@ module Pact
       end
 
       def get_pact_urls(link_by_provider)
-        link_by_provider.fetch(PACTS).collect do |pact|
+        link_by_provider.fetch(PB_PACTS, PACTS).collect do |pact|
           Pact::Provider::PactURI.new(pact[HREF], http_client_options)
         end
       end

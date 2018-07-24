@@ -1,6 +1,9 @@
 require 'pact/pact_broker/fetch_pacts'
 require 'pact/pact_broker/fetch_wip_pacts'
 
+#
+# @public Use by Pact Provider Verifier
+#
 module Pact
   module PactBroker
     extend self

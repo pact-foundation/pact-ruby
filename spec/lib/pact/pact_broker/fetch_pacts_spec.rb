@@ -31,6 +31,16 @@ module Pact
           end
         end
 
+        context "when there is a HAL relation missing" do
+          before do
+            stub_request(:get, "http://broker.org/").to_return(status: 200, body: {"_links" => {} }.to_json, headers: {})
+          end
+
+          it "raises a Pact::Error" do
+            expect { subject }.to raise_error Pact::Error, /Could not find relation/
+          end
+        end
+
         context "for the latest tag" do
           it "logs a message" do
             expect(Pact.configuration.output_stream).to receive(:puts).with("INFO: Fetching pacts for Foo from http://broker.org for tags: latest master, latest prod")

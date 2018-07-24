@@ -64,9 +64,9 @@ module Pact
 
       def link_for(tag)
         if !tag[:all]
-          index_entity._link(LATEST_PROVIDER_TAG_RELATION)
+          index_entity._link!(LATEST_PROVIDER_TAG_RELATION)
         else
-          index_entity._link(ALL_PROVIDER_TAG_RELATION)
+          index_entity._link!(ALL_PROVIDER_TAG_RELATION)
         end
       end
 
@@ -75,7 +75,7 @@ module Pact
       end
 
       def latest_pacts_for_provider
-        link = index_entity._link(LATEST_PROVIDER_RELATION)
+        link = index_entity._link!(LATEST_PROVIDER_RELATION)
         pact_urls(link.expand(provider: provider).get)
       end
 

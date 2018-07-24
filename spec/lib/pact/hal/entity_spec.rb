@@ -32,7 +32,7 @@ module Pact
         }
       end
 
-      subject(:entity) { Entity.new(pact_hash, http_client) }
+      subject(:entity) { Entity.new("http://pact", pact_hash, http_client) }
 
       it "delegates to the properties in the data" do
         expect(subject.name).to eq "a name"
@@ -70,6 +70,21 @@ module Pact
         context "when the relation does not exist" do
           it "returns false" do
             expect(subject.can?('pb:consumer')).to be false
+          end
+        end
+      end
+
+      describe "_link!" do
+        context 'when the key exists' do
+          it 'returns a Link' do
+            expect(subject._link!('pb:provider')).to be_a(Link)
+            expect(subject._link!('pb:provider').href).to eq 'http://provider'
+          end
+        end
+
+        context 'when the key does not exist' do
+          it 'raises an error' do
+            expect { subject._link!('foo') }.to raise_error RelationNotFoundError, "Could not find relation 'foo' in resource at http://pact"
           end
         end
       end

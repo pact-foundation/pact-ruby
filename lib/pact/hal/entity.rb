@@ -4,8 +4,12 @@ require 'pact/hal/link'
 
 module Pact
   module Hal
+    class RelationNotFoundError < ::Pact::Error; end
+
     class Entity
-      def initialize(data, http_client, response = nil)
+
+      def initialize(href, data, http_client, response = nil)
+        @href = href
         @data = data
         @links = (@data || {}).fetch("_links", {})
         @client = http_client
@@ -40,6 +44,10 @@ module Pact
         end
       end
 
+      def _link!(key)
+        _link(key) or raise RelationNotFoundError.new("Could not find relation '#{key}' in resource at #{@href}")
+      end
+
       def success?
         true
       end
@@ -69,7 +77,8 @@ module Pact
 
     class ErrorEntity < Entity
 
-      def initialize(data, http_client, response = nil)
+      def initialize(href, data, http_client, response = nil)
+        @href = href
         @data = data
         @links = {}
         @client = http_client

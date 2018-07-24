@@ -32,7 +32,7 @@ module Pact
           end
 
           @http_client = Pact::Hal::HttpClient.new(http_client_options)
-          @pact_entity = Pact::Hal::Entity.new(pact_source.pact_hash, http_client)
+          @pact_entity = Pact::Hal::Entity.new(pact_source.uri, pact_source.pact_hash, http_client)
         end
 
         def call

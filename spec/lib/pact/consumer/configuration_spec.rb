@@ -63,7 +63,7 @@ module Pact::Consumer::Configuration
 
         it "registers the app with the AppManager with find_available_port option" do
           expect(Pact::MockService::AppManager.instance).to receive(:register_mock_service_for).
-            with(provider_name, url, pact_specification_version: nil, find_available_port: true).
+            with(provider_name, url, pact_specification_version: '2', find_available_port: true).
             and_return(port_number)
           subject
         end
@@ -75,7 +75,7 @@ module Pact::Consumer::Configuration
 
         it "checks and raises an error" do
           expect(Pact::MockService::AppManager.instance).to receive(:register_mock_service_for).
-            with(provider_name, url, pact_specification_version: nil, find_available_port: true).
+            with(provider_name, url, pact_specification_version: '2', find_available_port: true).
             and_return(nil)
           expect { subject }.to raise_error(/pact-mock_service.+does not support/)
         end

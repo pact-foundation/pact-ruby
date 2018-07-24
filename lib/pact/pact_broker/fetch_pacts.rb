@@ -34,11 +34,11 @@ module Pact
 
       def call
         log_message
-        if get_index.success?
+        if index.success?
           if any_tags?
-            get_tagged_pacts_for_provider
+            tagged_pacts_for_provider
           else
-            get_latest_pacts_for_provider
+            latest_pacts_for_provider
           end
         else
           raise Pact::Error.new("Error retrieving #{broker_base_url} status=#{index_entity.response.code} #{index_entity.response.raw_body}")
@@ -51,18 +51,18 @@ module Pact
         tags && tags.any?
       end
 
-      def get_tagged_pacts_for_provider
+      def tagged_pacts_for_provider
         tags.collect do |tag|
-          link = get_link(tag)
-          urls = get_pact_urls(link.expand(provider: provider, tag: tag[:name]).get)
-          if urls == [] && tag[:fallback]
-            urls = get_pact_urls(link.expand(provider: provider, tag: tag[:fallback]).get)
+          link = link_for(tag)
+          urls = pact_urls(link.expand(provider: provider, tag: tag[:name]).get)
+          if urls.empty? && tag[:fallback]
+            urls = pact_urls(link.expand(provider: provider, tag: tag[:fallback]).get)
           end
           urls
         end.flatten
       end
 
-      def get_link(tag)
+      def link_for(tag)
         if !tag[:all]
           index_entity._link(LATEST_PROVIDER_TAG_RELATION)
         else
@@ -70,16 +70,16 @@ module Pact
         end
       end
 
-      def get_index
-        @index_entity = Pact::Hal::Link.new({ "href" => broker_base_url }, http_client).get
+      def index
+        @index_entity ||= Pact::Hal::Link.new({ "href" => broker_base_url }, http_client).get
       end
 
-      def get_latest_pacts_for_provider
+      def latest_pacts_for_provider
         link = index_entity._link(LATEST_PROVIDER_RELATION)
-        get_pact_urls(link.expand(provider: provider).get)
+        pact_urls(link.expand(provider: provider).get)
       end
 
-      def get_pact_urls(link_by_provider)
+      def pact_urls(link_by_provider)
         link_by_provider.fetch(PB_PACTS, PACTS).collect do |pact|
           Pact::Provider::PactURI.new(pact[HREF], http_client_options)
         end

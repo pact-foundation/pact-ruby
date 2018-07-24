@@ -15,7 +15,7 @@ describe Pact::PactBroker::FetchWipPacts, pact: true do
 
     before do
       pact_broker
-        .given('the relations for retrieving WIP pacts exist in the index resource')
+        .given('the relation for retrieving WIP pacts exists in the index resource')
         .upon_receiving('a request for the index resource')
         .with(
           method: :get,
@@ -26,7 +26,7 @@ describe Pact::PactBroker::FetchWipPacts, pact: true do
           status: 200,
           body: {
             _links: {
-              'pb:wip-provider-pacts' => {
+              'beta:wip-provider-pacts' => {
                 href: Pact.term(
                   generate: broker_base_url + 'pacts/provider/{provider}/wip',
                   matcher: %r{/pacts/provider/{provider}/wip$}

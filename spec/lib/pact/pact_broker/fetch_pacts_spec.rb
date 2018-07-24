@@ -3,7 +3,6 @@ require 'pact/pact_broker/fetch_pacts'
 module Pact
   module PactBroker
     describe FetchPacts do
-
       describe "call" do
         before do
           allow(Pact.configuration).to receive(:output_stream).and_return(double('output stream').as_null_object)

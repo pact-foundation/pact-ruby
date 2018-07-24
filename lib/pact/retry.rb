@@ -1,3 +1,5 @@
+require 'pact/errors'
+
 module Pact
   class Retry
     class RescuableError

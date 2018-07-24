@@ -6,11 +6,11 @@ module Pact
     extend self
 
     def fetch_pact_uris *args
-      Pact::PactBroker::FetchPacts.call(*args)
+      Pact::PactBroker::FetchPacts.call(*args).collect(&:uri)
     end
 
     def fetch_wip_pact_uris *args
-      Pact::PactBroker::FetchWipPacts.call(*args)
+      Pact::PactBroker::FetchWipPacts.call(*args).collect(&:uri)
     end
   end
 end

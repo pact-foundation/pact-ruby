@@ -20,7 +20,7 @@ module Pact
           @port = nil
           @standalone = false
           @verify = true
-          @pact_specification_version = nil
+          @pact_specification_version = '2'
           @finalized = false
         end
 

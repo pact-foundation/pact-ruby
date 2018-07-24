@@ -1,3 +1,20 @@
+<a name="v1.29.0"></a>
+### v1.29.0 (2018-07-24)
+
+
+#### Features
+
+* return plain string URLs from Pact::PactBroker.fetch_pact_uris	 ([1aa1989](/../../commit/1aa1989))
+* use beta:wip-provider-pacts rather than pb:wip-provider-pacts to fetch WIP pacts	 ([3bb0501](/../../commit/3bb0501))
+* allow WIP pacts to be verified without causing the process to return an non zero exit code	 ([9e6de46](/../../commit/9e6de46))
+
+
+#### Bug Fixes
+
+* add missing require	 ([0aa2d2a](/../../commit/0aa2d2a))
+* default pact specification version to 2	 ([917891a](/../../commit/917891a))
+
+
 <a name="v1.28.0"></a>
 ### v1.28.0 (2018-06-24)
 

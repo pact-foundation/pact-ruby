@@ -1,3 +1,12 @@
+<a name="v1.31.0"></a>
+### v1.31.0 (2018-07-25)
+
+
+#### Features
+
+* publish beta format of individual interaction results to Pact Broker	 ([6742afa](/../../commit/6742afa))
+
+
 <a name="v1.30.0"></a>
 ### v1.30.0 (2018-07-24)
 

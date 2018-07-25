@@ -59,6 +59,10 @@ module Pact
               hash[:actualBody] = example.metadata[:pact_actual_body]
             end
 
+            if example.metadata[:pact_actual_contents]
+              hash[:actualContents] = example.metadata[:pact_actual_contents]
+            end
+
             if example.metadata[:pact_diff]
               hash[:differences] = Pact::Matchers::ExtractDiffMessages.call(example.metadata[:pact_diff])
                                     .to_a

@@ -44,4 +44,5 @@ end
 
 task 'pact:verify:foobar' => ['pact:foobar:create']
 task 'pact:verify:foobar_using_broker' => ['pact:foobar:create', 'pact:foobar:publish']
+task 'pact:verify:foobar_using_broker:fail' => ['pact:foobar:create', 'pact:foobar:publish']
 

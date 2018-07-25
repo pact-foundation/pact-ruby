@@ -5,7 +5,7 @@ module Pact
   module Test
     class BarApp
       def call env
-        [200, {'Content-Type' => 'application/json'}, [{"status" => "5"},{"status" => "6"}].to_json]
+        [200, {'Content-Type' => 'application/json'}, [{name: "Thing 1"}.to_json]]
       end
     end
 

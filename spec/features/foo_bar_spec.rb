@@ -30,13 +30,15 @@ describe "Bar", :pact => true do
         will_respond_with({
         status: 200,
         headers: { 'Content-Type' => 'application/json' },
-        body: Pact.each_like({status: Pact.term(/\d+/, "4")})
+        body: {
+          name: "Thing 1"
+        }
       })
 
       bar_response = Net::HTTP.get_response(URI('http://localhost:4638/thing'))
 
       expect(bar_response.code).to eql '200'
-      expect(JSON.parse(bar_response.body)).to eq [{"status" => "4"}]
+      expect(JSON.parse(bar_response.body)).to eq "name" => "Thing 1"
 
       puts bar_service.write_pact
   end

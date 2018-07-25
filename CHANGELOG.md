@@ -1,3 +1,12 @@
+<a name="v1.30.0"></a>
+### v1.30.0 (2018-07-24)
+
+
+#### Features
+
+* raise error when an expected HAL relation cannot be found in a resource	 ([5db4134](/../../commit/5db4134))
+
+
 <a name="v1.29.0"></a>
 ### v1.29.0 (2018-07-24)
 

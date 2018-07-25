@@ -57,6 +57,12 @@ module Pact
             summary: {
               testCount: examples_for_pact_uri.size,
               failureCount: count_failures_for_pact_uri
+            },
+            metadata: {
+              warning: "These test results use a beta format. Do not rely on it, as it will definitely change.",
+              pactVerificationResultsSpecification: {
+                version: "1.0.0-beta.1"
+              }
             }
           }
         end

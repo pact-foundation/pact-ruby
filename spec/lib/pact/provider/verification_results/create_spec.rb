@@ -52,7 +52,13 @@ module Pact
         it "creates a VerificationResult with the relevant test results" do
           expected_test_results_hash = {
             tests: [{ status: "passed" }],
-            summary: { testCount: 1, failureCount: 0}
+            summary: { testCount: 1, failureCount: 0},
+            metadata: {
+              warning: "These test results use a beta format. Do not rely on it, as it will definitely change.",
+              pactVerificationResultsSpecification: {
+                version: "1.0.0-beta.1"
+              }
+            }
           }
           expect(VerificationResult).to receive(:new).with(anything, anything, anything, expected_test_results_hash)
           subject

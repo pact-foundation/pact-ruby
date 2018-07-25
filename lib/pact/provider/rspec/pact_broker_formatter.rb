@@ -8,34 +8,20 @@ module Pact
     module RSpec
       class PactBrokerFormatter < ::RSpec::Core::Formatters::BaseFormatter
         Pact::RSpec.with_rspec_3 do
-          ::RSpec::Core::Formatters.register self, :message, :dump_summary, :stop, :seed, :close
+          ::RSpec::Core::Formatters.register self, :stop, :close
         end
 
         attr_reader :output_hash
 
         def initialize(output)
           super
-          @output_hash = {
-            :version => ::RSpec::Core::Version::STRING
-          }
-        end
-
-        def message(notification)
-          (@output_hash[:messages] ||= []) << notification.message
-        end
-
-        def dump_summary(summary)
+          @output_hash = {}
         end
 
         def stop(notification)
           @output_hash[:tests] = notification
                                   .examples
                                   .map { |example| format_example(example) }
-        end
-
-        def seed(notification)
-          return unless notification.seed_used?
-          @output_hash[:seed] = notification.seed
         end
 
         def close(_notification)

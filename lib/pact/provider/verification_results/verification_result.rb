@@ -24,7 +24,7 @@ module Pact
           {
             success: success,
             providerApplicationVersion: provider_application_version,
-            #testResults: test_results_hash # not yet
+            testResults: test_results_hash
           }.to_json(options)
         end
 

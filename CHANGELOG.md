@@ -1,3 +1,12 @@
+<a name="v1.32.0"></a>
+### v1.32.0 (2018-07-25)
+
+
+#### Features
+
+* add actual pact message contents to results published to Pact Broker	 ([09e9d89](/../../commit/09e9d89))
+
+
 <a name="v1.31.0"></a>
 ### v1.31.0 (2018-07-25)
 

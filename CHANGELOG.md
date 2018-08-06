@@ -1,3 +1,13 @@
+<a name="v1.33.0"></a>
+### v1.33.0 (2018-08-07)
+
+
+#### Features
+
+* update version of pact-mock_service	 ([25a04fb](/../../commit/25a04fb))
+* add support for multipart/form requests	 ([7a16ab1](/../../commit/7a16ab1))
+
+
 <a name="v1.32.0"></a>
 ### v1.32.0 (2018-07-25)
 

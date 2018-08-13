@@ -1,7 +1,7 @@
 require_relative 'helper'
-require 'pact/pact_broker/fetch_wip_pacts'
+require 'pact/pact_broker/fetch_pending_pacts'
 
-describe Pact::PactBroker::FetchWipPacts, pact: true do
+describe Pact::PactBroker::FetchPendingPacts, pact: true do
   before do
     allow($stdout).to receive(:puts)
   end
@@ -15,7 +15,7 @@ describe Pact::PactBroker::FetchWipPacts, pact: true do
 
     before do
       pact_broker
-        .given('the relation for retrieving WIP pacts exists in the index resource')
+        .given('the relation for retrieving pending pacts exists in the index resource')
         .upon_receiving('a request for the index resource')
         .with(
           method: :get,
@@ -26,10 +26,10 @@ describe Pact::PactBroker::FetchWipPacts, pact: true do
           status: 200,
           body: {
             _links: {
-              'beta:wip-provider-pacts' => {
+              'beta:pending-provider-pacts' => {
                 href: Pact.term(
-                  generate: broker_base_url + 'pacts/provider/{provider}/wip',
-                  matcher: %r{/pacts/provider/{provider}/wip$}
+                  generate: broker_base_url + 'pacts/provider/{provider}/pending',
+                  matcher: %r{/pacts/provider/{provider}/pending$}
                 )
               }
             }
@@ -37,14 +37,14 @@ describe Pact::PactBroker::FetchWipPacts, pact: true do
         )
     end
 
-    context 'retrieving WIP pacts by provider' do
+    context 'retrieving pending pacts by provider' do
       before do
         pact_broker
-          .given('consumer-1 has a WIP pact with provider provider-1')
-          .upon_receiving('a request to retrieve the WIP pacts for provider')
+          .given('consumer-1 has a pending pact with provider provider-1')
+          .upon_receiving('a request to retrieve the pending pacts for provider')
           .with(
             method: :get,
-            path: '/pacts/provider/provider-1/wip',
+            path: '/pacts/provider/provider-1/pending',
             headers: get_headers
           )
           .will_respond_with(
@@ -62,7 +62,7 @@ describe Pact::PactBroker::FetchWipPacts, pact: true do
       end
 
       it 'returns the array of pact urls' do
-        pacts = Pact::PactBroker::FetchWipPacts.call(provider, broker_base_url, basic_auth_options)
+        pacts = Pact::PactBroker::FetchPendingPacts.call(provider, broker_base_url, basic_auth_options)
         expect(pacts).to eq(
           [
             Pact::Provider::PactURI.new('http://pact-broker-url-for-consumer-1', basic_auth_options)

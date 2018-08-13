@@ -1,5 +1,5 @@
 require 'pact/pact_broker/fetch_pacts'
-require 'pact/pact_broker/fetch_wip_pacts'
+require 'pact/pact_broker/fetch_pending_pacts'
 
 #
 # @public Use by Pact Provider Verifier
@@ -12,8 +12,8 @@ module Pact
       Pact::PactBroker::FetchPacts.call(*args).collect(&:uri)
     end
 
-    def fetch_wip_pact_uris *args
-      Pact::PactBroker::FetchWipPacts.call(*args).collect(&:uri)
+    def fetch_pending_pact_uris *args
+      Pact::PactBroker::FetchPendingPacts.call(*args).collect(&:uri)
     end
   end
 end

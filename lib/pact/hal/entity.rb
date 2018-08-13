@@ -36,9 +36,11 @@ module Pact
         Link.new(@links[key].merge(method: http_method), @client).run(*args)
       end
 
-      def _link(key)
+      def _link(key, fallback_key = nil)
         if @links[key]
           Link.new(@links[key], @client)
+        elsif fallback_key && @links[fallback_key]
+          Link.new(@links[fallback_key], @client)
         else
           nil
         end

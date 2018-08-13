@@ -4,10 +4,11 @@ require 'pact/provider/pact_uri'
 
 module Pact
   module PactBroker
-    class FetchWipPacts
+    class FetchPendingPacts
       attr_reader :provider, :tags, :broker_base_url, :http_client_options, :http_client, :index_entity
 
-      WIP_PROVIDER_RELATION = 'beta:wip-provider-pacts'.freeze
+      PENDING_PROVIDER_RELATION = 'beta:pending-provider-pacts'.freeze
+      WIP_PROVIDER_RELATION = 'beta:wip-provider-pacts'.freeze # deprecated
       PACTS = 'pacts'.freeze
       PB_PACTS = 'pb:pacts'.freeze
       HREF = 'href'.freeze
@@ -25,7 +26,7 @@ module Pact
 
       def call
         if index.success?
-          wip_pacts_for_provider
+          pending_pacts_for_provider
         else
           raise Pact::Error.new("Error retrieving #{broker_base_url} status=#{index_entity.response.code} #{index_entity.response.raw_body}")
         end
@@ -37,8 +38,8 @@ module Pact
         @index_entity ||= Pact::Hal::Link.new({ "href" => broker_base_url }, http_client).get
       end
 
-      def wip_pacts_for_provider
-        link = index_entity._link(WIP_PROVIDER_RELATION)
+      def pending_pacts_for_provider
+        link = index_entity._link(WIP_PROVIDER_RELATION, PENDING_PROVIDER_RELATION)
         if link
           get_pact_urls(link.expand(provider: provider).get)
         else

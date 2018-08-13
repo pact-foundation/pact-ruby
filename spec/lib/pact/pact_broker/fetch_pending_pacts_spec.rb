@@ -1,8 +1,8 @@
-require 'pact/pact_broker/fetch_wip_pacts'
+require 'pact/pact_broker/fetch_pending_pacts'
 
 module Pact
   module PactBroker
-    describe FetchWipPacts do
+    describe FetchPendingPacts do
       describe "call" do
         before do
           allow(Pact.configuration).to receive(:output_stream).and_return(double('output stream').as_null_object)
@@ -11,7 +11,7 @@ module Pact
         let(:provider) { "Foo"}
         let(:broker_base_url) { "http://broker.org" }
         let(:http_client_options) { {} }
-        subject { FetchWipPacts.call(provider, broker_base_url, http_client_options)}
+        subject { FetchPendingPacts.call(provider, broker_base_url, http_client_options)}
 
         context "when there is an error retrieving the index resource" do
           before do
@@ -32,7 +32,7 @@ module Pact
           end
         end
 
-        context "when the pb:wip-provider-pacts relation does not exist" do
+        context "when the pb:pending-provider-pacts relation does not exist" do
           before do
             stub_request(:get, "http://broker.org/").to_return(status: 200, body: response_body, headers: response_headers)
           end

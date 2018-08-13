@@ -22,17 +22,17 @@ module Pact
       end
     end
 
-    describe ".fetch_wip_pact_uris" do
+    describe ".fetch_pending_pact_uris" do
       before do
-        allow(Pact::PactBroker::FetchWipPacts).to receive(:call).and_return([pact_uri])
+        allow(Pact::PactBroker::FetchPendingPacts).to receive(:call).and_return([pact_uri])
       end
 
       let(:pact_uri) { Pact::Provider::PactURI.new("http://pact") }
 
-      subject { Pact::PactBroker.fetch_wip_pact_uris("foo") }
+      subject { Pact::PactBroker.fetch_pending_pact_uris("foo") }
 
-      it "calls Pact::PactBroker::FetchWipPacts" do
-        expect(Pact::PactBroker::FetchWipPacts).to receive(:call).with("foo")
+      it "calls Pact::PactBroker::FetchPendingPacts" do
+        expect(Pact::PactBroker::FetchPendingPacts).to receive(:call).with("foo")
         subject
       end
 

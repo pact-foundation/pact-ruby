@@ -55,7 +55,7 @@ end
 
 Pact::VerificationTask.new('test_app:wip') do | pact |
 	pact.uri './spec/support/test_app_fail.json', pact_helper: './spec/support/pact_helper.rb'
-	pact.wip = true
+	pact.ignore_failures = true
 end
 
 

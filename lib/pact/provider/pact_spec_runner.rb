@@ -91,7 +91,7 @@ module Pact
           ::RSpec::Core::CommandLine.new(NoConfigurationOptions.new)
             .run(::RSpec.configuration.output_stream, ::RSpec.configuration.error_stream)
         end
-        options[:wip] ? 0 : exit_code
+        options[:ignore_failures] ? 0 : exit_code
       end
 
       def rspec_runner_options
@@ -120,7 +120,7 @@ module Pact
         pact_sources.each do | pact_source |
           options = {
             criteria: @options[:criteria],
-            wip: @options[:wip]
+            ignore_failures: @options[:ignore_failures]
           }
           honour_pactfile pact_source.uri, ordered_pact_json(pact_source.pact_json), options
         end
@@ -147,7 +147,7 @@ module Pact
 
         ::RSpec.configuration.full_backtrace = @options[:full_backtrace]
 
-        ::RSpec.configuration.failure_color = :yellow if @options[:wip]
+        ::RSpec.configuration.failure_color = :yellow if @options[:ignore_failures]
       end
 
       def ordered_pact_json(pact_json)

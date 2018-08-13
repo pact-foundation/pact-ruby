@@ -8,8 +8,8 @@ module Pact
       let(:ruby_path) { "/path/to/ruby" }
       let(:pact_uri) { "/pact/uri" }
       let(:default_pact_helper_path) { "/pact/helper/path.rb" }
-      let(:verification_options) { { wip: wip } }
-      let(:wip) { nil }
+      let(:verification_options) { { ignore_failures: ignore_failures } }
+      let(:ignore_failures) { nil }
 
       before do
         stub_const("FileUtils::RUBY", ruby_path)
@@ -119,10 +119,10 @@ module Pact
         end
       end
 
-      context "with wip: true" do
-        let(:wip) { true }
-        it "executes the command with --wip" do
-          expect(TaskHelper).to receive(:execute_cmd).with(/ --wip\b/)
+      context "with ignore_failures: true" do
+        let(:ignore_failures) { true }
+        it "executes the command with --ignore-failures" do
+          expect(TaskHelper).to receive(:execute_cmd).with(/ --ignore-failures\b/)
           TaskHelper.execute_pact_verify(pact_uri, nil, nil, verification_options)
         end
       end

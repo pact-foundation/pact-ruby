@@ -21,7 +21,7 @@ module Pact
         include ::RSpec::Core::DSL
 
         def honour_pactfile pact_uri, pact_json, options
-          pact_description = options[:wip] ? "WIP pact" : "pact"
+          pact_description = options[:ignore_failures] ? "Pending pact" : "pact"
           Pact.configuration.output_stream.puts "INFO: Reading #{pact_description} at #{pact_uri}"
           Pact.configuration.output_stream.puts "INFO: Filtering interactions by: #{options[:criteria]}" if options[:criteria] && options[:criteria].any?
           consumer_contract = Pact::ConsumerContract.from_json(pact_json)
@@ -74,7 +74,7 @@ module Pact
             pact_interaction: interaction,
             pact_interaction_example_description: interaction_description_for_rerun_command(interaction),
             pact_uri: options[:pact_uri],
-            pact_wip: options[:wip]
+            pact_ignore_failures: options[:ignore_failures]
           }
 
           describe description_for(interaction), metadata do

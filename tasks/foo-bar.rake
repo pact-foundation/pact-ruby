@@ -31,7 +31,7 @@ end
 
 Pact::VerificationTask.new('foobar:wip') do | pact |
   pact.uri './spec/pacts/foo-bar-wip.json', pact_helper: './spec/support/bar_pact_helper.rb'
-  pact.wip = true
+  pact.ignore_failures = true
 end
 
 Pact::VerificationTask.new(:foobar_using_broker) do | pact |

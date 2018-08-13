@@ -9,7 +9,7 @@ module Pact
       @pact_uri = 'http://example.org/pact.json'
       @task_name = 'pact:verify:pact_rake_spec'
       @task_name_with_explict_pact_helper = 'pact:verify:pact_rake_spec_with_explict_pact_helper'
-      @task_name_wip = 'pact:verify:pact_rake_spec_wip'
+      @task_name_ignore_failures = 'pact:verify:pact_rake_spec_ignore_failures'
       @consumer = 'some-consumer'
       @criteria = {:description => /wiffle/}
 
@@ -21,9 +21,9 @@ module Pact
         pact.uri @pact_uri
       end
 
-      VerificationTask.new(:pact_rake_spec_wip) do | pact |
+      VerificationTask.new(:pact_rake_spec_ignore_failures) do | pact |
         pact.uri @pact_uri
-        pact.wip = true
+        pact.ignore_failures = true
       end
     end
 
@@ -47,7 +47,7 @@ module Pact
     describe 'execute' do
       context "with no explicit pact_helper" do
         it 'verifies the pacts using the TaskHelper' do
-          expect(Pact::TaskHelper).to receive(:execute_pact_verify).with(@pact_uri, nil, nil, { wip: false })
+          expect(Pact::TaskHelper).to receive(:execute_pact_verify).with(@pact_uri, nil, nil, { ignore_failures: false })
           Rake::Task[@task_name].execute
         end
       end
@@ -55,15 +55,15 @@ module Pact
       context "with an explict pact_helper" do
         let(:verification_config) { [ uri: @pact_uri, pact_helper: @pact_helper] }
         it 'verifies the pacts using specified pact_helper' do
-          expect(Pact::TaskHelper).to receive(:execute_pact_verify).with(@pact_uri, @pact_helper, nil,  { wip: false })
+          expect(Pact::TaskHelper).to receive(:execute_pact_verify).with(@pact_uri, @pact_helper, nil,  { ignore_failures: false })
           Rake::Task[@task_name_with_explict_pact_helper].execute
         end
       end
 
-      context "with wip: true" do
-        it 'verifies the pacts with wip: true' do
-          expect(Pact::TaskHelper).to receive(:execute_pact_verify).with(@pact_uri, anything, anything,  { wip: true })
-          Rake::Task[@task_name_wip].execute
+      context "with ignore_failures: true" do
+        it 'verifies the pacts with ignore_failures: true' do
+          expect(Pact::TaskHelper).to receive(:execute_pact_verify).with(@pact_uri, anything, anything,  { ignore_failures: true })
+          Rake::Task[@task_name_ignore_failures].execute
         end
       end
 

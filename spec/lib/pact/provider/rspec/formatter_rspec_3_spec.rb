@@ -20,7 +20,7 @@ Pact::RSpec.with_rspec_3 do
               pactfile_uri: pactfile_uri,
               pact_interaction_example_description: description,
               pact_json: pact_json,
-              pact_wip: wip
+              pact_ignore_failures: ignore_failures
             }
           end
           let(:metadata_2) { metadata.merge(pact_interaction_example_description: 'another interaction')}
@@ -34,7 +34,7 @@ Pact::RSpec.with_rspec_3 do
           let(:summary) { double("summary", failure_count: 1, failed_examples: failed_examples, examples: examples)}
           let(:pact_executing_language) { 'ruby' }
           let(:pact_interaction_rerun_command) { Pact::TaskHelper::PACT_INTERACTION_RERUN_COMMAND }
-          let(:wip) { nil }
+          let(:ignore_failures) { nil }
 
           subject { Formatter.new output }
 
@@ -105,8 +105,8 @@ Pact::RSpec.with_rspec_3 do
               end
             end
 
-            context "when wip is true" do
-              let(:wip) { true }
+            context "when ignore_failures is true" do
+              let(:ignore_failures) { true }
 
               it "reports failures as pending" do
                 expect(output_result).to include("1 pending")

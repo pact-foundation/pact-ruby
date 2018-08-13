@@ -72,7 +72,7 @@ module Pact
           criteria: SpecCriteria.call(options),
           format: options[:format],
           out: options[:out],
-          wip: options[:wip]
+          ignore_failures: options[:ignore_failures]
         }
       end
     end

@@ -251,6 +251,10 @@ At this stage, you'll want to be able to run your specs one at a time while you 
 
     $ rake pact:verify PACT_DESCRIPTION="a request for an alligator" PACT_PROVIDER_STATE="an alligator exists"
 
+This triggers all RSpec examples for interactions which match given description and provider state. You can also pass in RSpec options with `SPEC_OPTS`. For instance, if you'd like to run only the examples which check response body:
+
+    $ rake pact:verify SPEC_OPTS="--example has_a_matching_body"
+
 #### 4. Implement enough to make your first interaction spec pass
 
 Rinse and repeat.

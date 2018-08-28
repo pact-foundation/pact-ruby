@@ -1,3 +1,20 @@
+<a name="v1.33.1"></a>
+### v1.33.1 (2018-08-28)
+
+
+#### Features
+
+* rename 'wip pacts' to 'pending pacts'	 ([6a46ebb](/../../commit/6a46ebb))
+
+* **verify cli**
+  * rename --wip to --ignore-failures	 ([8e2dffd](/../../commit/8e2dffd))
+
+
+#### Bug Fixes
+
+* correct version for dependency on pact-mock_service	 ([01c0df7](/../../commit/01c0df7))
+
+
 <a name="v1.33.0"></a>
 ### v1.33.0 (2018-08-07)
 

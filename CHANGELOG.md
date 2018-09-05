@@ -1,3 +1,12 @@
+<a name="v1.33.2"></a>
+### v1.33.2 (2018-09-06)
+
+
+#### Bug Fixes
+
+* add missing requires for pact/errors	 ([0e01451](/../../commit/0e01451))
+
+
 <a name="v1.33.1"></a>
 ### v1.33.1 (2018-08-28)
 

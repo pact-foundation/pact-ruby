@@ -1,4 +1,5 @@
 require 'pact/retry'
+require 'net/http'
 
 module Pact
   module Hal

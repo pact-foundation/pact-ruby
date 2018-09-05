@@ -1,6 +1,7 @@
 require 'pact/hal/entity'
 require 'pact/hal/http_client'
 require 'pact/provider/pact_uri'
+require 'pact/errors'
 
 module Pact
   module PactBroker

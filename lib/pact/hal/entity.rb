@@ -1,6 +1,7 @@
 require 'uri'
 require 'delegate'
 require 'pact/hal/link'
+require 'pact/errors'
 
 module Pact
   module Hal

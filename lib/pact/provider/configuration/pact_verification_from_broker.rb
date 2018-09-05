@@ -1,6 +1,7 @@
 require 'pact/shared/dsl'
 require 'pact/provider/world'
 require 'pact/pact_broker/fetch_pacts'
+require 'pact/errors'
 
 module Pact
   module Provider

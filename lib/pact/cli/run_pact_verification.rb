@@ -72,7 +72,8 @@ module Pact
           criteria: SpecCriteria.call(options),
           format: options[:format],
           out: options[:out],
-          ignore_failures: options[:ignore_failures]
+          ignore_failures: options[:ignore_failures],
+          request_customizer: options[:request_customizer]
         }
       end
     end

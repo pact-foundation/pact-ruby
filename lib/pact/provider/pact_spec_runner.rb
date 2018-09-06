@@ -120,7 +120,8 @@ module Pact
         pact_sources.each do | pact_source |
           options = {
             criteria: @options[:criteria],
-            ignore_failures: @options[:ignore_failures]
+            ignore_failures: @options[:ignore_failures],
+            request_customizer: @options[:request_customizer]
           }
           honour_pactfile pact_source.uri, ordered_pact_json(pact_source.pact_json), options
         end

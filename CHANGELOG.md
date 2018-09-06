@@ -1,3 +1,18 @@
+<a name="v1.34.0"></a>
+### v1.34.0 (2018-09-06)
+
+
+#### Features
+
+* **verify**
+  * add request customizer for pact-provider-verifier	 ([4ae0b58](/../../commit/4ae0b58))
+
+
+#### Bug Fixes
+
+* add missing require for net/http	 ([fe2ebb1](/../../commit/fe2ebb1))
+
+
 <a name="v1.33.2"></a>
 ### v1.33.2 (2018-09-06)
 

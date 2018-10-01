@@ -84,7 +84,7 @@ module Pact
             before do | example |
               interaction_context.run_once :before do
                 Pact.configuration.logger.info "Running example '#{Pact::RSpec.full_description(example)}'"
-                set_up_provider_state interaction.provider_state, options[:consumer]
+                set_up_provider_states interaction.provider_states, options[:consumer]
                 replay_interaction interaction, options[:request_customizer]
                 interaction_context.last_response = last_response
               end
@@ -92,7 +92,7 @@ module Pact
 
             after do
               interaction_context.run_once :after do
-                tear_down_provider_state interaction.provider_state, options[:consumer]
+                tear_down_provider_states interaction.provider_states, options[:consumer]
               end
             end
 

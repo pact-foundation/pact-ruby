@@ -35,12 +35,16 @@ module Pact
         end
       end
 
-      def set_up_provider_state provider_state_name, consumer, options = {}
-        Pact.configuration.provider_state_set_up.call(provider_state_name, consumer, options)
+      def set_up_provider_states provider_states, consumer, options = {}
+        provider_states.each do | provider_state |
+          Pact.configuration.provider_state_set_up.call(provider_state.name, consumer, options.merge(params: provider_state.params))
+        end
       end
 
-      def tear_down_provider_state provider_state_name, consumer, options = {}
-        Pact.configuration.provider_state_tear_down.call(provider_state_name, consumer, options)
+      def tear_down_provider_states provider_states, consumer, options = {}
+        provider_states.reverse.each do | provider_state |
+          Pact.configuration.provider_state_tear_down.call(provider_state.name, consumer, options.merge(params: provider_state.params))
+        end
       end
 
       def set_metadata example, key, value

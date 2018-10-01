@@ -9,5 +9,5 @@
 * [Rarely asked questions](https://github.com/pact-foundation/pact-ruby/wiki/RAQ)
 * [Best practices](https://github.com/pact-foundation/pact-ruby/wiki/Best-practices)
 * [Troubleshooting](https://github.com/pact-foundation/pact-ruby/wiki/Troubleshooting)
-* [Testing with pact diagram](https://github.com/pact-foundation/pact-ruby/wiki/Testing with pact.png)
+* [Testing with pact diagram](https://github.com/pact-foundation/pact-ruby/wiki/Testing%20with%20pact.png)
 * [Development workflow](https://github.com/pact-foundation/pact-ruby/wiki/Development-workflow)

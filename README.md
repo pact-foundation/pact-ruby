@@ -1,7 +1,7 @@
 # Pact
 [![travis-ci.org Build Status](https://travis-ci.org/pact-foundation/pact-ruby.svg?branch=master)](https://travis-ci.org/pact-foundation/pact-ruby)
  [![Backers on Open Collective](https://opencollective.com/pact-foundation/backers/badge.svg)](#backers)
- [![Sponsors on Open Collective](https://opencollective.com/pact-foundation/sponsors/badge.svg)](#sponsors) 
+ [![Sponsors on Open Collective](https://opencollective.com/pact-foundation/sponsors/badge.svg)](#sponsors)
 
 Define a pact between service consumers and providers, enabling "consumer driven contract" testing.
 
@@ -284,8 +284,8 @@ As in all things, there are good ways to implement Pacts, and there are not so g
 * [Rarely asked questions](https://github.com/pact-foundation/pact-ruby/wiki/RAQ)
 * [Best practices](https://github.com/pact-foundation/pact-ruby/wiki/Best-practices)
 * [Troubleshooting](https://github.com/pact-foundation/pact-ruby/wiki/Troubleshooting)
-* [Testing with pact diagram](https://github.com/pact-foundation/pact-ruby/wiki/Testing with pact.png)
-* [News, blogs and articles](https://github.com/pact-foundation/pact-ruby/wiki/News,-blogs-and-articles)
+* [Testing with pact diagram](https://github.com/pact-foundation/pact-ruby/wiki/Testing%20with%20pact.png)
+* [News, blogs, videos and articles](https://github.com/pact-foundation/pact-ruby/wiki/News,-blogs,-videos-and-articles)
 
 ## Related libraries
 

@@ -1,3 +1,14 @@
+<a name="v1.36.0"></a>
+### v1.36.0 (2018-10-04)
+
+
+#### Features
+
+* **v3**
+  * make provider state params available to set up and tear down blocks	 ([9593730](/../../commit/9593730))
+  * support set up and tear down of multiple provider states	 ([cbad0be](/../../commit/cbad0be))
+
+
 <a name="v1.34.0"></a>
 ### v1.34.0 (2018-09-06)
 

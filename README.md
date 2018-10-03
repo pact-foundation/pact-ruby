@@ -271,6 +271,10 @@ See the [Configuration](/documentation/configuration.md) section of the document
 
 As in all things, there are good ways to implement Pacts, and there are not so good ways. There are also some Pact [GOTCHAS][gotchas] to beware of! Check out the [Best practices](https://github.com/pact-foundation/pact-ruby/wiki/Best-practices) section of the documentation to make sure you're not Pacting it Wrong.
 
+## Current Pact specification version
+
+Currently, Ruby Pact supports writing Pacts in v2, and verifying Pacts in v3 format, HOWEVER it only supports the rules that were defined in v2 (`like` and `term`). If you are interested in helping add support for the v3 rules, please talk to @Beth in the `#pact-ruby` channel on our [Slack](http://slack.pact.io).
+
 ## Docs
 
 * [Example](example)

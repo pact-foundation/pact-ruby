@@ -2,8 +2,6 @@ require 'spec_helper'
 require 'pact/provider/state/provider_state_manager'
 
 module Pact::Provider::State
-
-
   describe ProviderStateManager do
 
     PROVIDER_STATE_MESSAGES = []
@@ -42,7 +40,8 @@ module Pact::Provider::State
       end
     end
 
-    let(:provider_state_manager) { ProviderStateManager.new("a custom state", "a consumer with provider states") }
+    let(:params) { { "foo" => "bar" } }
+    let(:provider_state_manager) { ProviderStateManager.new("a custom state", params, "a consumer with provider states") }
 
     describe "set_up_provider_state" do
 
@@ -83,7 +82,5 @@ module Pact::Provider::State
         expect(PROVIDER_STATE_MESSAGES[2]).to eq :global_base_tear_down
       end
     end
-
   end
-
 end

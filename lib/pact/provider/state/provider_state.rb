@@ -116,17 +116,17 @@ module Pact
         @no_op_defined = true
       end
 
-      def set_up
+      def set_up params = {}
         if @set_up_block
           include_provider_state_configured_modules
-          instance_eval &@set_up_block
+          instance_exec params, &@set_up_block
         end
       end
 
-      def tear_down
+      def tear_down params = {}
         if @tear_down_block
           include_provider_state_configured_modules
-          instance_eval &@tear_down_block
+          instance_exec params, &@tear_down_block
         end
       end
 
@@ -168,14 +168,13 @@ module Pact
 
     class NoOpProviderState
 
-      def self.set_up
+      def self.set_up params = {}
 
       end
 
-      def self.tear_down
+      def self.tear_down params = {}
 
       end
-
     end
   end
 end

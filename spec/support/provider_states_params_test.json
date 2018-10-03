@@ -1,0 +1,32 @@
+{
+  "consumer" : { "name" : "some-test-consumer" },
+  "provider" : { "name" : "some-test-provider" },
+  "interactions": [
+    {
+      "description": "a request for the first alligator",
+      "providerStates": [
+        {
+          "name": "the first alligator exists",
+          "params": {
+            "name": "Mary"
+          }
+        }
+      ],
+      "request": {
+        "method": "GET",
+        "path": "/alligators/first"
+      },
+      "response": {
+        "status": 200,
+        "body": {
+          "name": "Mary"
+        }
+      }
+    }
+  ],
+  "metadata": {
+    "pactSpecification": {
+      "version": "3"
+    }
+  }
+}

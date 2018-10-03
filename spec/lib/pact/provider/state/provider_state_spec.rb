@@ -3,12 +3,89 @@ require 'pact/provider/state/provider_state'
 
 module Pact
   module Provider::State
-
     describe ProviderStates do
+
+      module ProviderStatesHelper
+        def help_me_set_up
+          "set up helped"
+        end
+
+        def help_me_tear_down
+          "tear down helped"
+        end
+      end
+
       MESSAGES = []
+
+      let(:params) { { "foo" => "bar" } }
 
       before do
         MESSAGES.clear
+        Pact.configuration.include ProviderStatesHelper
+      end
+
+      describe 'with an included module' do
+        Pact.provider_state :alligators_with_helper_module do
+          set_up do
+            MESSAGES << help_me_set_up
+          end
+          tear_down do
+            MESSAGES << help_me_tear_down
+          end
+        end
+
+        subject { ProviderStates.get('alligators_with_helper_module') }
+
+        it 'makes the helper module available to the set up block' do
+          subject.set_up
+          expect(MESSAGES).to eq ["set up helped"]
+        end
+
+        it 'makes the helper module available to the tear down block' do
+          subject.tear_down
+          expect(MESSAGES).to eq ["tear down helped"]
+        end
+      end
+
+      describe 'with params' do
+        Pact.provider_state :alligators_with_params do
+          set_up do | params |
+            MESSAGES << { set_up: params }
+          end
+          tear_down do | params |
+            MESSAGES << { tear_down: params }
+          end
+        end
+
+        subject { ProviderStates.get('alligators_with_params') }
+
+        it 'calls the block passed to set_up with the params as an argument' do
+          subject.set_up(params)
+          expect(MESSAGES).to eq [{ set_up: params }]
+        end
+
+        it 'calls the block passed to tear_down with the params as an argument' do
+          subject.tear_down(params)
+          expect(MESSAGES).to eq [{ tear_down: params }]
+        end
+      end
+
+      describe 'with a variable delcared outside the block' do
+
+        variable_declared_outside = "foo"
+
+        Pact.provider_state :alligators_with_variable_declared_out_of_scope do
+          set_up do | params |
+            MESSAGES << variable_declared_outside
+          end
+        end
+
+        subject { ProviderStates.get('alligators_with_variable_declared_out_of_scope') }
+
+        it 'calls the block passed to set_up with the params as an argument' do
+          subject.set_up(params)
+          expect(MESSAGES).to eq ["foo"]
+        end
       end
 
       describe 'global ProviderState' do

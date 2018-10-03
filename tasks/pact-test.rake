@@ -53,6 +53,10 @@ Pact::VerificationTask.new('test_app:fail') do | pact |
 	pact.uri './spec/support/test_app_fail.json', pact_helper: './spec/support/pact_helper.rb'
 end
 
+Pact::VerificationTask.new('test_app_with_provider_state_params') do | pact |
+	pact.uri './spec/support/provider_states_params_test.json', pact_helper: './spec/support/pact_helper_for_provider_state_params_test.rb'
+end
+
 Pact::VerificationTask.new('test_app:wip') do | pact |
 	pact.uri './spec/support/test_app_fail.json', pact_helper: './spec/support/pact_helper.rb'
 	pact.ignore_failures = true
@@ -74,6 +78,7 @@ namespace :pact do
 		Rake::Task['pact:verify:test_app:content_type'].execute
 		Rake::Task['pact:verify:case_insensitive_response_header_matching'].execute
 		Rake::Task['pact:verify:term_v2'].execute
+		Rake::Task['pact:verify:test_app_with_provider_state_params'].execute
 		Rake::Task['pact:verify:test_app:wip'].execute
 	end
 

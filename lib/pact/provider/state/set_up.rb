@@ -5,7 +5,7 @@ module Pact
     module State
       class SetUp
         def self.call provider_state_name, consumer, options = {}
-          State::ProviderStateManager.new(provider_state_name, consumer).set_up_provider_state
+          State::ProviderStateManager.new(provider_state_name, options[:params], consumer).set_up_provider_state
         end
       end
     end

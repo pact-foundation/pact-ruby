@@ -36,12 +36,16 @@ module Pact
       end
 
       def set_up_provider_states provider_states, consumer, options = {}
+        # If there are no provider state, execute with an nil state to ensure global and base states are executed
+        Pact.configuration.provider_state_set_up.call(nil, consumer, options) if provider_states.nil? || provider_states.empty?
         provider_states.each do | provider_state |
           Pact.configuration.provider_state_set_up.call(provider_state.name, consumer, options.merge(params: provider_state.params))
         end
       end
 
       def tear_down_provider_states provider_states, consumer, options = {}
+        # If there are no provider state, execute with an nil state to ensure global and base states are executed
+        Pact.configuration.provider_state_tear_down.call(nil, consumer, options) if provider_states.nil? || provider_states.empty?
         provider_states.reverse.each do | provider_state |
           Pact.configuration.provider_state_tear_down.call(provider_state.name, consumer, options.merge(params: provider_state.params))
         end

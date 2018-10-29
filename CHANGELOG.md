@@ -1,3 +1,12 @@
+<a name="v1.36.2"></a>
+### v1.36.2 (2018-10-22)
+
+
+#### Bug Fixes
+
+* always execute global and base states	 ([8317fe3](/../../commit/8317fe3))
+
+
 <a name="v1.36.0"></a>
 ### v1.36.0 (2018-10-04)
 

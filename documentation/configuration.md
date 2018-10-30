@@ -101,7 +101,7 @@ end
 
 ```ruby
 Pact.configure do | config |
-  config.pact_dir = `./spec/pacts`
+  config.pact_dir = './spec/pacts'
 end
 ```
 

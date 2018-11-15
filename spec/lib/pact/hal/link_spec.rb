@@ -102,6 +102,10 @@ module Pact
         it "returns a duplicate Link with the expanded href with URL escaping" do
           expect(subject.expand(bar: 'wiffle meep').href).to eq "http://foo/wiffle%20meep"
         end
+
+        it "returns a duplicate Link with the expanded href with URL escaping for forward slashes" do
+          expect(subject.expand(bar: 'wiffle/meep').href).to eq "http://foo/wiffle%2Fmeep"
+        end
       end
     end
   end

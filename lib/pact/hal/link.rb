@@ -1,4 +1,4 @@
-require 'uri'
+require 'erb'
 require 'delegate'
 
 module Pact
@@ -54,11 +54,9 @@ module Pact
       end
 
       def expand_url(params, url)
-        new_url = url
-        params.each do | key, value |
-          new_url = new_url.gsub('{' + key.to_s + '}', URI.escape(value))
+        params.inject(url) do | url, (key, value) |
+          url.gsub('{' + key.to_s + '}', ERB::Util.url_encode(value))
         end
-        new_url
       end
     end
   end

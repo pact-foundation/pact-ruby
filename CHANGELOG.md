@@ -1,3 +1,18 @@
+<a name="v1.37.0"></a>
+### v1.37.0 (2018-11-15)
+
+
+#### Features
+
+* **hal client**
+  * ensure meaningful error is displayed when HTTP errors are returned	 ([9244c14](/../../commit/9244c14))
+
+
+#### Bug Fixes
+
+* correct url encoding for expanded HAL links	 ([4abfe7d](/../../commit/4abfe7d))
+
+
 <a name="v1.36.2"></a>
 ### v1.36.2 (2018-10-22)
 

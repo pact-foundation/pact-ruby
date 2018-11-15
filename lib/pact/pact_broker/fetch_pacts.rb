@@ -72,16 +72,16 @@ module Pact
       end
 
       def index
-        @index_entity ||= Pact::Hal::Link.new({ "href" => broker_base_url }, http_client).get
+        @index_entity ||= Pact::Hal::Link.new({ "href" => broker_base_url }, http_client).get.assert_success!
       end
 
       def latest_pacts_for_provider
         link = index_entity._link!(LATEST_PROVIDER_RELATION)
-        pact_urls(link.expand(provider: provider).get)
+        pact_urls(link.expand(provider: provider).get.assert_success!)
       end
 
       def pact_urls(link_by_provider)
-        link_by_provider.fetch(PB_PACTS, PACTS).collect do |pact|
+        link_by_provider.assert_success!.fetch(PB_PACTS, PACTS).collect do |pact|
           Pact::Provider::PactURI.new(pact[HREF], http_client_options)
         end
       end

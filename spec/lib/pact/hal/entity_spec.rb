@@ -60,6 +60,32 @@ module Pact
         end
       end
 
+      describe "assert_success!" do
+        context "when the response is successful" do
+          it "returns the entity" do
+            expect(entity.assert_success!).to be entity
+          end
+        end
+
+        context "when the response is not successful and there is no response" do
+          subject(:entity) { ErrorEntity.new("http://pact", pact_hash, http_client) }
+
+          it "raises an error" do
+            expect { entity.assert_success! }.to raise_error Pact::Hal::ErrorResponseReturned, "Error retrieving http://pact status= "
+          end
+        end
+
+        context "when the response is not successful and there is a response" do
+          let(:response) { double('response', code: 200, raw_body: "body") }
+
+          subject(:entity) { ErrorEntity.new("http://pact", pact_hash, http_client, response) }
+
+          it "raises an error" do
+            expect { entity.assert_success! }.to raise_error Pact::Hal::ErrorResponseReturned, "Error retrieving http://pact status=200 body"
+          end
+        end
+      end
+
       describe "can?" do
         context "when the relation exists" do
           it "returns true" do

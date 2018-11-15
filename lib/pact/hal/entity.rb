@@ -7,6 +7,8 @@ module Pact
   module Hal
     class RelationNotFoundError < ::Pact::Error; end
 
+    class ErrorResponseReturned < ::Pact::Error; end
+
     class Entity
 
       def initialize(href, data, http_client, response = nil)
@@ -76,6 +78,10 @@ module Pact
       def respond_to_missing?(method_name, include_private = false)
         @data.key?(method_name) || @links.key?(method_name)
       end
+
+      def assert_success!
+        self
+      end
     end
 
     class ErrorEntity < Entity
@@ -90,6 +96,10 @@ module Pact
 
       def success?
         false
+      end
+
+      def assert_success!
+        raise ErrorResponseReturned.new("Error retrieving #{@href} status=#{response ? response.code: nil} #{response ? response.raw_body : ''}")
       end
     end
   end

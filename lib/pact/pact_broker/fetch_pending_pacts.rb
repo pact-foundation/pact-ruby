@@ -36,7 +36,7 @@ module Pact
       private
 
       def index
-        @index_entity ||= Pact::Hal::Link.new({ "href" => broker_base_url }, http_client).get
+        @index_entity ||= Pact::Hal::Link.new({ "href" => broker_base_url }, http_client).get.assert_success!
       end
 
       def pending_pacts_for_provider

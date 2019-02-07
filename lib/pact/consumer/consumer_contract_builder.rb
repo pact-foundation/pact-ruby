@@ -15,7 +15,7 @@ module Pact
 
       def initialize(attributes)
         @interaction_builder = nil
-        @consumer_contract_details = {
+        @consumer_contract = {
           consumer: {name: attributes[:consumer_name]},
           provider: {name: attributes[:provider_name]},
           pactfile_write_mode: attributes[:pactfile_write_mode].to_s,
@@ -42,7 +42,7 @@ module Pact
       end
 
       def write_pact
-        mock_service_client.write_pact @consumer_contract_details
+        mock_service_client.write_pact @consumer_contract
       end
 
       def wait_for_interactions options = {}

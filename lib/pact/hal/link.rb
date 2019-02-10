@@ -24,6 +24,18 @@ module Pact
           end
       end
 
+      def title_or_name
+        title || name
+      end
+
+      def title
+        @attrs['title']
+      end
+
+      def name
+        @attrs['name']
+      end
+
       def get(payload = {}, headers = {})
         wrap_response(href, @http_client.get(href, payload, headers))
       end

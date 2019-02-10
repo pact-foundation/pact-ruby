@@ -3,12 +3,11 @@ require 'pact/hal/http_client'
 module Pact
   module Hal
     describe HttpClient do
-
       before do
         allow(Retry).to receive(:until_true) { |&block| block.call }
       end
 
-      subject { HttpClient.new(username: 'foo', password: 'bar' ) }
+      subject { HttpClient.new(username: 'foo', password: 'bar') }
 
       describe "get" do
         let!(:request) do

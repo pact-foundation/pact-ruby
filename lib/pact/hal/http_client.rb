@@ -68,6 +68,10 @@ module Pact
           __getobj__().body
         end
 
+        def status
+          code.to_i
+        end
+
         def success?
           __getobj__().code.start_with?("2")
         end

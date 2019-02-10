@@ -1,3 +1,13 @@
+<a name="v1.38.0"></a>
+### v1.38.0 (2019-02-11)
+
+
+#### Features
+
+* unlock rack-test dependency to allow version 1.1.0	 ([b0c40f6](/../../commit/b0c40f6))
+* update http client code	 ([bba3a08](/../../commit/bba3a08))
+
+
 <a name="v1.37.0"></a>
 ### v1.37.0 (2018-11-15)
 

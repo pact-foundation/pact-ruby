@@ -17,6 +17,7 @@ describe "Bar", :pact => true do
         has_pact_with "Bar" do
           mock_service :bar_service do
             pact_specification_version "2"
+            host "127.0.0.1"
             port 4638
           end
         end

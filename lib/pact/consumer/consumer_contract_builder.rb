@@ -21,8 +21,8 @@ module Pact
           pactfile_write_mode: attributes[:pactfile_write_mode].to_s,
           pact_dir: attributes.fetch(:pact_dir)
         }
-        @mock_service_client = Pact::MockService::Client.new(attributes[:port])
-        @mock_service_base_url = "http://localhost:#{attributes[:port]}"
+        @mock_service_client = Pact::MockService::Client.new(attributes[:port], attributes[:host])
+        @mock_service_base_url = "http://#{attributes[:host]}:#{attributes[:port]}"
       end
 
       def given(provider_state)

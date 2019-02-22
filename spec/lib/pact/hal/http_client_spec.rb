@@ -50,7 +50,7 @@ module Pact
               to_return(status: 200, body: response_body, headers: {'Content-Type' => 'application/json'})
           end
 
-          subject { HttpClient.new(broker_token: 'mytoken123') }
+          subject { HttpClient.new(token: 'mytoken123') }
 
           it "sets a bearer authorization header" do
             do_get

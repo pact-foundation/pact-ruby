@@ -11,6 +11,7 @@ module Pact
     method_option :ignore_failures, type: :boolean, default: false, desc: "Process will always exit with exit code 0", hide: true
     method_option :pact_broker_username, aliases: "-u", desc: "Pact broker user name"
     method_option :pact_broker_password, aliases: "-w", desc: "Pact broker password"
+    method_option :pact_broker_token, aliases: "-k", desc: "Pact broker token"
     method_option :backtrace, aliases: "-b", desc: "Show full backtrace", :default => false, :type => :boolean
     method_option :interactions_replay_order, aliases: "-o",
                   desc: "Interactions replay order: randomised or recorded (default)",

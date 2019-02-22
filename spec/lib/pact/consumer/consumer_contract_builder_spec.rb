@@ -16,6 +16,7 @@ module Pact
           provider_name: provider_name,
           pactfile_write_mode: :overwrite,
           port: 2222,
+          host: 'localhost',
           pact_dir: pact_dir)
       end
 
@@ -70,6 +71,7 @@ module Pact
             pact_dir: './spec/pacts',
             consumer_name: consumer_name,
             provider_name: provider_name,
+            host: 'localhost',
         		port: 1234
           )
         end

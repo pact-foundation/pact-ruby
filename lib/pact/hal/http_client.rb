@@ -4,13 +4,13 @@ require 'net/http'
 module Pact
   module Hal
     class HttpClient
-      attr_accessor :username, :password, :verbose, :broker_token
+      attr_accessor :username, :password, :verbose, :token
 
       def initialize options
         @username = options[:username]
         @password = options[:password]
         @verbose = options[:verbose]
-        @broker_token = options[:broker_token]
+        @token = options[:token]
       end
 
       def get href, params = {}, headers = {}
@@ -40,7 +40,7 @@ module Pact
 
         request.body = body if body
         request.basic_auth username, password if username
-        request['Authorization'] = "Bearer #{broker_token}" if broker_token
+        request['Authorization'] = "Bearer #{token}" if token
         request
       end
 

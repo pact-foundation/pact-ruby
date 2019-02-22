@@ -11,13 +11,14 @@ module Pact
 
         extend Pact::DSL
 
-        attr_accessor :port, :standalone, :verify, :provider_name, :consumer_name, :pact_specification_version
+        attr_accessor :port, :host, :standalone, :verify, :provider_name, :consumer_name, :pact_specification_version
 
         def initialize name, consumer_name, provider_name
           @name = name
           @consumer_name = consumer_name
           @provider_name = provider_name
           @port = nil
+          @host = "localhost"
           @standalone = false
           @verify = true
           @pact_specification_version = '2'
@@ -27,6 +28,10 @@ module Pact
         dsl do
           def port port
             self.port = port
+          end
+
+          def host host
+            self.host = host
           end
 
           def standalone standalone
@@ -53,7 +58,7 @@ module Pact
 
         def register_mock_service
           unless standalone
-            url = "http://localhost#{port.nil? ? '' : ":#{port}"}"
+            url = "http://#{host}#{port.nil? ? '' : ":#{port}"}"
             ret = Pact::MockService::AppManager.instance.register_mock_service_for(provider_name, url, mock_service_options)
             raise "pact-mock_service(v#{Pact::MockService::VERSION}) does not support 'find available port' feature" unless ret
             @port = ret
@@ -73,6 +78,7 @@ module Pact
             :provider_name => provider_name,
             :pactfile_write_mode => Pact.configuration.pactfile_write_mode,
             :port => port,
+            :host => host,
             :pact_dir => Pact.configuration.pact_dir
           }
           Pact::Consumer::ConsumerContractBuilder.new consumer_contract_builder_fields

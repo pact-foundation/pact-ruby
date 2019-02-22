@@ -1,3 +1,12 @@
+<a name="v1.39.0"></a>
+### v1.39.0 (2019-02-21)
+
+
+#### Features
+
+* allow host of mock service to be specified	 ([de267bd](/../../commit/de267bd))
+
+
 <a name="v1.38.0"></a>
 ### v1.38.0 (2019-02-11)
 

@@ -1,3 +1,13 @@
+<a name="v1.40.0"></a>
+### v1.40.0 (2019-02-22)
+
+
+#### Features
+
+* remove ruby 2.2 tests	 ([4a30791](/../../commit/4a30791))
+* add support for bearer token	 ([297268d](/../../commit/297268d))
+
+
 <a name="v1.39.0"></a>
 ### v1.39.0 (2019-02-21)
 

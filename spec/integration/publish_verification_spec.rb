@@ -20,7 +20,7 @@ describe "publishing verifications" do
   end
 
   let(:pact_uri) do
-    instance_double('Pact::Provider::PactURI', uri: 'pact.json', basic_auth?: false)
+    instance_double('Pact::Provider::PactURI', uri: 'pact.json', options: {})
   end
 
   let(:pact_hash) do

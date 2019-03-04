@@ -9,7 +9,8 @@ module Pact
           let(:stubbed_publish_verification_url) { 'http://broker/something/provider/Bar/verifications' }
           let(:tag_version_url) { 'http://tag-me/{tag}' }
           let(:pact_source) { instance_double("Pact::Provider::PactSource", pact_hash: pact_hash, uri: pact_url)}
-          let(:pact_url) { instance_double("Pact::Provider::PactURI", basic_auth?: basic_auth, username: 'username', password: 'password')}
+          let(:pact_url) { instance_double("Pact::Provider::PactURI", options: options) }
+          let(:options) { { username: 'username', password: 'password' } }
           let(:provider_url) { 'http://provider' }
           let(:basic_auth) { false }
           let(:pact_hash) do
@@ -154,10 +155,18 @@ module Pact
               end
 
               context "when basic auth is configured on the pact URL" do
-                let(:basic_auth) { true }
-                it "sets the username and password for the pubication URL" do
+                it "sets the username and password for the publication URL" do
                   subject
                   expect(WebMock).to have_requested(:post, publish_verification_url).with(basic_auth: ['username', 'password'])
+                end
+              end
+
+              context "when a token is configured on the pact URL" do
+                let(:options) { {token: 'token'} }
+
+                it "sets the authorization header" do
+                  subject
+                  expect(WebMock).to have_requested(:post, publish_verification_url).with(headers: { 'Authorization' => 'Bearer token'})
                 end
               end
 

@@ -24,13 +24,7 @@ module Pact
         def initialize pact_source, verification_result
           @pact_source = pact_source
           @verification_result = verification_result
-
-          http_client_options = {}
-          if pact_source.uri.basic_auth?
-            http_client_options[:username] = pact_source.uri.username
-            http_client_options[:password] = pact_source.uri.password
-          end
-
+          http_client_options = pact_source.uri.options.reject{ |k, v| ![:username, :password, :token].include?(k) }
           @http_client = Pact::Hal::HttpClient.new(http_client_options)
           @pact_entity = Pact::Hal::Entity.new(pact_source.uri, pact_source.pact_hash, http_client)
         end

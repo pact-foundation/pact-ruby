@@ -41,6 +41,22 @@ module Pact
           end
         end
 
+        context "with broker token set" do
+          let!(:request) do
+            stub_request(:any, /.*/).
+              with(  headers: {
+                'Authorization'=>'Bearer mytoken123'
+              }).
+              to_return(status: 200, body: response_body, headers: {'Content-Type' => 'application/json'})
+          end
+
+          subject { HttpClient.new(token: 'mytoken123') }
+
+          it "sets a bearer authorization header" do
+            do_get
+            expect(request).to have_been_made
+          end
+        end
 
         it "retries on failure" do
           expect(Retry).to receive(:until_true)

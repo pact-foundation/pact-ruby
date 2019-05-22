@@ -1,4 +1,5 @@
 require 'pact/retry'
+require 'pact/hal/authorization_header_redactor'
 require 'net/http'
 
 module Pact
@@ -47,13 +48,17 @@ module Pact
       def perform_request request, uri
         response = Retry.until_true do
           http = Net::HTTP.new(uri.host, uri.port, :ENV)
-          http.set_debug_output(Pact.configuration.output_stream) if verbose
+          http.set_debug_output(output_stream) if verbose
           http.use_ssl = (uri.scheme == 'https')
           http.start do |http|
             http.request request
           end
         end
         Response.new(response)
+      end
+
+      def output_stream
+        AuthorizationHeaderRedactor.new(Pact.configuration.output_stream)
       end
 
       class Response < SimpleDelegator

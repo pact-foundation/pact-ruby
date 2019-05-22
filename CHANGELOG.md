@@ -1,3 +1,12 @@
+<a name="v1.41.0"></a>
+### v1.41.0 (2019-05-22)
+
+
+#### Features
+
+* redact Authorization header from HTTP client debug output	 ([c48c991](/../../commit/c48c991))
+
+
 <a name="v1.40.0"></a>
 ### v1.40.0 (2019-02-22)
 

@@ -1,6 +1,7 @@
 require 'pact/retry'
 require 'pact/hal/authorization_header_redactor'
 require 'net/http'
+require 'rack'
 
 module Pact
   module Hal
@@ -15,9 +16,11 @@ module Pact
       end
 
       def get href, params = {}, headers = {}
-        query = params.collect{ |(key, value)| "#{CGI::escape(key)}=#{CGI::escape(value)}" }.join("&")
         uri = URI(href)
-        uri.query = query
+        if params && params.any?
+          existing_params = Rack::Utils.parse_nested_query(uri.query)
+          uri.query = Rack::Utils.build_nested_query(existing_params.merge(params))
+        end
         perform_request(create_request(uri, 'Get', nil, headers), uri)
       end
 

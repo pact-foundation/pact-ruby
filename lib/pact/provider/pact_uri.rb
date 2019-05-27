@@ -1,17 +1,19 @@
 module Pact
   module Provider
     class PactURI
-      attr_reader :uri, :options
+      attr_reader :uri, :options, :metadata
 
-      def initialize (uri, options={})
+      def initialize (uri, options={}, metadata = {})
         @uri = uri
         @options = options
+        @metadata = metadata
       end
 
       def == other
         other.is_a?(PactURI) &&
           uri == other.uri &&
-          options == other.options
+          options == other.options &&
+          metadata == other.metadata
       end
 
       def basic_auth?

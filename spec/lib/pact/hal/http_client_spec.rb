@@ -39,6 +39,20 @@ module Pact
              do_get
              expect(request).to have_been_made
           end
+
+          context "when there are existing params on the URL" do
+            let!(:request) do
+              stub_request(:get, "http://example.org/?foo=hello+world&bar=wiffle&a=b").
+                to_return(status: 200)
+            end
+
+            let(:do_get) { subject.get('http://example.org?foo=bar&a=b', { 'foo' => 'hello world', 'bar' => 'wiffle' }) }
+
+            it "merges them in" do
+              do_get
+              expect(request).to have_been_made
+            end
+          end
         end
 
         context "with broker token set" do

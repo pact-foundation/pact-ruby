@@ -21,11 +21,11 @@ module Pact
         include ::RSpec::Core::DSL
 
         def honour_pactfile pact_uri, pact_json, options
-          pact_description = options[:ignore_failures] ? "Pending pact" : "pact"
-          Pact.configuration.output_stream.puts "INFO: Reading #{pact_description} at #{pact_uri}"
-          Pact.configuration.output_stream.puts "INFO: Filtering interactions by: #{options[:criteria]}" if options[:criteria] && options[:criteria].any?
+          Pact.configuration.output_stream.puts "INFO: Reading pact at #{pact_uri}"
+          Pact.configuration.output_stream.puts "DEBUG: Filtering interactions by: #{options[:criteria]}" if options[:criteria] && options[:criteria].any?
           consumer_contract = Pact::ConsumerContract.from_json(pact_json)
-          ::RSpec.describe "Verifying a #{pact_description} between #{consumer_contract.consumer.name} and #{consumer_contract.provider.name}", pactfile_uri: pact_uri do
+          suffix = options[:ignore_failures] ? " [PENDING]": ""
+          ::RSpec.describe "Verifying a pact between #{consumer_contract.consumer.name} and #{consumer_contract.provider.name}#{suffix}", pactfile_uri: pact_uri do
             honour_consumer_contract consumer_contract, options.merge(pact_json: pact_json, pact_uri: pact_uri)
           end
         end

@@ -45,7 +45,12 @@ module Pact
         private
 
         def create_pact_verification
-          fetch_pacts = Pact::PactBroker::FetchPacts.new(_provider_name, _consumer_version_tags, _pact_broker_base_url, _basic_auth_options.merge(verbose: _verbose))
+          fetch_pacts = Pact::PactBroker::FetchPacts.new(
+            _provider_name,
+            _consumer_version_tags,
+            _pact_broker_base_url,
+            _basic_auth_options.merge(verbose: _verbose)
+          )
           Pact.provider_world.add_pact_uri_source fetch_pacts
         end
 

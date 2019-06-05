@@ -13,6 +13,7 @@ module Pact
       HREF = 'href'.freeze
       LINKS = '_links'.freeze
       SELF = 'self'.freeze
+      EMBEDDED = '_embedded'.freeze
 
       def initialize(provider, query, broker_base_url, http_client_options)
         @provider = provider
@@ -53,8 +54,13 @@ module Pact
       end
 
       def pacts_for_verification
-        pacts_for_verification_entity.response.body[PACTS].collect do | pact |
-          Pact::Provider::PactURI.new(pact[LINKS][SELF][HREF], http_client_options, { pending: pact["pending"] })
+        pacts_for_verification_entity.response.body[EMBEDDED][PACTS].collect do | pact |
+          metadata = {
+            pending: pact["verificationProperties"]["pending"],
+            pending_reason: pact["verificationProperties"]["pendingReason"],
+            inclusion_reason: pact["verificationProperties"]["inclusionReason"],
+          }
+          Pact::Provider::PactURI.new(pact[LINKS][SELF][HREF], http_client_options, metadata)
         end
       end
 

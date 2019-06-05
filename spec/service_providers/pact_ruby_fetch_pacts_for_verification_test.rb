@@ -55,22 +55,36 @@ describe Pact::PactBroker::FetchPactsForVerification, pact: true do
           .will_respond_with(
             status: 200,
             body: {
-              "pacts" => [{
-                "pending" => Pact.like(true),
-                '_links' => {
-                  "self" => {
-                    "href" => Pact.term('http://pact-broker-url-for-foo', %r{http://.*})
+              "_embedded" => {
+                "pacts" => [{
+                  "verificationProperties" => {
+                    "pending" => Pact.like(true),
+                    "pendingReason" => Pact.like("pending reason"),
+                    "inclusionReason" => Pact.like("inclusion reason")
+                  },
+                  '_links' => {
+                    "self" => {
+                      "href" => Pact.term('http://pact-broker-url-for-foo', %r{http://.*})
+                    }
                   }
-                }
-              }]
+                }]
+              }
             }
           )
+      end
+
+      let(:expected_metadata) do
+        {
+          pending: true,
+          inclusion_reason: "inclusion reason",
+          pending_reason: "pending reason"
+         }
       end
 
       it 'returns the array of pact urls' do
         expect(subject).to eq(
           [
-            Pact::Provider::PactURI.new('http://pact-broker-url-for-foo', basic_auth_options, { pending: true })
+            Pact::Provider::PactURI.new('http://pact-broker-url-for-foo', basic_auth_options, expected_metadata)
           ]
         )
       end

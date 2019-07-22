@@ -306,7 +306,7 @@ Currently, Ruby Pact supports writing Pacts in v2, and verifying Pacts in v3 for
 
 ## Links
 
-[Simplifying microservices testing with pacts](http://dius.com.au/2014/05/20/simplifying-micro-service-testing-with-pacts/) - Ron Holshausen (one of the original pact authors)
+[Simplifying microservices testing with pacts](http://dius.com.au/2014/05/19/simplifying-micro-service-testing-with-pacts/) - Ron Holshausen (one of the original pact authors)
 
 [Pact specification](https://github.com/pact-foundation/pact-specification)
 

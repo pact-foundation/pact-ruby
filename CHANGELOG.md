@@ -1,3 +1,12 @@
+<a name="v1.41.1"></a>
+### v1.41.1 (2019-09-04)
+
+
+#### Bug Fixes
+
+* use to_json instead of JSON.dump because it generates different JSON when used in conjuction with other libraries (eg. Oj)	 ([14566fb](/../../commit/14566fb))
+
+
 <a name="v1.41.0"></a>
 ### v1.41.0 (2019-05-22)
 

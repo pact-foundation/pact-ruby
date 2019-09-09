@@ -20,6 +20,12 @@ Gem::Specification.new do |gem|
   gem.require_paths = ["lib"]
   gem.license       = 'MIT'
 
+  gem.metadata = {
+    'source_code_uri'   => 'https://github.com/pact-foundation/pact-ruby',
+    'bug_tracker_uri'   => 'https://github.com/pact-foundation/pact-ruby/issues',
+    'documentation_uri' => 'https://github.com/pact-foundation/pact-ruby/blob/master/README.md'
+  }
+
   gem.add_runtime_dependency 'randexp', '~> 0.1.7'
   gem.add_runtime_dependency 'rspec', '>=2.14'
   gem.add_runtime_dependency 'rack-test', '>= 0.6.3', '< 2.0.0'

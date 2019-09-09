@@ -1,3 +1,15 @@
+<a name="v1.41.2"></a>
+### v1.41.2 (2019-09-10)
+
+
+#### Bug Fixes
+
+* **pact_helper_locator**
+  * add 'test' dir to file patterns (#196)	 ([746883d](/../../commit/746883d))
+
+* file upload spec	 ([0fe072c](/../../commit/0fe072c))
+
+
 <a name="v1.41.1"></a>
 ### v1.41.1 (2019-09-04)
 

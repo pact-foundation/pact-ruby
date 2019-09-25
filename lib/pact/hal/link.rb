@@ -45,11 +45,11 @@ module Pact
       end
 
       def put(payload = nil, headers = {})
-        wrap_response(href, @http_client.put(href, payload ? JSON.dump(payload) : nil, headers))
+        wrap_response(href, @http_client.put(href, payload ? payload.to_json : nil, headers))
       end
 
       def post(payload = nil, headers = {})
-        wrap_response(href, @http_client.post(href, payload ? JSON.dump(payload) : nil, headers))
+        wrap_response(href, @http_client.post(href, payload ? payload.to_json : nil, headers))
       end
 
       def expand(params)

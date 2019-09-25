@@ -32,12 +32,11 @@ describe "A consumer with a file upload", :pact => true  do
 
   let(:do_request) { connection.post { |req| req.body = payload } }
 
+  let(:body) do
+    "-------------RubyMultipartPost-05e76cbc2adb42ac40344eb9b35e98bc\r\nContent-Disposition: form-data; name=\"file\"; filename=\"text.txt\"\r\nContent-Length: 14\r\nContent-Type: text/plain\r\nContent-Transfer-Encoding: binary\r\n\r\n#{File.read(file_to_upload)}\r\n-------------RubyMultipartPost-05e76cbc2adb42ac40344eb9b35e98bc--\r\n"
+  end
+
   describe "when the content matches" do
-
-    let(:body) do
-      "-------------RubyMultipartPost-05e76cbc2adb42ac40344eb9b35e98bc\r\nContent-Disposition: form-data; name=\"file\"; filename=\"text.txt\"\r\nContent-Length: 14\r\nContent-Type: text/plain\r\nContent-Transfer-Encoding: binary\r\n\r\nThis is a file\r\n-------------RubyMultipartPost-05e76cbc2adb42ac40344eb9b35e98bc--\r\n\r\n"
-    end
-
     it "returns the mocked response and verification passes" do
       file_upload_service.
         upon_receiving("a request to upload a file").with({
@@ -60,22 +59,15 @@ describe "A consumer with a file upload", :pact => true  do
   end
 
   describe "when the content does not match" do
-
-    let(:body) do
-      "-------------RubyMultipartPost-05e76cbc2adb42ac40344eb9b35e98bc\r\nContent-Disposition: form-data; name=\"file\"; filename=\"TEXT.txt\"\r\nContent-Length: 14\r\nContent-Type: text/plain\r\nContent-Transfer-Encoding: binary\r\n\r\nThis is a file\r\n-------------RubyMultipartPost-05e76cbc2adb42ac40344eb9b35e98bc--\r\n\r\n"
-    end
-
     it "the verification fails" do
       file_upload_service.
         upon_receiving("a request to upload another file").with({
         method: :post,
         path: '/files',
-        query: "foo=bar",
-        body: body,
+        body: body.gsub('text.txt', 'wrong.txt'),
         headers: {
           "Content-Type" => Pact.term(/multipart\/form\-data/, "multipart/form-data; boundary=-----------RubyMultipartPost-05e76cbc2adb42ac40344eb9b35e98bc"),
-          "Content-Length" => Pact.like("299"),
-          "Missing" => "header"
+          "Content-Length" => Pact.like("299")
         }
       }).
         will_respond_with({

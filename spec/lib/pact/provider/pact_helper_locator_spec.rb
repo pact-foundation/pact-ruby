@@ -20,6 +20,12 @@ module Pact::Provider
         '/spec/serviceconsumers',
         '/spec/consumer',
         '/spec',
+        '/test/blah/service-consumers',
+        '/test/consumers',
+        '/test/blah/service_consumers',
+        '/test/serviceconsumers',
+        '/test/consumer',
+        '/test',
         '/blah',
         '/blah/consumer',
         ''

@@ -26,6 +26,8 @@ task 'pact:foobar:publish' do
 
   tag_response = Faraday.put("#{BROKER_BASE_URL}/pacticipants/Foo/versions/1.0.0/tags/dev", nil, { 'Content-Type' => 'application/json' })
   puts tag_response.status unless tag_response.status == 200
+  tag_response = Faraday.put("#{BROKER_BASE_URL}/pacticipants/Foo/versions/1.0.0/tags/prod", nil, { 'Content-Type' => 'application/json' })
+  puts tag_response.status unless tag_response.status == 200
 end
 
 #'./spec/pacts/foo-bar.json'

@@ -2,6 +2,7 @@ require 'pact/hal/entity'
 require 'pact/hal/http_client'
 require 'pact/provider/pact_uri'
 require 'pact/errors'
+require 'pact/pact_broker/fetch_pacts'
 
 module Pact
   module PactBroker
@@ -33,7 +34,9 @@ module Pact
           log_message
           pacts_for_verification
         else
-          []
+          # Fall back to old method of fetching pacts
+          consumer_version_tags = consumer_version_selectors.collect{ | selector | selector[:tag] }
+          FetchPacts.call(provider, consumer_version_tags, broker_base_url, http_client_options)
         end
       end
 

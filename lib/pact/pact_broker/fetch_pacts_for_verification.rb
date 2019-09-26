@@ -6,7 +6,7 @@ require 'pact/errors'
 module Pact
   module PactBroker
     class FetchPactsForVerification
-      attr_reader :provider, :query, :broker_base_url, :http_client_options, :http_client
+      attr_reader :provider, :consumer_version_selectors, :provider_version_tags, :broker_base_url, :http_client_options, :http_client
 
       PACTS_FOR_VERIFICATION_RELATION = 'beta:provider-pacts-for-verification'.freeze
       PACTS = 'pacts'.freeze
@@ -15,16 +15,17 @@ module Pact
       SELF = 'self'.freeze
       EMBEDDED = '_embedded'.freeze
 
-      def initialize(provider, query, broker_base_url, http_client_options)
+      def initialize(provider, consumer_version_selectors, provider_version_tags, broker_base_url, http_client_options)
         @provider = provider
-        @query = query
+        @consumer_version_selectors = consumer_version_selectors
+        @provider_version_tags = provider_version_tags
         @http_client_options = http_client_options
         @broker_base_url = broker_base_url
         @http_client = Pact::Hal::HttpClient.new(http_client_options)
       end
 
-      def self.call(provider, query, broker_base_url, http_client_options)
-        new(provider, query, broker_base_url, http_client_options).call
+      def self.call(provider, consumer_version_selectors, provider_version_tags, broker_base_url, http_client_options)
+        new(provider, consumer_version_selectors, provider_version_tags, broker_base_url, http_client_options).call
       end
 
       def call
@@ -37,17 +38,6 @@ module Pact
       end
 
       private
-
-      def tagged_pacts_for_provider
-        tags.collect do |tag|
-          link = link_for(tag)
-          urls = pact_urls(link.expand(provider: provider, tag: tag[:name]).get)
-          if urls.empty? && tag[:fallback]
-            urls = pact_urls(link.expand(provider: provider, tag: tag[:fallback]).get)
-          end
-          urls
-        end.flatten
-      end
 
       def index
         @index_entity ||= Pact::Hal::Link.new({ "href" => broker_base_url }, http_client).get.assert_success!
@@ -72,8 +62,30 @@ module Pact
           .get!
       end
 
+      def query
+        q = {}
+        if consumer_version_selectors&.any?
+          q["consumer_version_selectors"] = consumer_version_selectors
+        end
+
+        if provider_version_tags&.any?
+          q["provider_version_tags"] = provider_version_tags
+        end
+        q
+      end
+
       def log_message
-        message = "INFO: Fetching pacts for #{provider} from #{broker_base_url}"
+        latest = consumer_version_selectors&.any? ? "" : "latest "
+        message = "INFO: Fetching #{latest}pacts for #{provider} from #{broker_base_url}"
+        if consumer_version_selectors&.any?
+          desc = consumer_version_selectors.collect do |selector|
+            all_or_latest = selector[:all] ? "all" : "latest"
+            # TODO support fallback
+            name = selector[:fallback] ? "#{selector[:tag]} (or #{selector[:fallback]} if not found)" : selector[:tag]
+            "#{all_or_latest} #{name}"
+          end.join(", ")
+          message << " for tags: #{desc}"
+        end
         Pact.configuration.output_stream.puts message
       end
     end

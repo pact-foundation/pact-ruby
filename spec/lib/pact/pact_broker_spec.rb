@@ -17,8 +17,8 @@ module Pact
         subject
       end
 
-      it "returns a list of string URLs" do
-        expect(subject).to eq ["http://pact"]
+      it "returns a list of pact uris" do
+        expect(subject).to eq [pact_uri]
       end
     end
 

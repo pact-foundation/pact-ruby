@@ -8,9 +8,17 @@ describe Pact::PactBroker::FetchPactsForVerification, pact: true do
 
   let(:get_headers) { { Accept: 'application/hal+json' } }
   let(:pacts_for_verification_relation) { Pact::PactBroker::FetchPactsForVerification::PACTS_FOR_VERIFICATION_RELATION }
-  let(:query) { { "provider_version_tags" => %[dev] } }
+  let(:query) do
+    {
+      "provider_version_tags[]"  => "pdev",
+      "consumer_version_selectors[][tag]" => "cdev",
+      "consumer_version_selectors[][latest]" => "true",
+    }
+  end
+  let(:provider_version_tags) { %w[pdev] }
+  let(:consumer_version_selectors) { [ { tag: "cdev", latest: true }] }
 
-  subject { Pact::PactBroker::FetchPactsForVerification.call(provider, query,broker_base_url, basic_auth_options) }
+  subject { Pact::PactBroker::FetchPactsForVerification.call(provider, consumer_version_selectors, provider_version_tags, broker_base_url, basic_auth_options) }
 
   describe 'fetch pacts' do
     let(:provider) { 'Bar' }

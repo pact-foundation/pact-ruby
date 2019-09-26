@@ -6,6 +6,7 @@ module Pact
       describe PactVerificationFromBroker do
         describe 'build' do
           let(:provider_name) {'provider-name'}
+          let(:provider_version_tags) { ['master'] }
           let(:base_url) { "http://broker.org" }
           let(:basic_auth_options) do
             {
@@ -16,13 +17,13 @@ module Pact
           let(:tags) { ['master'] }
 
           before do
-            allow(Pact::PactBroker::FetchPacts).to receive(:new).and_return(fetch_pacts)
+            allow(Pact::PactBroker::FetchPactsForVerification).to receive(:new).and_return(fetch_pacts)
             allow(Pact.provider_world).to receive(:add_pact_uri_source)
           end
 
           context "with valid values" do
             subject do
-              PactVerificationFromBroker.build(provider_name) do
+              PactVerificationFromBroker.build(provider_name, provider_version_tags) do
                 pact_broker_base_url base_url, basic_auth_options
                 consumer_version_tags tags
                 verbose true
@@ -31,9 +32,10 @@ module Pact
 
             let(:fetch_pacts) { double('FetchPacts') }
             let(:options) { basic_auth_options.merge(verbose: true) }
+            let(:consumer_version_selectors) { [ { tag: 'master', latest: true }] }
 
-            it "creates a instance of Pact::PactBroker::FetchPacts" do
-              expect(Pact::PactBroker::FetchPacts).to receive(:new).with(provider_name, tags, base_url, options)
+            it "creates a instance of Pact::PactBroker::FetchPactsForVerification" do
+              expect(Pact::PactBroker::FetchPactsForVerification).to receive(:new).with(provider_name, consumer_version_selectors, provider_version_tags, base_url, options)
               subject
             end
 
@@ -45,7 +47,7 @@ module Pact
 
           context "with a missing base url" do
             subject do
-              PactVerificationFromBroker.build(provider_name) do
+              PactVerificationFromBroker.build(provider_name, provider_version_tags) do
 
               end
             end
@@ -59,7 +61,7 @@ module Pact
 
           context "with a non array object for consumer_version_tags" do
             subject do
-              PactVerificationFromBroker.build(provider_name) do
+              PactVerificationFromBroker.build(provider_name, provider_version_tags) do
                 pact_broker_base_url base_url
                 consumer_version_tags "master"
               end
@@ -68,14 +70,14 @@ module Pact
             let(:fetch_pacts) { double('FetchPacts') }
 
             it "coerces the value into an array" do
-              expect(Pact::PactBroker::FetchPacts).to receive(:new).with(anything, ["master"], anything, anything)
+              expect(Pact::PactBroker::FetchPactsForVerification).to receive(:new).with(anything, [{ tag: "master", latest: true}], anything, anything, anything)
               subject
             end
           end
 
           context "when no consumer_version_tags are provided" do
             subject do
-              PactVerificationFromBroker.build(provider_name) do
+              PactVerificationFromBroker.build(provider_name, provider_version_tags) do
                 pact_broker_base_url base_url
               end
             end
@@ -83,22 +85,22 @@ module Pact
             let(:fetch_pacts) { double('FetchPacts') }
 
             it "creates an instance of FetchPacts with an emtpy array for the consumer_version_tags" do
-              expect(Pact::PactBroker::FetchPacts).to receive(:new).with(anything, [], anything, anything)
+              expect(Pact::PactBroker::FetchPactsForVerification).to receive(:new).with(anything, [], anything, anything, anything)
               subject
             end
           end
 
           context "when no verbose flag is provided" do
             subject do
-              PactVerificationFromBroker.build(provider_name) do
+              PactVerificationFromBroker.build(provider_name, provider_version_tags) do
                 pact_broker_base_url base_url
               end
             end
 
             let(:fetch_pacts) { double('FetchPacts') }
 
-            it "creates an instance of FetchPacts with verbose: false" do
-              expect(Pact::PactBroker::FetchPacts).to receive(:new).with(anything, anything, anything, hash_including(verbose: false))
+            it "creates an instance of FetchPactsForVerification with verbose: false" do
+              expect(Pact::PactBroker::FetchPactsForVerification).to receive(:new).with(anything, anything, anything, anything, hash_including(verbose: false))
               subject
             end
           end

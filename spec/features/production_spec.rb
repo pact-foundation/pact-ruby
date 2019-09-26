@@ -81,7 +81,7 @@ module Pact::Provider
         end
     end
 
-    honour_consumer_contract pact
+    honour_consumer_contract pact, pact_uri: Pact::Provider::PactURI.new("http://dummy-uri")
 
   end
 
@@ -116,7 +116,7 @@ module Pact::Provider
         end
 
 
-        honour_consumer_contract consumer_contract
+        honour_consumer_contract consumer_contract, pact_uri: Pact::Provider::PactURI.new("http://dummy-uri")
     end
 
     context "that is a string" do
@@ -148,7 +148,7 @@ module Pact::Provider
         end
 
 
-        honour_consumer_contract consumer_contract
+        honour_consumer_contract consumer_contract, pact_uri: Pact::Provider::PactURI.new("http://dummy-uri")
     end
 
   end

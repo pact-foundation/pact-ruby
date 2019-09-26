@@ -1,4 +1,5 @@
 require 'pact/tasks/verification_task'
+require 'faraday'
 # Use for end to end manual debugging of issues.
 
 BROKER_BASE_URL = 'http://localhost:9292'
@@ -22,6 +23,9 @@ task 'pact:foobar:publish' do
     http.request put_request
   end
   puts response.code unless response.code == '200'
+
+  tag_response = Faraday.put("#{BROKER_BASE_URL}/pacticipants/Foo/versions/1.0.0/tags/dev", nil, { 'Content-Type' => 'application/json' })
+  puts tag_response.status unless tag_response.status == 200
 end
 
 #'./spec/pacts/foo-bar.json'

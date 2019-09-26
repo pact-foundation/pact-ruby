@@ -65,7 +65,7 @@ module Pact
         end
 
         def create_pact_verification_from_broker(&block)
-          PactVerificationFromBroker.build(name, &block)
+          PactVerificationFromBroker.build(name, tags, &block)
         end
 
         def finalize

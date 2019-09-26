@@ -40,6 +40,10 @@ module Pact
         wrap_response(href, @http_client.get(href, payload, headers))
       end
 
+      def get!(*args)
+        get(*args).assert_success!
+      end
+
       def put(payload = nil, headers = {})
         wrap_response(href, @http_client.put(href, payload ? payload.to_json : nil, headers))
       end
@@ -51,10 +55,24 @@ module Pact
       def expand(params)
         expanded_url = expand_url(params, href)
         new_attrs = @attrs.merge('href' => expanded_url)
-        Link.new(new_attrs, @http_client)
+        Link.new(new_attrs, http_client)
+      end
+
+      def with_query(query)
+        if query && query.any?
+          uri = URI(href)
+          existing_query_params = Rack::Utils.parse_nested_query(uri.query)
+          uri.query = Rack::Utils.build_nested_query(existing_query_params.merge(query))
+          new_attrs = attrs.merge('href' => uri.to_s)
+          Link.new(new_attrs, http_client)
+        else
+          self
+        end
       end
 
       private
+
+      attr_reader :attrs, :http_client
 
       def wrap_response(href, http_response)
         require 'pact/hal/entity' # avoid circular reference

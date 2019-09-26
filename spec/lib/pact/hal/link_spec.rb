@@ -19,9 +19,10 @@ module Pact
         instance_double('Pact::Hal::Entity')
       end
 
+      let(:href) { 'http://foo/{bar}' }
       let(:attrs) do
         {
-          'href' => 'http://foo/{bar}',
+          'href' => href,
           'title' => 'title',
           method: :post
         }
@@ -91,6 +92,14 @@ module Pact
             expect(http_client).to receive(:post).with('http://foo/{bar}', '{"foo":"bar"}', { 'Accept' => 'foo' })
             do_post
           end
+        end
+      end
+
+      describe "#with_query" do
+        let(:href) { "http://example.org?a=1&b=2" }
+
+        it "returns a link with the new query merged into the existing query" do
+          expect(subject.with_query("a" => "5", "c" => "3").href).to eq "http://example.org?a=5&b=2&c=3"
         end
       end
 

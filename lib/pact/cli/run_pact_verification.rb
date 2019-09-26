@@ -44,15 +44,17 @@ module Pact
       end
 
       def run_specs
-        exit_code = if options[:pact_uri]
-          run_with_pact_uri
+        exit_code = if options[:pact_uri].is_a?(String)
+          run_with_pact_url_string
+        elsif options[:pact_uri]
+          run_with_pact_uri_object # from pact-provider-verifier
         else
-          run_with_configured_pacts
+          run_with_configured_pacts_from_pact_helper
         end
         exit exit_code
       end
 
-      def run_with_pact_uri
+      def run_with_pact_url_string
         pact_repository_uri_options = {}
         pact_repository_uri_options[:username] = options[:pact_broker_username] if options[:pact_broker_username]
         pact_repository_uri_options[:password] = options[:pact_broker_password] if options[:pact_broker_password]
@@ -61,7 +63,11 @@ module Pact
         Pact::Provider::PactSpecRunner.new([pact_uri], pact_spec_options).run
       end
 
-      def run_with_configured_pacts
+      def run_with_pact_uri_object
+        Pact::Provider::PactSpecRunner.new([options[:pact_uri]], pact_spec_options).run
+      end
+
+      def run_with_configured_pacts_from_pact_helper
         pact_urls = Pact.provider_world.pact_urls
         raise "Please configure a pact to verify" if pact_urls.empty?
         Pact::Provider::PactSpecRunner.new(pact_urls, pact_spec_options).run

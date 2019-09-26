@@ -21,11 +21,13 @@ module Pact
         include ::RSpec::Core::DSL
 
         def honour_pactfile pact_uri, pact_json, options
-          pact_description = options[:ignore_failures] ? "Pending pact" : "pact"
-          Pact.configuration.output_stream.puts "INFO: Reading #{pact_description} at #{pact_uri}"
-          Pact.configuration.output_stream.puts "INFO: Filtering interactions by: #{options[:criteria]}" if options[:criteria] && options[:criteria].any?
+          Pact.configuration.output_stream.puts "INFO: Reading pact at #{pact_uri}"
+          Pact.configuration.output_stream.puts("DEBUG: #{pact_uri.metadata[:inclusion_reason]}") if pact_uri.metadata[:inclusion_reason]
+          Pact.configuration.output_stream.puts("DEBUG: #{pact_uri.metadata[:pending_reason]}") if pact_uri.metadata[:pending_reason]
+          Pact.configuration.output_stream.puts "DEBUG: Filtering interactions by: #{options[:criteria]}" if options[:criteria] && options[:criteria].any?
           consumer_contract = Pact::ConsumerContract.from_json(pact_json)
-          ::RSpec.describe "Verifying a #{pact_description} between #{consumer_contract.consumer.name} and #{consumer_contract.provider.name}", pactfile_uri: pact_uri do
+          suffix = pact_uri.metadata[:pending] ? " [PENDING]": ""
+          ::RSpec.describe "Verifying a pact between #{consumer_contract.consumer.name} and #{consumer_contract.provider.name}#{suffix}", pactfile_uri: pact_uri do
             honour_consumer_contract consumer_contract, options.merge(pact_json: pact_json, pact_uri: pact_uri)
           end
         end
@@ -74,7 +76,7 @@ module Pact
             pact_interaction: interaction,
             pact_interaction_example_description: interaction_description_for_rerun_command(interaction),
             pact_uri: options[:pact_uri],
-            pact_ignore_failures: options[:ignore_failures]
+            pact_ignore_failures: options[:pact_uri].metadata[:pending]
           }
 
           describe description_for(interaction), metadata do

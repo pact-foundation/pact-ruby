@@ -1,8 +1,8 @@
-require 'pact/pact_broker/fetch_pending_pacts'
+require 'pact/pact_broker/fetch_pact_uris_for_verification'
 
 module Pact
   module PactBroker
-    describe FetchPendingPacts do
+    describe FetchPactURIsForVerification do
       describe "call" do
         before do
           allow(Pact.configuration).to receive(:output_stream).and_return(double('output stream').as_null_object)
@@ -11,7 +11,10 @@ module Pact
         let(:provider) { "Foo"}
         let(:broker_base_url) { "http://broker.org" }
         let(:http_client_options) { {} }
-        subject { FetchPendingPacts.call(provider, broker_base_url, http_client_options)}
+        let(:consumer_version_selectors) { [{ tag: "cmaster", latest: true}] }
+        let(:provider_version_tags) { ["pmaster"] }
+
+        subject { FetchPactURIsForVerification.call(provider, consumer_version_selectors, provider_version_tags, broker_base_url, http_client_options)}
 
         context "when there is an error retrieving the index resource" do
           before do
@@ -32,8 +35,9 @@ module Pact
           end
         end
 
-        context "when the pb:pending-provider-pacts relation does not exist" do
+        context "when the beta:provider-pacts-for-verification relation does not exist" do
           before do
+            allow(FetchPacts).to receive(:call)
             stub_request(:get, "http://broker.org/").to_return(status: 200, body: response_body, headers: response_headers)
           end
 
@@ -44,8 +48,9 @@ module Pact
             }.to_json
           end
 
-          it "returns an empty list" do
-            expect(subject).to eq []
+          it "calls the old fetch pacts code" do
+            expect(FetchPacts).to receive(:call).with(provider, ["cmaster"], broker_base_url, http_client_options)
+            subject
           end
         end
       end

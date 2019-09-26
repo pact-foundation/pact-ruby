@@ -1,3 +1,12 @@
+<a name="v1.42.0"></a>
+### v1.42.0 (2019-09-26)
+
+
+#### Features
+
+* use new 'pacts for verification' endpoint to retrieve pacts (#199)	 ([55bb935](/../../commit/55bb935))
+
+
 <a name="v1.41.2"></a>
 ### v1.41.2 (2019-09-10)
 

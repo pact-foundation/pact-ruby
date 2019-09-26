@@ -6,7 +6,7 @@ require 'pact/pact_broker/fetch_pacts'
 
 module Pact
   module PactBroker
-    class FetchPactsForVerification
+    class FetchPactURIsForVerification
       attr_reader :provider, :consumer_version_selectors, :provider_version_tags, :broker_base_url, :http_client_options, :http_client
 
       PACTS_FOR_VERIFICATION_RELATION = 'beta:provider-pacts-for-verification'.freeze

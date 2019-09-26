@@ -1,13 +1,13 @@
 require_relative 'helper'
-require 'pact/pact_broker/fetch_pacts_for_verification'
+require 'pact/pact_broker/fetch_pact_uris_for_verification'
 
-describe Pact::PactBroker::FetchPactsForVerification, pact: true do
+describe Pact::PactBroker::FetchPactURIsForVerification, pact: true do
   before do
     allow($stdout).to receive(:puts)
   end
 
   let(:get_headers) { { Accept: 'application/hal+json' } }
-  let(:pacts_for_verification_relation) { Pact::PactBroker::FetchPactsForVerification::PACTS_FOR_VERIFICATION_RELATION }
+  let(:pacts_for_verification_relation) { Pact::PactBroker::FetchPactURIsForVerification::PACTS_FOR_VERIFICATION_RELATION }
   let(:query) do
     {
       "provider_version_tags[]"  => "pdev",
@@ -18,7 +18,7 @@ describe Pact::PactBroker::FetchPactsForVerification, pact: true do
   let(:provider_version_tags) { %w[pdev] }
   let(:consumer_version_selectors) { [ { tag: "cdev", latest: true }] }
 
-  subject { Pact::PactBroker::FetchPactsForVerification.call(provider, consumer_version_selectors, provider_version_tags, broker_base_url, basic_auth_options) }
+  subject { Pact::PactBroker::FetchPactURIsForVerification.call(provider, consumer_version_selectors, provider_version_tags, broker_base_url, basic_auth_options) }
 
   describe 'fetch pacts' do
     let(:provider) { 'Bar' }

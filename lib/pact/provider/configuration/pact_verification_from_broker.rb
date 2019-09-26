@@ -1,6 +1,6 @@
 require 'pact/shared/dsl'
 require 'pact/provider/world'
-require 'pact/pact_broker/fetch_pacts_for_verification'
+require 'pact/pact_broker/fetch_pact_uris_for_verification'
 require 'pact/errors'
 
 module Pact
@@ -46,7 +46,7 @@ module Pact
         private
 
         def create_pact_verification
-          fetch_pacts = Pact::PactBroker::FetchPactsForVerification.new(
+          fetch_pacts = Pact::PactBroker::FetchPactURIsForVerification.new(
             _provider_name,
             consumer_version_selectors,
             _provider_version_tags,

@@ -1,8 +1,8 @@
-require 'pact/pact_broker/fetch_pacts_for_verification'
+require 'pact/pact_broker/fetch_pact_uris_for_verification'
 
 module Pact
   module PactBroker
-    describe FetchPactsForVerification do
+    describe FetchPactURIsForVerification do
       describe "call" do
         before do
           allow(Pact.configuration).to receive(:output_stream).and_return(double('output stream').as_null_object)
@@ -14,7 +14,7 @@ module Pact
         let(:consumer_version_selectors) { [{ tag: "cmaster", latest: true}] }
         let(:provider_version_tags) { ["pmaster"] }
 
-        subject { FetchPactsForVerification.call(provider, consumer_version_selectors, provider_version_tags, broker_base_url, http_client_options)}
+        subject { FetchPactURIsForVerification.call(provider, consumer_version_selectors, provider_version_tags, broker_base_url, http_client_options)}
 
         context "when there is an error retrieving the index resource" do
           before do

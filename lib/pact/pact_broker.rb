@@ -1,5 +1,5 @@
 require 'pact/pact_broker/fetch_pacts'
-require 'pact/pact_broker/fetch_pacts_for_verification'
+require 'pact/pact_broker/fetch_pact_uris_for_verification'
 require 'pact/provider/pact_uri'
 
 #
@@ -9,8 +9,8 @@ module Pact
   module PactBroker
     extend self
 
-    def fetch_pacts_for_verification *args
-      Pact::PactBroker::FetchPactsForVerification.call(*args)
+    def fetch_pact_uris_for_verification *args
+      Pact::PactBroker::FetchPactURIsForVerification.call(*args)
     end
 
     def build_pact_uri(*args)

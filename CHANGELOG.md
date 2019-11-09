@@ -1,3 +1,12 @@
+<a name="v1.42.1"></a>
+### v1.42.1 (2019-11-09)
+
+
+#### Bug Fixes
+
+* can't use safe navigation operator because of Ruby 2.2 in Travelling Ruby for the pact-ruby-standalone	 ([3068ceb](/../../commit/3068ceb))
+
+
 <a name="v1.42.0"></a>
 ### v1.42.0 (2019-09-26)
 

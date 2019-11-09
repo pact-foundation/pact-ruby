@@ -18,8 +18,8 @@ module Pact
 
       def initialize(provider, consumer_version_selectors, provider_version_tags, broker_base_url, http_client_options)
         @provider = provider
-        @consumer_version_selectors = consumer_version_selectors
-        @provider_version_tags = provider_version_tags
+        @consumer_version_selectors = consumer_version_selectors || []
+        @provider_version_tags = provider_version_tags || []
         @http_client_options = http_client_options
         @broker_base_url = broker_base_url
         @http_client = Pact::Hal::HttpClient.new(http_client_options)
@@ -67,18 +67,18 @@ module Pact
 
       def query
         q = {}
-        if consumer_version_selectors&.any?
+        if consumer_version_selectors.any?
           q["consumer_version_selectors"] = consumer_version_selectors
         end
 
-        if provider_version_tags&.any?
+        if provider_version_tags.any?
           q["provider_version_tags"] = provider_version_tags
         end
         q
       end
 
       def log_message
-        latest = consumer_version_selectors&.any? ? "" : "latest "
+        latest = consumer_version_selectors.any? ? "" : "latest "
         message = "INFO: Fetching #{latest}pacts for #{provider} from #{broker_base_url}"
         if consumer_version_selectors&.any?
           desc = consumer_version_selectors.collect do |selector|

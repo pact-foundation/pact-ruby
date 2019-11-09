@@ -1,6 +1,6 @@
 #!/bin/bash
 set -e
-
+unset X_PACT_DEVELOPMENT
 bundle exec bump ${1:-minor} --no-commit
 bundle exec appraisal update
 bundle exec rake generate_changelog

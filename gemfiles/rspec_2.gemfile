@@ -2,9 +2,6 @@
 
 source "https://rubygems.org"
 
-gem "pact-support", path: "../../pact-support"
-gem "pact-mock_service", path: "../../pact-mock_service"
-gem "pry-byebug"
 gem "rspec", "2.14.1"
 
 gemspec path: "../"

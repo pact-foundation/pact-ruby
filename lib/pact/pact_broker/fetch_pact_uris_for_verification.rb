@@ -80,7 +80,7 @@ module Pact
       def log_message
         latest = consumer_version_selectors.any? ? "" : "latest "
         message = "INFO: Fetching #{latest}pacts for #{provider} from #{broker_base_url}"
-        if consumer_version_selectors&.any?
+        if consumer_version_selectors.any?
           desc = consumer_version_selectors.collect do |selector|
             all_or_latest = selector[:all] ? "all" : "latest"
             # TODO support fallback

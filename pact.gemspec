@@ -26,7 +26,6 @@ Gem::Specification.new do |gem|
     'documentation_uri' => 'https://github.com/pact-foundation/pact-ruby/blob/master/README.md'
   }
 
-  gem.add_runtime_dependency 'randexp', '~> 0.1.7'
   gem.add_runtime_dependency 'rspec', '>=2.14'
   gem.add_runtime_dependency 'rack-test', '>= 0.6.3', '< 2.0.0'
   gem.add_runtime_dependency 'thor'

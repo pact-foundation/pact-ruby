@@ -22,4 +22,3 @@ module Pact
     end
   end
 end
-

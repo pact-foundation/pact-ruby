@@ -1,6 +1,5 @@
 require 'rspec'
 require 'fakefs/spec_helpers'
-require 'rspec'
 require 'pact'
 require 'webmock/rspec'
 require 'support/factories'
@@ -15,7 +14,7 @@ require './spec/support/warning_silencer'
 is_jruby = defined?(RUBY_ENGINE) && RUBY_ENGINE == 'jruby'
 
 RSpec.configure do | config |
-  config.include(FakeFS::SpecHelpers, :fakefs => true)
+  config.include(FakeFS::SpecHelpers, fakefs: true)
 
   config.extend Pact::Provider::RSpec::ClassMethods
   config.include Pact::Provider::RSpec::InstanceMethods
@@ -24,6 +23,5 @@ RSpec.configure do | config |
   if config.respond_to?(:example_status_persistence_file_path=)
     config.example_status_persistence_file_path = "./spec/examples.txt"
   end
-  config.filter_run_excluding :skip_jruby => is_jruby
+  config.filter_run_excluding skip_jruby: is_jruby
 end
-

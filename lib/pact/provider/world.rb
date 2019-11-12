@@ -43,7 +43,7 @@ module Pact
       end
 
       def pact_uris_from_pact_uri_sources
-        pact_uri_sources.collect{| pact_uri_source| pact_uri_source.call }.flatten
+        pact_uri_sources.collect(&:call).flatten
       end
     end
   end

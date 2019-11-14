@@ -54,7 +54,7 @@ module Pact
         end
 
         def rack_request_header_for header
-          with_http_prefix(header.to_s.upcase).gsub('-', '_')
+          with_http_prefix(header.to_s.upcase).tr('-', '_')
         end
 
         def rack_request_value_for value

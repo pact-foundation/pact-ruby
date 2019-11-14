@@ -29,7 +29,7 @@ module Pact
 
       def after_suite
         if Pact.consumer_world.any_pact_examples_ran?
-          Pact.consumer_world.consumer_contract_builders.each { | c | c.write_pact }
+          Pact.consumer_world.consumer_contract_builders.each(&:write_pact)
           Pact::Doc::Generate.call
           Pact::MockService::AppManager.instance.kill_all
           Pact::MockService::AppManager.instance.clear_all

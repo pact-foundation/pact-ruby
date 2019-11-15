@@ -91,7 +91,7 @@ module Pact
           ::RSpec::Core::CommandLine.new(NoConfigurationOptions.new)
             .run(::RSpec.configuration.output_stream, ::RSpec.configuration.error_stream)
         end
-        options[:ignore_failures] ? 0 : exit_code
+        (all_pacts_pending? || options[:ignore_failures]) ? 0 : exit_code
       end
 
       def rspec_runner_options
@@ -157,6 +157,10 @@ module Pact
         consumer_contract = JSON.parse(pact_json)
         consumer_contract["interactions"] = consumer_contract["interactions"].shuffle
         consumer_contract.to_json
+      end
+
+      def all_pacts_pending?
+        pact_urls.all?{ | pact_url| pact_url.metadata[:pending] }
       end
 
       def class_exists? name

@@ -76,7 +76,7 @@ module Pact
             pact_interaction: interaction,
             pact_interaction_example_description: interaction_description_for_rerun_command(interaction),
             pact_uri: options[:pact_uri],
-            pact_ignore_failures: options[:pact_uri].metadata[:pending]
+            pact_ignore_failures: options[:pact_uri].metadata[:pending] || options[:ignore_failures]
           }
 
           describe description_for(interaction), metadata do

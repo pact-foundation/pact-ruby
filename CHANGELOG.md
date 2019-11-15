@@ -1,3 +1,13 @@
+<a name="v1.42.3"></a>
+### v1.42.3 (2019-11-15)
+
+
+#### Bug Fixes
+
+* **verify**
+  * exit with status 0 if all pacts are in pending state	 ([2f7110b](/../../commit/2f7110b))
+
+
 <a name="v1.42.2"></a>
 ### v1.42.2 (2019-11-09)
 

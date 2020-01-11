@@ -1,3 +1,13 @@
+<a name="v1.43.1"></a>
+### v1.43.1 (2020-01-11)
+
+
+#### Bug Fixes
+
+* use configured credentials when fetching the diff with previous version	 ([b9deb09](/../../commit/b9deb09))
+* use URI.open instead of Kernel.open	 ([7b3ea81](/../../commit/7b3ea81))
+
+
 <a name="v1.43.0"></a>
 ### v1.43.0 (2020-01-11)
 

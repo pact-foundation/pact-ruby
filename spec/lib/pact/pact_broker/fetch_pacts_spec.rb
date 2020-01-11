@@ -33,7 +33,7 @@ module Pact
 
         context "when there is a HAL relation missing" do
           before do
-            stub_request(:get, "http://broker.org/").to_return(status: 200, body: {"_links" => {} }.to_json, headers: {})
+            stub_request(:get, "http://broker.org/").to_return(status: 200, body: {"_links" => {} }.to_json, headers: {"Content-Type" => "application/hal+json"})
           end
 
           it "raises a Pact::Error" do

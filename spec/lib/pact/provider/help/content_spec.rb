@@ -4,19 +4,17 @@ module Pact
   module Provider
     module Help
       describe Content do
-
         describe "#text" do
-
-          let(:pact_1_json) { { some: 'json'}.to_json }
-          let(:pact_2_json) { { some: 'other json'}.to_json }
-          let(:pact_jsons) { [pact_1_json, pact_2_json] }
-
           before do
-            allow(PactDiff).to receive(:call).with(pact_1_json).and_return('diff 1')
-            allow(PactDiff).to receive(:call).with(pact_2_json).and_return(nil)
+            allow(PactDiff).to receive(:call).with(pact_source_1).and_return('diff 1')
+            allow(PactDiff).to receive(:call).with(pact_source_2).and_return(nil)
           end
 
-          subject { Content.new(pact_jsons) }
+          let(:pact_source_1) { { some: 'json'}.to_json }
+          let(:pact_source_2) { { some: 'other json'}.to_json }
+          let(:pact_sources) { [pact_source_1, pact_source_2] }
+
+          subject { Content.new(pact_sources) }
 
           it "displays the log path" do
             expect(subject.text).to include Pact.configuration.log_path
@@ -29,7 +27,6 @@ module Pact
           it "displays the diff" do
             expect(subject.text).to include 'diff 1'
           end
-
         end
       end
     end

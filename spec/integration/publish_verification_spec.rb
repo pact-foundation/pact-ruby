@@ -59,7 +59,7 @@ describe "publishing verifications" do
   subject { Pact::Provider::VerificationResults::PublishAll.call(pact_sources, test_results_hash) }
 
   let!(:request) do
-    stub_request(:post, 'http://publish').to_return(status: 200, body: created_verification_body)
+    stub_request(:post, 'http://publish').to_return(status: 200, headers: {'Content-Type' => 'application/hal+json'}, body: created_verification_body)
   end
 
   it "publishes the results" do

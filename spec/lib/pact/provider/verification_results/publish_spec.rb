@@ -82,7 +82,7 @@ module Pact
             allow($stdout).to receive(:puts)
             allow($stderr).to receive(:puts)
             allow(Pact.configuration).to receive(:provider).and_return(provider_configuration)
-            stub_request(:post, stubbed_publish_verification_url).to_return(status: 200, body: created_verification_body)
+            stub_request(:post, stubbed_publish_verification_url).to_return(status: 200, headers: { 'Content-Type' => 'application/hal+json'}, body: created_verification_body)
             stub_request(:put, 'http://provider/version/1.2.3/tag/foo').to_return(status: 200, headers: { 'Content-Type' => 'application/hal+json'}, body: tag_body)
             stub_request(:get, provider_url).to_return(status: 200, headers: { 'Content-Type' => 'application/hal+json'}, body: provider_body)
             allow(Retry).to receive(:until_true) { |&block| block.call }
@@ -186,7 +186,7 @@ module Pact
 
               context "with https" do
                 before do
-                  stub_request(:post, publish_verification_url).to_return(status: 200, body: created_verification_body)
+                  stub_request(:post, publish_verification_url).to_return(status: 200, headers: { 'Content-Type' => 'application/json' }, body: created_verification_body)
                 end
                 let(:publish_verification_url) { stubbed_publish_verification_url.gsub('http', 'https') }
 

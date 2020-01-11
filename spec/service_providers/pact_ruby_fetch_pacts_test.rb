@@ -26,6 +26,9 @@ describe Pact::PactBroker::FetchPacts, pact: true do
         )
         .will_respond_with(
           status: 200,
+          headers: {
+            'Content-Type' => Pact.term('application/hal+json', /json/)
+          },
           body: {
             _links: {
               'pb:latest-provider-pacts' => {
@@ -65,6 +68,9 @@ describe Pact::PactBroker::FetchPacts, pact: true do
           )
           .will_respond_with(
             status: 200,
+            headers: {
+              'Content-Type' => Pact.term('application/hal+json', /json/)
+            },
             body: {
               _links: {
                 'pb:pacts' => [
@@ -105,6 +111,9 @@ describe Pact::PactBroker::FetchPacts, pact: true do
           )
           .will_respond_with(
             status: 200,
+            headers: {
+              'Content-Type' => Pact.term('application/hal+json', /json/)
+            },
             body: {
               _links: {
                 'pb:pacts' => [
@@ -128,6 +137,9 @@ describe Pact::PactBroker::FetchPacts, pact: true do
           )
           .will_respond_with(
             status: 200,
+            headers: {
+              'Content-Type' => Pact.term('application/hal+json', /json/)
+            },
             body: {
               _links: {
                 'pb:pacts' => [
@@ -171,6 +183,9 @@ describe Pact::PactBroker::FetchPacts, pact: true do
           )
           .will_respond_with(
             status: 200,
+            headers: {
+              'Content-Type' => Pact.term('application/hal+json', /json/)
+            },
             body: {
               _links: {
                 'pb:pacts' => []
@@ -187,6 +202,9 @@ describe Pact::PactBroker::FetchPacts, pact: true do
           )
           .will_respond_with(
             status: 200,
+            headers: {
+              'Content-Type' => Pact.term('application/hal+json', /json/)
+            },
             body: {
               _links: {
                 'pb:pacts' => [
@@ -227,6 +245,9 @@ describe Pact::PactBroker::FetchPacts, pact: true do
           )
           .will_respond_with(
             status: 200,
+            headers: {
+              'Content-Type' => Pact.term('application/hal+json', /json/)
+            },
             body: {
               _links: {
                 'pb:pacts' => []
@@ -256,6 +277,9 @@ describe Pact::PactBroker::FetchPacts, pact: true do
           )
           .will_respond_with(
             status: 200,
+            headers: {
+              'Content-Type' => Pact.term('application/hal+json', /json/)
+            },
             body: {
               _links: {
                 'pb:pacts' => [
@@ -280,6 +304,9 @@ describe Pact::PactBroker::FetchPacts, pact: true do
           )
           .will_respond_with(
             status: 200,
+            headers: {
+              'Content-Type' => Pact.term('application/hal+json', /json/)
+            },
             body: {
               _links: {
                 'pb:pacts' => [
@@ -323,6 +350,9 @@ describe Pact::PactBroker::FetchPacts, pact: true do
           )
           .will_respond_with(
             status: 200,
+            headers: {
+              'Content-Type' => Pact.term('application/hal+json', /json/)
+            },
             body: {
               _links: {
                 'pb:pacts' => [

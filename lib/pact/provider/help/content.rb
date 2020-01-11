@@ -5,8 +5,8 @@ module Pact
     module Help
       class Content
 
-        def initialize pact_jsons
-          @pact_jsons = pact_jsons
+        def initialize pact_sources
+          @pact_sources = pact_sources
         end
 
         def text
@@ -15,7 +15,7 @@ module Pact
 
         private
 
-        attr_reader :pact_jsons
+        attr_reader :pact_sources
 
         def help_text
           temp_dir = Pact.configuration.tmp_dir
@@ -28,7 +28,7 @@ module Pact
         end
 
         def pact_diffs
-          pact_jsons.collect do | pact_json |
+          pact_sources.collect do | pact_json |
             PactDiff.call(pact_json)
           end.compact.join("\n")
         end

@@ -9,12 +9,12 @@ module Pact
 
         HELP_FILE_NAME = 'help.md'
 
-        def self.call pact_jsons, reports_dir = Pact.configuration.reports_dir
-          new(pact_jsons, reports_dir).call
+        def self.call pact_sources, reports_dir = Pact.configuration.reports_dir
+          new(pact_sources, reports_dir).call
         end
 
-        def initialize pact_jsons, reports_dir
-          @pact_jsons = pact_jsons
+        def initialize pact_sources, reports_dir
+          @pact_sources = pact_sources
           @reports_dir = File.expand_path(reports_dir)
         end
 
@@ -25,7 +25,7 @@ module Pact
 
         private
 
-        attr_reader :reports_dir, :pact_jsons
+        attr_reader :reports_dir, :pact_sources
 
         def clean_reports_dir
           raise "Cleaning report dir #{reports_dir} would delete project!" if reports_dir_contains_pwd
@@ -46,9 +46,8 @@ module Pact
         end
 
         def help_text
-          Content.new(pact_jsons).text
+          Content.new(pact_sources).text
         end
-
       end
     end
   end

@@ -13,7 +13,7 @@ module Pact
         let!(:request) do
           stub_request(:get, "http://example.org/").
             with(  headers: {
-              'Accept'=>'application/hal+json',
+              'Accept'=>'*/*',
               'Authorization'=>'Basic Zm9vOmJhcg=='
               }).
             to_return(status: 200, body: response_body, headers: {'Content-Type' => 'application/json'})
@@ -86,9 +86,8 @@ module Pact
         let!(:request) do
           stub_request(:post, "http://example.org/").
             with(  headers: {
-              'Accept'=>'application/hal+json',
-              'Authorization'=>'Basic Zm9vOmJhcg==',
-              'Content-Type'=>'application/json'
+              'Accept'=>'*/*',
+              'Authorization'=>'Basic Zm9vOmJhcg=='
               },
               body: request_body).
             to_return(status: 200, body: response_body, headers: {'Content-Type' => 'application/json'})

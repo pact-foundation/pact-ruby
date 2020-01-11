@@ -9,7 +9,7 @@ module Pact
       end
 
       let(:provider_response) do
-        double('response', body: provider_hash, success?: true)
+        double('response', body: provider_hash, success?: true, json?: true)
       end
 
       let(:provider_hash) do

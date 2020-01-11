@@ -80,7 +80,7 @@ module Pact
         executing_with_ruby = executing_with_ruby?
 
         config.after(:suite) do | suite |
-          Pact::Provider::Help::Write.call(jsons) if executing_with_ruby
+          Pact::Provider::Help::Write.call(Pact.provider_world.pact_sources) if executing_with_ruby
         end
       end
 

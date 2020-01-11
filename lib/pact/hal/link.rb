@@ -23,14 +23,14 @@ module Pact
       end
 
       def run(payload = nil)
-        response = case request_method
-          when :get
-            get(payload)
-          when :put
-            put(payload)
-          when :post
-            post(payload)
-          end
+        case request_method
+        when :get
+          get(payload)
+        when :put
+          put(payload)
+        when :post
+          post(payload)
+        end
       end
 
       def title_or_name
@@ -89,8 +89,14 @@ module Pact
 
       def wrap_response(href, http_response)
         require 'pact/hal/entity' # avoid circular reference
+        require 'pact/hal/non_json_entity'
+
         if http_response.success?
-          Entity.new(href, http_response.body, @http_client, http_response)
+          if http_response.json?
+            Entity.new(href, http_response.body, @http_client, http_response)
+          else
+            NonJsonEntity.new(href, http_response.raw_body, @http_client, http_response)
+          end
         else
           ErrorEntity.new(href, http_response.raw_body, @http_client, http_response)
         end

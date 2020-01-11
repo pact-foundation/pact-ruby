@@ -36,12 +36,9 @@ module Pact
 
       def create_request uri, http_method, body = nil, headers = {}
         request = Net::HTTP.const_get(http_method).new(uri.request_uri)
-        request['Content-Type'] = "application/json" if ['Post', 'Put', 'Patch'].include?(http_method)
-        request['Accept'] = "application/hal+json"
         headers.each do | key, value |
           request[key] = value
         end
-
         request.body = body if body
         request.basic_auth username, password if username
         request['Authorization'] = "Bearer #{token}" if token
@@ -84,6 +81,10 @@ module Pact
 
         def success?
           __getobj__().code.start_with?("2")
+        end
+
+        def json?
+          self['content-type'] && self['content-type'] =~ /json/
         end
       end
     end

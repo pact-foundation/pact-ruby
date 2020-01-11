@@ -1,3 +1,13 @@
+<a name="v1.43.0"></a>
+### v1.43.0 (2020-01-11)
+
+
+#### Features
+
+* **verify**
+  * allow includePendingStatus to be specified when fetching pacts	 ([1f5fc9c](/../../commit/1f5fc9c))
+
+
 <a name="v1.42.3"></a>
 ### v1.42.3 (2019-11-15)
 

@@ -1,9 +1,7 @@
 module Pact
   module Provider
     module Help
-
       class PactDiff
-
         class PrintPactDiffError < StandardError; end
 
         attr_reader :pact_json, :output
@@ -52,7 +50,7 @@ module Pact
 
         def get_diff
           begin
-            open(diff_url) { | file | file.read }
+            URI.open(diff_url) { | file | file.read }
           rescue StandardError => e
             raise PrintPactDiffError.new("Tried to retrieve diff with previous pact from #{diff_url}, but received response code #{e}.")
           end

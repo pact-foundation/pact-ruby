@@ -7,7 +7,7 @@ require 'pact/pact_broker/fetch_pacts'
 module Pact
   module PactBroker
     class FetchPactURIsForVerification
-      attr_reader :provider, :consumer_version_selectors, :provider_version_tags, :broker_base_url, :http_client_options, :http_client
+      attr_reader :provider, :consumer_version_selectors, :provider_version_tags, :broker_base_url, :http_client_options, :http_client, :options
 
       PACTS_FOR_VERIFICATION_RELATION = 'beta:provider-pacts-for-verification'.freeze
       PACTS = 'pacts'.freeze
@@ -16,17 +16,18 @@ module Pact
       SELF = 'self'.freeze
       EMBEDDED = '_embedded'.freeze
 
-      def initialize(provider, consumer_version_selectors, provider_version_tags, broker_base_url, http_client_options)
+      def initialize(provider, consumer_version_selectors, provider_version_tags, broker_base_url, http_client_options, options = {})
         @provider = provider
         @consumer_version_selectors = consumer_version_selectors || []
         @provider_version_tags = provider_version_tags || []
         @http_client_options = http_client_options
         @broker_base_url = broker_base_url
         @http_client = Pact::Hal::HttpClient.new(http_client_options)
+        @options = options
       end
 
-      def self.call(provider, consumer_version_selectors, provider_version_tags, broker_base_url, http_client_options)
-        new(provider, consumer_version_selectors, provider_version_tags, broker_base_url, http_client_options).call
+      def self.call(provider, consumer_version_selectors, provider_version_tags, broker_base_url, http_client_options, options = {})
+        new(provider, consumer_version_selectors, provider_version_tags, broker_base_url, http_client_options, options).call
       end
 
       def call
@@ -50,8 +51,7 @@ module Pact
         pacts_for_verification_entity.response.body[EMBEDDED][PACTS].collect do | pact |
           metadata = {
             pending: pact["verificationProperties"]["pending"],
-            pending_reason: pact["verificationProperties"]["pendingReason"],
-            inclusion_reason: pact["verificationProperties"]["inclusionReason"],
+            notices: extract_notices(pact)
           }
           Pact::Provider::PactURI.new(pact[LINKS][SELF][HREF], http_client_options, metadata)
         end
@@ -61,20 +61,19 @@ module Pact
         index
           ._link(PACTS_FOR_VERIFICATION_RELATION)
           .expand(provider: provider)
-          .with_query(query)
-          .get!
+          .post!(query)
       end
 
       def query
         q = {}
-        if consumer_version_selectors.any?
-          q["consumer_version_selectors"] = consumer_version_selectors
-        end
-
-        if provider_version_tags.any?
-          q["provider_version_tags"] = provider_version_tags
-        end
+        q["includePendingStatus"] = true if options[:include_pending_status]
+        q["consumerVersionSelectors"] = consumer_version_selectors if consumer_version_selectors.any?
+        q["providerVersionTags"] = provider_version_tags if provider_version_tags.any?
         q
+      end
+
+      def extract_notices(pact)
+        (pact["verificationProperties"]["notices"] || []).collect{ |notice| notice["text"] }.compact
       end
 
       def log_message

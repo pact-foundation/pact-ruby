@@ -6,19 +6,26 @@ describe Pact::PactBroker::FetchPactURIsForVerification, pact: true do
     allow($stdout).to receive(:puts)
   end
 
-  let(:get_headers) { { Accept: 'application/hal+json' } }
-  let(:pacts_for_verification_relation) { Pact::PactBroker::FetchPactURIsForVerification::PACTS_FOR_VERIFICATION_RELATION }
-  let(:query) do
+  let(:get_headers) { { "Accept" => 'application/hal+json' } }
+  let(:post_headers) do
     {
-      "provider_version_tags[]"  => "pdev",
-      "consumer_version_selectors[][tag]" => "cdev",
-      "consumer_version_selectors[][latest]" => "true",
+      "Accept" => 'application/hal+json',
+      "Content-Type" => "application/json"
+    }
+  end
+  let(:pacts_for_verification_relation) { Pact::PactBroker::FetchPactURIsForVerification::PACTS_FOR_VERIFICATION_RELATION }
+  let(:body) do
+    {
+      "providerVersionTags"  => ["pdev"],
+      "consumerVersionSelectors" => [{ "tag" => "cdev", "latest" => true}],
+      "includePendingStatus" => true
     }
   end
   let(:provider_version_tags) { %w[pdev] }
   let(:consumer_version_selectors) { [ { tag: "cdev", latest: true }] }
+  let(:options) { { include_pending_status: true }}
 
-  subject { Pact::PactBroker::FetchPactURIsForVerification.call(provider, consumer_version_selectors, provider_version_tags, broker_base_url, basic_auth_options) }
+  subject { Pact::PactBroker::FetchPactURIsForVerification.call(provider, consumer_version_selectors, provider_version_tags, broker_base_url, basic_auth_options, options) }
 
   describe 'fetch pacts' do
     let(:provider) { 'Bar' }
@@ -36,6 +43,7 @@ describe Pact::PactBroker::FetchPactURIsForVerification, pact: true do
         )
         .will_respond_with(
           status: 200,
+          headers: { "Content-Type" => Pact.term("application/hal+json", /hal/) },
           body: {
             _links: {
                pacts_for_verification_relation => {
@@ -52,23 +60,23 @@ describe Pact::PactBroker::FetchPactURIsForVerification, pact: true do
     context 'retrieving pacts for verification by provider' do
       before do
         pact_broker
-          .given('Foo has a pact with provider Bar')
+          .given('Foo has a pact tagged cdev with provider Bar')
           .upon_receiving('a request to retrieve the pacts for verification for a provider')
           .with(
-            method: :get,
+            method: :post,
             path: '/pacts/provider/Bar/for-verification',
-            query: query,
-            headers: get_headers
+            body: body,
+            headers: post_headers
           )
           .will_respond_with(
             status: 200,
+            headers: { "Content-Type" => Pact.term("application/hal+json", /hal/) },
             body: {
               "_embedded" => {
                 "pacts" => [{
                   "verificationProperties" => {
                     "pending" => Pact.like(true),
-                    "pendingReason" => Pact.like("pending reason"),
-                    "inclusionReason" => Pact.like("inclusion reason")
+                    "notices" => Pact.each_like("text" => "some text")
                   },
                   '_links' => {
                     "self" => {
@@ -84,8 +92,7 @@ describe Pact::PactBroker::FetchPactURIsForVerification, pact: true do
       let(:expected_metadata) do
         {
           pending: true,
-          inclusion_reason: "inclusion reason",
-          pending_reason: "pending reason"
+          notices: ["some text"]
          }
       end
 

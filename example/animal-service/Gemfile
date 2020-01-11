@@ -7,7 +7,7 @@ group :development, :test do
 end
 
 gem 'rake'
-gem 'rack', '~> 2.0'
+gem 'rack', '~> 2.1'
 gem 'json', '~>1.8'
 gem 'sqlite3'
 gem 'sequel'

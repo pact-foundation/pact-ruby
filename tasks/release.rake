@@ -7,3 +7,10 @@ task :generate_changelog do
   require 'pact/version'
   ConventionalChangelog::Generator.new.generate! version: "v#{Pact::VERSION}"
 end
+
+desc 'Tag for release'
+task :tag_for_release do | t, args |
+  command = "git tag -a v#{Pact::VERSION} -m \"chore(release): version #{Pact::VERSION}\" && git push origin v#{Pact::VERSION}"
+  puts command
+  puts `#{command}`
+end

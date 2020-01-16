@@ -80,6 +80,7 @@ namespace :pact do
 		Rake::Task['pact:verify:term_v2'].execute
 		Rake::Task['pact:verify:test_app_with_provider_state_params'].execute
 		Rake::Task['pact:verify:test_app:wip'].execute
+		Rake::Task['pact:verify:message'].execute
 	end
 
 	desc "All the verification tests with active support loaded"

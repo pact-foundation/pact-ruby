@@ -1,7 +1,6 @@
 require 'pact/consumer/configuration/service_consumer'
 
 module Pact
-
   module Consumer
     module DSL
       def service_consumer name, &block

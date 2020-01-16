@@ -1,3 +1,13 @@
+<a name="v1.44.0"></a>
+### v1.44.0 (2020-01-16)
+
+
+#### Features
+
+* **message pact**
+  * add DSL for configuring Message Pact verifications	 ([a5181b6](/../../commit/a5181b6))
+
+
 <a name="v1.43.1"></a>
 ### v1.43.1 (2020-01-11)
 

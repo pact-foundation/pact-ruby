@@ -9,10 +9,8 @@ require 'pact/provider/pact_source'
 require 'pact/provider/help/write'
 require 'pact/provider/verification_results/publish_all'
 require 'pact/provider/rspec/pact_broker_formatter'
-
-require_relative 'rspec'
-
 require 'pact/provider/rspec/json_formatter'
+require 'pact/provider/rspec'
 
 module Pact
   module Provider
@@ -119,12 +117,12 @@ module Pact
 
       def initialize_specs
         pact_sources.each do | pact_source |
-          options = {
-            criteria: @options[:criteria],
-            ignore_failures: @options[:ignore_failures],
-            request_customizer: @options[:request_customizer]
+          spec_options = {
+            criteria: options[:criteria],
+            ignore_failures: options[:ignore_failures],
+            request_customizer: options[:request_customizer]
           }
-          honour_pactfile pact_source.uri, ordered_pact_json(pact_source.pact_json), options
+          honour_pactfile pact_source.uri, ordered_pact_json(pact_source.pact_json), spec_options
         end
       end
 

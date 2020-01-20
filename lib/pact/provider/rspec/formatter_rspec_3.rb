@@ -6,13 +6,13 @@ require 'pact/provider/help/prompt_text'
 module Pact
   module Provider
     module RSpec
-
       class Formatter < ::RSpec::Core::Formatters::DocumentationFormatter
 
         class NilFormatter < ::RSpec::Core::Formatters::BaseFormatter
           Pact::RSpec.with_rspec_3 do
             ::RSpec::Core::Formatters.register self, :start, :example_group_started, :close
           end
+
           def dump_summary(summary)
           end
         end

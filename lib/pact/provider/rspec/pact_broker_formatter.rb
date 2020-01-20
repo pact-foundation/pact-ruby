@@ -66,7 +66,7 @@ module Pact
             if example.metadata[:pact_diff]
               hash[:differences] = Pact::Matchers::ExtractDiffMessages.call(example.metadata[:pact_diff])
                                     .to_a
-                                    .collect{ | description | {description: description} }
+                                    .collect{ | description | { description: description } }
             end
           end
         end

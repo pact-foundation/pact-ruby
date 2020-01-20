@@ -3,7 +3,6 @@ require 'pact/cli/spec_criteria'
 module Pact
   module Cli
     class RunPactVerification
-
       attr_reader :options
 
       def initialize options

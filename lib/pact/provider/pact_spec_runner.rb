@@ -12,6 +12,7 @@ require 'pact/provider/rspec/pact_broker_formatter'
 
 require_relative 'rspec'
 
+require 'pact/provider/rspec/json_formatter'
 
 module Pact
   module Provider

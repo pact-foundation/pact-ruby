@@ -91,7 +91,7 @@ module Pact
           ::RSpec::Core::CommandLine.new(NoConfigurationOptions.new)
             .run(::RSpec.configuration.output_stream, ::RSpec.configuration.error_stream)
         end
-        (all_pacts_pending? || options[:ignore_failures]) ? 0 : exit_code
+        pending_mode? ? 0 : exit_code
       end
 
       def rspec_runner_options
@@ -148,7 +148,7 @@ module Pact
 
         ::RSpec.configuration.full_backtrace = @options[:full_backtrace]
 
-        ::RSpec.configuration.failure_color = :yellow if @options[:ignore_failures]
+        ::RSpec.configuration.failure_color = :yellow if pending_mode?
       end
 
       def ordered_pact_json(pact_json)
@@ -167,6 +167,10 @@ module Pact
         Kernel.const_get name
       rescue NameError
         false
+      end
+
+      def pending_mode?
+        (all_pacts_pending? || options[:ignore_failures])
       end
 
       def executing_with_ruby?

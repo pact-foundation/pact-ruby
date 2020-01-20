@@ -14,6 +14,7 @@ module Pact
       end
 
       def call
+        configure_output
         initialize_rspec
         setup_load_path
         load_pact_helper
@@ -81,6 +82,14 @@ module Pact
           ignore_failures: options[:ignore_failures],
           request_customizer: options[:request_customizer]
         }
+      end
+
+      def configure_output
+        if options[:format] == 'json' && !options[:out]
+          # Don't want to mess up the JSON parsing with messages to stdout, so send it to stderr
+          require 'pact/configuration'
+          Pact.configuration.output_stream = Pact.configuration.error_stream
+        end
       end
     end
   end

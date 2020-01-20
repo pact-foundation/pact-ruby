@@ -1,3 +1,18 @@
+<a name="v1.45.0"></a>
+### v1.45.0 (2020-01-21)
+
+
+#### Features
+
+* use custom json formatter when --format json is specified and send it straight to stdout or the configured file	 ([6c703a1](/../../commit/6c703a1))
+* support pending pacts in json formatter	 ([2c0d20d](/../../commit/2c0d20d))
+
+
+#### Bug Fixes
+
+* show pending test output in yellow instead of red	 ([e8d4a55](/../../commit/e8d4a55))
+
+
 <a name="v1.44.1"></a>
 ### v1.44.1 (2020-01-20)
 

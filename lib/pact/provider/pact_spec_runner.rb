@@ -133,10 +133,13 @@ module Pact
 
         output = options[:out] || Pact.configuration.output_stream
         if options[:format]
-          ::RSpec.configuration.add_formatter options[:format], output
-          if !options[:out]
-            # Don't want to mess up the JSON parsing with messages to stdout, so send it to stderr
-            Pact.configuration.output_stream = Pact.configuration.error_stream
+          if options[:format] == 'json'
+            # To avoid mixing JSON and logging, the output_stream will be set to the error_stream
+            # in the pact-provider-verifier.
+            # Send JSON to a file if configured, or straight to $stdout
+            ::RSpec.configuration.add_formatter Pact::Provider::RSpec::JsonFormatter, options[:out] || $stdout
+          else
+            ::RSpec.configuration.add_formatter options[:format], output
           end
         else
           # Sometimes the formatter set in the cli.rb get set with an output of StringIO.. don't know why

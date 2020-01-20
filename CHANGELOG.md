@@ -1,3 +1,12 @@
+<a name="v1.44.1"></a>
+### v1.44.1 (2020-01-20)
+
+
+#### Bug Fixes
+
+* print notices from 'pacts for verification' response to indicate why pacts are included an/or pending	 ([b107348](/../../commit/b107348))
+
+
 <a name="v1.44.0"></a>
 ### v1.44.0 (2020-01-16)
 

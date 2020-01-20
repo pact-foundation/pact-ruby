@@ -17,13 +17,15 @@ module Pact
       end
 
       module ClassMethods
+        EMPTY_ARRAY = [].freeze
 
         include ::RSpec::Core::DSL
 
         def honour_pactfile pact_uri, pact_json, options
           Pact.configuration.output_stream.puts "INFO: Reading pact at #{pact_uri}"
-          Pact.configuration.output_stream.puts("DEBUG: #{pact_uri.metadata[:inclusion_reason]}") if pact_uri.metadata[:inclusion_reason]
-          Pact.configuration.output_stream.puts("DEBUG: #{pact_uri.metadata[:pending_reason]}") if pact_uri.metadata[:pending_reason]
+          (pact_uri.metadata[:notices] || EMPTY_ARRAY).each do | notice |
+            Pact.configuration.output_stream.puts("DEBUG: #{notice}")
+          end
           Pact.configuration.output_stream.puts "DEBUG: Filtering interactions by: #{options[:criteria]}" if options[:criteria] && options[:criteria].any?
           consumer_contract = Pact::ConsumerContract.from_json(pact_json)
           suffix = pact_uri.metadata[:pending] ? " [PENDING]": ""

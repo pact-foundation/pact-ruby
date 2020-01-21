@@ -10,5 +10,5 @@ if ENV['X_PACT_DEVELOPMENT']
 end
 
 group :local_development do
-  gem "pry-byebug", "~> 3.7"
+  gem "pry-byebug"
 end

@@ -3,7 +3,7 @@ rvm:
 - 2.2
 - 2.7
 before_install:
-- bundle config set without 'development'
+- bundle config set without 'local_development'
 jobs:
   include:
     - stage: gem release

@@ -8,3 +8,7 @@ if ENV['X_PACT_DEVELOPMENT']
   gem "pact-mock_service", path: '../pact-mock_service'
   gem "pry-byebug"
 end
+
+group :development do
+  gem "pry-byebug", "~> 3.7"
+end

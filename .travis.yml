@@ -1,16 +1,11 @@
 language: ruby
 rvm:
 - 2.2
-- 2.6
 - 2.7
-gemfile:
-- gemfiles/default.gemfile
-- gemfiles/rspec_2.gemfile
-- gemfiles/rspec_3.0.gemfile
 jobs:
   include:
     - stage: gem release
-      rvm: 2.6
+      rvm: 2.7
       script: echo "Deploying to rubygems.org ..."
       deploy:
         provider: rubygems

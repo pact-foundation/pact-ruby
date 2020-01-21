@@ -29,7 +29,7 @@ Gem::Specification.new do |gem|
   gem.add_runtime_dependency 'rspec', '~> 3.0'
   gem.add_runtime_dependency 'rack-test', '>= 0.6.3', '< 2.0.0'
   gem.add_runtime_dependency 'thor', '~> 0.20'
-  gem.add_runtime_dependency 'webrick'
+  gem.add_runtime_dependency 'webrick', '~> 1.3'
   gem.add_runtime_dependency 'term-ansicolor', '~> 1.0'
 
   gem.add_runtime_dependency 'pact-support', '~> 1.9'

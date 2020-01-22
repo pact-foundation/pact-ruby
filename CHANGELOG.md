@@ -1,3 +1,12 @@
+<a name="v1.46.1"></a>
+### v1.46.1 (2020-01-22)
+
+
+#### Bug Fixes
+
+* send output messages to the correct stream when using the XML formatter	 ([e768a33](/../../commit/e768a33))
+
+
 <a name="v1.46.0"></a>
 ### v1.46.0 (2020-01-22)
 

@@ -73,7 +73,11 @@ module Pact
       end
 
       def extract_notices(pact)
-        (pact["verificationProperties"]["notices"] || []).collect{ |notice| notice["text"] }.compact
+        (pact["verificationProperties"]["notices"] || []).collect{ |notice| symbolize_keys(notice) }.compact
+      end
+
+      def symbolize_keys(hash)
+        hash.each_with_object({}){ |(k,v), h| h[k.to_sym] = v }
       end
 
       def log_message

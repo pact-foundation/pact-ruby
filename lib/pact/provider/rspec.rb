@@ -24,7 +24,7 @@ module Pact
         def honour_pactfile pact_uri, pact_json, options
           Pact.configuration.output_stream.puts "INFO: Reading pact at #{pact_uri}"
           (pact_uri.metadata[:notices] || EMPTY_ARRAY).each do | notice |
-            Pact.configuration.output_stream.puts("DEBUG: #{notice}")
+            Pact.configuration.output_stream.puts("DEBUG: #{notice[:text]}")
           end
           Pact.configuration.output_stream.puts "DEBUG: Filtering interactions by: #{options[:criteria]}" if options[:criteria] && options[:criteria].any?
           consumer_contract = Pact::ConsumerContract.from_json(pact_json)

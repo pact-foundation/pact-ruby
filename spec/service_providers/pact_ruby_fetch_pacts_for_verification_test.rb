@@ -92,7 +92,9 @@ describe Pact::PactBroker::FetchPactURIsForVerification, pact: true do
       let(:expected_metadata) do
         {
           pending: true,
-          notices: ["some text"]
+          notices: [
+            text: "some text"
+          ]
          }
       end
 

@@ -1,3 +1,17 @@
+<a name="v1.46.0"></a>
+### v1.46.0 (2020-01-22)
+
+
+#### Features
+
+* expose full notice object in JSON output	 ([bdc2711](/../../commit/bdc2711))
+
+
+#### Bug Fixes
+
+* remove accidentally committed verbose: true	 ([498518c](/../../commit/498518c))
+
+
 <a name="v1.45.0"></a>
 ### v1.45.0 (2020-01-21)
 

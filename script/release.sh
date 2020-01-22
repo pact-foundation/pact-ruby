@@ -6,4 +6,4 @@ bundle exec rake generate_changelog
 git add CHANGELOG.md lib/pact/version.rb
 git commit -m "chore(release): version $(ruby -r ./lib/pact/version.rb -e "puts Pact::VERSION")" && git push
 bundle exec rake tag_for_release
-
+echo "Releasing from https://travis-ci.org/pact-foundation/pact-ruby"

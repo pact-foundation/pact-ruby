@@ -23,7 +23,7 @@ module Pact
       def hal_entity
         http_client_keys = [:username, :password, :token]
         http_client_options = uri.options.reject{ |k, _| !http_client_keys.include?(k) }
-        http_client = Pact::Hal::HttpClient.new(http_client_options.merge(verbose: true))
+        http_client = Pact::Hal::HttpClient.new(http_client_options)
         Pact::Hal::Entity.new(uri, pact_hash, http_client)
       end
     end

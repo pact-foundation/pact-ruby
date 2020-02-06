@@ -122,7 +122,7 @@ module Pact
             ignore_failures: options[:ignore_failures],
             request_customizer: options[:request_customizer]
           }
-          honour_pactfile pact_source.uri, ordered_pact_json(pact_source.pact_json), spec_options
+          honour_pactfile pact_source, ordered_pact_json(pact_source.pact_json), spec_options
         end
       end
 

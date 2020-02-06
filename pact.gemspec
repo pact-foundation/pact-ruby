@@ -44,4 +44,5 @@ Gem::Specification.new do |gem|
   gem.add_development_dependency 'conventional-changelog', '~> 1.3'
   gem.add_development_dependency 'bump', '~> 0.5'
   gem.add_development_dependency 'pact-message', '~> 0.6'
+  gem.add_development_dependency 'rspec-its', '~> 1.3'
 end

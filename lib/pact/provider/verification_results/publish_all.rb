@@ -17,7 +17,12 @@ module Pact
 
         def call
           verification_results.collect do | (pact_source, verification_result) |
-            Publish.call(pact_source, verification_result)
+            published = false
+            begin
+              published = Publish.call(pact_source, verification_result)
+            ensure
+              print_after_verification_notices(pact_source, verification_result, published)
+            end
           end
         end
 
@@ -26,6 +31,14 @@ module Pact
         def verification_results
           pact_sources.collect do | pact_source |
             [pact_source, Create.call(pact_source, test_results_hash)]
+          end
+        end
+
+        def print_after_verification_notices(pact_source, verification_result, published)
+          if pact_source.uri.metadata[:notices]
+            pact_source.uri.metadata[:notices].after_verification_notices_text(verification_result.success, published).each do | text |
+              Pact.configuration.output_stream.puts "DEBUG: #{text}"
+            end
           end
         end
 

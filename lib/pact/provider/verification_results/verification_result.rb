@@ -4,6 +4,7 @@ module Pact
   module Provider
     module VerificationResults
       class VerificationResult
+        attr_reader :success, :provider_application_version, :test_results_hash
 
         def initialize publishable, success, provider_application_version, test_results_hash
           @publishable = publishable
@@ -31,10 +32,6 @@ module Pact
         def to_s
           "[success: #{success}, providerApplicationVersion: #{provider_application_version}]"
         end
-
-        private
-
-        attr_reader :success, :provider_application_version, :test_results_hash
       end
     end
   end

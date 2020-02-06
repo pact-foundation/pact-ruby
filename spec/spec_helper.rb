@@ -1,4 +1,5 @@
 require 'rspec'
+require 'rspec/its'
 require 'fakefs/spec_helpers'
 require 'pact'
 require 'webmock/rspec'

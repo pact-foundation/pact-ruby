@@ -3,6 +3,7 @@ require 'pact/hal/http_client'
 require 'pact/provider/pact_uri'
 require 'pact/errors'
 require 'pact/pact_broker/fetch_pacts'
+require 'pact/pact_broker/notices'
 
 module Pact
   module PactBroker
@@ -51,7 +52,8 @@ module Pact
         pacts_for_verification_entity.response.body[EMBEDDED][PACTS].collect do | pact |
           metadata = {
             pending: pact["verificationProperties"]["pending"],
-            notices: extract_notices(pact)
+            notices: extract_notices(pact),
+            short_description: pact["shortDescription"]
           }
           Pact::Provider::PactURI.new(pact[LINKS][SELF][HREF], http_client_options, metadata)
         end
@@ -69,11 +71,12 @@ module Pact
         q["includePendingStatus"] = true if options[:include_pending_status]
         q["consumerVersionSelectors"] = consumer_version_selectors if consumer_version_selectors.any?
         q["providerVersionTags"] = provider_version_tags if provider_version_tags.any?
+        q["includeWipPactsSince"] = options[:include_wip_pacts_since] if options[:include_wip_pacts_since]
         q
       end
 
       def extract_notices(pact)
-        (pact["verificationProperties"]["notices"] || []).collect{ |notice| symbolize_keys(notice) }.compact
+        Notices.new((pact["verificationProperties"]["notices"] || []).collect{ |notice| symbolize_keys(notice) })
       end
 
       def symbolize_keys(hash)
@@ -82,15 +85,15 @@ module Pact
 
       def log_message
         latest = consumer_version_selectors.any? ? "" : "latest "
-        message = "INFO: Fetching #{latest}pacts for #{provider} from #{broker_base_url}"
+        message = "INFO: Fetching pacts for #{provider} from #{broker_base_url} with the selection criteria: "
         if consumer_version_selectors.any?
           desc = consumer_version_selectors.collect do |selector|
-            all_or_latest = selector[:all] ? "all" : "latest"
+            all_or_latest = selector[:all] ? "all for tag" : "latest for tag"
             # TODO support fallback
             name = selector[:fallback] ? "#{selector[:tag]} (or #{selector[:fallback]} if not found)" : selector[:tag]
             "#{all_or_latest} #{name}"
           end.join(", ")
-          message << " for tags: #{desc}"
+          message << ": #{desc}"
         end
         Pact.configuration.output_stream.puts message
       end

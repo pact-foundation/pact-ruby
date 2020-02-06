@@ -33,6 +33,9 @@ module Pact
           if can_publish_verification_results?
             tag_versions_if_configured
             publish_verification_results
+            true
+          else
+            false
           end
         end
 

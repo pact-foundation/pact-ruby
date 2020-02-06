@@ -8,19 +8,26 @@ module Pact
 
         def dump_summary(summary)
           super(create_custom_summary(summary))
-          output_hash[:summary][:notices] = pact_broker_notices(summary)
+          output_hash[:summary][:pacts] = pacts(summary)
         end
 
         def format_example(example)
           {
             :id => example.id,
+            :interaction_index => example.metadata[:pact_interaction].index,
             :description => example.description,
             :full_description => example.full_description,
             :status => calculate_status(example),
             :file_path => example.metadata[:file_path],
             :line_number  => example.metadata[:line_number],
             :run_time => example.execution_result.run_time,
-            :mismatches => extract_differences(example)
+            :mismatches => extract_differences(example),
+            :pact => {
+              consumer_name: example.metadata[:pact_consumer_contract].consumer.name,
+              provider_name: example.metadata[:pact_consumer_contract].provider.name,
+              url: example.metadata[:pact_uri].uri,
+              short_description: example.metadata[:pact_uri].metadata[:short_description]
+            }
           }
         end
 
@@ -54,8 +61,14 @@ module Pact
         # If the JSON formatter is used by someone else and they have multiple pacts, all the notices
         # for the pacts will be mushed together in one collection, so it will be hard to know which notice
         # belongs to which pact.
-        def pact_broker_notices(summary)
-          pact_uris(summary).collect{ |pact_uri| pact_uri.metadata[:notices] }.compact.flatten
+        def pacts(summary)
+          pact_uris(summary).collect do | pact_uri |
+            notices = (pact_uri.metadata[:notices] && pact_uri.metadata[:notices].before_verification_notices) || []
+            {
+              notices: notices,
+              url: pact_uri.uri
+            }
+          end
         end
 
         def pact_uris(summary)

@@ -21,16 +21,20 @@ module Pact
 
         include ::RSpec::Core::DSL
 
-        def honour_pactfile pact_uri, pact_json, options
+        def honour_pactfile pact_source, pact_json, options
+          pact_uri = pact_source.uri
           Pact.configuration.output_stream.puts "INFO: Reading pact at #{pact_uri}"
-          (pact_uri.metadata[:notices] || EMPTY_ARRAY).each do | notice |
-            Pact.configuration.output_stream.puts("DEBUG: #{notice[:text]}")
+          if pact_uri.metadata[:notices]
+            pact_uri.metadata[:notices].before_verification_notices_text.each do | text |
+              Pact.configuration.output_stream.puts("DEBUG: #{text}")
+            end
           end
+
           Pact.configuration.output_stream.puts "DEBUG: Filtering interactions by: #{options[:criteria]}" if options[:criteria] && options[:criteria].any?
           consumer_contract = Pact::ConsumerContract.from_json(pact_json)
           suffix = pact_uri.metadata[:pending] ? " [PENDING]": ""
           ::RSpec.describe "Verifying a pact between #{consumer_contract.consumer.name} and #{consumer_contract.provider.name}#{suffix}", pactfile_uri: pact_uri do
-            honour_consumer_contract consumer_contract, options.merge(pact_json: pact_json, pact_uri: pact_uri)
+            honour_consumer_contract consumer_contract, options.merge(pact_json: pact_json, pact_uri: pact_uri, pact_source: pact_source, consumer_contract: consumer_contract)
           end
         end
 
@@ -78,7 +82,9 @@ module Pact
             pact_interaction: interaction,
             pact_interaction_example_description: interaction_description_for_rerun_command(interaction),
             pact_uri: options[:pact_uri],
-            pact_ignore_failures: options[:pact_uri].metadata[:pending] || options[:ignore_failures]
+            pact_source: options[:pact_source],
+            pact_ignore_failures: options[:pact_uri].metadata[:pending] || options[:ignore_failures],
+            pact_consumer_contract: options[:consumer_contract]
           }
 
           describe description_for(interaction), metadata do

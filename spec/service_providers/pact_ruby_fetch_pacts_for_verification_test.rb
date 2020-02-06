@@ -74,6 +74,7 @@ describe Pact::PactBroker::FetchPactURIsForVerification, pact: true do
             body: {
               "_embedded" => {
                 "pacts" => [{
+                  "shortDescription" => "a description",
                   "verificationProperties" => {
                     "pending" => Pact.like(true),
                     "notices" => Pact.each_like("text" => "some text")
@@ -94,7 +95,8 @@ describe Pact::PactBroker::FetchPactURIsForVerification, pact: true do
           pending: true,
           notices: [
             text: "some text"
-          ]
+          ],
+          short_description: "a description"
          }
       end
 

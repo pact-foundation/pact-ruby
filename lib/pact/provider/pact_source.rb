@@ -6,7 +6,7 @@ module Pact
   module Provider
     class PactSource
 
-      attr_reader :uri
+      attr_reader :uri # PactURI class
 
       def initialize uri
         @uri = uri

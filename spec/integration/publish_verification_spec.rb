@@ -20,8 +20,11 @@ describe "publishing verifications" do
   end
 
   let(:pact_uri) do
-    instance_double('Pact::Provider::PactURI', uri: 'pact.json', options: {})
+    instance_double('Pact::Provider::PactURI', uri: 'pact.json', options: {}, metadata: metadata)
   end
+
+  let(:metadata) { { notices: notices} }
+  let(:notices) { instance_double('Pact::PactBroker::Notices', after_verification_notices_text: ['hello'] ) }
 
   let(:pact_hash) do
     {

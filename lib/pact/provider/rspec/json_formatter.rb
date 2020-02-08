@@ -22,12 +22,7 @@ module Pact
             :line_number  => example.metadata[:line_number],
             :run_time => example.execution_result.run_time,
             :mismatches => extract_differences(example),
-            :pact => {
-              consumer_name: example.metadata[:pact_consumer_contract].consumer.name,
-              provider_name: example.metadata[:pact_consumer_contract].provider.name,
-              url: example.metadata[:pact_uri].uri,
-              short_description: example.metadata[:pact_uri].metadata[:short_description]
-            }
+            :pact_url => example.metadata[:pact_uri].uri
           }
         end
 
@@ -62,17 +57,21 @@ module Pact
         # for the pacts will be mushed together in one collection, so it will be hard to know which notice
         # belongs to which pact.
         def pacts(summary)
-          pact_uris(summary).collect do | pact_uri |
+          unique_pact_metadatas(summary).collect do | example_metadata |
+            pact_uri = example_metadata[:pact_uri]
             notices = (pact_uri.metadata[:notices] && pact_uri.metadata[:notices].before_verification_notices) || []
             {
               notices: notices,
-              url: pact_uri.uri
+              url: pact_uri.uri,
+              consumer_name: example_metadata[:pact_consumer_contract].consumer.name,
+              provider_name: example_metadata[:pact_consumer_contract].provider.name,
+              short_description: pact_uri.metadata[:short_description]
             }
           end
         end
 
-        def pact_uris(summary)
-          summary.examples.collect(&:metadata).collect{ |metadata| metadata[:pact_uri] }.uniq
+        def unique_pact_metadatas(summary)
+          summary.examples.collect(&:metadata).group_by{ | metadata | metadata[:pact_uri].uri }.values.collect(&:first)
         end
 
         def create_custom_summary(summary)

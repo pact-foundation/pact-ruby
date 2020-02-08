@@ -1,3 +1,13 @@
+<a name="v1.47.0"></a>
+### v1.47.0 (2020-02-08)
+
+
+#### Features
+
+* update json formatter output	 ([376e47a](/../../commit/376e47a))
+* add pact metadata to json formatter	 ([6c6ddb8](/../../commit/6c6ddb8))
+
+
 <a name="v1.46.1"></a>
 ### v1.46.1 (2020-01-22)
 

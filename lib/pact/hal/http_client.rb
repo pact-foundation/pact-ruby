@@ -50,6 +50,8 @@ module Pact
           http = Net::HTTP.new(uri.host, uri.port, :ENV)
           http.set_debug_output(output_stream) if verbose
           http.use_ssl = (uri.scheme == 'https')
+          http.ca_file = ENV['SSL_CERT_FILE'] if ENV['SSL_CERT_FILE'] && ENV['SSL_CERT_FILE'] != ''
+          http.ca_path = ENV['SSL_CERT_DIR'] if ENV['SSL_CERT_DIR'] && ENV['SSL_CERT_DIR'] != ''
           http.start do |http|
             http.request request
           end

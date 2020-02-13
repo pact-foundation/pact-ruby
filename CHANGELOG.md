@@ -1,3 +1,12 @@
+<a name="v1.48.0"></a>
+### v1.48.0 (2020-02-13)
+
+
+#### Features
+
+* use certificates from SSL_CERT_FILE and SSL_CERT_DIR environment variables in HTTP connections	 ([164912b](/../../commit/164912b))
+
+
 <a name="v1.47.0"></a>
 ### v1.47.0 (2020-02-08)
 

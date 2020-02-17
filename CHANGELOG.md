@@ -1,3 +1,12 @@
+<a name="v1.49.0"></a>
+### v1.49.0 (2020-02-18)
+
+
+#### Features
+
+* use environment variables PACT_BROKER_USERNAME and PACT_BROKER_PASSWORD when verifying a pact by URL, if the environment variables are present	 ([308f25d](/../../commit/308f25d))
+
+
 <a name="v1.48.0"></a>
 ### v1.48.0 (2020-02-13)
 

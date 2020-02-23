@@ -32,6 +32,7 @@ module Pact
 
           Pact.configuration.output_stream.puts "DEBUG: Filtering interactions by: #{options[:criteria]}" if options[:criteria] && options[:criteria].any?
           consumer_contract = Pact::ConsumerContract.from_json(pact_json)
+        
           suffix = pact_uri.metadata[:pending] ? " [PENDING]": ""
           ::RSpec.describe "Verifying a pact between #{consumer_contract.consumer.name} and #{consumer_contract.provider.name}#{suffix}", pactfile_uri: pact_uri do
             honour_consumer_contract consumer_contract, options.merge(pact_json: pact_json, pact_uri: pact_uri, pact_source: pact_source, consumer_contract: consumer_contract)
@@ -69,7 +70,6 @@ module Pact
         end
 
         def describe_interaction interaction, options
-
           # pact_uri and pact_interaction are used by
           # Pact::Provider::RSpec::PactBrokerFormatter
 
@@ -94,8 +94,9 @@ module Pact
             before do | example |
               interaction_context.run_once :before do
                 Pact.configuration.logger.info "Running example '#{Pact::RSpec.full_description(example)}'"
-                set_up_provider_states interaction.provider_states, options[:consumer]
-                replay_interaction interaction, options[:request_customizer]
+                state_params = set_up_provider_states interaction.provider_states, options[:consumer]
+                interaction_context.state_params = state_params
+                replay_interaction interaction, options[:request_customizer], interaction_context
                 interaction_context.last_response = last_response
               end
             end
@@ -119,6 +120,7 @@ module Pact
         def describe_message expected_response, interaction_context
           include Pact::RSpec::Matchers
           extend Pact::Matchers::Messages
+
 
           let(:expected_contents) { expected_response.body[:contents].as_json }
           let(:response) { interaction_context.last_response }
@@ -204,6 +206,8 @@ module Pact
       class InteractionContext
 
         attr_accessor :last_response
+
+        attr_accessor :state_params
 
         def initialize
           @already_run = []

@@ -88,6 +88,21 @@ module Pact
           subject.will_respond_with response
         end
       end
+
+      describe "without_writing_to_pact" do
+        it "sets the write_to_pact key to false on metadata" do
+          mock_metadata = {}
+          expect(interaction).to receive(:metadata).and_return(nil, mock_metadata)
+          
+          subject.without_writing_to_pact
+
+          expect(mock_metadata).to eq({ write_to_pact: false })
+        end
+
+        it "returns itself" do
+          expect(subject.without_writing_to_pact).to be(subject)
+        end
+      end
     end
   end
 end

@@ -13,6 +13,12 @@ module Pact
         @callback = block
       end
 
+      def without_writing_to_pact
+        interaction.metadata ||= {}
+        interaction.metadata[:write_to_pact] = false
+        self
+      end
+
       def upon_receiving description
         @interaction.description = description
         self

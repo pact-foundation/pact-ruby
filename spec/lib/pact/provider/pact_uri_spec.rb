@@ -30,6 +30,14 @@ describe Pact::Provider::PactURI do
       it 'should include user name and password' do
         expect(pact_uri.to_s).to eq('http://pact:*****@uri')
       end
+
+      context 'when basic auth credentials have been set for a local file (eg. via environment variables, unintentionally)' do
+        let(:uri) { '/some/file thing.json' }
+
+        it 'does not blow up' do
+          expect(pact_uri.to_s).to eq uri
+        end
+      end
     end
 
     context 'without userinfo' do

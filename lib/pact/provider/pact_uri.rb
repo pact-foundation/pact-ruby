@@ -29,10 +29,10 @@ module Pact
       end
 
       def to_s
-        if(basic_auth?)
+        if basic_auth? && uri.start_with?('http://', 'https://')
           URI(@uri).tap { |x| x.userinfo="#{username}:*****"}.to_s
         else
-          @uri
+          uri
         end
       end
     end

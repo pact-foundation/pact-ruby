@@ -30,13 +30,15 @@ module Pact
           output_hash[:examples] = notification.examples.map do |example|
             format_example(example).tap do |hash|
               e = example.exception
-              # No point providing a backtrace for a mismatch, too much noise
-              if e && ! e.is_a?(::RSpec::Expectations::ExpectationNotMetError)
+              if e
                 hash[:exception] =  {
-                  :class => e.class.name,
-                  :message => e.message,
-                  :backtrace => e.backtrace,
+                  class: e.class.name,
+                  message: e.message,
                 }
+                # No point providing a backtrace for a mismatch, too much noise
+                if !e.is_a?(::RSpec::Expectations::ExpectationNotMetError)
+                  hash[:exception][:backtrace]
+                end
               end
             end
           end

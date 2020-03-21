@@ -1,3 +1,13 @@
+<a name="v1.49.1"></a>
+### v1.49.1 (2020-03-21)
+
+
+#### Bug Fixes
+
+* ensure diff is included in the json output	 ([0bd9753](/../../commit/0bd9753))
+* ensure the presence of basic auth credentials does not cause an error when displaying the path of a pact on the local filesystem	 ([f6a0b4d](/../../commit/f6a0b4d))
+
+
 <a name="v1.49.0"></a>
 ### v1.49.0 (2020-02-18)
 

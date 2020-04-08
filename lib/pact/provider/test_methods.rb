@@ -29,7 +29,9 @@ module Pact
       def parse_body_from_response rack_response
         case rack_response.headers['Content-Type']
         when /json/
-          JSON.load(rack_response.body)
+          # For https://github.com/pact-foundation/pact-net/issues/237
+          # Only required for the pact-ruby-standalone ¯\_(ツ)_/¯
+          JSON.load("[#{rack_response.body}]").first
         else
           rack_response.body
         end

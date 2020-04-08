@@ -1,3 +1,12 @@
+<a name="v1.49.2"></a>
+### v1.49.2 (2020-04-08)
+
+
+#### Bug Fixes
+
+* json parser error for top level JSON values	 ([dafbc35](/../../commit/dafbc35))
+
+
 <a name="v1.49.1"></a>
 ### v1.49.1 (2020-03-21)
 

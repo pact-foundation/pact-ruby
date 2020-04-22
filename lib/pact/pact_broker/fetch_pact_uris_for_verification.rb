@@ -4,10 +4,12 @@ require 'pact/provider/pact_uri'
 require 'pact/errors'
 require 'pact/pact_broker/fetch_pacts'
 require 'pact/pact_broker/notices'
+require 'pact/pact_broker/pact_selection_description'
 
 module Pact
   module PactBroker
     class FetchPactURIsForVerification
+      include PactSelectionDescription
       attr_reader :provider, :consumer_version_selectors, :provider_version_tags, :broker_base_url, :http_client_options, :http_client, :options
 
       PACTS_FOR_VERIFICATION_RELATION = 'beta:provider-pacts-for-verification'.freeze
@@ -84,18 +86,7 @@ module Pact
       end
 
       def log_message
-        latest = consumer_version_selectors.any? ? "" : "latest "
-        message = "INFO: Fetching pacts for #{provider} from #{broker_base_url} with the selection criteria: "
-        if consumer_version_selectors.any?
-          desc = consumer_version_selectors.collect do |selector|
-            all_or_latest = selector[:all] ? "all for tag" : "latest for tag"
-            # TODO support fallback
-            name = selector[:fallback] ? "#{selector[:tag]} (or #{selector[:fallback]} if not found)" : selector[:tag]
-            "#{all_or_latest} #{name}"
-          end.join(", ")
-          message << ": #{desc}"
-        end
-        Pact.configuration.output_stream.puts message
+        Pact.configuration.output_stream.puts "INFO: #{pact_selection_description(provider, consumer_version_selectors, options, broker_base_url)}"
       end
     end
   end

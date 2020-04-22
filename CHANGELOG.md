@@ -1,3 +1,12 @@
+<a name="v1.49.3"></a>
+### v1.49.3 (2020-04-22)
+
+
+#### Bug Fixes
+
+* pact selection verification options logging	 ([9ff59f4](/../../commit/9ff59f4))
+
+
 <a name="v1.49.2"></a>
 ### v1.49.2 (2020-04-08)
 

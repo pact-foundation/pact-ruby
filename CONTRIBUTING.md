@@ -11,7 +11,7 @@ Please provide the following information with your issue to enable us to respond
 
 1. Fork it
 2. Create your feature branch (`git checkout -b feat/my-new-feature`)
-3. Commit your changes. **Please use the contentional changelog format for [sematic commit messages](http://karma-runner.github.io/1.0/dev/git-commit-msg.html)** (`git commit -am 'feat(some new feat): add a thing'`)
+3. Commit your changes. **Please use the conventional changelog format for [semantic commit messages](http://karma-runner.github.io/1.0/dev/git-commit-msg.html)** (`git commit -am 'feat(some new feat): add a thing'`)
 4. Push to the branch (`git push origin feat/my-new-feature`)
 5. Create new Pull Request
 

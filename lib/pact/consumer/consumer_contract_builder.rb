@@ -25,6 +25,10 @@ module Pact
         @mock_service_base_url = "http://#{attributes[:host]}:#{attributes[:port]}"
       end
 
+      def without_writing_to_pact
+        interaction_builder.without_writing_to_pact
+      end
+
       def given(provider_state)
         interaction_builder.given(provider_state)
       end

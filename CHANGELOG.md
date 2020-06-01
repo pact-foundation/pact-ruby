@@ -1,3 +1,12 @@
+<a name="v1.50.0"></a>
+### v1.50.0 (2020-04-25)
+
+
+#### Features
+
+* Set expected interactions on mock service but without writing them to pact file (#210)	 ([14f5327](/../../commit/14f5327))
+
+
 <a name="v1.49.3"></a>
 ### v1.49.3 (2020-04-22)
 

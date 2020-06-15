@@ -1,3 +1,12 @@
+<a name="v1.50.1"></a>
+### v1.50.1 (2020-06-15)
+
+
+#### Bug Fixes
+
+* fix integration with pact-message-ruby (#216)	 ([d2da13e](/../../commit/d2da13e))
+
+
 <a name="v1.50.0"></a>
 ### v1.50.0 (2020-04-25)
 

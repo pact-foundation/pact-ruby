@@ -10,7 +10,8 @@ Pact::RSpec.with_rspec_3 do
       module RSpec
         describe Formatter do
 
-          let(:interaction) { InteractionFactory.create 'provider_state' => 'a state', 'description' => 'a description'}
+          let(:interaction) { InteractionFactory.create 'provider_state' => 'a state', 'description' => 'a description', '_id' => id, 'index' => 2 }
+          let(:id) { nil }
           let(:pactfile_uri) { 'pact_file_uri' }
           let(:description) { 'an interaction' }
           let(:pact_json) { {some: 'pact json'}.to_json }
@@ -29,11 +30,13 @@ Pact::RSpec.with_rspec_3 do
           let(:failed_examples) { [example, example] }
           let(:examples) { [example, example, example_2]}
           let(:output) { StringIO.new }
-          let(:rerun_command) { "rake pact:verify:at[pact_file_uri] PACT_DESCRIPTION=\"a description\" PACT_PROVIDER_STATE=\"a state\" # an interaction" }
+          let(:rerun_command) { 'PACT_DESCRIPTION="a description" PACT_PROVIDER_STATE="a state" # an interaction' }
+          let(:broker_rerun_command) { "rake pact:verify:at[pact_file_uri] PACT_BROKER_INTERACTION_ID=\"1234\" # an interaction" }
           let(:missing_provider_states) { 'missing_provider_states'}
           let(:summary) { double("summary", failure_count: 1, failed_examples: failed_examples, examples: examples)}
           let(:pact_executing_language) { 'ruby' }
           let(:pact_interaction_rerun_command) { Pact::TaskHelper::PACT_INTERACTION_RERUN_COMMAND }
+          let(:pact_interaction_rerun_command_for_broker) { Pact::TaskHelper::PACT_INTERACTION_RERUN_COMMAND_FOR_BROKER }
           let(:ignore_failures) { nil }
 
           subject { Formatter.new output }
@@ -43,6 +46,7 @@ Pact::RSpec.with_rspec_3 do
           before do
             allow(ENV).to receive(:[]).with('PACT_INTERACTION_RERUN_COMMAND').and_return(pact_interaction_rerun_command)
             allow(ENV).to receive(:[]).with('PACT_EXECUTING_LANGUAGE').and_return(pact_executing_language)
+            allow(ENV).to receive(:[]).with('PACT_INTERACTION_RERUN_COMMAND_FOR_BROKER').and_return(pact_interaction_rerun_command_for_broker)
             allow(PrintMissingProviderStates).to receive(:call)
             allow(Pact::Provider::Help::PromptText).to receive(:call).and_return("some help")
             allow(subject).to receive(:failed_examples).and_return(failed_examples)
@@ -69,15 +73,46 @@ Pact::RSpec.with_rspec_3 do
               end
             end
 
-            context "when PACT_INTERACTION_RERUN_COMMAND is not set" do
-              let(:pact_interaction_rerun_command) { nil }
+            context "when PACT_INTERACTION_RERUN_COMMAND_FOR_BROKER is set" do
+              context "when the _id is populated" do
+                let(:id) { "1234" }
 
-              it "prints a list of failed interactions" do
-                expect(output_result).to include("* #{description}\n")
+                it "prints a list of rerun commands" do
+                  expect(output_result).to include(broker_rerun_command)
+                end
+
+                it "only prints unique commands" do
+                  expect(output_result.scan(broker_rerun_command).size).to eq 1
+                end
+              end
+
+              context "when the _id is not populated" do
+                it "prints a list of rerun commands using the provider state and description" do
+                  expect(output_result).to include(rerun_command)
+                end
+              end
+            end
+
+            context "when PACT_INTERACTION_RERUN_COMMAND and PACT_INTERACTION_RERUN_COMMAND_FOR_BROKER are not set" do
+              let(:pact_interaction_rerun_command) { nil }
+              let(:pact_interaction_rerun_command_for_broker) { nil }
+
+              context "when the _id is populated" do
+                let(:id) { "1234" }
+
+                it "prints a list of failed interactions" do
+                  expect(output_result).to include('* an interaction (to re-run just this interaction, set environment variable PACT_BROKER_INTERACTION_ID="1234")')
+                end
+              end
+
+              context "when the _id is not populated" do
+                it "prints a list of failed interactions" do
+                  expect(output_result).to include('* an interaction (to re-run just this interaction, set environment variables PACT_DESCRIPTION="a description" PACT_PROVIDER_STATE="a state")')
+                end
               end
 
               it "only prints unique commands" do
-                expect(output_result.scan("* #{description}\n").size).to eq 1
+                expect(output_result.scan("* #{description}").size).to eq 1
               end
             end
 

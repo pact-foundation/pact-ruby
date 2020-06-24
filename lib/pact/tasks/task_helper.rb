@@ -7,6 +7,7 @@ module Pact
   module TaskHelper
 
     PACT_INTERACTION_RERUN_COMMAND = "bundle exec rake pact:verify:at[<PACT_URI>] PACT_DESCRIPTION=\"<PACT_DESCRIPTION>\" PACT_PROVIDER_STATE=\"<PACT_PROVIDER_STATE>\""
+    PACT_INTERACTION_RERUN_COMMAND_FOR_BROKER = "bundle exec rake pact:verify:at[<PACT_URI>] PACT_BROKER_INTERACTION_ID=\"<PACT_BROKER_INTERACTION_ID>\""
 
     extend self
 
@@ -34,6 +35,8 @@ module Pact
       command_parts << "--backtrace" if ENV['BACKTRACE'] == 'true'
       command_parts << "--description #{Shellwords.escape(ENV['PACT_DESCRIPTION'])}" if ENV['PACT_DESCRIPTION']
       command_parts << "--provider-state #{Shellwords.escape(ENV['PACT_PROVIDER_STATE'])}" if ENV['PACT_PROVIDER_STATE']
+      command_parts << "--pact-broker-interaction-id #{Shellwords.escape(ENV['PACT_BROKER_INTERACTION_ID'])}" if ENV['PACT_BROKER_INTERACTION_ID']
+      command_parts << "--interaction-index #{Shellwords.escape(ENV['PACT_INTERACTION_INDEX'])}" if ENV['PACT_INTERACTION_INDEX']
       command_parts.flatten.join(" ")
     end
 
@@ -41,7 +44,9 @@ module Pact
       Pact.configuration.output_stream.puts command
       temporarily_set_env_var 'PACT_EXECUTING_LANGUAGE', 'ruby' do
         temporarily_set_env_var 'PACT_INTERACTION_RERUN_COMMAND', PACT_INTERACTION_RERUN_COMMAND do
-          exit_status = system(command) ? 0 : 1
+          temporarily_set_env_var 'PACT_INTERACTION_RERUN_COMMAND_FOR_BROKER', PACT_INTERACTION_RERUN_COMMAND_FOR_BROKER do
+            exit_status = system(command) ? 0 : 1
+          end
         end
       end
     end

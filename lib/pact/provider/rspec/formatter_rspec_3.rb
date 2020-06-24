@@ -93,17 +93,32 @@ module Pact
 
         def interaction_rerun_command_for example
           example_description = example.metadata[:pact_interaction_example_description]
-          if ENV['PACT_INTERACTION_RERUN_COMMAND']
+
+          _id = example.metadata[:pact_interaction]._id
+          index = example.metadata[:pact_interaction].index
+          provider_state = example.metadata[:pact_interaction].provider_state
+          description = example.metadata[:pact_interaction].description
+          pactfile_uri = example.metadata[:pactfile_uri]
+
+          if _id && ENV['PACT_INTERACTION_RERUN_COMMAND_FOR_BROKER']
+            cmd = String.new(ENV['PACT_INTERACTION_RERUN_COMMAND_FOR_BROKER'])
+            cmd.gsub!("<PACT_URI>", example.metadata[:pactfile_uri].to_s)
+            cmd.gsub!("<PACT_BROKER_INTERACTION_ID>", "#{_id}")
+            colorizer.wrap("#{cmd} ", ::RSpec.configuration.failure_color) + colorizer.wrap("# #{example_description}", ::RSpec.configuration.detail_color)
+          elsif ENV['PACT_INTERACTION_RERUN_COMMAND']
             cmd = String.new(ENV['PACT_INTERACTION_RERUN_COMMAND'])
-            provider_state = example.metadata[:pact_interaction].provider_state
-            description = example.metadata[:pact_interaction].description
-            pactfile_uri = example.metadata[:pactfile_uri]
             cmd.gsub!("<PACT_URI>", pactfile_uri.to_s)
             cmd.gsub!("<PACT_DESCRIPTION>", description)
             cmd.gsub!("<PACT_PROVIDER_STATE>", "#{provider_state}")
+            cmd.gsub!("<PACT_INTERACTION_INDEX>", "#{index}")
             colorizer.wrap("#{cmd} ", ::RSpec.configuration.failure_color) + colorizer.wrap("# #{example_description}", ::RSpec.configuration.detail_color)
           else
-            colorizer.wrap("* #{example_description}", ::RSpec.configuration.failure_color)
+            message = if _id
+              "* #{example_description} (to re-run just this interaction, set environment variable PACT_BROKER_INTERACTION_ID=\"#{_id}\")"
+            else
+              "* #{example_description} (to re-run just this interaction, set environment variables PACT_DESCRIPTION=\"#{description}\" PACT_PROVIDER_STATE=\"#{provider_state}\")"
+            end
+            colorizer.wrap(message, ::RSpec.configuration.failure_color)
           end
         end
 

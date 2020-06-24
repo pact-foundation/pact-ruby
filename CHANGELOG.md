@@ -1,3 +1,12 @@
+<a name="v1.51.0"></a>
+### v1.51.0 (2020-06-24)
+
+
+#### Features
+
+* allow individual interactions to be re-run by setting PACT_BROKER_INTERACTION_ID	 ([a586d80](/../../commit/a586d80))
+
+
 <a name="v1.50.1"></a>
 ### v1.50.1 (2020-06-15)
 

@@ -4,6 +4,9 @@ require 'pact/provider/configuration'
 
 module Pact
   class CLI < Thor
+    def self.exit_on_failure? # Thor 1.0 deprecation guard
+      false
+    end
 
     desc 'verify', "Verify a pact"
     method_option :pact_helper, aliases: "-h", desc: "Pact helper file", :required => true

@@ -1,3 +1,11 @@
+<a name="v1.51.1"></a>
+### v1.51.1 (2020-08-12)
+
+#### Bug Fixes
+
+* update thor dependency (#218)	 ([bf3ce69](/../../commit/bf3ce69))
+* bump rake dependency per CVE-2020-8130 (#219)	 ([09feaa6](/../../commit/09feaa6))
+
 <a name="v1.51.0"></a>
 ### v1.51.0 (2020-06-24)
 

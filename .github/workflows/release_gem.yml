@@ -1,0 +1,58 @@
+name: Release gem
+
+on:
+  repository_dispatch:
+    types:
+      - release-triggered
+
+jobs:
+  test:
+    runs-on: ubuntu-latest
+    steps:
+    - uses: actions/checkout@v2
+    - uses: actions/setup-ruby@v1
+      with:
+        ruby-version: '2.6'
+    - run: |
+        gem install bundler -v 2.1
+        bundle install
+    - name: Test
+      run: bundle exec rake
+
+  release:
+    needs: test
+    runs-on: ubuntu-latest
+    outputs:
+      gem_name: ${{ steps.release.outputs.gem_name }}
+      version: ${{ steps.release.outputs.version }}
+      increment: ${{ steps.release.outputs.increment }}
+    steps:
+    - uses: actions/checkout@v2
+      with:
+        fetch-depth: 0
+    - uses: pact-foundation/release-gem@v0.0.11
+      id: release
+      env:
+        GEM_HOST_API_KEY: '${{ secrets.RUBYGEMS_API_KEY }}'
+        GITHUB_TOKEN: '${{ secrets.GITHUB_TOKEN }}'
+        INCREMENT: '${{ github.event.client_payload.increment }}'
+
+  notify-gem-released:
+    needs: release
+    strategy:
+      matrix:
+        repository: [pact-foundation/pact-ruby-cli, pact-foundation/pact-ruby-standalone, pact-foundation/pact_broker-client]
+    runs-on: ubuntu-latest
+    steps:
+      - name: Notify ${{ matrix.repository }} of gem release
+        uses: peter-evans/repository-dispatch@v1
+        with:
+          token: ${{ secrets.GHTOKENFORPACTCLIRELEASE }}
+          repository: ${{ matrix.repository }}
+          event-type: gem-released
+          client-payload: |
+              {
+                "name": "${{ needs.release.outputs.gem_name }}",
+                "version": "${{ needs.release.outputs.version }}",
+                "increment": "${{ needs.release.outputs.increment }}"
+              }

@@ -21,7 +21,11 @@ module Pact
 
         logger.info "Sending #{request.method.upcase} request to path: \"#{request.path}\" with headers: #{request.headers}, see debug logs for body"
         logger.debug "body :#{request.body}"
-        response = self.send(request.method.downcase, *args)
+        response = if self.respond_to?(:custom_request)
+          self.custom_request(request.method.upcase, *args)
+        else
+          self.send(request.method.downcase, *args)
+        end
         logger.info "Received response with status: #{response.status}, headers: #{response.headers}, see debug logs for body"
         logger.debug "body: #{response.body}"
       end

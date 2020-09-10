@@ -1,3 +1,10 @@
+<a name="v1.52.0"></a>
+### v1.52.0 (2020-09-10)
+
+#### Features
+
+* support webdav http methods	 ([fa1d712](/../../commit/fa1d712))
+
 <a name="v1.51.1"></a>
 ### v1.51.1 (2020-08-12)
 

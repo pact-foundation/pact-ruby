@@ -1,3 +1,10 @@
+<a name="v1.53.0"></a>
+### v1.53.0 (2020-09-11)
+
+#### Features
+
+* add support for the enable_pending flag	 ([16866f4](/../../commit/16866f4))
+
 <a name="v1.52.0"></a>
 ### v1.52.0 (2020-09-10)
 

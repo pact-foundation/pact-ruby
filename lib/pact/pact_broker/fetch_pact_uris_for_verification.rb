@@ -22,7 +22,7 @@ module Pact
       def initialize(provider, consumer_version_selectors, provider_version_tags, broker_base_url, http_client_options, options = {})
         @provider = provider
         @consumer_version_selectors = consumer_version_selectors || []
-        @provider_version_tags = provider_version_tags || []
+        @provider_version_tags = [*provider_version_tags]
         @http_client_options = http_client_options
         @broker_base_url = broker_base_url
         @http_client = Pact::Hal::HttpClient.new(http_client_options)

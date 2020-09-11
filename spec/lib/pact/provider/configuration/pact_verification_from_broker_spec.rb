@@ -26,16 +26,18 @@ module Pact
               PactVerificationFromBroker.build(provider_name, provider_version_tags) do
                 pact_broker_base_url base_url, basic_auth_options
                 consumer_version_tags tags
+                enable_pending true
                 verbose true
               end
             end
 
             let(:fetch_pacts) { double('FetchPacts') }
-            let(:options) { basic_auth_options.merge(verbose: true) }
+            let(:basic_auth_opts) { basic_auth_options.merge(verbose: true) }
+            let(:options) { { include_pending_status: true }}
             let(:consumer_version_selectors) { [ { tag: 'master', latest: true }] }
 
             it "creates a instance of Pact::PactBroker::FetchPactURIsForVerification" do
-              expect(Pact::PactBroker::FetchPactURIsForVerification).to receive(:new).with(provider_name, consumer_version_selectors, provider_version_tags, base_url, options)
+              expect(Pact::PactBroker::FetchPactURIsForVerification).to receive(:new).with(provider_name, consumer_version_selectors, provider_version_tags, base_url, basic_auth_opts, options)
               subject
             end
 
@@ -70,7 +72,7 @@ module Pact
             let(:fetch_pacts) { double('FetchPacts') }
 
             it "coerces the value into an array" do
-              expect(Pact::PactBroker::FetchPactURIsForVerification).to receive(:new).with(anything, [{ tag: "master", latest: true}], anything, anything, anything)
+              expect(Pact::PactBroker::FetchPactURIsForVerification).to receive(:new).with(anything, [{ tag: "master", latest: true}], anything, anything, anything, anything)
               subject
             end
           end
@@ -85,7 +87,7 @@ module Pact
             let(:fetch_pacts) { double('FetchPacts') }
 
             it "creates an instance of FetchPacts with an emtpy array for the consumer_version_tags" do
-              expect(Pact::PactBroker::FetchPactURIsForVerification).to receive(:new).with(anything, [], anything, anything, anything)
+              expect(Pact::PactBroker::FetchPactURIsForVerification).to receive(:new).with(anything, [], anything, anything, anything, anything)
               subject
             end
           end
@@ -100,7 +102,7 @@ module Pact
             let(:fetch_pacts) { double('FetchPacts') }
 
             it "creates an instance of FetchPactURIsForVerification with verbose: false" do
-              expect(Pact::PactBroker::FetchPactURIsForVerification).to receive(:new).with(anything, anything, anything, anything, hash_including(verbose: false))
+              expect(Pact::PactBroker::FetchPactURIsForVerification).to receive(:new).with(anything, anything, anything, anything, hash_including(verbose: false), anything)
               subject
             end
           end

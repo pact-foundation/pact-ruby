@@ -35,6 +35,17 @@ module Pact
           end
         end
 
+        context "when a single tag is provided instead of an array" do
+
+          let(:provider_version_tags) { "pmaster" }
+
+          subject { FetchPactURIsForVerification.new(provider, consumer_version_selectors, provider_version_tags, broker_base_url, http_client_options)}
+
+          it "wraps an array around it" do
+            expect(subject.provider_version_tags).to eq ["pmaster"]
+          end
+        end
+
         context "when the beta:provider-pacts-for-verification relation does not exist" do
           before do
             allow(FetchPacts).to receive(:call)

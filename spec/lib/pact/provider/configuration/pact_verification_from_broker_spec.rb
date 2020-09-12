@@ -8,6 +8,7 @@ module Pact
           let(:provider_name) {'provider-name'}
           let(:provider_version_tags) { ['master'] }
           let(:base_url) { "http://broker.org" }
+          let(:since) { "2020-01-01" }
           let(:basic_auth_options) do
             {
               username: 'pact_broker_username',
@@ -27,7 +28,7 @@ module Pact
                 pact_broker_base_url base_url, basic_auth_options
                 consumer_version_tags tags
                 enable_pending true
-                include_wip_pacts_since "2020-01-01"
+                include_wip_pacts_since since
                 verbose true
               end
             end
@@ -44,13 +45,33 @@ module Pact
                 provider_version_tags,
                 base_url,
                 basic_auth_opts,
-              options)
+                options
+              )
               subject
             end
 
             it "adds a pact_uri_source to the provider world" do
               expect(Pact.provider_world).to receive(:add_pact_uri_source).with(fetch_pacts)
               subject
+            end
+
+            context "when since is a Date" do
+              let(:since) { Date.new(2020, 1, 1) }
+
+              it "converts it to a string" do
+                expect(Pact::PactBroker::FetchPactURIsForVerification).to receive(:new).with(
+                  anything,
+                  anything,
+                  anything,
+                  anything,
+                  anything,
+                  {
+                    include_pending_status: true,
+                    include_wip_pacts_since: since.xmlschema
+                  }
+                )
+                subject
+              end
             end
           end
 

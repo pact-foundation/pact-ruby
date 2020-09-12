@@ -40,7 +40,11 @@ module Pact
           end
 
           def include_wip_pacts_since since
-            self._include_wip_pacts_since = since
+            self._include_wip_pacts_since = if since.respond_to?(:xmlschema)
+              since.xmlschema
+            else
+              since
+            end
           end
 
           def verbose verbose

@@ -12,7 +12,8 @@ module Pact
       include PactSelectionDescription
       attr_reader :provider, :consumer_version_selectors, :provider_version_tags, :broker_base_url, :http_client_options, :http_client, :options
 
-      PACTS_FOR_VERIFICATION_RELATION = 'beta:provider-pacts-for-verification'.freeze
+      PACTS_FOR_VERIFICATION_RELATION = 'pb:provider-pacts-for-verification'.freeze
+      PACTS_FOR_VERIFICATION_RELATION_BETA = 'beta:provider-pacts-for-verification'.freeze
       PACTS = 'pacts'.freeze
       HREF = 'href'.freeze
       LINKS = '_links'.freeze
@@ -34,7 +35,7 @@ module Pact
       end
 
       def call
-        if index.can?(PACTS_FOR_VERIFICATION_RELATION)
+        if index.can?(PACTS_FOR_VERIFICATION_RELATION) || index.can?(PACTS_FOR_VERIFICATION_RELATION_BETA)
           log_message
           pacts_for_verification
         else
@@ -63,7 +64,7 @@ module Pact
 
       def pacts_for_verification_entity
         index
-          ._link(PACTS_FOR_VERIFICATION_RELATION)
+          ._link(PACTS_FOR_VERIFICATION_RELATION, PACTS_FOR_VERIFICATION_RELATION_BETA)
           .expand(provider: provider)
           .post!(query)
       end

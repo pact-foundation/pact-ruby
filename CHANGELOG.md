@@ -1,3 +1,12 @@
+<a name="v1.54.0"></a>
+### v1.54.0 (2020-09-12)
+
+#### Features
+
+* use pb relation in preference to beta relation when fetching pacts for verification	 ([7563fcf](/../../commit/7563fcf))
+* allow include_wip_pacts_since to use a Date, DateTime or Time	 ([dd35366](/../../commit/dd35366))
+* add support for include_wip_pacts_since	 ([f2247b8](/../../commit/f2247b8))
+
 <a name="v1.53.0"></a>
 ### v1.53.0 (2020-09-11)
 

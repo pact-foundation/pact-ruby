@@ -18,7 +18,7 @@ GEM
     diff-lcs (1.4.4)
     filelock (1.1.1)
     find_a_port (1.0.1)
-    json (1.8.6)
+    json (2.3.1)
     method_source (1.0.0)
     mustermann (1.1.1)
       ruby2_keywords (~> 0.0.1)
@@ -81,7 +81,6 @@ PLATFORMS
   ruby
 
 DEPENDENCIES
-  json (~> 1.8)
   pact!
   pry
   rack (~> 2.1)

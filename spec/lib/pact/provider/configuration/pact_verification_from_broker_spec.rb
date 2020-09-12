@@ -27,17 +27,24 @@ module Pact
                 pact_broker_base_url base_url, basic_auth_options
                 consumer_version_tags tags
                 enable_pending true
+                include_wip_pacts_since "2020-01-01"
                 verbose true
               end
             end
 
             let(:fetch_pacts) { double('FetchPacts') }
             let(:basic_auth_opts) { basic_auth_options.merge(verbose: true) }
-            let(:options) { { include_pending_status: true }}
+            let(:options) { { include_pending_status: true, include_wip_pacts_since: "2020-01-01" }}
             let(:consumer_version_selectors) { [ { tag: 'master', latest: true }] }
 
             it "creates a instance of Pact::PactBroker::FetchPactURIsForVerification" do
-              expect(Pact::PactBroker::FetchPactURIsForVerification).to receive(:new).with(provider_name, consumer_version_selectors, provider_version_tags, base_url, basic_auth_opts, options)
+              expect(Pact::PactBroker::FetchPactURIsForVerification).to receive(:new).with(
+                provider_name,
+                consumer_version_selectors,
+                provider_version_tags,
+                base_url,
+                basic_auth_opts,
+              options)
               subject
             end
 

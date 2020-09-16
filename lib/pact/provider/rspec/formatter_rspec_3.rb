@@ -54,11 +54,15 @@ module Pact
         private
 
         def interactions_count(summary)
-          summary.examples.collect{ |e| e.metadata[:pact_interaction_example_description] }.uniq.size
+          summary.examples.collect{ |e| interaction_unique_key(e) }.uniq.size
         end
 
         def failed_interactions_count(summary)
-          summary.failed_examples.collect{ |e| e.metadata[:pact_interaction_example_description] }.uniq.size
+          failed_interaction_examples(summary).size
+        end
+
+        def pending_interactions_count(summary)
+          pending_interaction_examples(summary).size
         end
 
         def ignore_failures?(summary)
@@ -66,16 +70,14 @@ module Pact
         end
 
         def failure_title summary
-          if ignore_failures?(summary)
-            "#{failed_interactions_count(summary)} pending"
-          else
-            ::RSpec::Core::Formatters::Helpers.pluralize(failed_interactions_count(summary), "failure")
-          end
+          ::RSpec::Core::Formatters::Helpers.pluralize(failed_interactions_count(summary), "failure")
         end
 
         def totals_line summary
           line = ::RSpec::Core::Formatters::Helpers.pluralize(interactions_count(summary), "interaction")
           line << ", " << failure_title(summary)
+          pending_count = pending_interactions_count(summary)
+          line << ", " << "#{pending_count} pending" if pending_count > 0
           line
         end
 
@@ -88,12 +90,17 @@ module Pact
         end
 
         def print_rerun_commands summary
-          if ignore_failures?(summary)
+          if pending_interactions_count(summary) > 0
+            set_rspec_failure_color(:yellow)
             output.puts("\nPending interactions: (Failures listed here are expected and do not affect your suite's status)\n\n")
-          else
-            output.puts("\nFailed interactions:\n\n")
+            interaction_rerun_commands(pending_interaction_examples(summary)).each do | message |
+              output.puts(message)
+            end
           end
-          interaction_rerun_commands(summary).each do | message |
+
+          set_rspec_failure_color(:red)
+          output.puts("\nFailed interactions:\n\n")
+          interaction_rerun_commands(failed_interaction_examples(summary)).each do | message |
             output.puts(message)
           end
         end
@@ -104,10 +111,34 @@ module Pact
           end
         end
 
-        def interaction_rerun_commands summary
-          summary.failed_examples.collect do |example|
+        def pending_interaction_examples(summary)
+          one_failed_example_per_interaction(summary).select do | example |
+            example.metadata[:pactfile_uri].metadata[:pending]
+          end
+        end
+
+        def failed_interaction_examples(summary)
+          one_failed_example_per_interaction(summary).select do | example |
+            !example.metadata[:pactfile_uri].metadata[:pending]
+          end
+        end
+
+        def one_failed_example_per_interaction(summary)
+          summary.failed_examples.group_by{| e| interaction_unique_key(e)}.values.collect(&:first)
+        end
+
+        def interaction_rerun_commands examples
+          examples.collect do |example|
             interaction_rerun_command_for example
-          end.uniq.compact
+          end.compact
+        end
+
+        def interaction_unique_key(example)
+          # pending is just to make the counting easier, it isn't required for the unique key
+          {
+            pactfile_uri: example.metadata[:pactfile_uri],
+            index: example.metadata[:pact_interaction].index,
+          }
         end
 
         def interaction_rerun_command_for example
@@ -155,6 +186,10 @@ module Pact
 
         def executing_with_ruby?
           ENV['PACT_EXECUTING_LANGUAGE'] == 'ruby'
+        end
+
+        def set_rspec_failure_color color
+          ::RSpec.configuration.failure_color = color
         end
       end
     end

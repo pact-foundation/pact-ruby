@@ -11,8 +11,9 @@ Pact::RSpec.with_rspec_3 do
         describe Formatter do
 
           let(:interaction) { InteractionFactory.create 'provider_state' => 'a state', 'description' => 'a description', '_id' => id, 'index' => 2 }
+          let(:interaction_2) { InteractionFactory.create 'provider_state' => 'a state', 'description' => 'a description 2', '_id' => "#{id}2", 'index' => 3 }
           let(:id) { nil }
-          let(:pactfile_uri) { 'pact_file_uri' }
+          let(:pactfile_uri) { Pact::Provider::PactURI.new('pact_file_uri') }
           let(:description) { 'an interaction' }
           let(:pact_json) { {some: 'pact json'}.to_json }
           let(:metadata) do
@@ -21,10 +22,10 @@ Pact::RSpec.with_rspec_3 do
               pactfile_uri: pactfile_uri,
               pact_interaction_example_description: description,
               pact_json: pact_json,
-              pact_ignore_failures: ignore_failures
+              pact_ignore_failures: ignore_failures,
             }
           end
-          let(:metadata_2) { metadata.merge(pact_interaction_example_description: 'another interaction')}
+          let(:metadata_2) { metadata.merge(pact_interaction: interaction_2)}
           let(:example) { double("Example", metadata: metadata) }
           let(:example_2) { double("Example", metadata: metadata_2) }
           let(:failed_examples) { [example, example] }
@@ -51,6 +52,7 @@ Pact::RSpec.with_rspec_3 do
             allow(Pact::Provider::Help::PromptText).to receive(:call).and_return("some help")
             allow(subject).to receive(:failed_examples).and_return(failed_examples)
             allow(Pact.provider_world.provider_states).to receive(:missing_provider_states).and_return(missing_provider_states)
+            allow(subject).to receive(:set_rspec_failure_color)
             subject.dump_summary summary
           end
 
@@ -141,7 +143,7 @@ Pact::RSpec.with_rspec_3 do
             end
 
             context "when ignore_failures is true" do
-              let(:ignore_failures) { true }
+              let(:pactfile_uri) { Pact::Provider::PactURI.new('pact_file_uri', {}, { pending: true}) }
 
               it "reports failures as pending" do
                 expect(output_result).to include("1 pending")

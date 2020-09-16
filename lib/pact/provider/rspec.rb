@@ -24,28 +24,34 @@ module Pact
         def honour_pactfile pact_source, pact_json, options
           pact_uri = pact_source.uri
           Pact.configuration.output_stream.puts "INFO: Reading pact at #{pact_uri}"
-          if pact_uri.metadata[:notices]
-            pact_uri.metadata[:notices].before_verification_notices_text.each do | text |
-              Pact.configuration.output_stream.puts("DEBUG: #{text}")
-            end
-          end
-
-          Pact.configuration.output_stream.puts "DEBUG: Filtering interactions by: #{options[:criteria]}" if options[:criteria] && options[:criteria].any?
           consumer_contract = Pact::ConsumerContract.from_json(pact_json)
           suffix = pact_uri.metadata[:pending] ? " [PENDING]": ""
+
           ::RSpec.describe "Verifying a pact between #{consumer_contract.consumer.name} and #{consumer_contract.provider.name}#{suffix}", pactfile_uri: pact_uri do
-            honour_consumer_contract consumer_contract, options.merge(pact_json: pact_json, pact_uri: pact_uri, pact_source: pact_source, consumer_contract: consumer_contract)
+            honour_consumer_contract consumer_contract, options.merge(
+              pact_json: pact_json,
+              pact_uri: pact_uri,
+              pact_source: pact_source,
+              consumer_contract: consumer_contract,
+              criteria: options[:criteria]
+              )
           end
         end
 
         def honour_consumer_contract consumer_contract, options = {}
-          describe_consumer_contract consumer_contract, options.merge(consumer: consumer_contract.consumer.name)
+          describe_consumer_contract consumer_contract, options.merge(consumer: consumer_contract.consumer.name, pact_context: InteractionContext.new)
         end
 
         private
 
         def describe_consumer_contract consumer_contract, options
-          consumer_interactions(consumer_contract, options).each do |interaction|
+          consumer_interactions(consumer_contract, options).tap{ |interactions|
+            if interactions.empty?
+              # If there are no interactions, the documentation formatter never fires to print this out,
+              # so print it out here.
+              Pact.configuration.output_stream.puts "DEBUG: All interactions for #{options[:pact_uri]} have been filtered out by criteria: #{options[:criteria]}" if options[:criteria] && options[:criteria].any?
+            end
+          }.each do |interaction|
             describe_interaction_with_provider_state interaction, options
           end
         end
@@ -54,7 +60,7 @@ module Pact
           if options[:criteria].nil?
             consumer_contract.interactions
           else
-            consumer_contract.find_interactions options[:criteria]
+            consumer_contract.find_interactions(options[:criteria])
           end
         end
 
@@ -84,14 +90,19 @@ module Pact
             pact_uri: options[:pact_uri],
             pact_source: options[:pact_source],
             pact_ignore_failures: options[:pact_uri].metadata[:pending] || options[:ignore_failures],
-            pact_consumer_contract: options[:consumer_contract]
+            pact_consumer_contract: options[:consumer_contract],
+            pact_criteria: options[:criteria]
           }
 
           describe description_for(interaction), metadata do
 
             interaction_context = InteractionContext.new
+            pact_context = options[:pact_context]
 
             before do | example |
+              pact_context.run_once :before do
+                ::RSpec.configuration.reporter.message "THIS IS A PACT"
+              end
               interaction_context.run_once :before do
                 Pact.configuration.logger.info "Running example '#{Pact::RSpec.full_description(example)}'"
                 set_up_provider_states interaction.provider_states, options[:consumer]

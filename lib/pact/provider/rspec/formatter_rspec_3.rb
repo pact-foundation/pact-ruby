@@ -24,6 +24,25 @@ module Pact
 
         C = ::Term::ANSIColor
 
+        def example_group_started(notification)
+          if @group_level == 0
+            Pact.configuration.output_stream.puts
+            pact_uri = notification.group.metadata[:pactfile_uri]
+            ::RSpec.configuration.failure_color = pact_uri.metadata[:pending] ? :yellow : :red
+
+            if pact_uri.metadata[:notices]
+              pact_uri.metadata[:notices].before_verification_notices_text.each do | text |
+                Pact.configuration.output_stream.puts("DEBUG: #{text}")
+              end
+            end
+
+            criteria = notification.group.metadata[:pact_criteria]
+            Pact.configuration.output_stream.puts "DEBUG: Filtering interactions by: #{criteria}" if criteria && criteria.any?
+          end
+          super
+        end
+
+
         def dump_summary(summary)
           output.puts "\n" + colorized_totals_line(summary)
           return if summary.failure_count == 0

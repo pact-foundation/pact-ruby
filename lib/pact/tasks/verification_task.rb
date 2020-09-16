@@ -31,6 +31,7 @@ module Pact
     attr_reader :pact_spec_configs
     attr_accessor :rspec_opts
     attr_accessor :ignore_failures
+    attr_accessor :_pact_helper
 
     def initialize(name)
       @rspec_opts = nil
@@ -39,6 +40,10 @@ module Pact
       @name = name
       yield self
       rake_task
+    end
+
+    def pact_helper(pact_helper)
+      @pact_spec_configs << { pact_helper: pact_helper }
     end
 
     def uri(uri, options = {})
@@ -82,6 +87,7 @@ module Pact
           Pact::TaskHelper.handle_verification_failure do
             exit_statuses.count{ | status | status != 0 }
           end
+
         end
       end
     end

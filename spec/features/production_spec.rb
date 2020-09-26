@@ -2,6 +2,7 @@ require 'spec_helper'
 require 'pact/provider/rspec'
 require 'pact/consumer_contract'
 require 'features/provider_states/zebras'
+require 'pact/provider/pact_source'
 
 
 module Pact::Provider
@@ -81,7 +82,10 @@ module Pact::Provider
         end
     end
 
-    honour_consumer_contract pact, pact_uri: Pact::Provider::PactURI.new("http://dummy-uri")
+    pact_uri = Pact::Provider::PactURI.new("http://dummy-uri")
+    pact_source = Pact::Provider::PactSource.new(pact_uri)
+
+    honour_consumer_contract pact, pact_uri: pact_uri, pact_source: pact_source
 
   end
 
@@ -115,8 +119,10 @@ module Pact::Provider
             end
         end
 
+        pact_uri = Pact::Provider::PactURI.new("http://dummy-uri")
+        pact_source = Pact::Provider::PactSource.new(pact_uri)
 
-        honour_consumer_contract consumer_contract, pact_uri: Pact::Provider::PactURI.new("http://dummy-uri")
+        honour_consumer_contract consumer_contract, pact_uri: pact_uri, pact_source: pact_source
     end
 
     context "that is a string" do
@@ -147,8 +153,10 @@ module Pact::Provider
             end
         end
 
+        pact_uri = Pact::Provider::PactURI.new("http://dummy-uri")
+        pact_source = Pact::Provider::PactSource.new(pact_uri)
 
-        honour_consumer_contract consumer_contract, pact_uri: Pact::Provider::PactURI.new("http://dummy-uri")
+        honour_consumer_contract consumer_contract, pact_uri: pact_uri, pact_source: pact_source
     end
 
   end

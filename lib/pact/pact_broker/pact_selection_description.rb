@@ -7,7 +7,6 @@ module Pact
         if consumer_version_selectors.any?
           desc = consumer_version_selectors.collect do |selector|
             all_or_latest = !selector[:latest] ? "all for tag" : "latest for tag"
-            # TODO support fallback
             fallback = selector[:fallback] || selector[:fallbackTag]
             name = fallback ? "#{selector[:tag]} (or #{fallback} if not found)" : selector[:tag]
             "#{all_or_latest} #{name}"

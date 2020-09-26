@@ -2,6 +2,7 @@ require 'pact/shared/dsl'
 require 'pact/provider/world'
 require 'pact/pact_broker/fetch_pact_uris_for_verification'
 require 'pact/errors'
+require 'pact/utils/string'
 
 module Pact
   module Provider
@@ -14,12 +15,13 @@ module Pact
         # in parent scope, it will clash with these ones,
         # so put an underscore in front of the name to be safer.
 
-        attr_accessor :_provider_name, :_pact_broker_base_url, :_consumer_version_tags, :_provider_version_tags, :_basic_auth_options, :_enable_pending, :_include_wip_pacts_since, :_verbose
+        attr_accessor :_provider_name, :_pact_broker_base_url, :_consumer_version_tags, :_provider_version_tags, :_basic_auth_options, :_enable_pending, :_include_wip_pacts_since, :_verbose, :_consumer_version_selectors
 
         def initialize(provider_name, provider_version_tags)
           @_provider_name = provider_name
           @_provider_version_tags = provider_version_tags
           @_consumer_version_tags = []
+          @_consumer_version_selectors = []
           @_enable_pending = false
           @_include_wip_pacts_since = nil
           @_verbose = false
@@ -33,6 +35,10 @@ module Pact
 
           def consumer_version_tags consumer_version_tags
             self._consumer_version_tags = *consumer_version_tags
+          end
+
+          def consumer_version_selectors consumer_version_selectors
+            self._consumer_version_selectors = *consumer_version_selectors
           end
 
           def enable_pending enable_pending
@@ -73,12 +79,33 @@ module Pact
         end
 
         def consumer_version_selectors
-          # TODO support "all"
+          convert_tags_to_selectors + convert_consumer_version_selectors
+        end
+
+        def convert_tags_to_selectors
           _consumer_version_tags.collect do | tag |
-            {
-              tag: tag,
-              latest: true
-            }
+            if tag.is_a?(Hash)
+              {
+                tag: tag.fetch(:name),
+                latest: !tag[:all],
+                fallbackTag: tag[:fallback]
+              }
+            elsif tag.is_a?(String)
+              {
+                tag: tag,
+                latest: true
+              }
+            else
+              raise Pact::Error.new("The value supplied for consumer_version_tags must be a String or a Hash. Found #{tag.class}")
+            end
+          end
+        end
+
+        def convert_consumer_version_selectors
+          _consumer_version_selectors.collect do | selector |
+            selector.each_with_object({}) do | (key, value), new_selector |
+              new_selector[Pact::Utils::String.camelcase(key.to_s).to_sym] = value
+            end
           end
         end
 

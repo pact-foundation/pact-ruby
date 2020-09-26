@@ -16,6 +16,7 @@ module Pact
             }
           end
           let(:tags) { ['master'] }
+          let(:fetch_pacts) { double('FetchPacts') }
 
           before do
             allow(Pact::PactBroker::FetchPactURIsForVerification).to receive(:new).and_return(fetch_pacts)
@@ -82,8 +83,6 @@ module Pact
               end
             end
 
-            let(:fetch_pacts) { double('FetchPacts') }
-
             it "raises an error" do
               expect { subject }.to raise_error Pact::Error, /Please provide a pact_broker_base_url/
             end
@@ -96,8 +95,6 @@ module Pact
                 consumer_version_tags "master"
               end
             end
-
-            let(:fetch_pacts) { double('FetchPacts') }
 
             it "coerces the value into an array" do
               expect(Pact::PactBroker::FetchPactURIsForVerification).to receive(:new).with(anything, [{ tag: "master", latest: true}], anything, anything, anything, anything)
@@ -112,10 +109,55 @@ module Pact
               end
             end
 
-            let(:fetch_pacts) { double('FetchPacts') }
-
             it "creates an instance of FetchPacts with an emtpy array for the consumer_version_tags" do
               expect(Pact::PactBroker::FetchPactURIsForVerification).to receive(:new).with(anything, [], anything, anything, anything, anything)
+              subject
+            end
+          end
+
+          context "when the old format of selector is supplied to the consumer_verison_tags" do
+            let(:tags) { [{ name: 'main', all: true, fallback: 'fallback' }] }
+
+            subject do
+              PactVerificationFromBroker.build(provider_name, provider_version_tags) do
+                pact_broker_base_url base_url
+                consumer_version_tags tags
+              end
+            end
+
+            it "converts them to selectors" do
+              expect(Pact::PactBroker::FetchPactURIsForVerification).to receive(:new).with(anything, [{ tag: "main", latest: false, fallbackTag: 'fallback'}], anything, anything, anything, anything)
+              subject
+            end
+          end
+
+          context "when an invalid class is used for the consumer_version_tags" do
+            let(:tags) { [true] }
+
+            subject do
+              PactVerificationFromBroker.build(provider_name, provider_version_tags) do
+                pact_broker_base_url base_url
+                consumer_version_tags tags
+              end
+            end
+
+            it "raises an error" do
+              expect { subject }.to raise_error Pact::Error, "The value supplied for consumer_version_tags must be a String or a Hash. Found TrueClass"
+            end
+          end
+
+          context "when consumer_version_selectors are provided" do
+            let(:tags) { [{ tag: 'main', latest: true, fallback_tag: 'fallback' }] }
+
+            subject do
+              PactVerificationFromBroker.build(provider_name, provider_version_tags) do
+                pact_broker_base_url base_url
+                consumer_version_selectors tags
+              end
+            end
+
+            it "converts the casing of the key names" do
+              expect(Pact::PactBroker::FetchPactURIsForVerification).to receive(:new).with(anything, [{ tag: "main", latest: true, fallbackTag: 'fallback'}], anything, anything, anything, anything)
               subject
             end
           end
@@ -126,8 +168,6 @@ module Pact
                 pact_broker_base_url base_url
               end
             end
-
-            let(:fetch_pacts) { double('FetchPacts') }
 
             it "creates an instance of FetchPactURIsForVerification with verbose: false" do
               expect(Pact::PactBroker::FetchPactURIsForVerification).to receive(:new).with(anything, anything, anything, anything, hash_including(verbose: false), anything)

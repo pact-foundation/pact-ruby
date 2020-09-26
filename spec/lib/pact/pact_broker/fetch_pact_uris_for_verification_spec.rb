@@ -11,7 +11,7 @@ module Pact
         let(:provider) { "Foo"}
         let(:broker_base_url) { "http://broker.org" }
         let(:http_client_options) { {} }
-        let(:consumer_version_selectors) { [{ tag: "cmaster", latest: true}] }
+        let(:consumer_version_selectors) { [{ tag: "cmaster", latest: true, fallbackTag: 'blah' }] }
         let(:provider_version_tags) { ["pmaster"] }
 
         subject { FetchPactURIsForVerification.call(provider, consumer_version_selectors, provider_version_tags, broker_base_url, http_client_options)}
@@ -60,7 +60,7 @@ module Pact
           end
 
           it "calls the old fetch pacts code" do
-            expect(FetchPacts).to receive(:call).with(provider, ["cmaster"], broker_base_url, http_client_options)
+            expect(FetchPacts).to receive(:call).with(provider, [{ name: "cmaster", all: false, fallback: "blah" }], broker_base_url, http_client_options)
             subject
           end
         end

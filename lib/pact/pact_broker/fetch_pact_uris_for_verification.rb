@@ -39,9 +39,11 @@ module Pact
           log_message
           pacts_for_verification
         else
+          old_selectors = consumer_version_selectors.collect do | selector |
+            { name: selector[:tag], all: !selector[:latest], fallback: selector[:fallbackTag]}
+          end
           # Fall back to old method of fetching pacts
-          consumer_version_tags = consumer_version_selectors.collect{ | selector | selector[:tag] }
-          FetchPacts.call(provider, consumer_version_tags, broker_base_url, http_client_options)
+          FetchPacts.call(provider, old_selectors, broker_base_url, http_client_options)
         end
       end
 

@@ -81,7 +81,7 @@ module Pact
             Pact.configuration.output_stream.puts "INFO: Tagging version #{provider_application_version} of #{provider_name} as #{tag.inspect}"
             tag_entity = tag_link.expand(version: provider_application_version, tag: tag).put
             unless tag_entity.success?
-              raise PublicationError.new("Error returned from tagging request #{tag_entity.response.code} #{tag_entity.response.body}")
+              raise PublicationError.new("Error returned from tagging request: status=#{tag_entity.response.code} body=#{tag_entity.response.body}")
             end
           end
         end

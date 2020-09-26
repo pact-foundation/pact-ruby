@@ -1,3 +1,13 @@
+<a name="v1.55.0"></a>
+### v1.55.0 (2020-09-26)
+
+#### Features
+
+* add consumer_version_selectors to pact verification DSL, and convert consumer_version_tags to selectors	 ([39e6c4a](/../../commit/39e6c4a))
+* allow verification task to set just a pact_helper without a URI	 ([303077d](/../../commit/303077d))
+* split pending and failed rerun commands into separate sections	 ([f839391](/../../commit/f839391))
+* update output during verification so the pact info shows before the describe blocks of the pact that is being verified	 ([15ec231](/../../commit/15ec231))
+
 <a name="v1.54.0"></a>
 ### v1.54.0 (2020-09-12)
 

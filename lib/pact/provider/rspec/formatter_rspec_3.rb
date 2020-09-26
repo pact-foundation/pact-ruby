@@ -65,10 +65,6 @@ module Pact
           pending_interaction_examples(summary).size
         end
 
-        def ignore_failures?(summary)
-          summary.failed_examples.any?{ |e| e.metadata[:pact_ignore_failures] }
-        end
-
         def failure_title summary
           ::RSpec::Core::Formatters::Helpers.pluralize(failed_interactions_count(summary), "failure")
         end

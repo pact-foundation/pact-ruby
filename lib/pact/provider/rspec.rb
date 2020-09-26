@@ -89,7 +89,7 @@ module Pact
             pact_interaction_example_description: interaction_description_for_rerun_command(interaction),
             pact_uri: options[:pact_uri],
             pact_source: options[:pact_source],
-            pact_ignore_failures: options[:pact_uri].metadata[:pending] || options[:ignore_failures],
+            pact_ignore_failures: options[:pact_source].pending? || options[:ignore_failures],
             pact_consumer_contract: options[:consumer_contract],
             pact_criteria: options[:criteria]
           }

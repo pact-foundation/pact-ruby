@@ -93,7 +93,11 @@ module Pact
             .run(::RSpec.configuration.output_stream, ::RSpec.configuration.error_stream)
         end
 
-        Pact::Provider::RSpec::CalculateExitCode.call(pact_sources, Pact.provider_world.failed_examples)
+        if options[:ignore_failures]
+          0
+        else
+          Pact::Provider::RSpec::CalculateExitCode.call(pact_sources, Pact.provider_world.failed_examples)
+        end
       end
 
       def rspec_runner_options

@@ -15,7 +15,7 @@ module Pact
         end
         let(:broker_base_url) { "http://broker" }
 
-        subject { pact_selection_description(provider, consumer_version_selectors, options, broker_base_url).tap { |it| puts it } }
+        subject { pact_selection_description(provider, consumer_version_selectors, options, broker_base_url) }
 
         it { is_expected.to eq "Fetching pacts for Bar from http://broker with the selection criteria: latest for tag cmaster (or master if not found), all for tag prod, work in progress pacts created after 2020-01-01" }
       end

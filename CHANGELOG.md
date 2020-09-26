@@ -1,3 +1,10 @@
+<a name="v1.55.2"></a>
+### v1.55.2 (2020-09-26)
+
+#### Bug Fixes
+
+* correctly calculate exit code when a mix of pending and non pending pacts are verified	 ([533faa1](/../../commit/533faa1))
+
 <a name="v1.55.1"></a>
 ### v1.55.1 (2020-09-26)
 

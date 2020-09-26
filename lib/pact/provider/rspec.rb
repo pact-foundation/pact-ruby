@@ -100,9 +100,6 @@ module Pact
             pact_context = options[:pact_context]
 
             before do | example |
-              pact_context.run_once :before do
-                ::RSpec.configuration.reporter.message "THIS IS A PACT"
-              end
               interaction_context.run_once :before do
                 Pact.configuration.logger.info "Running example '#{Pact::RSpec.full_description(example)}'"
                 set_up_provider_states interaction.provider_states, options[:consumer]

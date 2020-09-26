@@ -96,12 +96,14 @@ module Pact
             interaction_rerun_commands(pending_interaction_examples(summary)).each do | message |
               output.puts(message)
             end
+            set_rspec_failure_color(:red)
           end
 
-          set_rspec_failure_color(:red)
-          output.puts("\nFailed interactions:\n\n")
-          interaction_rerun_commands(failed_interaction_examples(summary)).each do | message |
-            output.puts(message)
+          if failed_interactions_count(summary) > 0
+            output.puts("\nFailed interactions:\n\n")
+            interaction_rerun_commands(failed_interaction_examples(summary)).each do | message |
+              output.puts(message)
+            end
           end
         end
 

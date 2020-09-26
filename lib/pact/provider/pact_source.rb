@@ -20,6 +20,10 @@ module Pact
         @pact_hash ||= JSON.load(pact_json, nil, { max_nesting: 50 })
       end
 
+      def pending?
+        uri.metadata[:pending]
+      end
+
       def hal_entity
         http_client_keys = [:username, :password, :token]
         http_client_options = uri.options.reject{ |k, _| !http_client_keys.include?(k) }

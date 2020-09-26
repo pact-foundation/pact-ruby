@@ -11,6 +11,7 @@ require 'pact/provider/verification_results/publish_all'
 require 'pact/provider/rspec/pact_broker_formatter'
 require 'pact/provider/rspec/json_formatter'
 require 'pact/provider/rspec'
+require 'pact/provider/rspec/calculate_exit_code'
 
 module Pact
   module Provider
@@ -79,6 +80,7 @@ module Pact
         executing_with_ruby = executing_with_ruby?
 
         config.after(:suite) do | suite |
+          Pact.provider_world.failed_examples = suite.reporter.failed_examples
           Pact::Provider::Help::Write.call(Pact.provider_world.pact_sources) if executing_with_ruby
         end
       end
@@ -90,7 +92,8 @@ module Pact
           ::RSpec::Core::CommandLine.new(NoConfigurationOptions.new)
             .run(::RSpec.configuration.output_stream, ::RSpec.configuration.error_stream)
         end
-        pending_mode? ? 0 : exit_code
+
+        Pact::Provider::RSpec::CalculateExitCode.call(pact_sources, Pact.provider_world.failed_examples)
       end
 
       def rspec_runner_options
@@ -147,8 +150,6 @@ module Pact
         end
 
         ::RSpec.configuration.full_backtrace = @options[:full_backtrace]
-
-        ::RSpec.configuration.failure_color = :yellow if pending_mode?
       end
 
       def ordered_pact_json(pact_json)
@@ -159,18 +160,10 @@ module Pact
         consumer_contract.to_json
       end
 
-      def all_pacts_pending?
-        pact_urls.all?{ | pact_url| pact_url.metadata[:pending] }
-      end
-
       def class_exists? name
         Kernel.const_get name
       rescue NameError
         false
-      end
-
-      def pending_mode?
-        (all_pacts_pending? || options[:ignore_failures])
       end
 
       def executing_with_ruby?

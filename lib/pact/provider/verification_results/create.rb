@@ -28,7 +28,23 @@ module Pact
         end
 
         def publishable?
-          executed_interactions_count == all_interactions_count && all_interactions_count > 0
+          if defined?(@publishable)
+            @publishable
+          else
+            @publishable = pact_source.consumer_contract.interactions.all? do | interaction |
+              examples_for_pact_uri.any?{ |e| example_is_for_interaction?(e, interaction) }
+            end && examples_for_pact_uri.count > 0
+          end
+        end
+
+        def example_is_for_interaction?(example, interaction)
+          # Use the Pact Broker id if supported
+          if interaction._id
+            example[:pact_interaction]._id == interaction._id
+          else
+            # fall back to object equality (based on the field values of the interaction)
+            example[:pact_interaction] == interaction
+          end
         end
 
         def examples_for_pact_uri
@@ -37,18 +53,6 @@ module Pact
 
         def count_failures_for_pact_uri
           examples_for_pact_uri.count{ |e| e[:status] != 'passed' }
-        end
-
-        def executed_interactions_count
-          examples_for_pact_uri
-            .collect { |e| e[:pact_interaction].object_id }
-            .uniq
-            .count
-        end
-
-        def all_interactions_count
-          interactions = (pact_source.pact_hash['interactions'] || pact_source.pact_hash['messages'])
-          interactions ? interactions.count : 0
         end
 
         def test_results_hash_for_pact_uri

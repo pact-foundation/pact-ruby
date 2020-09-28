@@ -14,32 +14,31 @@ module Pact
           double('provider_configuration', application_version: '1.2.3')
         end
         let(:pact_source_1) do
-          instance_double('Pact::Provider::PactSource', uri: pact_uri_1, pact_hash: pact_hash_1)
+          instance_double('Pact::Provider::PactSource', uri: pact_uri_1, consumer_contract: consumer_contract)
         end
+        let(:consumer_contract) { instance_double('Pact::ConsumerContract', interactions: interactions)}
+        let(:interactions) { [interaction_1] }
+        let(:interaction_1) { instance_double('Pact::Interaction', _id: "1") }
+        let(:interaction_2) { instance_double('Pact::Interaction', _id: "2") }
         let(:pact_uri_1) { instance_double('Pact::Provider::PactURI', uri: URI('foo')) }
         let(:pact_uri_2) { instance_double('Pact::Provider::PactURI', uri: URI('bar')) }
         let(:example_1) do
           {
             pact_uri: pact_uri_1,
-            pact_interaction: double('interaction'),
+            pact_interaction: interaction_1,
             status: 'passed'
           }
         end
         let(:example_2) do
           {
             pact_uri: pact_uri_2,
-            pact_interaction: double('interaction'),
+            pact_interaction: interaction_2,
             status: 'passed'
           }
         end
         let(:test_results_hash) do
           {
             tests: [example_1, example_2]
-          }
-        end
-        let(:pact_hash_1) do
-          {
-            'interactions' => [{}]
           }
         end
 
@@ -78,11 +77,9 @@ module Pact
         end
 
         context "when not every interaction has been executed" do
-          let(:pact_hash_1) do
-            {
-              'interactions' => [{}, {}]
-            }
-          end
+          let(:interaction_3) { instance_double('Pact::Interaction', _id: "3") }
+          let(:interactions) { [interaction_1, interaction_2]}
+
           it "sets publishable to false" do
             expect(VerificationResult).to receive(:new).with(false, anything, anything, anything)
             subject

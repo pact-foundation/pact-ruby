@@ -1,6 +1,7 @@
 require 'pact/consumer_contract/pact_file'
 require 'pact/hal/http_client'
 require 'pact/hal/entity'
+require 'pact/consumer_contract'
 
 module Pact
   module Provider
@@ -22,6 +23,10 @@ module Pact
 
       def pending?
         uri.metadata[:pending]
+      end
+
+      def consumer_contract
+        @consumer_contract ||= Pact::ConsumerContract.from_json(pact_json)
       end
 
       def hal_entity

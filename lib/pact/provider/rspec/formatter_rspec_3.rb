@@ -128,7 +128,7 @@ module Pact
         def interaction_rerun_commands examples
           examples.collect do |example|
             interaction_rerun_command_for example
-          end.compact
+          end.compact.uniq
         end
 
         def interaction_unique_key(example)

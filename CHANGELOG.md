@@ -1,3 +1,11 @@
+<a name="v1.55.3"></a>
+### v1.55.3 (2020-09-28)
+
+#### Bug Fixes
+
+* correct logic for determining if all interactions for a pact have been verified	 ([c4f968e](/../../commit/c4f968e))
+* de-duplicate re-run commands	 ([0813498](/../../commit/0813498))
+
 <a name="v1.55.2"></a>
 ### v1.55.2 (2020-09-26)
 

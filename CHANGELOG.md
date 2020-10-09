@@ -1,3 +1,10 @@
+<a name="v1.55.4"></a>
+### v1.55.4 (2020-10-09)
+
+#### Bug Fixes
+
+* add back missing output describing the interactions filter	 ([1a2d7c1](/../../commit/1a2d7c1))
+
 <a name="v1.55.3"></a>
 ### v1.55.3 (2020-09-28)
 

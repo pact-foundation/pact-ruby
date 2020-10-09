@@ -25,6 +25,7 @@ module Pact
         C = ::Term::ANSIColor
 
         def example_group_started(notification)
+          # This is the metadata on the top level "Verifying a pact between X and Y" describe block
           if @group_level == 0
             Pact.configuration.output_stream.puts
             pact_uri = notification.group.metadata[:pactfile_uri]

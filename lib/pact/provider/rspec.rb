@@ -26,8 +26,10 @@ module Pact
           Pact.configuration.output_stream.puts "INFO: Reading pact at #{pact_uri}"
           consumer_contract = Pact::ConsumerContract.from_json(pact_json)
           suffix = pact_uri.metadata[:pending] ? " [PENDING]": ""
+          example_group_description = "Verifying a pact between #{consumer_contract.consumer.name} and #{consumer_contract.provider.name}#{suffix}"
+          example_group_metadata = { pactfile_uri: pact_uri, pact_criteria: options[:criteria] }
 
-          ::RSpec.describe "Verifying a pact between #{consumer_contract.consumer.name} and #{consumer_contract.provider.name}#{suffix}", pactfile_uri: pact_uri do
+          ::RSpec.describe example_group_description, example_group_metadata do
             honour_consumer_contract consumer_contract, options.merge(
               pact_json: pact_json,
               pact_uri: pact_uri,
@@ -90,8 +92,7 @@ module Pact
             pact_uri: options[:pact_uri],
             pact_source: options[:pact_source],
             pact_ignore_failures: options[:pact_source].pending? || options[:ignore_failures],
-            pact_consumer_contract: options[:consumer_contract],
-            pact_criteria: options[:criteria]
+            pact_consumer_contract: options[:consumer_contract]
           }
 
           describe description_for(interaction), metadata do

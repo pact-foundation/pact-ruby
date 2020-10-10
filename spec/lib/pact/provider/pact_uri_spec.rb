@@ -23,15 +23,32 @@ describe Pact::Provider::PactURI do
   end
 
   describe '#to_s' do
-    context 'with userinfo provided' do
+    context 'with basic auth provided' do
       let(:password) { 'my_password' }
       let(:options) { { username: username, password: password } }
 
-      it 'should include user name and password' do
+      it 'should include user name and and hide password' do
         expect(pact_uri.to_s).to eq('http://pact:*****@uri')
       end
 
       context 'when basic auth credentials have been set for a local file (eg. via environment variables, unintentionally)' do
+        let(:uri) { '/some/file thing.json' }
+
+        it 'does not blow up' do
+          expect(pact_uri.to_s).to eq uri
+        end
+      end
+    end
+
+    context 'with personal access token provided' do
+      let(:pat) { 'should_be_secret' }
+      let(:options) { { username: pat } }
+
+      it 'should hide the pat' do
+        expect(pact_uri.to_s).to eq('http://*****@uri')
+      end
+
+      context 'when pat credentials have been set for a local file (eg. via environment variables, unintentionally)' do
         let(:uri) { '/some/file thing.json' }
 
         it 'does not blow up' do

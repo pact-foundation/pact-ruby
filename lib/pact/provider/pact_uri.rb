@@ -17,7 +17,7 @@ module Pact
       end
 
       def basic_auth?
-        !!username
+        !!username && !!password
       end
 
       def username
@@ -29,12 +29,23 @@ module Pact
       end
 
       def to_s
-        if basic_auth? && uri.start_with?('http://', 'https://')
+        if basic_auth? && http_or_https_uri?
           URI(@uri).tap { |x| x.userinfo="#{username}:*****"}.to_s
+        elsif personal_access_token? && http_or_https_uri?
+          URI(@uri).tap { |x| x.userinfo="*****"}.to_s
         else
           uri
         end
       end
+
+      private def personal_access_token?
+        !!username && !password
+      end
+
+      private def http_or_https_uri?
+        uri.start_with?('http://', 'https://')
+      end
+      
     end
   end
 end

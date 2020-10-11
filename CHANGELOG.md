@@ -1,3 +1,11 @@
+<a name="v1.55.5"></a>
+### v1.55.5 (2020-10-12)
+
+#### Bug Fixes
+
+* **security**
+  * hide personal access token given in uri (#225)	 ([f6db12d](/../../commit/f6db12d))
+
 <a name="v1.55.4"></a>
 ### v1.55.4 (2020-10-09)
 

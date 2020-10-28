@@ -6,4 +6,4 @@
 ## Long term
 
 * Add XML support
-* Create a test matrix to ensure compatiblity with implementations in other languages
+* Create a test matrix to ensure compatibility with implementations in other languages

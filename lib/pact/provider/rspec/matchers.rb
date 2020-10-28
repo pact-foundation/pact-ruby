@@ -8,7 +8,7 @@ module Pact
   module RSpec
     module Matchers
       module RSpec2Delegator
-        # For backwards compatiblity with rspec-2
+        # For backwards compatibility with rspec-2
         def method_missing(method, *args, &block)
           if method_name == :failure_message_for_should
             failure_message method, *args, &block

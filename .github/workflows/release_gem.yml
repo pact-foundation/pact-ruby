@@ -23,15 +23,15 @@ jobs:
     needs: test
     runs-on: ubuntu-latest
     outputs:
-      gem_name: ${{ steps.release.outputs.gem_name }}
-      version: ${{ steps.release.outputs.version }}
-      increment: ${{ steps.release.outputs.increment }}
+      gem_name: ${{ steps.release-gem.outputs.gem_name }}
+      version: ${{ steps.release-gem.outputs.version }}
+      increment: ${{ steps.release-gem.outputs.increment }}
     steps:
     - uses: actions/checkout@v2
       with:
         fetch-depth: 0
-    - uses: pact-foundation/release-gem@v0.0.11
-      id: release
+    - id: release-gem
+      uses: pact-foundation/release-gem@v0.0.11
       env:
         GEM_HOST_API_KEY: '${{ secrets.RUBYGEMS_API_KEY }}'
         GITHUB_TOKEN: '${{ secrets.GITHUB_TOKEN }}'

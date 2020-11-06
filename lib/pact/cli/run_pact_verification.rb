@@ -27,6 +27,7 @@ module Pact
         # With RSpec3, if the pact_helper loads a library that adds its own formatter before we set one,
         # we will get a ProgressFormatter too, and get little dots sprinkled throughout our output.
         # Load a NilFormatter here to prevent that.
+        require 'rspec'
         require 'pact/rspec'
         ::RSpec.configuration.add_formatter Pact::RSpec.formatter_class.const_get('NilFormatter')
       end

@@ -1,3 +1,10 @@
+<a name="v1.55.6"></a>
+### v1.55.6 (2020-11-06)
+
+#### Bug Fixes
+
+* require rspec now that pact-support does not depend on it	 ([5b5c27c](/../../commit/5b5c27c))
+
 <a name="v1.55.5"></a>
 ### v1.55.5 (2020-10-12)
 

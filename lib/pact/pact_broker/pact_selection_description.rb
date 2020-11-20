@@ -7,9 +7,10 @@ module Pact
         if consumer_version_selectors.any?
           desc = consumer_version_selectors.collect do |selector|
             all_or_latest = !selector[:latest] ? "all for tag" : "latest for tag"
+            consumer = selector[:consumer] ? "of consumer #{selector[:consumer]}" : nil
             fallback = selector[:fallback] || selector[:fallbackTag]
             name = fallback ? "#{selector[:tag]} (or #{fallback} if not found)" : selector[:tag]
-            "#{all_or_latest} #{name}"
+            [all_or_latest, name, consumer].compact.join(" ")
           end.join(", ")
           if options[:include_wip_pacts_since]
             desc = "#{desc}, work in progress pacts created after #{options[:include_wip_pacts_since]}"

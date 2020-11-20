@@ -2,7 +2,6 @@ module Pact
   module PactBroker
     module PactSelectionDescription
       def pact_selection_description(provider, consumer_version_selectors, options, broker_base_url)
-        latest = consumer_version_selectors.any? ? "" : "latest "
         message = "Fetching pacts for #{provider} from #{broker_base_url} with the selection criteria: "
         if consumer_version_selectors.any?
           desc = consumer_version_selectors.collect do |selector|

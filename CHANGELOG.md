@@ -1,3 +1,10 @@
+<a name="v1.55.7"></a>
+### v1.55.7 (2020-11-25)
+
+#### Bug Fixes
+
+* add consumer name to the selection description (#229)	 ([5127036](/../../commit/5127036))
+
 <a name="v1.55.6"></a>
 ### v1.55.6 (2020-11-06)
 

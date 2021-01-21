@@ -1,3 +1,10 @@
+<a name="v1.56.0"></a>
+### v1.56.0 (2021-01-22)
+
+#### Features
+
+* catch and log error during help text generation	 ([182a7cd](/../../commit/182a7cd))
+
 <a name="v1.55.7"></a>
 ### v1.55.7 (2020-11-25)
 

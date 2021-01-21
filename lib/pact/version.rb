@@ -1,4 +1,4 @@
 # Remember to bump pact-provider-proxy when this changes major version
 module Pact
-  VERSION = "1.55.7"
+  VERSION = "1.56.0"
 end

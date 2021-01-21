@@ -21,6 +21,8 @@ module Pact
         def call
           clean_reports_dir
           write
+        rescue StandardError => e
+          Pact.configuration.error_stream.puts("ERROR: Error generating help output - #{e.class} #{e.message} \n" + e.backtrace.join("\n"))
         end
 
         private

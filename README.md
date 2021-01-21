@@ -1,5 +1,5 @@
 # Pact
-[![travis-ci.org Build Status](https://travis-ci.org/pact-foundation/pact-ruby.svg?branch=master)](https://travis-ci.org/pact-foundation/pact-ruby)
+![Test](https://github.com/pact-foundation/pact-ruby/workflows/Test/badge.svg)
  [![Backers on Open Collective](https://opencollective.com/pact-foundation/backers/badge.svg)](#backers)
  [![Sponsors on Open Collective](https://opencollective.com/pact-foundation/sponsors/badge.svg)](#sponsors)
 

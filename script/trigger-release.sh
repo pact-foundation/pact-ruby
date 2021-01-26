@@ -1,5 +1,5 @@
 #!/bin/sh
-
+set -x
 # Script to trigger release of gem via the pact-foundation/release-gem action
 # Requires a Github API token with repo scope stored in the
 # environment variable GITHUB_ACCESS_TOKEN_FOR_PF_RELEASES
@@ -14,7 +14,7 @@ fi
 
 repository_slug=$(git remote get-url $(git remote show) | cut -d':' -f2 | sed 's/\.git//')
 
-output=$(curl -X https://api.github.com/repos/${repository_slug}/dispatches \
+output=$(curl -v https://api.github.com/repos/${repository_slug}/dispatches \
       -H 'Accept: application/vnd.github.everest-preview+json' \
       -H "Authorization: Bearer $GITHUB_ACCESS_TOKEN_FOR_PF_RELEASES" \
       -d "{\"event_type\": \"release-triggered\", \"client_payload\": {\"increment\": ${increment}}}" 2>&1)

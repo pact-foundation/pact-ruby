@@ -6,20 +6,21 @@ module Pact
     module VerificationResults
       class PublishAll
 
-        def self.call pact_sources, test_results_hash
-          new(pact_sources, test_results_hash).call
+        def self.call pact_sources, test_results_hash, options = {}
+          new(pact_sources, test_results_hash, options).call
         end
 
-        def initialize pact_sources, test_results_hash
+        def initialize pact_sources, test_results_hash, options = {}
           @pact_sources = pact_sources
           @test_results_hash = test_results_hash
+          @options = options
         end
 
         def call
           verification_results.collect do | (pact_source, verification_result) |
             published = false
             begin
-              published = Publish.call(pact_source, verification_result)
+              published = Publish.call(pact_source, verification_result, { verbose: options[:verbose] })
             ensure
               print_after_verification_notices(pact_source, verification_result, published)
             end
@@ -42,7 +43,7 @@ module Pact
           end
         end
 
-        attr_reader :pact_sources, :test_results_hash
+        attr_reader :pact_sources, :test_results_hash, :options
       end
     end
   end

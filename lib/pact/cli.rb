@@ -16,6 +16,7 @@ module Pact
     method_option :pact_broker_password, aliases: "-w", desc: "Pact broker password"
     method_option :pact_broker_token, aliases: "-k", desc: "Pact broker token"
     method_option :backtrace, aliases: "-b", desc: "Show full backtrace", :default => false, :type => :boolean
+    method_option :verbose, aliases: "-v", desc: "Show verbose HTTP logging", :default => false, :type => :boolean
     method_option :interactions_replay_order, aliases: "-o",
                   desc: "Interactions replay order: randomised or recorded (default)",
                   default: Pact.configuration.interactions_replay_order

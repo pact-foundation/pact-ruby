@@ -36,7 +36,7 @@ module Pact
               pact_source: pact_source,
               consumer_contract: consumer_contract,
               criteria: options[:criteria]
-              )
+            )
           end
         end
 

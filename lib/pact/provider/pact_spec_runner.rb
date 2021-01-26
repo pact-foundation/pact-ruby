@@ -75,6 +75,7 @@ module Pact
         end
 
         # For the Pact::Provider::RSpec::PactBrokerFormatter
+        Pact.provider_world.verbose = options[:verbose]
         Pact.provider_world.pact_sources = pact_sources
         jsons = pact_jsons
         executing_with_ruby = executing_with_ruby?

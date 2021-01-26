@@ -79,6 +79,7 @@ module Pact
       def pact_spec_options
         {
           full_backtrace: options[:backtrace],
+          verbose: options[:verbose] || ENV['VERBOSE'] == 'true',
           criteria: SpecCriteria.call(options),
           format: options[:format],
           out: options[:out],

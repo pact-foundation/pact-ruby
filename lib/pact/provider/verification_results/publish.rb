@@ -17,15 +17,15 @@ module Pact
         PROVIDER_RELATION = 'pb:provider'.freeze
         VERSION_TAG_RELATION = 'pb:version-tag'.freeze
 
-        def self.call pact_source, verification_result
-          new(pact_source, verification_result).call
+        def self.call pact_source, verification_result, options = {}
+          new(pact_source, verification_result, options).call
         end
 
-        def initialize pact_source, verification_result
+        def initialize pact_source, verification_result, options = {}
           @pact_source = pact_source
           @verification_result = verification_result
           http_client_options = pact_source.uri.options.reject{ |k, v| ![:username, :password, :token].include?(k) }
-          @http_client = Pact::Hal::HttpClient.new(http_client_options)
+          @http_client = Pact::Hal::HttpClient.new(http_client_options.merge(verbose: options[:verbose]))
           @pact_entity = Pact::Hal::Entity.new(pact_source.uri, pact_source.pact_hash, http_client)
         end
 

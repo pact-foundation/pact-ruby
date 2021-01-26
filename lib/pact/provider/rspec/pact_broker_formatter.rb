@@ -25,7 +25,7 @@ module Pact
         end
 
         def close(_notification)
-          Pact::Provider::VerificationResults::PublishAll.call(Pact.provider_world.pact_sources, output_hash)
+          Pact::Provider::VerificationResults::PublishAll.call(Pact.provider_world.pact_sources, output_hash, { verbose: Pact.provider_world.verbose })
         end
 
       private

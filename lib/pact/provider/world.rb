@@ -14,7 +14,7 @@ module Pact
   module Provider
     class World
 
-      attr_accessor :pact_sources, :failed_examples
+      attr_accessor :pact_sources, :failed_examples, :verbose
 
       def provider_states
         @provider_states_proxy ||= Pact::Provider::State::ProviderStateProxy.new

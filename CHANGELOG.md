@@ -1,3 +1,10 @@
+<a name="v1.57.0"></a>
+### v1.57.0 (2021-01-27)
+
+#### Features
+
+* allow verbose flag to be set when publishing verifications	 ([9238e4c](/../../commit/9238e4c))
+
 <a name="v1.56.0"></a>
 ### v1.56.0 (2021-01-22)
 

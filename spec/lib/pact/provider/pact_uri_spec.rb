@@ -38,6 +38,14 @@ describe Pact::Provider::PactURI do
           expect(pact_uri.to_s).to eq uri
         end
       end
+
+      context "with a username that has an @ symbol" do
+        let(:username) { "foo@bar" }
+
+        it 'does not blow up' do
+          expect(pact_uri.to_s).to eq "http://*****:*****@uri"
+        end
+      end
     end
 
     context 'with personal access token provided' do

@@ -30,7 +30,11 @@ module Pact
 
       def to_s
         if basic_auth? && http_or_https_uri?
-          URI(@uri).tap { |x| x.userinfo="#{username}:*****"}.to_s
+          begin
+            URI(@uri).tap { |x| x.userinfo="#{username}:*****"}.to_s
+          rescue URI::InvalidComponentError
+            URI(@uri).tap { |x| x.userinfo="*****:*****"}.to_s
+          end
         elsif personal_access_token? && http_or_https_uri?
           URI(@uri).tap { |x| x.userinfo="*****"}.to_s
         else
@@ -45,7 +49,7 @@ module Pact
       private def http_or_https_uri?
         uri.start_with?('http://', 'https://')
       end
-      
+
     end
   end
 end

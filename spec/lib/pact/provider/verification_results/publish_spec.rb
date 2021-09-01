@@ -48,6 +48,9 @@ module Pact
                 },
                 'pb:version-tag' => {
                   'href' => 'http://provider/version/{version}/tag/{tag}'
+                },
+                'pb:branch-version' => {
+                  'href' => 'http://provider/branches/{branch}/versions/{version}'
                 }
               }
             }.to_json
@@ -65,6 +68,7 @@ module Pact
           let(:verification_json) { '{"foo": "bar"}' }
           let(:publish_verification_results) { false }
           let(:publishable) { true }
+          let(:branch) { nil }
           let(:tags) { [] }
           let(:verification) do
             instance_double("Pact::Verifications::Verification",
@@ -75,7 +79,7 @@ module Pact
           end
 
           let(:provider_configuration) do
-            double('provider config', publish_verification_results?: publish_verification_results, tags: tags, application_version: '1.2.3')
+            double('provider config', publish_verification_results?: publish_verification_results, branch: branch, tags: tags, application_version: '1.2.3')
           end
 
           before do
@@ -84,6 +88,7 @@ module Pact
             allow(Pact.configuration).to receive(:provider).and_return(provider_configuration)
             stub_request(:post, stubbed_publish_verification_url).to_return(status: 200, headers: { 'Content-Type' => 'application/hal+json'}, body: created_verification_body)
             stub_request(:put, 'http://provider/version/1.2.3/tag/foo').to_return(status: 200, headers: { 'Content-Type' => 'application/hal+json'}, body: tag_body)
+            stub_request(:put, "http://provider/branches/main/versions/1.2.3").to_return(status: 200, body: "{}", headers: { 'Content-Type' => 'application/hal+json' })
             stub_request(:get, provider_url).to_return(status: 200, headers: { 'Content-Type' => 'application/hal+json'}, body: provider_body)
             allow(Retry).to receive(:until_true) { |&block| block.call }
           end
@@ -114,6 +119,35 @@ module Pact
                 it "does not publish the verification" do
                   subject
                   expect(WebMock).to_not have_requested(:post, stubbed_publish_verification_url)
+                end
+              end
+
+              context "with a branch" do
+                let(:branch) { "main" }
+
+                it "creates the branch version" do
+                  subject
+                  expect(WebMock).to have_requested(:put, 'http://provider/branches/main/versions/1.2.3').with(headers: {'Content-Type' => 'application/json'})
+                end
+
+                context "when there is an error creating the branch version" do
+                  before do
+                    stub_request(:put, "http://provider/branches/main/versions/1.2.3").to_return(status: 500, body: { some: "error" }.to_json, headers: { 'Content-Type' => 'application/hal+json' })
+                  end
+
+                  it "raises an error" do
+                    expect { subject }.to raise_error PublicationError, /500.*some.*error/
+                  end
+                end
+
+                context "when the broker does not support creating branch versions" do
+                  let(:provider_body) do
+                    {}.to_json
+                  end
+
+                  it "raises an error" do
+                    expect { subject }.to raise_error PublicationError, /does not support/
+                  end
                 end
               end
 

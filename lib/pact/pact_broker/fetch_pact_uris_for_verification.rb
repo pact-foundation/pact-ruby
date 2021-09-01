@@ -10,7 +10,7 @@ module Pact
   module PactBroker
     class FetchPactURIsForVerification
       include PactSelectionDescription
-      attr_reader :provider, :consumer_version_selectors, :provider_version_tags, :broker_base_url, :http_client_options, :http_client, :options
+      attr_reader :provider, :consumer_version_selectors, :provider_version_branch, :provider_version_tags, :broker_base_url, :http_client_options, :http_client, :options
 
       PACTS_FOR_VERIFICATION_RELATION = 'pb:provider-pacts-for-verification'.freeze
       PACTS_FOR_VERIFICATION_RELATION_BETA = 'beta:provider-pacts-for-verification'.freeze
@@ -20,9 +20,10 @@ module Pact
       SELF = 'self'.freeze
       EMBEDDED = '_embedded'.freeze
 
-      def initialize(provider, consumer_version_selectors, provider_version_tags, broker_base_url, http_client_options, options = {})
+      def initialize(provider, consumer_version_selectors, provider_version_branch, provider_version_tags, broker_base_url, http_client_options, options = {})
         @provider = provider
         @consumer_version_selectors = consumer_version_selectors || []
+        @provider_version_branch = provider_version_branch
         @provider_version_tags = [*provider_version_tags]
         @http_client_options = http_client_options
         @broker_base_url = broker_base_url
@@ -30,8 +31,8 @@ module Pact
         @options = options
       end
 
-      def self.call(provider, consumer_version_selectors, provider_version_tags, broker_base_url, http_client_options, options = {})
-        new(provider, consumer_version_selectors, provider_version_tags, broker_base_url, http_client_options, options).call
+      def self.call(provider, consumer_version_selectors, provider_version_branch, provider_version_tags, broker_base_url, http_client_options, options = {})
+        new(provider, consumer_version_selectors, provider_version_branch, provider_version_tags, broker_base_url, http_client_options, options).call
       end
 
       def call
@@ -76,6 +77,7 @@ module Pact
         q["includePendingStatus"] = true if options[:include_pending_status]
         q["consumerVersionSelectors"] = consumer_version_selectors if consumer_version_selectors.any?
         q["providerVersionTags"] = provider_version_tags if provider_version_tags.any?
+        q["providerVersionBranch"] = provider_version_branch if provider_version_branch
         q["includeWipPactsSince"] = options[:include_wip_pacts_since] if options[:include_wip_pacts_since]
         q
       end

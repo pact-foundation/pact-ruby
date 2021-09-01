@@ -11,6 +11,7 @@ describe "publishing verifications" do
     double('provider_configuration',
       application_version: '1.2.3',
       publish_verification_results?: true,
+      branch: nil,
       tags: [])
   end
 

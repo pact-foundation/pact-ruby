@@ -15,7 +15,7 @@ module Pact
 
         extend Pact::DSL
 
-        attr_accessor :name, :app_block, :application_version, :tags, :publish_verification_results
+        attr_accessor :name, :app_block, :application_version, :branch, :tags, :publish_verification_results
 
         CONFIG_RU_APP = lambda {
           unless File.exist? Pact.configuration.config_ru_path
@@ -44,6 +44,10 @@ module Pact
             self.tags = tags
           end
 
+          def app_version_branch branch
+            self.branch = branch
+          end
+
           def publish_verification_results publish_verification_results
             self.publish_verification_results = publish_verification_results
             Pact::RSpec.with_rspec_2 do
@@ -65,7 +69,7 @@ module Pact
         end
 
         def create_pact_verification_from_broker(&block)
-          PactVerificationFromBroker.build(name, tags, &block)
+          PactVerificationFromBroker.build(name, branch, tags, &block)
         end
 
         def finalize
@@ -85,7 +89,7 @@ module Pact
         end
 
         def create_service_provider
-          Pact.configuration.provider = ServiceProviderConfig.new(application_version, tags, publish_verification_results, &@app_block)
+          Pact.configuration.provider = ServiceProviderConfig.new(application_version, branch, tags, publish_verification_results, &@app_block)
         end
       end
     end

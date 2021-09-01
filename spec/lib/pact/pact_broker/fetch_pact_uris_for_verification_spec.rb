@@ -12,9 +12,10 @@ module Pact
         let(:broker_base_url) { "http://broker.org" }
         let(:http_client_options) { {} }
         let(:consumer_version_selectors) { [{ tag: "cmaster", latest: true, fallbackTag: 'blah' }] }
+        let(:provider_version_branch) { "pbranch" }
         let(:provider_version_tags) { ["pmaster"] }
 
-        subject { FetchPactURIsForVerification.call(provider, consumer_version_selectors, provider_version_tags, broker_base_url, http_client_options)}
+        subject { FetchPactURIsForVerification.call(provider, consumer_version_selectors, provider_version_branch, provider_version_tags, broker_base_url, http_client_options)}
 
         context "when there is an error retrieving the index resource" do
           before do
@@ -39,7 +40,7 @@ module Pact
 
           let(:provider_version_tags) { "pmaster" }
 
-          subject { FetchPactURIsForVerification.new(provider, consumer_version_selectors, provider_version_tags, broker_base_url, http_client_options)}
+          subject { FetchPactURIsForVerification.new(provider, consumer_version_selectors, provider_version_branch, provider_version_tags, broker_base_url, http_client_options)}
 
           it "wraps an array around it" do
             expect(subject.provider_version_tags).to eq ["pmaster"]

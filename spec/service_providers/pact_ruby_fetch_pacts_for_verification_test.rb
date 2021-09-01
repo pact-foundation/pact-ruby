@@ -16,16 +16,18 @@ describe Pact::PactBroker::FetchPactURIsForVerification, pact: true do
   let(:pacts_for_verification_relation) { Pact::PactBroker::FetchPactURIsForVerification::PACTS_FOR_VERIFICATION_RELATION }
   let(:body) do
     {
+      "providerVersionBranch" => "main",
       "providerVersionTags"  => ["pdev"],
       "consumerVersionSelectors" => [{ "tag" => "cdev", "latest" => true}],
       "includePendingStatus" => true
     }
   end
+  let(:provider_version_branch) { "main" }
   let(:provider_version_tags) { %w[pdev] }
   let(:consumer_version_selectors) { [ { tag: "cdev", latest: true }] }
   let(:options) { { include_pending_status: true }}
 
-  subject { Pact::PactBroker::FetchPactURIsForVerification.call(provider, consumer_version_selectors, provider_version_tags, broker_base_url, basic_auth_options, options) }
+  subject { Pact::PactBroker::FetchPactURIsForVerification.call(provider, consumer_version_selectors, provider_version_branch, provider_version_tags, broker_base_url, basic_auth_options, options) }
 
   describe 'fetch pacts' do
     let(:provider) { 'Bar' }

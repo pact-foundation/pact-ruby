@@ -158,7 +158,7 @@ module Pact
             end
 
             it "builds a PactVerificationFromBroker" do
-              expect(PactVerificationFromBroker).to receive(:build).with("some-provider", ["dev"])
+              expect(PactVerificationFromBroker).to receive(:build).with("some-provider", nil, ["dev"])
               subject
             end
           end

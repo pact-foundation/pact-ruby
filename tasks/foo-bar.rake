@@ -41,7 +41,7 @@ Pact::VerificationTask.new('foobar:wip') do | pact |
 end
 
 Pact::VerificationTask.new(:foobar_using_broker) do | pact |
-  pact.uri "#{BROKER_BASE_URL}/pacts/provider/Bar/consumer/Foo/version/1.0.0", :pact_helper => './spec/support/bar_pact_helper.rb', username: BROKER_USERNAME, password: BROKER_PASSWORD
+  pact.uri nil, :pact_helper => './spec/support/bar_pact_helper.rb', username: BROKER_USERNAME, password: BROKER_PASSWORD
 end
 
 Pact::VerificationTask.new('foobar_using_broker:fail') do | pact |

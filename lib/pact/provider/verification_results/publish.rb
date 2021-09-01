@@ -16,6 +16,7 @@ module Pact
         PUBLISH_RELATION = 'pb:publish-verification-results'.freeze
         PROVIDER_RELATION = 'pb:provider'.freeze
         VERSION_TAG_RELATION = 'pb:version-tag'.freeze
+        BRANCH_VERSION_RELATION = 'pb:branch-version'.freeze
 
         def self.call pact_source, verification_result, options = {}
           new(pact_source, verification_result, options).call
@@ -31,6 +32,7 @@ module Pact
 
         def call
           if can_publish_verification_results?
+            create_branch_version_if_configured
             tag_versions_if_configured
             publish_verification_results
             true
@@ -72,8 +74,28 @@ module Pact
           end
         end
 
+        def create_branch_version_if_configured
+          if Pact.configuration.provider.branch
+            branch_version_link = provider_entity._link(BRANCH_VERSION_RELATION)
+            if branch_version_link
+              version_number = Pact.configuration.provider.application_version
+              branch = Pact.configuration.provider.branch
+
+              Pact.configuration.output_stream.puts "INFO: Creating #{provider_name} version #{version_number} with branch \"#{branch}\""
+              branch_entity = branch_version_link.expand(
+                version: version_number,
+                branch: branch
+              ).put
+              unless branch_entity.success?
+                raise PublicationError.new("Error returned from tagging request: status=#{branch_entity.response.code} body=#{branch_entity.response.body}")
+              end
+            else
+              raise PublicationError.new("This version of the Pact Broker does not support version branches. Please update to version 2.58.0 or later.")
+            end
+          end
+        end
+
         def tag_versions
-          provider_entity = pact_entity.get(PROVIDER_RELATION)
           tag_link = provider_entity._link(VERSION_TAG_RELATION) || hacky_tag_url(provider_entity)
           provider_application_version = Pact.configuration.provider.application_version
 
@@ -110,6 +132,10 @@ module Pact
 
         def provider_name
           pact_source.pact_hash['provider']['name']
+        end
+
+        def provider_entity
+          @provider_entity ||= pact_entity.get(PROVIDER_RELATION)
         end
       end
     end

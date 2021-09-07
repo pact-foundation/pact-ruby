@@ -5,11 +5,48 @@ module Pact
         message = "Fetching pacts for #{provider} from #{broker_base_url} with the selection criteria: "
         if consumer_version_selectors.any?
           desc = consumer_version_selectors.collect do |selector|
-            all_or_latest = !selector[:latest] ? "all for tag" : "latest for tag"
-            consumer = selector[:consumer] ? "of consumer #{selector[:consumer]}" : nil
+            desc = nil
+            if selector[:tag]
+              desc = !selector[:latest] ? "all for tag #{selector[:tag]}" : "latest for tag #{selector[:tag]}"
+              desc = "#{desc} of #{selector[:consumer]}" if selector[:consumer]
+            elsif selector[:branch]
+              desc = "latest from branch #{selector[:branch]}"
+              desc = "#{desc} of #{selector[:consumer]}" if selector[:consumer]
+            elsif selector[:mainBranch]
+              desc = "latest from main branch"
+              desc = "#{desc} of #{selector[:consumer]}" if selector[:consumer]
+            elsif selector[:deployed]
+              if selector[:environment]
+                desc = "currently deployed to #{selector[:environment]}"
+              else
+                desc = "currently deployed"
+              end
+              desc = "#{selector[:consumer]} #{desc}" if selector[:consumer]
+            elsif selector[:released]
+              if selector[:environment]
+                desc = "currently released to #{selector[:environment]}"
+              else
+                desc = "currently released"
+              end
+              desc = "#{selector[:consumer]} #{desc}" if selector[:consumer]
+            elsif selector[:deployedOrReleased]
+              if selector[:environment]
+                desc = "currently deployed or released to #{selector[:environment]}"
+              else
+                desc = "currently deployed or released"
+              end
+              desc = "#{selector[:consumer]} #{desc}" if selector[:consumer]
+            elsif selector[:environment]
+              desc = "currently in #{selector[:environment]}"
+              desc = "#{selector[:consumer]} #{desc}" if selector[:consumer]
+            else
+              desc = selector.to_s
+            end
+
             fallback = selector[:fallback] || selector[:fallbackTag]
-            name = fallback ? "#{selector[:tag]} (or #{fallback} if not found)" : selector[:tag]
-            [all_or_latest, name, consumer].compact.join(" ")
+            desc = "#{desc} (or #{fallback} if not found)" if fallback
+
+            desc
           end.join(", ")
           if options[:include_wip_pacts_since]
             desc = "#{desc}, work in progress pacts created after #{options[:include_wip_pacts_since]}"

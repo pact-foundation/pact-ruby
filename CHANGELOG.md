@@ -1,3 +1,10 @@
+<a name="v1.59.0"></a>
+### v1.59.0 (2021-09-07)
+
+#### Features
+
+* update descriptions for new consumer version selectors	 ([0471397](/../../commit/0471397))
+
 <a name="v1.58.0"></a>
 ### v1.58.0 (2021-09-01)
 

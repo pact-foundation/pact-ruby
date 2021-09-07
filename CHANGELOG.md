@@ -1,3 +1,14 @@
+<a name="v1.58.0"></a>
+### v1.58.0 (2021-09-01)
+
+#### Features
+
+* support publishing verification results with a version branch	 ([da2facf](/../../commit/da2facf))
+
+#### Bug Fixes
+
+* gracefully handle display of username that causes InvalidComponentError to be raised when composing a URI	 ([cecb98f](/../../commit/cecb98f))
+
 <a name="v1.57.0"></a>
 ### v1.57.0 (2021-01-27)
 

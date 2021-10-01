@@ -55,7 +55,7 @@ module Pact
           http.ca_path = ENV['SSL_CERT_DIR'] if ENV['SSL_CERT_DIR'] && ENV['SSL_CERT_DIR'] != ''
           if ENV['PACT_DISABLE_SSL_VERIFICATION'] == 'true' || ENV['PACT_BROKER_DISABLE_SSL_VERIFICATION'] == 'true'
             if verbose?
-              Pact.configuration.error_stream.puts("Making request without SSL verification")
+              Pact.configuration.output_stream.puts("Making request without SSL verification")
             end
             http.verify_mode = OpenSSL::SSL::VERIFY_NONE
           end

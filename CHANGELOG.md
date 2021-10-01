@@ -1,3 +1,10 @@
+<a name="v1.60.0"></a>
+### v1.60.0 (2021-10-01)
+
+#### Features
+
+* allow SSL verification to be disabled in the HAL client by setting the environment variable PACT_DISABLE_SSL_VERIFICATION=true	 ([ce07d32](/../../commit/ce07d32))
+
 <a name="v1.59.0"></a>
 ### v1.59.0 (2021-09-07)
 

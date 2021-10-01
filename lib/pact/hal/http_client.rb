@@ -53,9 +53,9 @@ module Pact
           http.use_ssl = (uri.scheme == 'https')
           http.ca_file = ENV['SSL_CERT_FILE'] if ENV['SSL_CERT_FILE'] && ENV['SSL_CERT_FILE'] != ''
           http.ca_path = ENV['SSL_CERT_DIR'] if ENV['SSL_CERT_DIR'] && ENV['SSL_CERT_DIR'] != ''
-          if ENV['PACT_DISABLE_SSL_VERIFICATION'] == 'true' || ENV['PACT_BROKER_DISABLE_SSL_VERIFICATION'] == 'true'
+          if disable_ssl_verification?
             if verbose?
-              Pact.configuration.output_stream.puts("Making request without SSL verification")
+              Pact.configuration.output_stream.puts("SSL verification is disabled")
             end
             http.verify_mode = OpenSSL::SSL::VERIFY_NONE
           end
@@ -72,6 +72,10 @@ module Pact
 
       def verbose?
         verbose || ENV['VERBOSE'] == 'true'
+      end
+
+      def disable_ssl_verification?
+        ENV['PACT_DISABLE_SSL_VERIFICATION'] == 'true' || ENV['PACT_BROKER_DISABLE_SSL_VERIFICATION'] == 'true'
       end
 
       class Response < SimpleDelegator

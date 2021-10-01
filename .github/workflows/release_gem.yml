@@ -4,6 +4,7 @@ on:
   repository_dispatch:
     types:
       - release-triggered
+  workflow_dispatch:
 
 jobs:
   test:

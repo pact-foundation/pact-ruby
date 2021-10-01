@@ -85,7 +85,7 @@ We're going to write an integration, with Pact tests, between a consumer, the Zo
 
 #### 1. Start with your model
 
-Imagine a model class that looks something like this. The attributes for a Alligator live on a remote server, and will need to be retrieved by an HTTP call to the Animal Service.
+Imagine a model class that looks something like this. The attributes for an Alligator live on a remote server, and will need to be retrieved by an HTTP call to the Animal Service.
 
 ```ruby
 class Alligator
@@ -166,7 +166,7 @@ describe AnimalServiceClient, :pact => true do
           body: {name: 'Betty'} )
     end
 
-    it "returns a alligator" do
+    it "returns an alligator" do
       expect(subject.get_alligator).to eq(Alligator.new('Betty'))
     end
 

@@ -67,6 +67,18 @@ module Pact
           it { is_expected.to include "in production" }
         end
 
+        describe "matching branch" do
+          let(:consumer_version_selectors) { [{ matchingBranch: true, consumer: "Foo" }] }
+
+          it { is_expected.to include "matching current branch for Foo" }
+        end
+
+        describe "matching tag" do
+          let(:consumer_version_selectors) { [{ matchingTag: true, consumer: "Foo" }] }
+
+          it { is_expected.to include "matching tag for Foo" }
+        end
+
         describe "unknown" do
           let(:consumer_version_selectors) { [{ branchPattern: "*foo" }] }
 

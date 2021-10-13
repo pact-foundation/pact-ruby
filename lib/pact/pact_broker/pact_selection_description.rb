@@ -39,6 +39,12 @@ module Pact
             elsif selector[:environment]
               desc = "currently in #{selector[:environment]}"
               desc = "#{selector[:consumer]} #{desc}" if selector[:consumer]
+            elsif selector[:matchingBranch]
+              desc = "matching current branch"
+              desc = "#{desc} for #{selector[:consumer]}" if selector[:consumer]
+            elsif selector[:matchingTag]
+              desc = "matching tag"
+              desc = "#{desc} for #{selector[:consumer]}" if selector[:consumer]
             else
               desc = selector.to_s
             end

@@ -5,10 +5,13 @@ require 'pact/errors'
 require 'pact/pact_broker/fetch_pacts'
 require 'pact/pact_broker/notices'
 require 'pact/pact_broker/pact_selection_description'
+require "pact/hash_refinements"
 
 module Pact
   module PactBroker
     class FetchPactURIsForVerification
+      using Pact::HashRefinements
+
       include PactSelectionDescription
       attr_reader :provider, :consumer_version_selectors, :provider_version_branch, :provider_version_tags, :broker_base_url, :http_client_options, :http_client, :options
 
@@ -74,12 +77,12 @@ module Pact
 
       def query
         q = {}
-        q["includePendingStatus"] = true if options[:include_pending_status]
+        q["includePendingStatus"] = options[:include_pending_status]
         q["consumerVersionSelectors"] = consumer_version_selectors if consumer_version_selectors.any?
         q["providerVersionTags"] = provider_version_tags if provider_version_tags.any?
-        q["providerVersionBranch"] = provider_version_branch if provider_version_branch
-        q["includeWipPactsSince"] = options[:include_wip_pacts_since] if options[:include_wip_pacts_since]
-        q
+        q["providerVersionBranch"] = provider_version_branch
+        q["includeWipPactsSince"] = options[:include_wip_pacts_since]
+        q.compact
       end
 
       def extract_notices(pact)

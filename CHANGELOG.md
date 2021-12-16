@@ -1,3 +1,14 @@
+<a name="v1.61.0"></a>
+### v1.61.0 (2021-12-16)
+
+#### Features
+
+* support description of matching_branch and matching_tag consumer version selectors	 ([8e8bb22](/../../commit/8e8bb22))
+
+#### Bug Fixes
+
+* pass through includePendingStatus to the 'pacts for verification' API when it is false	 ([f0e37a4](/../../commit/f0e37a4))
+
 <a name="v1.60.0"></a>
 ### v1.60.0 (2021-10-01)
 

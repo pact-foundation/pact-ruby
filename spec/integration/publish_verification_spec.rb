@@ -12,7 +12,8 @@ describe "publishing verifications" do
       application_version: '1.2.3',
       publish_verification_results?: true,
       branch: nil,
-      tags: [])
+      tags: [],
+      build_url: 'http://ci/build/1')
   end
 
   let(:pact_sources) do

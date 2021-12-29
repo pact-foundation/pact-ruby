@@ -14,7 +14,13 @@ module Pact
         end
 
         def call
-          VerificationResult.new(publishable?, !any_failures?, Pact.configuration.provider.application_version, test_results_hash_for_pact_uri)
+          VerificationResult.new(
+            publishable?,
+            !any_failures?,
+            Pact.configuration.provider.application_version,
+            test_results_hash_for_pact_uri,
+            Pact.configuration.provider.build_url
+          )
         end
 
         private

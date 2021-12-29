@@ -25,6 +25,19 @@ module Pact
             end
           end
 
+          context 'with build_url' do
+            subject(:config_build_url) { Pact.configuration.provider.build_url }
+            let(:ci_build_url) { 'http://ci/build/1' }
+
+            before do
+              ServiceProviderDSL.build 'name' do
+                build_url ci_build_url
+              end
+            end
+
+            it { is_expected.to eq(ci_build_url) }
+          end
+
         end
 
         describe "validate" do

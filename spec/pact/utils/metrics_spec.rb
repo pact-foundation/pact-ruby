@@ -46,5 +46,4 @@ describe Pact::Utils::Metrics do
       end
     end
   end
-
 end

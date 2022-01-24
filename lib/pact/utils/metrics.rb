@@ -9,11 +9,11 @@ module Pact
 
       def self.report_metric(event, category, action, value = 1)
 
-        Pact.configuration.output_stream.puts "WARN: Please note: we are tracking events anonymously to gather important usage statistics like Pact-Ruby version
+        if track_events?
+          Pact.configuration.output_stream.puts "WARN: Please note: we are tracking events anonymously to gather important usage statistics like Pact-Ruby version
             and operating system. To disable tracking, set the 'pact_do_not_track' environment
             variable to 'true'."
 
-        if track_events?
           event = {
             "v" => 1,
             "t" => "event",

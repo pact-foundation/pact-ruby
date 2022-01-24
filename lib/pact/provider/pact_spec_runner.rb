@@ -134,7 +134,6 @@ module Pact
           honour_pactfile pact_source, ordered_pact_json(pact_source.pact_json), spec_options
 
           Pact::Utils::Metrics.report_metric("Pacts Verified", "ProviderTest", "Completed")
-          require 'pry'; pry(binding)
         end
       end
 

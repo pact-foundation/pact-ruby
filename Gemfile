@@ -13,5 +13,5 @@ group :local_development do
   gem "pry-byebug"
 end
 
-gem 'pact-support', git: "https://github.com/Benjaminpjacobs/pact-support", ref: 'b688d0f87871a96bfdae3ba810bf5b40d4344d14'
-gem "pact-mock_service", git: "https://github.com/Benjaminpjacobs/pact-mock_service", ref: "0800002a732332c377ba5aaea36af4a80c8e6dc2"
+gem 'pact-support', git: "https://github.com/Benjaminpjacobs/pact-support", ref: 'cfa90871707c28d8ec46f323fbaf0c3e61a54066'
+gem "pact-mock_service", git: "https://github.com/Benjaminpjacobs/pact-mock_service", ref: "7952006a2b4ea8868d02b52e4c89218d4a5a6479"

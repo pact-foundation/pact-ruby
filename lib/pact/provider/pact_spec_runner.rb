@@ -12,6 +12,7 @@ require 'pact/provider/rspec/pact_broker_formatter'
 require 'pact/provider/rspec/json_formatter'
 require 'pact/provider/rspec'
 require 'pact/provider/rspec/calculate_exit_code'
+require 'pact/utils/metrics'
 
 module Pact
   module Provider
@@ -131,6 +132,9 @@ module Pact
             request_customizer: options[:request_customizer]
           }
           honour_pactfile pact_source, ordered_pact_json(pact_source.pact_json), spec_options
+
+          Pact::Utils::Metrics.report_metric("Pacts Verified", "ProviderTest", "Completed")
+          require 'pry'; pry(binding)
         end
       end
 

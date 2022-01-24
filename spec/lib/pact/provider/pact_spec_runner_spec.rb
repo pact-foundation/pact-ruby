@@ -44,6 +44,7 @@ describe Pact::Provider::PactSpecRunner, skip_jruby: true do
       end
       allow(subject).to receive(:configure_rspec)
       allow(subject).to receive(:run_specs)
+      allow(Pact::Utils::Metrics).to receive(:report_metric)
 
       expect(Pact::Provider::PactSource).to receive(:new).with(pact_url).and_return(pact_source)
     end
@@ -59,6 +60,13 @@ describe Pact::Provider::PactSpecRunner, skip_jruby: true do
           expect(consumer_contract["interactions"]).to eq(interactions)
         end
 
+        subject.run
+      end
+
+      it 'reports pacts verified metric' do
+        allow(subject).to receive(:honour_pactfile).and_return([])
+
+        expect(Pact::Utils::Metrics).to receive(:report_metric).with("Pacts Verified", "ProviderTest", "Completed")
         subject.run
       end
 
@@ -82,6 +90,5 @@ describe Pact::Provider::PactSpecRunner, skip_jruby: true do
         end
       end
     end
-
   end
 end

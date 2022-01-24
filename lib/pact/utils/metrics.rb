@@ -43,7 +43,6 @@ module Pact
       private
 
       def self.track_events?
-        require 'pry'; pry(binding)
         if ENV['PACT_DO_NOT_TRACK'].nil?
           true
         else

@@ -11,7 +11,7 @@ describe Pact::Utils::Metrics do
 
   describe ".report_metric" do
     subject { Pact::Utils::Metrics.report_metric("Event", "Category", "Action", "Value") }
-    context 'when track_events is not set' do
+    context 'when do not track is not set' do
       let(:expected_event) { {
         "v" => 1,
         "t" => "event",
@@ -36,7 +36,7 @@ describe Pact::Utils::Metrics do
         subject
       end
     end
-    context 'when track_events is set to true' do
+    context 'when do not track is set to true' do
       before do
         ENV['PACT_DO_NOT_TRACK'] = "true"
       end

@@ -43,11 +43,7 @@ module Pact
       private
 
       def self.track_events?
-        if ENV['PACT_DO_NOT_TRACK'].nil?
-          true
-        else
-          ENV['PACT_DO_NOT_TRACK'] == 'true' ? false : true
-        end
+        ENV['PACT_DO_NOT_TRACK'] != 'true'
       end
 
       def self.calculate_cid

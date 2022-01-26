@@ -1,6 +1,5 @@
 require 'pact/provider/print_missing_provider_states'
 require 'rspec/core/formatters'
-require 'term/ansicolor'
 require 'pact/provider/help/prompt_text'
 
 module Pact
@@ -21,9 +20,6 @@ module Pact
           ::RSpec::Core::Formatters.register self, :example_group_started, :example_group_finished,
                                     :example_passed, :example_pending, :example_failed
         end
-
-        C = ::Term::ANSIColor
-
         def example_group_started(notification)
           # This is the metadata on the top level "Verifying a pact between X and Y" describe block
           if @group_level == 0

@@ -66,7 +66,7 @@ describe Pact::Provider::PactSpecRunner, skip_jruby: true do
       it 'reports pacts verified metric' do
         allow(subject).to receive(:honour_pactfile).and_return([])
 
-        expect(Pact::Utils::Metrics).to receive(:report_metric).with("Pacts Verified", "ProviderTest", "Completed")
+        expect(Pact::Utils::Metrics).to receive(:report_metric).with("Pacts verified", "ProviderTest", "Completed")
         subject.run
       end
 

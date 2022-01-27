@@ -11,7 +11,7 @@ module Pact
 
         if track_events?
           Pact.configuration.output_stream.puts "WARN: Please note: we are tracking events anonymously to gather important usage statistics like Pact-Ruby version
-            and operating system. To disable tracking, set the 'pact_do_not_track' environment
+            and operating system. To disable tracking, set the 'PACT_DO_NOT_TRACK' environment
             variable to 'true'."
 
           event = {
@@ -23,11 +23,11 @@ module Pact
             "av" => Pact::VERSION,
             "aid" => "pact-ruby",
             "aip" => 1,
-            "ds" => ENV["CI"] || "unknown",
-            "cd2" => ENV['PACT_EXECUTING_LANGUAGE'] ? "client" : "unknown",
+            "ds" => ENV['PACT_EXECUTING_LANGUAGE'] ? "client" : "cli",
+            "cd2" => ENV['CI'] == "true" ? "CI" : "unknown",
             "cd3" => RUBY_PLATFORM,
             "cd6" => ENV['PACT_EXECUTING_LANGUAGE'] || "unknown",
-            "cd7" => RUBY_VERSION,
+            "cd7" => ENV['PACT_EXECUTING_LANGUAGE_VERSION'],
             "el" => event,
             "ec" => category,
             "ea" => action,

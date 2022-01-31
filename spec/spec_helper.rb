@@ -7,7 +7,7 @@ require 'support/factories'
 require 'support/spec_support'
 require 'pact/provider/rspec'
 
-WebMock.disable_net_connect!(allow_localhost: true)
+WebMock.disable_net_connect!(allow_localhost: true, allow: 'https://www.google-analytics.com')
 
 require './spec/support/active_support_if_configured'
 require './spec/support/warning_silencer'

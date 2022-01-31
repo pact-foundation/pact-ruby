@@ -24,15 +24,19 @@ module Pact
                 http.request(req)
               end
             end
-          rescue Exception
-            if ENV['PACT_METRICS_DEBUG'] == 'true'
-              Pact.configuration.output_stream.puts("DEBUG: #{e.inspect}")
-            end
+          rescue StandardError => e
+            handle_error(e)
           end
         end
       end
 
       private
+
+      def self.handle_error e
+      if ENV['PACT_METRICS_DEBUG'] == 'true'
+        Pact.configuration.output_stream.puts("DEBUG: #{e.inspect}")
+      end
+    end
 
       def self.in_thread
         Thread.new do

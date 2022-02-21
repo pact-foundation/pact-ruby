@@ -31,12 +31,11 @@ module Pact
       end
 
       private
-
       def self.handle_error e
-      if ENV['PACT_METRICS_DEBUG'] == 'true'
-        Pact.configuration.output_stream.puts("DEBUG: #{e.inspect}")
+        if ENV['PACT_METRICS_DEBUG'] == 'true'
+          Pact.configuration.output_stream.puts("DEBUG: #{e.inspect}\n" + e.backtrace.join("\n"))
+        end
       end
-    end
 
       def self.in_thread
         Thread.new do

@@ -11,8 +11,9 @@ module Pact
 
         let(:verification_result) { double('VerificationResult') }
         let(:provider_configuration) do
-          double('provider_configuration', application_version: '1.2.3')
+          double('provider_configuration', application_version: '1.2.3', build_url: ci_build)
         end
+        let(:ci_build) { 'http://ci/build/1' }
         let(:pact_source_1) do
           instance_double('Pact::Provider::PactSource', uri: pact_uri_1, consumer_contract: consumer_contract)
         end
@@ -59,19 +60,25 @@ module Pact
               }
             }
           }
-          expect(VerificationResult).to receive(:new).with(anything, anything, anything, expected_test_results_hash)
+          expect(VerificationResult).to receive(:new).with(anything, anything, anything, expected_test_results_hash, anything)
           subject
         end
 
         it "creates a VerificationResult with the provider application version" do
           expect(provider_configuration).to receive(:application_version)
-          expect(VerificationResult).to receive(:new).with(anything, anything, '1.2.3', anything)
+          expect(VerificationResult).to receive(:new).with(anything, anything, '1.2.3', anything, anything)
+          subject
+        end
+
+        it "creates a VerificationResult with the provider ci build url" do
+          expect(provider_configuration).to receive(:build_url)
+          expect(VerificationResult).to receive(:new).with(anything, anything, anything, anything, ci_build)
           subject
         end
 
         context "when every interaction has been executed" do
           it "sets publishable to true" do
-            expect(VerificationResult).to receive(:new).with(true, anything, anything, anything)
+            expect(VerificationResult).to receive(:new).with(true, anything, anything, anything, anything)
             subject
           end
         end
@@ -81,14 +88,14 @@ module Pact
           let(:interactions) { [interaction_1, interaction_2]}
 
           it "sets publishable to false" do
-            expect(VerificationResult).to receive(:new).with(false, anything, anything, anything)
+            expect(VerificationResult).to receive(:new).with(false, anything, anything, anything, anything)
             subject
           end
         end
 
         context "when all the examples passed" do
           it "sets the success to true" do
-            expect(VerificationResult).to receive(:new).with(anything, true, anything, anything)
+            expect(VerificationResult).to receive(:new).with(anything, true, anything, anything, anything)
             subject
           end
         end
@@ -99,7 +106,7 @@ module Pact
           end
 
           it "sets the success to false" do
-            expect(VerificationResult).to receive(:new).with(anything, false, anything, anything)
+            expect(VerificationResult).to receive(:new).with(anything, false, anything, anything, anything)
             subject
           end
 

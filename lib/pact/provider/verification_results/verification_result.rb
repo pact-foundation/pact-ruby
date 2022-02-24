@@ -6,11 +6,12 @@ module Pact
       class VerificationResult
         attr_reader :success, :provider_application_version, :test_results_hash
 
-        def initialize publishable, success, provider_application_version, test_results_hash
+        def initialize publishable, success, provider_application_version, test_results_hash, build_url
           @publishable = publishable
           @success = success
           @provider_application_version = provider_application_version
           @test_results_hash = test_results_hash
+          @build_url = build_url
         end
 
         def publishable?
@@ -25,7 +26,8 @@ module Pact
           {
             success: success,
             providerApplicationVersion: provider_application_version,
-            testResults: test_results_hash
+            testResults: test_results_hash,
+            buildUrl: @build_url
           }.to_json(options)
         end
 

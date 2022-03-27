@@ -12,11 +12,11 @@ module Pact
       end
 
       def set_up &block
-        ProviderStates.base_provider_state.register.register_set_up &block
+        ProviderStates.base_provider_state.register.register_set_up(&block)
       end
 
       def tear_down &block
-        ProviderStates.base_provider_state.register_tear_down &block
+        ProviderStates.base_provider_state.register_tear_down(&block)
       end
 
       def provider_states_for name, &block
@@ -60,7 +60,7 @@ module Pact
       end
 
       def self.namespaced_name name, options = {}
-        fullname = options[:for] ? "#{options[:for]}.#{name}" : name
+        options[:for] ? "#{options[:for]}.#{name}" : name
       end
     end
 
@@ -81,11 +81,11 @@ module Pact
 
       dsl do
         def set_up &block
-          self.register_set_up &block
+          self.register_set_up(&block)
         end
 
         def tear_down &block
-          self.register_tear_down &block
+          self.register_tear_down(&block)
         end
 
         def no_op

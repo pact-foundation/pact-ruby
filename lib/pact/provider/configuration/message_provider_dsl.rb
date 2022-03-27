@@ -46,7 +46,7 @@ module Pact
           end
 
           def honours_pacts_from_pact_broker &block
-            create_pact_verification_from_broker &block
+            create_pact_verification_from_broker(&block)
           end
 
           def builder &block

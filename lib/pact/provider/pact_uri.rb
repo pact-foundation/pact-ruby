@@ -3,7 +3,7 @@ module Pact
     class PactURI
       attr_reader :uri, :options, :metadata
 
-      def initialize (uri, options = nil, metadata = nil)
+      def initialize(uri, options = nil, metadata = nil)
         @uri = uri
         @options = options || {}
         @metadata = metadata || {} # make sure it's not nil if nil is passed in

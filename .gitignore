@@ -28,6 +28,7 @@ log
 .idea
 reports
 Gemfile.lock
+*.gemfile.lock
 gemfiles/*.gemfile.lock
 reports/pacts
 spec/examples.txt

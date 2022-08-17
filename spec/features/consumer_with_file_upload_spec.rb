@@ -2,6 +2,7 @@ require 'net/http'
 require 'pact/consumer'
 require 'pact/consumer/rspec'
 require 'faraday'
+require 'faraday/multipart'
 load 'pact/consumer/world.rb'
 
 describe "A consumer with a file upload", :pact => true  do

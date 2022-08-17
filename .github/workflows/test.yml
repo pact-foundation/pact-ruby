@@ -5,12 +5,10 @@ on: [push, pull_request]
 jobs:
   test:
     runs-on: "ubuntu-latest"
-    continue-on-error: ${{ matrix.experimental }}
     strategy:
       fail-fast: false
       matrix:
         ruby_version: ["2.4", "2.7", "3.0"]
-        experimental: [false]
     steps:
       - uses: actions/checkout@v2
       - uses: ruby/setup-ruby@v1
@@ -18,3 +16,20 @@ jobs:
           ruby-version: ${{ matrix.ruby_version }}
       - run: "bundle install"
       - run: "bundle exec rake"
+  test-with-active-support:
+    runs-on: "ubuntu-latest"
+    strategy:
+      fail-fast: false
+      matrix:
+        ruby_version: ["2.7", "3.0"]
+    steps:
+      - uses: actions/checkout@v2
+      - uses: ruby/setup-ruby@v1
+        with:
+          ruby-version: ${{ matrix.ruby_version }}
+      - run: "bundle install "
+        env:
+          BUNDLE_GEMFILE: active-support.gemfile
+      - run: "bundle exec rake spec_with_active_support"
+        env:
+          BUNDLE_GEMFILE: active-support.gemfile

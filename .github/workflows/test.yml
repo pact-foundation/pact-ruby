@@ -28,6 +28,8 @@ jobs:
         with:
           ruby-version: ${{ matrix.ruby_version }}
       - run: "bundle install "
-        env: BUNDLE_GEMFILE=active-support.gemfile
+        env:
+          BUNDLE_GEMFILE: active-support.gemfile
       - run: "bundle exec rake spec_with_active_support"
-        env: BUNDLE_GEMFILE=active-support.gemfile
+        env:
+          BUNDLE_GEMFILE: active-support.gemfile

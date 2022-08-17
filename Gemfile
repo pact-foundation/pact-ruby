@@ -1,7 +1,6 @@
 source 'https://rubygems.org'
 
 # Specify your gem's dependencies in pact.gemspec
-puts Dir.pwd
 gemspec
 
 # If rspec-mocks is not locked, spec/lib/pact/consumer/configuration_spec.rb fails on Ruby 3.0

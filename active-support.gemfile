@@ -1,0 +1,10 @@
+# This gemfile is used to test that the pact library works ok when active support is loaded.
+# It is in a separate file because active support will not work on ruby 2.4, and the only
+# place that should be using ruby 2.4 is the pact-ruby-standalone, which will be guaranteed not
+# to have active support on it. I think :D
+
+instance_eval File.read("Gemfile")
+
+group :test do
+  gem 'activesupport', '~> 5.1'
+end

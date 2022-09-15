@@ -14,8 +14,8 @@ module Pact
       include Pact::Logging
       include Rack::Test::Methods
 
-      def replay_interaction interaction, request_customizer = nil, interaction_context
-        request = Request::Replayable.new(interaction.request, interaction_context)
+      def replay_interaction interaction, request_customizer = nil, state_params = nil
+        request = Request::Replayable.new(interaction.request, state_params)
         request = request_customizer.call(request, interaction) if request_customizer
         args = [request.path, request.body, request.headers]
 
@@ -42,17 +42,17 @@ module Pact
       end
 
       def set_up_provider_states provider_states, consumer, options = {}
-        state_params = {};
+        provider_states_result = {};
         # If there are no provider state, execute with an nil state to ensure global and base states are executed
         Pact.configuration.provider_state_set_up.call(nil, consumer, options) if provider_states.nil? || provider_states.empty?
         provider_states.each do | provider_state |
           result = Pact.configuration.provider_state_set_up.call(provider_state.name, consumer, options.merge(params: provider_state.params))
           if result.is_a?(Hash)
-            state_params = state_params.merge(result)
+            provider_states_result[provider_state.name] = result
           end
         end
 
-        state_params
+        provider_states_result
       end
 
       def tear_down_provider_states provider_states, consumer, options = {}

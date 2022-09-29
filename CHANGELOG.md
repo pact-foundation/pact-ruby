@@ -1,3 +1,17 @@
+<a name="v1.63.0"></a>
+### v1.63.0 (2022-09-28)
+
+#### Features
+
+* relax rack-test dependency to allow version 2 (#270)	 ([a619deb](/../../commit/a619deb))
+* only print metrics warning once per thread	 ([91da38f](/../../commit/91da38f))
+* provide configuration for build url to be published in verification results (#252)	 ([ce1c9bc](/../../commit/ce1c9bc))
+
+#### Bug Fixes
+
+* example/animal-service/Gemfile to reduce vulnerabilities (#263)	 ([8f3b732](/../../commit/8f3b732))
+* Fixup ruby warnings (#262)	 ([3640593](/../../commit/3640593))
+
 <a name="v1.62.0"></a>
 ### v1.62.0 (2022-02-21)
 

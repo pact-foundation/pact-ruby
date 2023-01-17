@@ -72,7 +72,6 @@ module Pact
 
       def run_with_configured_pacts_from_pact_helper
         pact_urls = Pact.provider_world.pact_urls
-        raise "Please configure a pact to verify" if pact_urls.empty?
         Pact::Provider::PactSpecRunner.new(pact_urls, pact_spec_options).run
       end
 

@@ -39,15 +39,17 @@ module Pact
       end
 
       def call
-        if index.can?(PACTS_FOR_VERIFICATION_RELATION) || index.can?(PACTS_FOR_VERIFICATION_RELATION_BETA)
-          log_message
-          pacts_for_verification
-        else
-          old_selectors = consumer_version_selectors.collect do | selector |
-            { name: selector[:tag], all: !selector[:latest], fallback: selector[:fallbackTag]}
+        handling_no_pacts_found do
+          if index.can?(PACTS_FOR_VERIFICATION_RELATION) || index.can?(PACTS_FOR_VERIFICATION_RELATION_BETA)
+            log_message
+            pacts_for_verification
+          else
+            old_selectors = consumer_version_selectors.collect do | selector |
+              { name: selector[:tag], all: !selector[:latest], fallback: selector[:fallbackTag]}
+            end
+            # Fall back to old method of fetching pacts
+            FetchPacts.call(provider, old_selectors, broker_base_url, http_client_options)
           end
-          # Fall back to old method of fetching pacts
-          FetchPacts.call(provider, old_selectors, broker_base_url, http_client_options)
         end
       end
 
@@ -95,6 +97,15 @@ module Pact
 
       def log_message
         Pact.configuration.output_stream.puts "INFO: #{pact_selection_description(provider, consumer_version_selectors, options, broker_base_url)}"
+      end
+
+      def handling_no_pacts_found
+        pacts_found = yield
+        if pacts_found.empty? && options[:fail_if_no_pacts_found] != false
+          raise "No pacts found to verify"
+        else
+          pacts_found
+        end
       end
     end
   end

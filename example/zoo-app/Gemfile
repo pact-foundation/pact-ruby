@@ -8,5 +8,5 @@ group :development, :test do
 end
 
 gem 'rake'
-gem 'rack', '~>2.2'
-gem 'httparty'
+gem 'rack', '~> 3.0', '>= 3.0.0'
+gem 'httparty', '>= 0.21.0'

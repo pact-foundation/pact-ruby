@@ -32,7 +32,7 @@ Pact::RSpec.with_rspec_3 do
           let(:examples) { [example, example, example_2]}
           let(:output) { StringIO.new }
           let(:rerun_command) { 'PACT_DESCRIPTION="a description" PACT_PROVIDER_STATE="a state" # an interaction' }
-          let(:broker_rerun_command) { "rake pact:verify:at[pact_file_uri] PACT_BROKER_INTERACTION_ID=\"1234\" # an interaction" }
+          let(:broker_rerun_command) { "rake pact:verify:at[pact_file_uri] PACT_BROKER_INTERACTION_ID=\"8888\" # an interaction" }
           let(:missing_provider_states) { 'missing_provider_states'}
           let(:summary) { double("summary", failure_count: 1, failed_examples: failed_examples, examples: examples)}
           let(:pact_executing_language) { 'ruby' }
@@ -77,7 +77,7 @@ Pact::RSpec.with_rspec_3 do
 
             context "when PACT_INTERACTION_RERUN_COMMAND_FOR_BROKER is set" do
               context "when the _id is populated" do
-                let(:id) { "1234" }
+                let(:id) { "8888" }
 
                 it "prints a list of rerun commands" do
                   expect(output_result).to include(broker_rerun_command)
@@ -100,10 +100,10 @@ Pact::RSpec.with_rspec_3 do
               let(:pact_interaction_rerun_command_for_broker) { nil }
 
               context "when the _id is populated" do
-                let(:id) { "1234" }
+                let(:id) { "8888" }
 
                 it "prints a list of failed interactions" do
-                  expect(output_result).to include('* an interaction (to re-run just this interaction, set environment variable PACT_BROKER_INTERACTION_ID="1234")')
+                  expect(output_result).to include('* an interaction (to re-run just this interaction, set environment variable PACT_BROKER_INTERACTION_ID="8888")')
                 end
               end
 

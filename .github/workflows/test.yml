@@ -10,6 +10,9 @@ jobs:
       matrix:
         ruby_version: ["2.7", "3.0", "3.2"]
         os: ["ubuntu-latest","windows-latest","macos-latest"]
+    defaults:
+      run:
+        shell: bash
     steps:
       - uses: actions/checkout@v3
       - uses: ruby/setup-ruby@v1
@@ -26,6 +29,9 @@ jobs:
       matrix:
         ruby_version: ["2.7", "3.0", "3.2"]
         os: ["ubuntu-latest","windows-latest","macos-latest"]
+    defaults:
+      run:
+        shell: bash
     steps:
       - uses: actions/checkout@v3
       - uses: ruby/setup-ruby@v1

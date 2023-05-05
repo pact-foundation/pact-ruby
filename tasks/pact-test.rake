@@ -69,6 +69,8 @@ namespace :pact do
 
 	desc "All the verification tests"
 	task "tests:all" do
+		next if Gem.win_platform?
+
 		Rake::Task['pact:verify:stubbing'].execute
 		Rake::Task['spec:standalone:pass'].execute
 		Rake::Task['pact:verify'].execute

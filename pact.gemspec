@@ -29,8 +29,8 @@ Gem::Specification.new do |gem|
   gem.add_runtime_dependency 'rspec', '~> 3.0'
   gem.add_runtime_dependency 'rack-test', '>= 0.6.3', '< 3.0.0'
   gem.add_runtime_dependency 'thor', '>= 0.20', '< 2.0'
-  gem.add_runtime_dependency 'webrick', '~> 1.3'
-  gem.add_runtime_dependency 'term-ansicolor', '~> 1.0'
+  gem.add_runtime_dependency 'webrick', '~> 1.8'
+  gem.add_runtime_dependency 'term-ansicolor', '~> 1.7'
 
   gem.add_runtime_dependency 'pact-support', '~> 1.16', '>= 1.16.9'
   gem.add_runtime_dependency 'pact-mock_service', '~> 3.0', '>= 3.3.1'
@@ -38,7 +38,7 @@ Gem::Specification.new do |gem|
   gem.add_development_dependency 'rake', '~> 13.0'
   gem.add_development_dependency 'webmock', '~> 3.0'
   gem.add_development_dependency 'fakefs', '2.4' # 0.6.0 blows up
-  gem.add_development_dependency 'hashie', '~> 2.0'
+  gem.add_development_dependency 'hashie', '~> 5.0'
   gem.add_development_dependency 'faraday', '~>1.0', '<3.0'
   gem.add_development_dependency 'faraday-multipart', '~> 1.0'
   gem.add_development_dependency 'conventional-changelog', '~> 1.3'

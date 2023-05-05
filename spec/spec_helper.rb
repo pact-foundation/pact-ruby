@@ -13,6 +13,7 @@ require './spec/support/active_support_if_configured'
 require './spec/support/warning_silencer'
 
 is_jruby = defined?(RUBY_ENGINE) && RUBY_ENGINE == 'jruby'
+is_windows = Gem.win_platform?
 
 RSpec.configure do | config |
   config.include(FakeFS::SpecHelpers, fakefs: true)
@@ -25,4 +26,5 @@ RSpec.configure do | config |
     config.example_status_persistence_file_path = "./spec/examples.txt"
   end
   config.filter_run_excluding skip_jruby: is_jruby
+  config.filter_run_excluding skip_windows: is_windows
 end

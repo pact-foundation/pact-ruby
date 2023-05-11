@@ -13,9 +13,9 @@ jobs:
     - uses: actions/checkout@v3
     - uses: ruby/setup-ruby@v1
       with:
-        ruby-version: '2.7'
+        ruby-version: '3.2'
     - run: |
-        gem install bundler -v 2.1
+        gem install bundler -v 2.4
         bundle install
     - name: Test
       run: bundle exec rake

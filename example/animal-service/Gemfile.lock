@@ -92,7 +92,7 @@ DEPENDENCIES
   rake
   rspec
   sequel
-  sinatra (>= 2.2.2)
+  sinatra
   sqlite3
 
 BUNDLED WITH

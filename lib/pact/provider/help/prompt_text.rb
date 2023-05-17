@@ -1,13 +1,11 @@
 require 'pact/consumer/configuration'
-require 'term/ansicolor'
+require 'rainbow'
 require 'pathname'
 
 module Pact
   module Provider
     module Help
       class PromptText
-
-        C = ::Term::ANSIColor
 
         def self.call reports_dir = Pact.configuration.reports_dir, options = {color: Pact.configuration.color_enabled}
           new(reports_dir, options).call
@@ -31,7 +29,7 @@ module Pact
         end
 
         def prompt_text_colored
-          C.yellow(prompt_text_plain)
+          Rainbow(prompt_text_plain).yellow
         end
 
         def rake_args

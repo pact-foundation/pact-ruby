@@ -126,10 +126,10 @@ namespace :pact do
 	end
 
 	def ensure_patterns_present command, options, stdout, stderr
-		require 'rainbow'
+		require 'term/ansicolor'
 		output = stdout.read + stderr.read
 		options[:with].each do | pattern |
-			raise (Rainbow("Could not find #{pattern.inspect} in output of #{command}").red + "\n\n#{output}") unless output =~ pattern
+			raise (::Term::ANSIColor.red("Could not find #{pattern.inspect} in output of #{command}") + "\n\n#{output}") unless output =~ pattern
 		end
 	end
 end

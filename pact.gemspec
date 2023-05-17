@@ -30,10 +30,10 @@ Gem::Specification.new do |gem|
   gem.add_runtime_dependency 'rack-test', '>= 0.6.3', '< 3.0.0'
   gem.add_runtime_dependency 'thor', '>= 0.20', '< 2.0'
   gem.add_runtime_dependency 'webrick', '~> 1.3'
-  gem.add_runtime_dependency "rainbow", "~> 3.1.1"
+  gem.add_runtime_dependency 'term-ansicolor', '~> 1.0'
 
-  gem.add_runtime_dependency 'pact-support', '~> 1.17.1', '>= 1.16.9'
-  gem.add_runtime_dependency 'pact-mock_service', '~> 3.10.1', '>= 3.3.1'
+  gem.add_runtime_dependency 'pact-support', '~> 1.16', '>= 1.16.9'
+  gem.add_runtime_dependency 'pact-mock_service', '~> 3.0', '>= 3.3.1'
 
   gem.add_development_dependency 'rake', '~> 13.0'
   gem.add_development_dependency 'webmock', '~> 3.0'

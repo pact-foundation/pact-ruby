@@ -1,6 +1,6 @@
 require 'pact/provider/print_missing_provider_states'
 require 'rspec/core/formatters/documentation_formatter'
-require 'rainbow'
+require 'term/ansicolor'
 require 'pact/provider/help/prompt_text'
 
 module Pact
@@ -12,6 +12,8 @@ module Pact
           def dump_commands_to_rerun_failed_examples
           end
         end
+
+        C = ::Term::ANSIColor
 
         def dump_commands_to_rerun_failed_examples
           return if failed_examples.empty?

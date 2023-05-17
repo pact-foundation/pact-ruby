@@ -27,7 +27,7 @@ describe "consumer side" do
 
         has_pact_with "My Service" do
           mock_service :my_service do
-            port 1234
+            port 8888
             standalone true
           end
         end
@@ -52,7 +52,7 @@ describe "consumer side" do
 
       context "when standalone is true" do
         it "is not registerd with the AppManager" do
-          expect(Pact::MockService::AppManager.instance.app_registered_on?(1234)).to eq false
+          expect(Pact::MockService::AppManager.instance.app_registered_on?(8888)).to eq false
         end
       end
 

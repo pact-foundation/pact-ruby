@@ -10,12 +10,12 @@ jobs:
   test:
     runs-on: ubuntu-latest
     steps:
-    - uses: actions/checkout@v2
+    - uses: actions/checkout@v3
     - uses: ruby/setup-ruby@v1
       with:
-        ruby-version: '2.6'
+        ruby-version: '3.2'
     - run: |
-        gem install bundler -v 2.1
+        gem install bundler -v 2.4
         bundle install
     - name: Test
       run: bundle exec rake
@@ -28,7 +28,7 @@ jobs:
       version: ${{ steps.release-gem.outputs.version }}
       increment: ${{ steps.release-gem.outputs.increment }}
     steps:
-    - uses: actions/checkout@v2
+    - uses: actions/checkout@v3
       with:
         fetch-depth: 0
     - id: release-gem

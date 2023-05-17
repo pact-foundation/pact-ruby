@@ -72,12 +72,12 @@ module Pact
             consumer_name: consumer_name,
             provider_name: provider_name,
             host: 'localhost',
-        		port: 1234
+        		port: 8888
           )
         end
 
       	it "returns the mock service base URL" do
-      		expect(subject.mock_service_base_url).to eq("http://localhost:1234")
+      		expect(subject.mock_service_base_url).to eq("http://localhost:8888")
       	end
       end
 

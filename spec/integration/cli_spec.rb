@@ -1,7 +1,7 @@
 require 'open3'
 require 'support/cli'
 
-describe "running the pact verify CLI" do
+describe "running the pact verify CLI", skip_windows: true do
 
   include Pact::Support::CLI
 

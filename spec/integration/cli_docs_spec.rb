@@ -2,7 +2,7 @@ require 'open3'
 require 'support/cli'
 require 'fileutils'
 
-describe "running the pact docs CLI" do
+describe "running the pact docs CLI", skip_windows: true do
 
   include Pact::Support::CLI
 

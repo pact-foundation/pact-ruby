@@ -57,6 +57,10 @@ module Pact
         wrap_response(href, @http_client.put(href, payload ? payload.to_json : nil, DEFAULT_POST_HEADERS.merge(headers)))
       end
 
+      def put!(payload = nil, headers = {})
+        put(payload, headers).assert_success!
+      end
+
       def post(payload = nil, headers = {})
         wrap_response(href, @http_client.post(href, payload ? payload.to_json : nil, DEFAULT_POST_HEADERS.merge(headers)))
       end

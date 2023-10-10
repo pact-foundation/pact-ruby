@@ -7,6 +7,7 @@
 * [log_dir](#log_dir)
 * [logger](#logger)
 * [logger.level](#loggerlevel)
+* [SSL certificate](#SSL-Certificate)
 
 #### Consumer only configuration options
 * [pact_dir](#pact_dir)
@@ -50,6 +51,14 @@ end
 ```
 
 Default value: `Logger::DEBUG`
+
+### SSL Certificate
+
+To connect to a Pact Broker that uses custom SSL certificates, set the environment variable $SSL_CERT_FILE or $SSL_CERT_DIR to a path that contains the appropriate certificate.
+
+#### Using x509 Certificates
+
+To connect to a Pact Broker that uses x509 certificates for client authentication, set the environment variable `$X509_CLIENT_CERT_FILE` to the path of the client's x509 certificate and `$X509_CLIENT_KEY_FILE` to the path of the client's private key.
 
 ### diff_formatter
 
@@ -184,7 +193,7 @@ To make modules available in the provider state set_up and tear_down blocks, inc
 Default value: `:recorded`
 Options: `:recorded`, `:random`
 
-Replays interactions in a specific order. In combination with pactfile_write_order will allow you to have a consistent pact contract replayed in random order.  
+Replays interactions in a specific order. In combination with pactfile_write_order will allow you to have a consistent pact contract replayed in random order.
 
 ```ruby
 Pact.configure do | config |

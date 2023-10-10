@@ -54,9 +54,9 @@ module Pact
           http.ca_file = ENV['SSL_CERT_FILE'] if ENV['SSL_CERT_FILE'] && ENV['SSL_CERT_FILE'] != ''
           http.ca_path = ENV['SSL_CERT_DIR'] if ENV['SSL_CERT_DIR'] && ENV['SSL_CERT_DIR'] != ''
 
-          if custom_x509_certificate?
-            http.cert = OpenSSL::X509::Certificate.new(x509_cert_file)
-            http.key = OpenSSL::PKey::RSA.new(x509_cert_key_file)
+          if x509_certificate?
+            http.cert = OpenSSL::X509::Certificate.new(x509_client_cert_file)
+            http.key = OpenSSL::PKey::RSA.new(x509_client_key_file)
           end
 
           if disable_ssl_verification?
@@ -80,16 +80,17 @@ module Pact
         verbose || ENV['VERBOSE'] == 'true'
       end
 
-      def custom_x509_certificate?
-        ENV['X509_CERT_ENABLED'] == 'true'
+      def x509_certificate?
+        ENV['X509_CLIENT_CERT_FILE'] && ENV['X509_CLIENT_CERT_FILE'] != '' &&
+          ENV['X509_CLIENT_KEY_FILE'] && ENV['X509_CLIENT_KEY_FILE'] != ''
       end
 
-      def x509_cert_file
-        File.read(ENV['X509_CERT_FILE_PATH'])
+      def x509_client_cert_file
+        File.read(ENV['X509_CLIENT_CERT_FILE'])
       end
 
-      def x509_cert_key_file
-        File.read(ENV['X509_CERT_KEY_FILE_PATH'])
+      def x509_client_key_file
+        File.read(ENV['X509_CLIENT_KEY_FILE'])
       end
 
       def disable_ssl_verification?

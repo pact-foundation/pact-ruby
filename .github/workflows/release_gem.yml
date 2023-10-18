@@ -32,7 +32,7 @@ jobs:
       with:
         fetch-depth: 0
     - id: release-gem
-      uses: pact-foundation/release-gem@v0.1.0
+      uses: pact-foundation/release-gem@v1
       env:
         GEM_HOST_API_KEY: '${{ secrets.RUBYGEMS_API_KEY }}'
         GITHUB_TOKEN: '${{ secrets.GITHUB_TOKEN }}'

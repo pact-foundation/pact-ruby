@@ -21,7 +21,7 @@ module Pact
           unless File.exist? Pact.configuration.config_ru_path
             raise "Could not find config.ru file at #{Pact.configuration.config_ru_path} Please configure the service provider app or create a config.ru file in the root directory of the project. See https://github.com/pact-foundation/pact-ruby/wiki/Verifying-pacts for more information."
           end
-          Rack::Builder.parse_file(Pact.configuration.config_ru_path).first
+          Rack::Builder.parse_file(Pact.configuration.config_ru_path)
         }
 
         def initialize name

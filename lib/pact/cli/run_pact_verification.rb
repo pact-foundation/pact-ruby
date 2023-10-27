@@ -6,7 +6,7 @@ module Pact
       attr_reader :options
 
       def initialize options
-        @options = options
+        @options = options.merge(format: 'progress')
       end
 
       def self.call options

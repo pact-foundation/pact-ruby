@@ -185,10 +185,38 @@ module Pact
               end
             end
 
+            def warn_if_actual_has_extra_keys(actual, expected)
+              extra_keys = extract_keys(Array(actual).first) - extract_keys(Array(expected).first)
+
+              if extra_keys.any?
+                pending "Extra keys: #{extra_keys.join(", ")}"
+                expect(extra_keys).to be_empty
+              else
+                expect(true).to be true
+              end
+            end
+
+            def extract_keys(hash, prefix: '')
+              return extract_keys(hash.first, prefix: "#{prefix}[]") if hash.is_a?(Array) && hash.first.is_a?(Hash)
+              return [] if hash.is_a?(Array)
+
+              hash.reduce([]) do |acc, (k, v)|
+                new_acc = acc.concat(["#{prefix}#{k}"])
+                next new_acc.concat(extract_keys(v, prefix: "#{prefix}#{k}.")) if v.is_a?(Hash)
+
+                new_acc
+              end
+            end
+
             if expected_response.body
               it "has a matching body" do | example |
                 set_metadata(example, :pact_actual_body, response_body)
+                @response_body = response_body
                 expect(response_body).to match_term expected_response_body, diff_options, example
+              end
+
+              it 'does not have extra keys' do
+                warn_if_actual_has_extra_keys(parse_body_from_response(interaction_context.last_response), expected_response.body)
               end
             end
           end

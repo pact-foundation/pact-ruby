@@ -21,3 +21,8 @@ end
 group :local_development do
   gem "pry-byebug"
 end
+
+group :test do
+  gem 'faraday', '~>2.0'
+  gem 'faraday-retry', '~>2.0'
+end

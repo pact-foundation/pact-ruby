@@ -135,7 +135,7 @@ module Pact
         end
 
         def provider_entity
-          @provider_entity ||= pact_entity.get(PROVIDER_RELATION)
+          @provider_entity ||= pact_entity.get!(PROVIDER_RELATION)
         end
       end
     end

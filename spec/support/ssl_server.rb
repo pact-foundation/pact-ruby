@@ -32,7 +32,11 @@ if __FILE__ == $0
   require "webrick"
   require "webrick/https"
   require "rack"
-  require "rackup/handler/webrick"
+  begin
+    require "rackup/handler/webrick" # rack 3
+  rescue LoadError
+    require "rack/handler/webrick"  # rack 2
+  end
 
   opts = webrick_opts(4444)
 

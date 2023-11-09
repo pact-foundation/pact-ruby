@@ -1,3 +1,0 @@
-instance_eval File.read("Gemfile")
-
-gem "rack", "~> 2.0"

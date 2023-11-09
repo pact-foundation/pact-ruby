@@ -40,8 +40,6 @@ jobs:
       - run: "bundle exec appraisal rack-2 rake"
   test-with-active-support:
     runs-on: ${{ matrix.os }}
-    env:
-      BUNDLE_GEMFILE: active-support.gemfile
     strategy:
       fail-fast: false
       matrix:

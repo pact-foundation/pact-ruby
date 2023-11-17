@@ -52,7 +52,7 @@ module Pact
         else
           run_with_configured_pacts_from_pact_helper
         end
-        exit exit_code
+        Process.exit!(exit_code)
       end
 
       def run_with_pact_url_string

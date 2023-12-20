@@ -1,3 +1,22 @@
+<a name="v1.64.0"></a>
+### v1.64.0 (2023-11-09)
+
+#### Features
+
+* support x509 certs in HTTP Client (#298)	 ([3ed5680](/../../commit/3ed5680))
+
+* **CI**
+  * use setup-ruby's bundle installer and cache (#275)	 ([f5621b6](/../../commit/f5621b6))
+
+#### Bug Fixes
+
+* assert provider retrieved successfully before using link	 ([0af0691](/../../commit/0af0691))
+* update call to Rack::Builder.parse_file for rack 3	 ([652047c](/../../commit/652047c))
+* example/zoo-app/Gemfile to reduce vulnerabilities	 ([b4ca8cb](/../../commit/b4ca8cb))
+* example/animal-service/Gemfile to reduce vulnerabilities	 ([7ad2073](/../../commit/7ad2073))
+* example/zoo-app/Gemfile to reduce vulnerabilities	 ([dd417fd](/../../commit/dd417fd))
+* example/animal-service/Gemfile to reduce vulnerabilities (#281)	 ([4ea07cd](/../../commit/4ea07cd))
+
 <a name="v1.63.0"></a>
 ### v1.63.0 (2022-09-28)
 

@@ -15,7 +15,7 @@ module Pact
         # in parent scope, it will clash with these ones,
         # so put an underscore in front of the name to be safer.
 
-        attr_accessor :_provider_name, :_pact_broker_base_url, :_consumer_version_tags, :_provider_version_branch, :_provider_version_tags, :_basic_auth_options, :_enable_pending, :_include_wip_pacts_since, :_verbose, :_consumer_version_selectors
+        attr_accessor :_provider_name, :_pact_broker_base_url, :_consumer_version_tags, :_provider_version_branch, :_provider_version_tags, :_basic_auth_options, :_enable_pending, :_include_wip_pacts_since, :_verbose, :_consumer_version_selectors, :_fail_if_no_pacts_found
 
         def initialize(provider_name, provider_version_branch, provider_version_tags)
           @_provider_name = provider_name
@@ -26,6 +26,7 @@ module Pact
           @_enable_pending = false
           @_include_wip_pacts_since = nil
           @_verbose = false
+          @_fail_if_no_pacts_found = true # CLI defaults to false, unfortunately for consistency
         end
 
         dsl do
@@ -44,6 +45,11 @@ module Pact
 
           def enable_pending enable_pending
             self._enable_pending = enable_pending
+          end
+
+          # Underlying code defaults to true if not specified
+          def fail_if_no_pacts_found fail_if_no_pacts_found
+            self._fail_if_no_pacts_found = fail_if_no_pacts_found
           end
 
           def include_wip_pacts_since since
@@ -74,7 +80,7 @@ module Pact
             _provider_version_tags,
             _pact_broker_base_url,
             _basic_auth_options.merge(verbose: _verbose),
-            { include_pending_status: _enable_pending, include_wip_pacts_since: _include_wip_pacts_since }
+            { include_pending_status: _enable_pending, include_wip_pacts_since: _include_wip_pacts_since, fail_if_no_pacts_found: _fail_if_no_pacts_found }
           )
 
           Pact.provider_world.add_pact_uri_source fetch_pacts

@@ -34,13 +34,15 @@ if __FILE__ == $0
   require "rack"
   begin
     require "rackup/handler/webrick" # rack 3
+    PactWEBrick = Rackup::Handler::WEBrick
   rescue LoadError
     require "rack/handler/webrick"  # rack 2
+    PactWEBrick = Rack::Handler::WEBrick
   end
 
   opts = webrick_opts(4444)
 
-  Rack::Handler::WEBrick.run(app, **opts) do |server|
+  PactWEBrick.run(app, **opts) do |server|
     @server = server
   end
 end

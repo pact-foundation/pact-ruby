@@ -37,7 +37,7 @@ module Pact
 
             let(:fetch_pacts) { double('FetchPacts') }
             let(:basic_auth_opts) { basic_auth_options.merge(verbose: true) }
-            let(:options) { { include_pending_status: true, include_wip_pacts_since: "2020-01-01" }}
+            let(:options) { { fail_if_no_pacts_found: true, include_pending_status: true, include_wip_pacts_since: "2020-01-01" }}
             let(:consumer_version_selectors) { [ { tag: 'master', latest: true }] }
 
             it "creates a instance of Pact::PactBroker::FetchPactURIsForVerification" do
@@ -70,6 +70,7 @@ module Pact
                   anything,
                   anything,
                   {
+                    fail_if_no_pacts_found: true,
                     include_pending_status: true,
                     include_wip_pacts_since: since.xmlschema
                   }

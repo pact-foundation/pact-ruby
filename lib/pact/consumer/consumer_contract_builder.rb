@@ -11,11 +11,11 @@ module Pact
 
       include Pact::Logging
 
-      attr_reader :consumer_contract, :mock_service_base_url
+      attr_reader :mock_service_base_url
 
       def initialize(attributes)
         @interaction_builder = nil
-        @consumer_contract = {
+        @consumer_contract_details = {
           consumer: {name: attributes[:consumer_name]},
           provider: {name: attributes[:provider_name]},
           pactfile_write_mode: attributes[:pactfile_write_mode].to_s,
@@ -46,7 +46,7 @@ module Pact
       end
 
       def write_pact
-        mock_service_client.write_pact @consumer_contract
+        mock_service_client.write_pact @consumer_contract_details
       end
 
       def wait_for_interactions options = {}

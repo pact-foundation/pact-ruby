@@ -101,11 +101,11 @@ module Pact
 
       def handling_no_pacts_found
         pacts_found = yield
-        if pacts_found.blank? && options[:fail_if_no_pacts_found] != false
-          raise "No pacts found to verify"
-        else
-          pacts_found
+        raise "No pacts found to verify" if pacts_found.blank? && options[:fail_if_no_pacts_found] != false
+        if pacts_found.blank? && options[:fail_if_no_pacts_found] == false
+          Pact.configuration.output_stream.puts "WARN: No pacts found to verify & fail_if_no_pacts_found is set to false."
         end
+        pacts_found
       end
     end
   end

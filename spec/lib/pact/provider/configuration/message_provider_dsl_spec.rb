@@ -151,6 +151,7 @@ module Pact
             subject do
               described_class.build "some-provider" do
                 app {}
+                app_version_branch 'main'
                 app_version_tags ["dev"]
                 honours_pacts_from_pact_broker do
                 end
@@ -158,7 +159,7 @@ module Pact
             end
 
             it "builds a PactVerificationFromBroker" do
-              expect(PactVerificationFromBroker).to receive(:build).with("some-provider", nil, ["dev"])
+              expect(PactVerificationFromBroker).to receive(:build).with("some-provider", 'main', ["dev"])
               subject
             end
           end

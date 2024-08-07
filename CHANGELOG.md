@@ -1,3 +1,25 @@
+<a name="v1.65.0"></a>
+### v1.65.0 (2024-08-06)
+
+#### Features
+
+* support app_version_branch in MessageProviderDSL	 ([1653128](/../../commit/1653128))
+* allow setting fail_if_no_pacts_found in honours_pacts_from_pact_broker	 ([f0f142e](/../../commit/f0f142e))
+
+#### Bug Fixes
+
+* handle case in no_pacts_found - undefined method empty? for nil	 ([0145d2d](/../../commit/0145d2d))
+* remove unused ConsumerContractBuilder contract_details accessor	 ([fb5488e](/../../commit/fb5488e))
+* example/animal-service/Gemfile to reduce vulnerabilities	 ([2bbefe2](/../../commit/2bbefe2))
+* example/zoo-app/Gemfile to reduce vulnerabilities	 ([e10f914](/../../commit/e10f914))
+* example/animal-service/Gemfile to reduce vulnerabilities	 ([7560918](/../../commit/7560918))
+* example/zoo-app/Gemfile to reduce vulnerabilities	 ([b4cbe85](/../../commit/b4cbe85))
+* example/animal-service/Gemfile to reduce vulnerabilities	 ([4028087](/../../commit/4028087))
+* ConsumerContractBuilder exposing incorrect field	 ([c805c3e](/../../commit/c805c3e))
+
+* **test**
+  * alias Rack/Rackup WEBrick handler in x509 test for backwards compat	 ([cc77498](/../../commit/cc77498))
+
 <a name="v1.64.0"></a>
 ### v1.64.0 (2023-11-09)
 

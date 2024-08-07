@@ -42,7 +42,7 @@ jobs:
     needs: release
     strategy:
       matrix:
-        repository: [pact-foundation/pact-ruby-cli, pact-foundation/pact-ruby-standalone, pact-foundation/pact_broker-client]
+        repository: [pact-foundation/pact-ruby-cli, pact-foundation/pact-ruby-standalone]
     runs-on: ubuntu-latest
     steps:
       - name: Notify ${{ matrix.repository }} of gem release

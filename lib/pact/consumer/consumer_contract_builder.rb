@@ -11,7 +11,7 @@ module Pact
 
       include Pact::Logging
 
-      attr_reader :consumer_contract, :mock_service_base_url
+      attr_reader :mock_service_base_url
 
       def initialize(attributes)
         @interaction_builder = nil

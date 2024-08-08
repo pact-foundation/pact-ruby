@@ -2,14 +2,12 @@ require 'pact/provider/help/content'
 require 'fileutils'
 require 'pact/consumer/configuration'
 require 'pact/provider/help/write'
-require 'term/ansicolor'
+require 'rainbow'
 
 module Pact
   module Provider
     module Help
       class ConsoleText
-
-        C = ::Term::ANSIColor
 
         def self.call reports_dir = Pact.configuration.reports_dir, options = {color: true}
           new(reports_dir || Pact.configuration.reports_dir, options).call
@@ -46,12 +44,10 @@ module Pact
         end
 
         def error_text_coloured
-          C.red(error_text_plain)
+          Rainbow(error_text_plain).red
         end
 
         class ColorizeMarkdown
-
-          C = ::Term::ANSIColor
 
           def self.call markdown
             markdown.split("\n").collect do | line |
@@ -66,11 +62,11 @@ module Pact
           end
 
           def self.yellow_underling string
-            C.underline(C.yellow(string))
+            Rainbow(string).yellow.underline
           end
 
           def self.green string
-            C.green(string)
+            Rainbow(string).green
           end
 
         end

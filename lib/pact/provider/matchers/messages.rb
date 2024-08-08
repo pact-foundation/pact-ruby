@@ -36,9 +36,9 @@ module Pact
       def colorize_if_enabled formatted_diff, color_enabled
         if color_enabled
           # RSpec wraps each line in the failure message with failure_color, turning it red.
-          # To ensure the lines in the diff that should be white, stay white, wrap each line
-          # in ANSI white.
-          formatted_diff.split("\n").collect{ |line| Rainbow(line).white }.join("\n")
+          # To ensure the lines in the diff that should be white, stay white, put an
+          # ANSI reset at the start of each line.
+          formatted_diff.split("\n").collect{ |line|"\e[0m#{line}" }.join("\n")
         else
           formatted_diff
         end

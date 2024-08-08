@@ -43,7 +43,7 @@ module Pact
             if example.exception
               hash[:exception] =  {
                 class: example.exception.class.name,
-                message: Rainbow(example.exception.message).white
+                message: "\e[0m#{example.exception.message}"
               }
             end
 

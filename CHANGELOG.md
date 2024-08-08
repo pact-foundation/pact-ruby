@@ -1,3 +1,11 @@
+<a name="v1.65.1"></a>
+### v1.65.1 (2024-08-08)
+
+#### Bug Fixes
+
+* set color codes even on dumb terms (prev behaviour)	 ([4f01bc9](/../../commit/4f01bc9))
+* use .empty? in handling_no_pacts_found	 ([43bce74](/../../commit/43bce74))
+
 <a name="v1.65.0"></a>
 ### v1.65.0 (2024-08-06)
 

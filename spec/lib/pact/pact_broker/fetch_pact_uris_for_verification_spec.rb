@@ -49,7 +49,7 @@ module Pact
 
         context "when the beta:provider-pacts-for-verification relation does not exist" do
           before do
-            allow(FetchPacts).to receive(:call)
+            allow(FetchPacts).to receive(:call).and_return([])
             stub_request(:get, "http://broker.org/").to_return(status: 200, body: response_body, headers: response_headers)
           end
 

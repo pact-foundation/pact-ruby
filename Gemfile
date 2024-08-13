@@ -17,6 +17,8 @@ if ENV['X_PACT_DEVELOPMENT']
   gem "pact-support", path: '../pact-support'
   gem "pact-mock_service", path: '../pact-mock_service'
   gem "pry-byebug"
+else
+  gem "pact-support", git: 'https://github.com/pact-foundation/pact-support.git', branch: 'feat/v3_generators'
 end
 
 group :local_development do

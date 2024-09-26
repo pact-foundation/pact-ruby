@@ -29,7 +29,6 @@ Gem::Specification.new do |gem|
   gem.add_runtime_dependency 'rspec', '~> 3.0'
   gem.add_runtime_dependency 'rack-test', '>= 0.6.3', '< 3.0.0'
   gem.add_runtime_dependency 'thor', '>= 0.20', '< 2.0'
-  gem.add_runtime_dependency 'webrick', '~> 1.8'
   gem.add_runtime_dependency "rainbow", '~> 3.1'
 
   gem.add_runtime_dependency 'pact-support', '~> 1.16', '>= 1.16.9'
@@ -45,4 +44,5 @@ Gem::Specification.new do |gem|
   gem.add_development_dependency 'bump', '~> 0.5'
   gem.add_development_dependency 'pact-message', '~> 0.8'
   gem.add_development_dependency 'rspec-its', '~> 1.3'
+  gem.add_development_dependency 'webrick', '~> 1.8'
 end

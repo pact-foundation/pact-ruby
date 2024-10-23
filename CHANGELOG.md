@@ -1,3 +1,11 @@
+<a name="v1.65.3"></a>
+### v1.65.3 (2024-10-23)
+
+#### Bug Fixes
+
+* **test**
+  * explicitly require ostruct as non stdlib in ruby 3.5.x	 ([c9a8525](/../../commit/c9a8525))
+
 <a name="v1.65.2"></a>
 ### v1.65.2 (2024-09-26)
 

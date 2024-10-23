@@ -45,4 +45,5 @@ Gem::Specification.new do |gem|
   gem.add_development_dependency 'pact-message', '~> 0.8'
   gem.add_development_dependency 'rspec-its', '~> 1.3'
   gem.add_development_dependency 'webrick', '~> 1.8'
+  gem.add_development_dependency 'ostruct'
 end

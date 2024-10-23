@@ -1,6 +1,7 @@
 require 'json'
 require 'pact/reification'
 require 'pact/shared/null_expectation'
+require 'pact/generators'
 
 module Pact
   module Provider
@@ -10,8 +11,9 @@ module Pact
         # See https://github.com/rack/rack/blob/e7d741c6282ca4cf4e01506f5681e6e6b14c0b32/SPEC#L87-89
         NO_HTTP_PREFIX = ["CONTENT-TYPE", "CONTENT-LENGTH"]
 
-        def initialize expected_request
+        def initialize expected_request, state_params = nil
           @expected_request = expected_request
+          @state_params = state_params
         end
 
         def method
@@ -19,7 +21,7 @@ module Pact
         end
 
         def path
-          expected_request.full_path
+          Pact::Generators.apply_generators(expected_request, "path", expected_request.full_path, @state_params)
         end
 
         def body
@@ -27,17 +29,20 @@ module Pact
           when String then expected_request.body
           when NullExpectation then ''
           else
-            reified_body
+            Pact::Generators.apply_generators(expected_request, "body", reified_body, @state_params)
           end
         end
 
         def headers
           request_headers = {}
           return request_headers if expected_request.headers.is_a?(Pact::NullExpectation)
+
           expected_request.headers.each do |key, value|
-            request_headers[rack_request_header_for(key)] = Pact::Reification.from_term(value)
+            request_headers[key] = Pact::Reification.from_term(value)
           end
-          request_headers
+
+          request_headers = Pact::Generators.apply_generators(expected_request, "header", request_headers, @state_params)
+          request_headers.map{ |key,value| [rack_request_header_for(key), value]}.to_h
         end
 
         private

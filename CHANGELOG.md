@@ -1,3 +1,17 @@
+<a name="v1.66.0"></a>
+### v1.66.0 (2024-11-29)
+
+#### Features
+
+* **generators**
+  * Add more generators as per spec	 ([f55adf1](/../../commit/f55adf1))
+  * Pass context and add ProviderState generator	 ([7a1cf3b](/../../commit/7a1cf3b))
+
+#### Bug Fixes
+
+* add HTTPS_HOST header if invoking a Sinatra app	 ([ed44189](/../../commit/ed44189))
+* example/animal-service/Gemfile to reduce vulnerabilities	 ([981ebee](/../../commit/981ebee))
+
 <a name="v1.65.3"></a>
 ### v1.65.3 (2024-10-23)
 

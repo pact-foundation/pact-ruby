@@ -35,7 +35,7 @@ module Pact
 
         def headers
           request_headers = {}
-          request_headers.merge!('HTTP_HOST' => 'localhost') if defined?(Sinatra)
+          request_headers.merge!('HOST' => 'localhost') if defined?(Sinatra)
           return request_headers if expected_request.headers.is_a?(Pact::NullExpectation)
 
           expected_request.headers.each do |key, value|

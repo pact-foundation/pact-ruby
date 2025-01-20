@@ -33,7 +33,7 @@ Gem::Specification.new do |gem|
   gem.add_runtime_dependency 'string_pattern', '~> 2.0'
   gem.add_runtime_dependency 'jsonpath', '~> 1.0'
 
-  gem.add_runtime_dependency 'pact-support', '~> 1.19', '>= 1.19.0'
+  gem.add_runtime_dependency 'pact-support', '~> 1.21', '>= 1.21.0'
   gem.add_runtime_dependency 'pact-mock_service', '~> 3.0', '>= 3.3.1'
 
   gem.add_development_dependency 'rake', '~> 13.0'

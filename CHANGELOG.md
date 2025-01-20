@@ -1,3 +1,10 @@
+<a name="v1.66.1"></a>
+### v1.66.1 (2025-01-20)
+
+#### Bug Fixes
+
+* HTTP_HOST headers for sinatra 4.x	 ([173bfb7](/../../commit/173bfb7))
+
 <a name="v1.66.0"></a>
 ### v1.66.0 (2024-11-29)
 

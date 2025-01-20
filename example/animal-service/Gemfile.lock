@@ -1,12 +1,14 @@
 PATH
   remote: ../..
   specs:
-    pact (1.65.3)
+    pact (1.66.0)
+      jsonpath (~> 1.0)
       pact-mock_service (~> 3.0, >= 3.3.1)
-      pact-support (~> 1.16, >= 1.16.9)
+      pact-support (~> 1.19, >= 1.19.0)
       rack-test (>= 0.6.3, < 3.0.0)
       rainbow (~> 3.1)
       rspec (~> 3.0)
+      string_pattern (~> 2.0)
       thor (>= 0.20, < 2.0)
 
 GEM
@@ -104,7 +106,7 @@ DEPENDENCIES
   rake
   rspec
   sequel
-  sinatra (>= 4.0.0)
+  sinatra (>= 4.1.0)
   sqlite3
 
 BUNDLED WITH

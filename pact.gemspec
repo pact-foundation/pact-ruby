@@ -38,9 +38,9 @@ Gem::Specification.new do |gem|
 
   gem.add_development_dependency 'rake', '~> 13.0'
   gem.add_development_dependency 'webmock', '~> 3.0'
-  gem.add_development_dependency 'fakefs', '2.4' # 0.6.0 blows up
+  gem.add_development_dependency 'fakefs', '2.4'
   gem.add_development_dependency 'hashie', '~> 5.0'
-  gem.add_development_dependency 'faraday', '~>1.0', '<3.0'
+  gem.add_development_dependency 'faraday', '~>2.0', '<3.0'
   gem.add_development_dependency 'faraday-multipart', '~> 1.0'
   gem.add_development_dependency 'conventional-changelog', '~> 1.3'
   gem.add_development_dependency 'bump', '~> 0.5'

@@ -79,7 +79,7 @@ GEM
       rspec-support (~> 3.13.0)
     rspec-support (3.13.1)
     ruby2_keywords (0.0.5)
-    sequel (5.86.0)
+    sequel (5.89.0)
       bigdecimal
     sinatra (4.1.1)
       logger (>= 1.6.0)

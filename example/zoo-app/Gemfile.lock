@@ -1,7 +1,7 @@
 PATH
   remote: ../..
   specs:
-    pact (1.66.0)
+    pact (1.66.1)
       jsonpath (~> 1.0)
       pact-mock_service (~> 3.0, >= 3.3.1)
       pact-support (~> 1.21, >= 1.21.0)

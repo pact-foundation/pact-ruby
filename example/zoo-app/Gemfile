@@ -9,5 +9,5 @@ end
 
 gem 'rake'
 
-gem 'rack', '>= 3.1.10'
+gem 'rack', '>= 3.1.11'
 gem 'httparty', '>= 0.21.0'

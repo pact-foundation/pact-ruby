@@ -51,7 +51,7 @@ GEM
     pry (0.15.2)
       coderay (~> 1.1)
       method_source (~> 1.0)
-    rack (3.1.8)
+    rack (3.1.12)
     rack-protection (4.1.1)
       base64 (>= 0.1.0)
       logger (>= 1.6.0)
@@ -102,7 +102,7 @@ PLATFORMS
 DEPENDENCIES
   pact!
   pry
-  rack (>= 3.1.5)
+  rack (>= 3.1.10)
   rake
   rspec
   sequel

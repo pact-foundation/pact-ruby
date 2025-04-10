@@ -6,13 +6,15 @@ describe Pact::Provider::Request::Replayable do
   let(:path) { '/path?something' }
   let(:body) { { a: 'body' } }
   let(:headers) { {} }
+  let(:generators) { {} }
   let(:expected_request) do
     instance_double(
       'Pact::Request::Expected',
       method: 'post',
       full_path: path,
       body: body,
-      headers: headers
+      headers: headers,
+      generators: generators,
     )
   end
 
@@ -68,6 +70,15 @@ describe Pact::Provider::Request::Replayable do
 
       it "returns the object as a json string" do
         expect(subject.body).to eq body.to_json
+      end
+
+      context "and it uses generators" do
+        let(:body) { { a: 'body', b: '2025-04-08' } }
+        let(:generators) { {"body"=>{"b"=>{"type"=>"Date"}}} }
+
+        it "returns the object as a json string" do
+          expect(subject.body).to eq body.to_json
+        end
       end
     end
   end

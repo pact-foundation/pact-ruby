@@ -11,6 +11,7 @@ gemspec
 # Diff:
 
 gem "rspec-mocks", "3.10.2"
+gem "appraisal", "~> 2.5"
 
 if ENV['X_PACT_DEVELOPMENT']
   gem "pact-support", path: '../pact-support'
@@ -20,4 +21,10 @@ end
 
 group :local_development do
   gem "pry-byebug"
+end
+
+group :test do
+  gem 'faraday', '~>2.0', '<3.0'
+  gem 'faraday-retry', '~>2.0'
+  gem 'rackup', '~> 2.1'
 end

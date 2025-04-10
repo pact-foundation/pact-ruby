@@ -1,7 +1,7 @@
 require 'json'
 require 'pact/reification'
 require 'pact/shared/null_expectation'
-require 'pact/provider/generators'
+require 'pact/generators'
 
 module Pact
   module Provider
@@ -21,7 +21,7 @@ module Pact
         end
 
         def path
-          Pact::Provider::Generators.apply_generators(expected_request, "path", expected_request.full_path, @state_params)
+          Pact::Generators.apply_generators(expected_request, "path", expected_request.full_path, @state_params)
         end
 
         def body
@@ -35,13 +35,15 @@ module Pact
 
         def headers
           request_headers = {}
+          # https://github.com/pact-foundation/pact-ruby/pull/327
+          request_headers.merge!('HOST' => 'localhost') if defined?(Sinatra)
           return request_headers if expected_request.headers.is_a?(Pact::NullExpectation)
 
           expected_request.headers.each do |key, value|
             request_headers[key] = Pact::Reification.from_term(value)
           end
 
-          request_headers = Pact::Provider::Generators.apply_generators(expected_request, "header", request_headers, @state_params)
+          request_headers = Pact::Generators.apply_generators(expected_request, "header", request_headers, @state_params)
           request_headers.map{ |key,value| [rack_request_header_for(key), value]}.to_h
         end
 

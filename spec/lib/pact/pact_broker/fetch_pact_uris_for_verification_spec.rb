@@ -14,7 +14,7 @@ module Pact
         let(:consumer_version_selectors) { [{ tag: "cmaster", latest: true, fallbackTag: 'blah' }] }
         let(:provider_version_branch) { "pbranch" }
         let(:provider_version_tags) { ["pmaster"] }
-
+        
         subject { FetchPactURIsForVerification.call(provider, consumer_version_selectors, provider_version_branch, provider_version_tags, broker_base_url, http_client_options)}
 
         context "when there is an error retrieving the index resource" do
@@ -49,7 +49,7 @@ module Pact
 
         context "when the beta:provider-pacts-for-verification relation does not exist" do
           before do
-            allow(FetchPacts).to receive(:call)
+            allow(FetchPacts).to receive(:call).and_return([])
             stub_request(:get, "http://broker.org/").to_return(status: 200, body: response_body, headers: response_headers)
           end
 
@@ -62,7 +62,7 @@ module Pact
 
           it "calls the old fetch pacts code" do
             expect(FetchPacts).to receive(:call).with(provider, [{ name: "cmaster", all: false, fallback: "blah" }], broker_base_url, http_client_options)
-            subject
+            expect { subject }.to raise_error( "No pacts found to verify" )
           end
         end
       end

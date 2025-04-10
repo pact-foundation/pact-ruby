@@ -34,6 +34,10 @@ module Pact
             self.tags = tags
           end
 
+          def app_version_branch branch
+            self.branch = branch
+          end
+
           def publish_verification_results publish_verification_results
             self.publish_verification_results = publish_verification_results
             Pact::RSpec.with_rspec_2 do

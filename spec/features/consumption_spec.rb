@@ -19,7 +19,7 @@ describe "A service consumer side of a pact", :pact => true  do
           has_pact_with "Alice Service" do
             mock_service :alice_service do
               verify true
-              port 1234
+              port 8888
             end
           end
 
@@ -76,7 +76,7 @@ describe "A service consumer side of a pact", :pact => true  do
         })
 
 
-        alice_response = Net::HTTP.get_response(URI('http://localhost:1234/mallory'))
+        alice_response = Net::HTTP.get_response(URI('http://localhost:8888/mallory'))
 
         expect(alice_response.code).to eql '200'
         expect(alice_response['Content-Type']).to eql 'text/html'

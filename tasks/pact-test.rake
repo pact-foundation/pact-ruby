@@ -69,6 +69,8 @@ namespace :pact do
 
 	desc "All the verification tests"
 	task "tests:all" do
+		next if Gem.win_platform?
+
 		Rake::Task['pact:verify:stubbing'].execute
 		Rake::Task['spec:standalone:pass'].execute
 		Rake::Task['pact:verify'].execute
@@ -124,10 +126,10 @@ namespace :pact do
 	end
 
 	def ensure_patterns_present command, options, stdout, stderr
-		require 'term/ansicolor'
+		require 'rainbow'
 		output = stdout.read + stderr.read
 		options[:with].each do | pattern |
-			raise (::Term::ANSIColor.red("Could not find #{pattern.inspect} in output of #{command}") + "\n\n#{output}") unless output =~ pattern
+			raise (Rainbow("Could not find #{pattern.inspect} in output of #{command}").red + "\n\n#{output}") unless output =~ pattern
 		end
 	end
 end

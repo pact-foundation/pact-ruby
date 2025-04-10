@@ -1,6 +1,6 @@
 require 'rspec/core/formatters'
 require 'pact/provider/verification_results/publish_all'
-require 'term/ansicolor'
+require 'rainbow'
 require 'pact/matchers/extract_diff_messages'
 
 module Pact
@@ -43,7 +43,7 @@ module Pact
             if example.exception
               hash[:exception] =  {
                 class: example.exception.class.name,
-                message: ::Term::ANSIColor.uncolor(example.exception.message)
+                message: "\e[0m#{example.exception.message}"
               }
             end
 

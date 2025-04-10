@@ -23,6 +23,10 @@ module Pact
         _link(key).get(*args)
       end
 
+      def get!(key, *args)
+        _link(key).get!(*args)
+      end
+
       def post(key, *args)
         _link(key).post(*args)
       end

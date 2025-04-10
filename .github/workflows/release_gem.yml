@@ -10,12 +10,12 @@ jobs:
   test:
     runs-on: ubuntu-latest
     steps:
-    - uses: actions/checkout@v2
+    - uses: actions/checkout@v4
     - uses: ruby/setup-ruby@v1
       with:
-        ruby-version: '2.6'
+        ruby-version: '3.2'
     - run: |
-        gem install bundler -v 2.1
+        gem install bundler -v 2.4
         bundle install
     - name: Test
       run: bundle exec rake
@@ -28,11 +28,11 @@ jobs:
       version: ${{ steps.release-gem.outputs.version }}
       increment: ${{ steps.release-gem.outputs.increment }}
     steps:
-    - uses: actions/checkout@v2
+    - uses: actions/checkout@v4
       with:
         fetch-depth: 0
     - id: release-gem
-      uses: pact-foundation/release-gem@v0.0.13
+      uses: pact-foundation/release-gem@v1
       env:
         GEM_HOST_API_KEY: '${{ secrets.RUBYGEMS_API_KEY }}'
         GITHUB_TOKEN: '${{ secrets.GITHUB_TOKEN }}'
@@ -42,11 +42,11 @@ jobs:
     needs: release
     strategy:
       matrix:
-        repository: [pact-foundation/pact-ruby-cli, pact-foundation/pact-ruby-standalone, pact-foundation/pact_broker-client]
+        repository: [pact-foundation/pact-ruby-cli, pact-foundation/pact-ruby-standalone]
     runs-on: ubuntu-latest
     steps:
       - name: Notify ${{ matrix.repository }} of gem release
-        uses: peter-evans/repository-dispatch@v1
+        uses: peter-evans/repository-dispatch@v3
         with:
           token: ${{ secrets.GHTOKENFORPACTCLIRELEASE }}
           repository: ${{ matrix.repository }}

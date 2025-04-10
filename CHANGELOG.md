@@ -1,3 +1,84 @@
+<a name="v1.66.1"></a>
+### v1.66.1 (2025-01-20)
+
+#### Bug Fixes
+
+* HTTP_HOST headers for sinatra 4.x	 ([173bfb7](/../../commit/173bfb7))
+
+<a name="v1.66.0"></a>
+### v1.66.0 (2024-11-29)
+
+#### Features
+
+* **generators**
+  * Add more generators as per spec	 ([f55adf1](/../../commit/f55adf1))
+  * Pass context and add ProviderState generator	 ([7a1cf3b](/../../commit/7a1cf3b))
+
+#### Bug Fixes
+
+* add HTTPS_HOST header if invoking a Sinatra app	 ([ed44189](/../../commit/ed44189))
+* example/animal-service/Gemfile to reduce vulnerabilities	 ([981ebee](/../../commit/981ebee))
+
+<a name="v1.65.3"></a>
+### v1.65.3 (2024-10-23)
+
+#### Bug Fixes
+
+* **test**
+  * explicitly require ostruct as non stdlib in ruby 3.5.x	 ([c9a8525](/../../commit/c9a8525))
+
+<a name="v1.65.2"></a>
+### v1.65.2 (2024-09-26)
+
+<a name="v1.65.1"></a>
+### v1.65.1 (2024-08-08)
+
+#### Bug Fixes
+
+* set color codes even on dumb terms (prev behaviour)	 ([4f01bc9](/../../commit/4f01bc9))
+* use .empty? in handling_no_pacts_found	 ([43bce74](/../../commit/43bce74))
+
+<a name="v1.65.0"></a>
+### v1.65.0 (2024-08-06)
+
+#### Features
+
+* support app_version_branch in MessageProviderDSL	 ([1653128](/../../commit/1653128))
+* allow setting fail_if_no_pacts_found in honours_pacts_from_pact_broker	 ([f0f142e](/../../commit/f0f142e))
+
+#### Bug Fixes
+
+* handle case in no_pacts_found - undefined method empty? for nil	 ([0145d2d](/../../commit/0145d2d))
+* remove unused ConsumerContractBuilder contract_details accessor	 ([fb5488e](/../../commit/fb5488e))
+* example/animal-service/Gemfile to reduce vulnerabilities	 ([2bbefe2](/../../commit/2bbefe2))
+* example/zoo-app/Gemfile to reduce vulnerabilities	 ([e10f914](/../../commit/e10f914))
+* example/animal-service/Gemfile to reduce vulnerabilities	 ([7560918](/../../commit/7560918))
+* example/zoo-app/Gemfile to reduce vulnerabilities	 ([b4cbe85](/../../commit/b4cbe85))
+* example/animal-service/Gemfile to reduce vulnerabilities	 ([4028087](/../../commit/4028087))
+* ConsumerContractBuilder exposing incorrect field	 ([c805c3e](/../../commit/c805c3e))
+
+* **test**
+  * alias Rack/Rackup WEBrick handler in x509 test for backwards compat	 ([cc77498](/../../commit/cc77498))
+
+<a name="v1.64.0"></a>
+### v1.64.0 (2023-11-09)
+
+#### Features
+
+* support x509 certs in HTTP Client (#298)	 ([3ed5680](/../../commit/3ed5680))
+
+* **CI**
+  * use setup-ruby's bundle installer and cache (#275)	 ([f5621b6](/../../commit/f5621b6))
+
+#### Bug Fixes
+
+* assert provider retrieved successfully before using link	 ([0af0691](/../../commit/0af0691))
+* update call to Rack::Builder.parse_file for rack 3	 ([652047c](/../../commit/652047c))
+* example/zoo-app/Gemfile to reduce vulnerabilities	 ([b4ca8cb](/../../commit/b4ca8cb))
+* example/animal-service/Gemfile to reduce vulnerabilities	 ([7ad2073](/../../commit/7ad2073))
+* example/zoo-app/Gemfile to reduce vulnerabilities	 ([dd417fd](/../../commit/dd417fd))
+* example/animal-service/Gemfile to reduce vulnerabilities (#281)	 ([4ea07cd](/../../commit/4ea07cd))
+
 <a name="v1.63.0"></a>
 ### v1.63.0 (2022-09-28)
 

@@ -6,7 +6,7 @@ module Pact::Consumer::Configuration
   describe MockService do
 
     let(:world) { Pact::Consumer::World.new }
-    let(:port_number) { 1234 }
+    let(:port_number) { 8888 }
     before do
       Pact.clear_configuration
       allow(Pact::MockService::AppManager.instance).to receive(:register_mock_service_for).and_return(port_number)

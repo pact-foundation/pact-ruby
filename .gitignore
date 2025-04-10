@@ -33,3 +33,4 @@ gemfiles/*.gemfile.lock
 reports/pacts
 spec/examples.txt
 *bethtest*
+.DS_Store

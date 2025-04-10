@@ -1,4 +1,4 @@
-RSpec.describe "executing pact verify" do
+RSpec.describe "executing pact verify", skip_windows: true do
   let(:command) { "bundle exec rake pact:verify:test_app:fail > /dev/null" }
   let(:reports_dir) { 'tmp/spec_reports' } # The config for this is in spec/support/pact_helper.rb
 

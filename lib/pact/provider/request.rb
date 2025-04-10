@@ -29,7 +29,7 @@ module Pact
           when String then expected_request.body
           when NullExpectation then ''
           else
-            Pact::Provider::Generators.apply_generators(expected_request, "body", reified_body, @state_params)
+            generated_body
           end
         end
 
@@ -55,6 +55,19 @@ module Pact
             rb
           else
             JSON.dump(rb)
+          end
+        end
+
+        def generated_body
+          result = Pact::Provider::Generators.apply_generators(expected_request, "body", reified_body, @state_params)
+
+          case result
+          when Hash
+            result.to_json
+          when String
+            result
+          else
+            raise "Expected body to be a String or Hash, but was #{result.class} with value #{result.inspect}"
           end
         end
 

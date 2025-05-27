@@ -65,19 +65,19 @@ GEM
     rainbow (3.1.1)
     rake (13.2.1)
     regexp_parser (2.9.2)
-    rspec (3.13.0)
+    rspec (3.13.1)
       rspec-core (~> 3.13.0)
       rspec-expectations (~> 3.13.0)
       rspec-mocks (~> 3.13.0)
-    rspec-core (3.13.2)
+    rspec-core (3.13.4)
       rspec-support (~> 3.13.0)
-    rspec-expectations (3.13.3)
+    rspec-expectations (3.13.5)
       diff-lcs (>= 1.2.0, < 2.0)
       rspec-support (~> 3.13.0)
-    rspec-mocks (3.13.2)
+    rspec-mocks (3.13.5)
       diff-lcs (>= 1.2.0, < 2.0)
       rspec-support (~> 3.13.0)
-    rspec-support (3.13.1)
+    rspec-support (3.13.4)
     ruby2_keywords (0.0.5)
     sequel (5.89.0)
       bigdecimal
@@ -102,7 +102,7 @@ PLATFORMS
 DEPENDENCIES
   pact!
   pry
-  rack (>= 3.1.10)
+  rack (>= 3.1.12)
   rake
   rspec
   sequel

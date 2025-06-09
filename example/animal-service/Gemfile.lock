@@ -27,7 +27,7 @@ GEM
       multi_json
     logger (1.6.1)
     method_source (1.1.0)
-    mini_portile2 (2.8.8)
+    mini_portile2 (2.8.9)
     multi_json (1.15.0)
     mustermann (3.0.3)
       ruby2_keywords (~> 0.0.1)
@@ -88,7 +88,7 @@ GEM
       rack-protection (= 4.1.1)
       rack-session (>= 2.0.0, < 3)
       tilt (~> 2.0)
-    sqlite3 (2.6.0)
+    sqlite3 (2.7.0)
       mini_portile2 (~> 2.8.0)
     string_pattern (2.3.0)
       regexp_parser (~> 2.5, >= 2.5.0)
@@ -102,7 +102,7 @@ PLATFORMS
 DEPENDENCIES
   pact!
   pry
-  rack (>= 3.1.10)
+  rack (>= 3.1.12)
   rake
   rspec
   sequel

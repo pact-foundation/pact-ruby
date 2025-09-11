@@ -1,0 +1,12 @@
+$: << File.join(File.dirname(__FILE__), "lib")
+
+require 'pact/tasks'
+
+task :default => 'pact:verify'
+
+require 'rspec/core/rake_task'
+
+RSpec::Core::RakeTask.new('pact:v2:verify') do |task|
+  task.pattern = 'spec/pact/consumers/*_spec.rb'
+  task.rspec_opts = ['-t pact', '--require rails_helper']
+end

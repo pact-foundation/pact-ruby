@@ -1,0 +1,19 @@
+default: &default
+  deliver: true
+  auth:
+    kind: 'sasl_plaintext'
+    sasl_mechanism: <%= ENV.fetch('KAFKA_SASL_DSN'){ 'SCRAM-SHA-512:kafka_login:kafka_password' }.split(':').first %>
+    sasl_username: <%= ENV.fetch('KAFKA_SASL_DSN'){ 'SCRAM-SHA-512:kafka_login:kafka_password' }.split(':').second %>
+    sasl_password: <%= ENV.fetch('KAFKA_SASL_DSN'){ 'SCRAM-SHA-512:kafka_login:kafka_password' }.split(':').last %>
+  kafka:
+    servers: <%= ENV.fetch('KAFKA_BROKERS'){ 'localhost:9092' } %>
+development:
+  <<: *default
+  auth:
+    kind: 'plaintext'
+test:
+  <<: *default
+  deliver: false
+  wait_on_queue_full: false
+  auth:
+    kind: 'plaintext'

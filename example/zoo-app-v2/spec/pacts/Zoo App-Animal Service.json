@@ -1,0 +1,77 @@
+{
+  "consumer": {
+    "name": "Zoo App"
+  },
+  "interactions": [
+    {
+      "description": "a request for an alligator",
+      "providerState": "an error occurs retrieving an alligator",
+      "request": {
+        "headers": {
+          "Accept": "application/json"
+        },
+        "method": "GET",
+        "path": "/alligators/Mary"
+      },
+      "response": {
+        "body": {
+          "error": "Argh!!!"
+        },
+        "headers": {
+          "Content-Type": "application/json;charset=utf-8"
+        },
+        "status": 500
+      }
+    },
+    {
+      "description": "a request for an alligator",
+      "providerState": "there is an alligator named Mary",
+      "request": {
+        "headers": {
+          "Accept": "application/json"
+        },
+        "method": "GET",
+        "path": "/alligators/Mary"
+      },
+      "response": {
+        "body": {
+          "name": "Mary"
+        },
+        "headers": {
+          "Content-Type": "application/json;charset=utf-8"
+        },
+        "status": 200
+      }
+    },
+    {
+      "description": "a request for an alligator",
+      "providerState": "there is not an alligator named Mary",
+      "request": {
+        "headers": {
+          "Accept": "application/json"
+        },
+        "method": "GET",
+        "path": "/alligators/Mary"
+      },
+      "response": {
+        "status": 404
+      }
+    }
+  ],
+  "metadata": {
+    "pactRust": {
+      "ffi": "0.4.28",
+      "mockserver": "1.2.16",
+      "models": "1.3.5"
+    },
+    "pactSpecification": {
+      "version": "2.0.0"
+    },
+    "pact-ruby-v2": {
+      "pact-ffi": "0.4.28"
+    }
+  },
+  "provider": {
+    "name": "Animal Service"
+  }
+}

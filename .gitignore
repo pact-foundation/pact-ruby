@@ -8,6 +8,8 @@ _yardoc
 coverage
 lib/bundler/man
 pkg
+# grpc generated files required for testing
+!spec/internal/pkg
 rdoc
 spec/reports
 test/tmp
@@ -28,8 +30,9 @@ log
 .idea
 reports
 Gemfile.lock
+example/**/Gemfile.lock
 *.gemfile.lock
-gemfiles/*.gemfile.lock
+gemfiles
 reports/pacts
 spec/examples.txt
 *bethtest*

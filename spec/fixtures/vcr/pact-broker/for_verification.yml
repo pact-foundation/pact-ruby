@@ -1,0 +1,73 @@
+---
+http_interactions:
+- request:
+    method: get
+    uri: https://example.org/pacts/provider/paas-stand-seeker/for-verification
+    body:
+      encoding: US-ASCII
+      string: ''
+    headers:
+      User-Agent:
+      - test-app / 0.0.1 Faraday v2.10.1
+      X-Request-Id:
+      - 4de62273-41aa-46e3-b428-63ff7506ea78
+      Accept-Encoding:
+      - gzip;q=1.0,deflate;q=0.6,identity;q=0.3
+      Accept:
+      - "*/*"
+      Connection:
+      - keep-alive
+      Keep-Alive:
+      - '30'
+  response:
+    status:
+      code: 200
+      message: OK
+    headers:
+      Vary:
+      - Accept
+      Cache-Control:
+      - no-cache
+      Content-Type:
+      - application/hal+json;charset=utf-8
+      Date:
+      - Thu, 08 Aug 2024 14:43:22 GMT
+      Server:
+      - istio-envoy
+      X-Pact-Broker-Version:
+      - 2.110.0
+      X-Content-Type-Options:
+      - nosniff
+      Content-Length:
+      - '2817'
+      X-Envoy-Upstream-Service-Time:
+      - '37'
+    body:
+      encoding: UTF-8
+      string: '{"_embedded":{"pacts":[{"shortDescription":"deployed to production,
+        latest from main branch","verificationProperties":{"pending":false,"notices":[{"when":"before_verification","text":"WARNING
+        - this version of the Pact library uses a beta version of the API which will
+        be removed in the future. Please upgrade your Pact library. See https://docs.pact.io/pact_broker/advanced_topics/provider_verification_results/#pacts-for-verification
+        for minimum required versions."},{"when":"before_verification","text":"The
+        pact at https://example.org/pacts/provider/paas-stand-seeker/consumer/paas-stand-placer/pact-version/2967a9343bd8fdd28a286c4b8322380020618892
+        is being verified because the pact content belongs to the consumer versions
+        matching the following criteria:\n    * consumer version(s) currently deployed
+        to production (98c66ec6)\n    * latest version of paas-stand-placer from the
+        main branch ''master'' (98c66ec6)"},{"when":"before_verification","text":"This
+        pact has previously been successfully verified by paas-stand-seeker. If this
+        verification fails, it will fail the build. Read more at https://docs.pact.io/go/pending"}]},"_links":{"self":{"href":"https://example.org/pacts/provider/paas-stand-seeker/consumer/paas-stand-placer/pact-version/2967a9343bd8fdd28a286c4b8322380020618892/metadata/c1tdW2N2XT03MzIyJnNbXVtjdl09NzMyMiZwPWZhbHNl","name":"Pact
+        between paas-stand-placer (98c66ec6) and paas-stand-seeker"}}},{"shortDescription":"deployed
+        to test","verificationProperties":{"pending":false,"notices":[{"when":"before_verification","text":"WARNING
+        - this version of the Pact library uses a beta version of the API which will
+        be removed in the future. Please upgrade your Pact library. See https://docs.pact.io/pact_broker/advanced_topics/provider_verification_results/#pacts-for-verification
+        for minimum required versions."},{"when":"before_verification","text":"The
+        pact at https://example.org/pacts/provider/paas-stand-seeker/consumer/paas-stand-placer/pact-version/c6d07ac41916c31609f0f2879c80ff3cce0df7b9
+        is being verified because the pact content belongs to the consumer version
+        matching the following criterion:\n    * consumer version(s) currently deployed
+        to test (6b35eb7a)"},{"when":"before_verification","text":"This pact has previously
+        been successfully verified by paas-stand-seeker. If this verification fails,
+        it will fail the build. Read more at https://docs.pact.io/go/pending"}]},"_links":{"self":{"href":"https://example.org/pacts/provider/paas-stand-seeker/consumer/paas-stand-placer/pact-version/c6d07ac41916c31609f0f2879c80ff3cce0df7b9/metadata/c1tdW2N2XT03Njc0JnA9ZmFsc2U","name":"Pact
+        between paas-stand-placer (6b35eb7a) and paas-stand-seeker"}}}]},"_links":{"self":{"href":"https://example.org/pacts/provider/paas-stand-seeker/for-verification","title":"Pacts
+        to be verified"}}}'
+  recorded_at: Thu, 08 Aug 2024 14:43:22 GMT
+recorded_with: VCR 6.2.0

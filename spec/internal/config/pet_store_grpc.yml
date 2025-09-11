@@ -1,0 +1,10 @@
+default: &default
+  host: localhost
+  port: 3009
+  client_name: test-app
+
+development:
+  <<: *default
+
+test:
+  <<: *default

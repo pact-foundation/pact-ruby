@@ -1,0 +1,42 @@
+default: &default
+  auth:
+    kind: 'sasl_plaintext'
+    sasl_mechanism: <%= ENV.fetch('KAFKA_SASL_DSN'){ 'SCRAM-SHA-512:kafka_login:kafka_password' }.split(':').first %>
+    sasl_username: <%= ENV.fetch('KAFKA_SASL_DSN'){ 'SCRAM-SHA-512:kafka_login:kafka_password' }.split(':').second %>
+    sasl_password: <%= ENV.fetch('KAFKA_SASL_DSN'){ 'SCRAM-SHA-512:kafka_login:kafka_password' }.split(':').last %>
+  client_id: pact-ruby-v2-test-app
+  kafka:
+    servers: <%= ENV.fetch('KAFKA_BROKERS'){ 'kafka:9092' } %>
+  consumer_groups:
+    json:
+      name: json
+      topics:
+        - name: 'json-topic'
+          consumer:
+            klass: "PetJsonConsumer"
+            deserializer:
+              klass: "Sbmt::KafkaConsumer::Serialization::JsonDeserializer"
+    proto:
+      name: proto
+      topics:
+        - name: 'proto-topic'
+          consumer:
+            klass: "PetProtoConsumer"
+          deserializer:
+            klass: "Sbmt::KafkaConsumer::Serialization::ProtobufDeserializer"
+            init_attrs:
+              message_decoder_klass: "PetStore::Grpc::PetStore::V1::Pet"
+development:
+  <<: *default
+  auth:
+    kind: 'plaintext'
+test:
+  <<: *default
+  deliver: false
+  wait_on_queue_full: false
+  auth:
+    kind: 'plaintext'
+staging: &staging
+  <<: *default
+production:
+  <<: *staging

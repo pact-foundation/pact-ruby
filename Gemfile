@@ -27,10 +27,6 @@ group :test do
   gem 'faraday', '~>2.0', '<3.0'
   gem 'faraday-retry', '~>2.0'
   gem 'rackup'
+  gem 'tzinfo-data', platforms: [:mingw, :mswin, :x64_mingw]
 end
 
-# gem 'tzinfo-data', platforms: [:mingw, :mswin, :x64_mingw]
-
-# # loaded from the standard library, but will no longer be part of the default gem
-# gem 'mutex_m'
-# gem 'csv'

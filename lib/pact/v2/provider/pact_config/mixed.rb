@@ -1,16 +1,10 @@
 # # frozen_string_literal: true
 
-# require_relative "base"
-# require_relative "async"
-# require_relative "grpc"
-# require_relative "http"
-
 module Pact
   module V2
     module Provider
       module PactConfig
         # Mixed config allows composing one of each: async, grpc, http
-        # class Mixed
         class Mixed < Base
           attr_reader :async_config, :grpc_config, :http_config
 

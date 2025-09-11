@@ -1,0 +1,18 @@
+source 'https://rubygems.org'
+
+group :development, :test do
+  gem 'rspec'
+  gem 'pact', path: '../../'
+  gem 'pry'
+  # required for pact-ruby-v2
+  gem 'combustion'
+  gem 'webmock'
+end
+
+gem 'rake'
+gem 'rack'
+gem 'sqlite3'
+gem 'sequel'
+gem 'sinatra'
+
+gem 'tzinfo-data', platforms: [:mingw, :mswin, :x64_mingw]

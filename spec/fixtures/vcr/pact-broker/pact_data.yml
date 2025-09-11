@@ -1,0 +1,79 @@
+---
+http_interactions:
+- request:
+    method: get
+    uri: https://example.org/pacts/provider/paas-stand-seeker/consumer/paas-stand-placer/pact-version/2967a9343bd8fdd28a286c4b8322380020618892/metadata/c1tdW2VdPXByb2R1Y3Rpb24mc1tdW2N2XT03MzIy
+    body:
+      encoding: US-ASCII
+      string: ''
+    headers:
+      User-Agent:
+      - test-app / 0.0.1 Faraday v2.10.1
+      X-Request-Id:
+      - de7fc6fa-d335-4103-a696-e729f06d295c
+      Accept-Encoding:
+      - gzip;q=1.0,deflate;q=0.6,identity;q=0.3
+      Accept:
+      - "*/*"
+      Connection:
+      - keep-alive
+      Keep-Alive:
+      - '30'
+  response:
+    status:
+      code: 200
+      message: OK
+    headers:
+      Vary:
+      - Accept
+      Cache-Control:
+      - no-cache
+      Content-Type:
+      - application/hal+json;charset=utf-8
+      Date:
+      - Thu, 08 Aug 2024 14:43:46 GMT
+      Server:
+      - istio-envoy
+      X-Pact-Broker-Version:
+      - 2.110.0
+      X-Content-Type-Options:
+      - nosniff
+      Content-Length:
+      - '9450'
+      X-Envoy-Upstream-Service-Time:
+      - '135'
+    body:
+      encoding: UTF-8
+      string: '{"consumer":{"name":"paas-stand-placer"},"interactions":[{"_id":"29380d95a12351ab677ce97a02160e48c6377c4e","description":"","interactionMarkup":{"markup":"```protobuf\nmessage
+        OrderResponse {\n    message .orders.Order order = 1;\n}\n```\n","markupType":"COMMON_MARK"},"pending":false,"pluginConfiguration":{"protobuf":{"descriptorKey":"0bd6fa36f4bd9fb12f69d903196144ed","service":"ProcessOrders/StatusToProcessed"}},"providerStates":[{"name":"order
+        exists and can be saved","params":{"order_uuid":"mxfcpcsfUOHO"}}],"request":{"contents":{"content":"CgxteGZjcGNzZlVPSE8=","contentType":"application/protobuf;message=OrderRequest","contentTypeHint":"BINARY","encoded":"base64"},"matchingRules":{"body":{"$.uuid":{"combine":"AND","matchers":[{"match":"regex","regex":"(?-mix:.*)"}]}}},"metadata":{"contentType":"application/protobuf;message=OrderRequest"}},"response":[{"contents":{"content":"ChQIChIDYW55GAMiCQoDUlVCEAoYCg==","contentType":"application/protobuf;message=OrderResponse","contentTypeHint":"BINARY","encoded":"base64"},"matchingRules":{"body":{"$.order.id":{"combine":"AND","matchers":[{"match":"integer"}]},"$.order.name":{"combine":"AND","matchers":[{"match":"regex","regex":"(?-mix:.*)"}]},"$.order.price.currency_code":{"combine":"AND","matchers":[{"match":"regex","regex":"(?-mix:[A-Z]+)"}]},"$.order.price.nanos":{"combine":"AND","matchers":[{"match":"integer"}]},"$.order.price.units":{"combine":"AND","matchers":[{"match":"integer"}]},"$.order.status":{"combine":"AND","matchers":[{"match":"equality"}]}}},"metadata":{"contentType":"application/protobuf;message=OrderResponse"}}],"transport":"grpc","type":"Synchronous/Messages"},{"_id":"fb76a7fdcc476dd441cf5bd272a2dc993fb38c7d","description":"","interactionMarkup":{"markup":"```protobuf\nmessage
+        OrderResponse {\n}\n```\n","markupType":"COMMON_MARK"},"pending":false,"pluginConfiguration":{"protobuf":{"descriptorKey":"0bd6fa36f4bd9fb12f69d903196144ed","service":"ProcessOrders/StatusToProcessed"}},"providerStates":[{"name":"order
+        not found"}],"request":{"contents":{"content":"CgxteGZjcGNzZlVPSE8=","contentType":"application/protobuf;message=OrderRequest","contentTypeHint":"BINARY","encoded":"base64"},"matchingRules":{"body":{"$.uuid":{"combine":"AND","matchers":[{"match":"regex","regex":"(?-mix:.*)"}]}}},"metadata":{"contentType":"application/protobuf;message=OrderRequest"}},"response":[{"contents":{"content":"","contentType":"application/protobuf;message=OrderResponse","contentTypeHint":"BINARY","encoded":"base64"},"metadata":{"contentType":"application/protobuf;message=OrderResponse","grpc-message":"Failed
+        to find Order with UUID: mxfcpcsfUOHO","grpc-status":"NOT_FOUND"}}],"transport":"grpc","type":"Synchronous/Messages"}],"metadata":{"pactRust":{"ffi":"0.4.7","mockserver":"1.2.3","models":"1.1.9"},"pactSpecification":{"version":"4.0"},"plugins":[{"configuration":{"0bd6fa36f4bd9fb12f69d903196144ed":{"protoDescriptors":"CuoBChdnb29nbGUvdHlwZS9tb25leS5wcm90bxILZ29vZ2xlLnR5cGUiWAoFTW9uZXkSIwoNY3VycmVuY3lfY29kZRgBIAEoCVIMY3VycmVuY3lDb2RlEhQKBXVuaXRzGAIgASgDUgV1bml0cxIUCgVuYW5vcxgDIAEoBVIFbmFub3NCYAoPY29tLmdvb2dsZS50eXBlQgpNb25leVByb3RvUAFaNmdvb2dsZS5nb2xhbmcub3JnL2dlbnByb3RvL2dvb2dsZWFwaXMvdHlwZS9tb25leTttb25lefgBAaICA0dUUGIGcHJvdG8zCsYDCgxvcmRlcnMucHJvdG8SBm9yZGVycxoXZ29vZ2xlL3R5cGUvbW9uZXkucHJvdG8ixgEKBU9yZGVyEg4KAmlkGAEgASgFUgJpZBISCgRuYW1lGAIgASgJUgRuYW1lEiwKBnN0YXR1cxgDIAEoDjIULm9yZGVycy5PcmRlci5TdGF0dXNSBnN0YXR1cxIoCgVwcmljZRgEIAEoCzISLmdvb2dsZS50eXBlLk1vbmV5UgVwcmljZSJBCgZTdGF0dXMSCwoHUEVORElORxAAEg0KCUNPTVBMRVRFRBABEgwKCENBTkNFTEVEEAISDQoJUFJPQ0VTU0VEEAMiIgoMT3JkZXJSZXF1ZXN0EhIKBHV1aWQYASABKAlSBHV1aWQiNAoNT3JkZXJSZXNwb25zZRIjCgVvcmRlchgBIAEoCzINLm9yZGVycy5PcmRlclIFb3JkZXIyUQoNUHJvY2Vzc09yZGVycxJAChFTdGF0dXNUb1Byb2Nlc3NlZBIULm9yZGVycy5PcmRlclJlcXVlc3QaFS5vcmRlcnMuT3JkZXJSZXNwb25zZUIX6gIUU2Vla2VyOjpHcnBjOjpPcmRlcnNiBnByb3RvMw==","protoFile":"syntax
+        = \"proto3\";\n\nimport \"google/type/money.proto\";\n\npackage orders;\noption
+        ruby_package = \"Seeker::Grpc::Orders\";\n\nservice ProcessOrders {\n rpc
+        StatusToProcessed(OrderRequest) returns (OrderResponse);\n}\n\nmessage Order
+        {\n int32 id = 1;\n string name = 2;\n enum Status {\n    PENDING = 0;\n    COMPLETED
+        = 1;\n    CANCELED = 2;\n    PROCESSED = 3;\n }\n Status status = 3;\n google.type.Money
+        price = 4;\n}\n\nmessage OrderRequest {\n string uuid = 1;\n}\n\nmessage OrderResponse
+        {\n Order order = 1;\n}\n"}},"name":"protobuf","version":"0.5.5"}],"pact-ruby-v2":{"pact-ffi":"0.4.7"}},"provider":{"name":"paas-stand-seeker"},"createdAt":"2024-08-01T13:24:10+00:00","_links":{"self":{"title":"Pact","name":"Pact
+        between paas-stand-placer (98c66ec6) and paas-stand-seeker","href":"https://example.org/pacts/provider/paas-stand-seeker/consumer/paas-stand-placer/version/98c66ec6"},"pb:consumer":{"title":"Consumer","name":"paas-stand-placer","href":"https://example.org/pacticipants/paas-stand-placer"},"pb:consumer-version":{"title":"Consumer
+        version","name":"98c66ec6","href":"https://example.org/pacticipants/paas-stand-placer/versions/98c66ec6"},"pb:consumer-versions":[{"title":"Consumer
+        version","name":"98c66ec6","href":"https://example.org/pacticipants/paas-stand-placer/versions/98c66ec6"}],"pb:provider":{"title":"Provider","name":"paas-stand-seeker","href":"https://example.org/pacticipants/paas-stand-seeker"},"pb:pact-version":{"title":"Pact
+        content version permalink","name":"2967a9343bd8fdd28a286c4b8322380020618892","href":"https://example.org/pacts/provider/paas-stand-seeker/consumer/paas-stand-placer/pact-version/2967a9343bd8fdd28a286c4b8322380020618892"},"pb:latest-pact-version":{"title":"Latest
+        version of this pact","href":"https://example.org/pacts/provider/paas-stand-seeker/consumer/paas-stand-placer/latest"},"pb:all-pact-versions":{"title":"All
+        versions of this pact","href":"https://example.org/pacts/provider/paas-stand-seeker/consumer/paas-stand-placer/versions"},"pb:latest-untagged-pact-version":{"title":"Latest
+        untagged version of this pact","href":"https://example.org/pacts/provider/paas-stand-seeker/consumer/paas-stand-placer/latest-untagged"},"pb:latest-tagged-pact-version":{"title":"Latest
+        tagged version of this pact","href":"https://example.org/pacts/provider/paas-stand-seeker/consumer/paas-stand-placer/latest/{tag}","templated":true},"pb:previous-distinct":{"title":"Previous
+        distinct version of this pact","href":"https://example.org/pacts/provider/paas-stand-seeker/consumer/paas-stand-placer/version/98c66ec6/previous-distinct"},"pb:diff-previous-distinct":{"title":"Diff
+        with previous distinct version of this pact","href":"https://example.org/pacts/provider/paas-stand-seeker/consumer/paas-stand-placer/version/98c66ec6/diff/previous-distinct"},"pb:diff":{"title":"Diff
+        with another specified version of this pact","href":"https://example.org/pacts/provider/paas-stand-seeker/consumer/paas-stand-placer/pact-version/2967a9343bd8fdd28a286c4b8322380020618892/diff/pact-version/{pactVersion}","templated":true},"pb:pact-webhooks":{"title":"Webhooks
+        for the pact between paas-stand-placer and paas-stand-seeker","href":"https://example.org/webhooks/provider/paas-stand-seeker/consumer/paas-stand-placer"},"pb:consumer-webhooks":{"title":"Webhooks
+        for all pacts with provider paas-stand-seeker","href":"https://example.org/webhooks/consumer/paas-stand-seeker"},"pb:tag-prod-version":{"title":"PUT
+        to this resource to tag this consumer version as ''production''","href":"https://example.org/pacticipants/paas-stand-placer/versions/98c66ec6/tags/prod"},"pb:tag-version":{"title":"PUT
+        to this resource to tag this consumer version","href":"https://example.org/pacticipants/paas-stand-placer/versions/98c66ec6/tags/{tag}"},"pb:publish-verification-results":{"title":"Publish
+        verification results","href":"https://example.org/pacts/provider/paas-stand-seeker/consumer/paas-stand-placer/pact-version/2967a9343bd8fdd28a286c4b8322380020618892/metadata/c1tdW2VdPXByb2R1Y3Rpb24mc1tdW2N2XT03MzIy/verification-results"},"pb:latest-verification-results":{"href":"https://example.org/pacts/provider/paas-stand-seeker/consumer/paas-stand-placer/pact-version/2967a9343bd8fdd28a286c4b8322380020618892/verification-results/latest"},"pb:triggered-webhooks":{"title":"Webhooks
+        triggered by the publication of this pact","href":"https://example.org/pacts/provider/paas-stand-seeker/consumer/paas-stand-placer/version/98c66ec6/triggered-webhooks"},"pb:matrix-for-consumer-version":{"title":"View
+        matrix rows for the consumer version to which this pact belongs","href":"https://example.org/matrix?q[][pacticipant]=paas-stand-placer&q[][version]=98c66ec6&latestby=cvpv"},"curies":[{"name":"pb","href":"https://example.org/doc/{rel}?context=pact","templated":true}]}}'
+  recorded_at: Thu, 08 Aug 2024 14:43:46 GMT
+recorded_with: VCR 6.2.0

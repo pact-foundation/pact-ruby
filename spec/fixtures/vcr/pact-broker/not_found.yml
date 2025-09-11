@@ -1,0 +1,55 @@
+---
+http_interactions:
+- request:
+    method: get
+    uri: https://example.org/pacts/provider/non-existent-provider/for-verification
+    body:
+      encoding: US-ASCII
+      string: ''
+    headers:
+      User-Agent:
+      - test-app / 0.0.1 Faraday v2.10.1
+      X-Request-Id:
+      - c293d78b-e515-4986-aec4-f948ba935286
+      Accept-Encoding:
+      - gzip;q=1.0,deflate;q=0.6,identity;q=0.3
+      Accept:
+      - "*/*"
+      Connection:
+      - keep-alive
+      Keep-Alive:
+      - '30'
+      Host:
+      - example.org
+      Version:
+      - HTTP/1.1
+      X-Forwarded-For:
+      - 127.0.0.1
+  response:
+    status:
+      code: 404
+      message: Not Found
+    headers:
+      Vary:
+      - Accept
+      Cache-Control:
+      - no-cache
+      Content-Type:
+      - application/hal+json;charset=utf-8
+      Date:
+      - Thu, 08 Aug 2024 15:05:51 GMT
+      Server:
+      - istio-envoy
+      X-Pact-Broker-Version:
+      - 2.110.0
+      X-Content-Type-Options:
+      - nosniff
+      Content-Length:
+      - '63'
+      X-Envoy-Upstream-Service-Time:
+      - '25'
+    body:
+      encoding: UTF-8
+      string: '{"error":"No provider with name ''non-existent-provider'' found"}'
+  recorded_at: Thu, 08 Aug 2024 15:05:51 GMT
+recorded_with: VCR 6.2.0

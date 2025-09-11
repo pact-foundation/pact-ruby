@@ -1,0 +1,17 @@
+source 'https://rubygems.org'
+
+group :development, :test do
+  gem 'rspec'
+  gem 'pact', path: '../../'
+  gem 'pact_broker-client'
+  gem 'pry'
+  # required for pact-ruby-v2
+  gem 'combustion'
+end
+
+gem 'rake'
+
+gem 'rack'
+gem 'httparty', '>= 0.21.0'
+
+gem 'tzinfo-data', platforms: [:mingw, :mswin, :x64_mingw]

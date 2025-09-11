@@ -27,6 +27,7 @@ group :test do
   gem 'faraday', '~>2.0', '<3.0'
   gem 'faraday-retry', '~>2.0'
   gem 'rackup'
+  gem 'tzinfo-data', platforms: [:mingw, :mswin, :x64_mingw]
 end
 
 if RUBY_VERSION >= "3.4"

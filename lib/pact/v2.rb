@@ -36,7 +36,6 @@ module Pact
 end
 
 loader = Zeitwerk::Loader.new
-puts "LOADER ROOT: #{File.join(__dir__, "..",)}"
 loader.push_dir(File.join(__dir__, ".."))
 
 loader.tag = "pact-v2"
@@ -70,6 +69,3 @@ loader.ignore("#{__dir__}/../pact/v2/rspec")
 loader.ignore("#{__dir__}/../pact/v2/railtie.rb") unless defined?(Rails::Railtie)
 loader.setup
 loader.eager_load
-
-
-# loader.ignore("#{__dir__}/pact/v2")

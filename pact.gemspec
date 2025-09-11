@@ -44,13 +44,8 @@ Gem::Specification.new do |gem|
     gem.add_runtime_dependency 'string_pattern', '~> 2.0'
     gem.add_runtime_dependency 'jsonpath', '~> 1.0'
 
-    # These are pinned to specific versions due to issues with later versions
-    gem.add_runtime_dependency "pact-support" , "~> 1.21", "1.21.2"
-    if ENV['RACK_VERSION'] == '2'
-      gem.add_runtime_dependency 'pact-mock_service', '>= 3.3.1', '~> 3.0', '< 3.12'
-    else
-      gem.add_runtime_dependency 'pact-mock_service', '~> 3.0', '>= 3.3.1'
-    end
+    gem.add_runtime_dependency "pact-support" , "~> 1.21", ">=1.21.2"
+    gem.add_runtime_dependency 'pact-mock_service', '~> 3.0', '>= 3.3.1'
     gem.add_development_dependency 'fakefs', '2.4'
     gem.add_development_dependency 'hashie', '~> 5.0'
     gem.add_development_dependency 'faraday-multipart', '~> 1.0'

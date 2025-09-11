@@ -1,10 +1,4 @@
 # # frozen_string_literal: true
-
-# require_relative "pact_config/mixed"
-# require_relative "async_message_verifier"
-# require_relative "grpc_verifier"
-# require_relative "http_verifier"
-
 module Pact
   module V2
     module Provider

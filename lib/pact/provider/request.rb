@@ -61,7 +61,7 @@ module Pact
         end
 
         def generated_body
-          result = Pact::Provider::Generators.apply_generators(expected_request, "body", reified_body, @state_params)
+          result = Pact::Generators.apply_generators(expected_request, "body", reified_body, @state_params)
 
           case result
           when Hash

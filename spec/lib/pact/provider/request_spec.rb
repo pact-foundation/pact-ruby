@@ -75,9 +75,10 @@ describe Pact::Provider::Request::Replayable do
       context "and it uses generators" do
         let(:body) { { a: 'body', b: '2025-04-08' } }
         let(:generators) { {"body"=>{"b"=>{"type"=>"Date"}}} }
+        let(:expected_body) { { a: 'body', b: Date.today.to_s } }
 
         it "returns the object as a json string" do
-          expect(subject.body).to eq body.to_json
+          expect(subject.body).to eq expected_body.to_json
         end
       end
     end

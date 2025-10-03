@@ -28,3 +28,9 @@ group :test do
   gem 'faraday-retry', '~>2.0'
   gem 'rackup', '~> 2.1'
 end
+
+if RUBY_VERSION >= "3.4"
+  gem "csv"
+  gem "mutex_m"
+  gem "base64"
+end

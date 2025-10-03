@@ -1,3 +1,16 @@
+<a name="v1.66.2"></a>
+### v1.66.2 (2025-10-03)
+
+#### Bug Fixes
+
+* **spec**
+  * update rspec keyword vs arg changes https://github.com/rspec/rspec-mocks/pull/1473	 ([c1c17fc](/../../commit/c1c17fc))
+
+* correct generators import and update specs	 ([d025342](/../../commit/d025342))
+* example/animal-service/Gemfile to reduce vulnerabilities	 ([4dfb3f5](/../../commit/4dfb3f5))
+* example/animal-service/Gemfile to reduce vulnerabilities	 ([3d8fa31](/../../commit/3d8fa31))
+* example/zoo-app/Gemfile to reduce vulnerabilities	 ([5ff8945](/../../commit/5ff8945))
+
 <a name="v1.66.1"></a>
 ### v1.66.1 (2025-01-20)
 

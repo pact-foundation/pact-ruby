@@ -63,6 +63,6 @@ describe Pact::Generators do
       }
     })
     request = Pact::Provider::Request::Replayable.new(expected_request)
-    expect(request.body['result'][0].length).to eq(8)
+    expect(JSON.parse(request.body)['result'][0].length).to eq(8)
   end
 end

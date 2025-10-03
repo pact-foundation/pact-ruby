@@ -10,7 +10,7 @@ gemspec
 #        got: ("Mock Provider", "http://localhost:1234", {:find_available_port=>false, :pact_specification_version=>"1"})
 # Diff:
 
-gem "rspec-mocks", "3.10.2"
+gem "rspec-mocks", "3.13.5"
 gem "appraisal", "~> 2.5"
 
 if ENV['X_PACT_DEVELOPMENT']

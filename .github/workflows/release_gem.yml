@@ -10,7 +10,7 @@ jobs:
   test:
     runs-on: ubuntu-latest
     steps:
-    - uses: actions/checkout@v4
+    - uses: actions/checkout@v5
     - uses: ruby/setup-ruby@v1
       with:
         ruby-version: '3.2'
@@ -28,7 +28,7 @@ jobs:
       version: ${{ steps.release-gem.outputs.version }}
       increment: ${{ steps.release-gem.outputs.increment }}
     steps:
-    - uses: actions/checkout@v4
+    - uses: actions/checkout@v5
       with:
         fetch-depth: 0
     - id: release-gem

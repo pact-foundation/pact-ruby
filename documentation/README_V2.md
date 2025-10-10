@@ -347,23 +347,6 @@ end
 
 ## Development & Test
 
-### Feature Flags
-
-There are feature flags which have been implemented to control the opt-in nature of pact-ruby v2
-
-There are two toggles designed to allow you to maintain pact-ruby v1 behaviour, and opt-in when ready to pact-ruby-v2.
-
-Once you have migrated, you can remove pact-ruby-v1 completely.
-
-- `PACT_RUBY_V2_ENABLE`
-  - Desc: Installs dependencies required for pact-ruby-v2. Required at install & runtime.
-  - Default: `false`
-  - To Enable: set to `true`
-- `PACT_RUBY_V1_DISABLE`
-  - Desc: Controls dependencies required for pact-ruby-v1.
-  - Default: `false`
-  - To Disable: set to `true`
-
 ### Setup
 
 ```shell

@@ -89,6 +89,22 @@ module Pact
       def match_each_kv(template, key_matchers)
         V4::EachKeyValue.new(key_matchers.is_a?(Array) ? key_matchers : [key_matchers], template)
       end
+
+      def match_semver(template = nil)
+        V3::Semver.new(template)
+      end
+
+      def match_content_type(content_type, template = nil)
+        V3::ContentType.new(content_type, template: template)
+      end
+
+      def match_not_empty(template = nil)
+        V4::NotEmpty.new(template)
+      end
+
+      def match_status_code(template)
+        V4::StatusCode.new(template)
+      end
     end
   end
 end

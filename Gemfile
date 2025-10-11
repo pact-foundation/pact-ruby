@@ -12,6 +12,7 @@ gemspec
 
 gem "rspec-mocks", "3.13.5"
 gem "appraisal", "~> 2.5"
+gem "pact-support", git: "https://github.com/pact-foundation/pact-support.git", branch: "feat/generator_mock_server-url"
 
 if ENV['X_PACT_DEVELOPMENT']
   gem "pact-support", path: '../pact-support'

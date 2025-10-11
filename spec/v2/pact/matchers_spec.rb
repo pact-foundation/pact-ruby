@@ -289,6 +289,46 @@ RSpec.describe Pact::V2::Matchers do
         }
       })
     end
+
+    it "properly builds semver matcher" do
+      expect(test_class.match_semver.as_basic).to eq({
+        "pact:matcher:type" => "semver",
+      })
+    end
+    it "properly builds content_type matcher" do
+      expect(test_class.match_content_type("application/xml").as_basic).to eq({
+        "pact:matcher:type" => "contentType",
+        "value" => "application/xml"
+      })
+    end
+    it "properly builds not_empty matcher" do
+      expect(test_class.match_not_empty.as_basic).to eq({
+        "pact:matcher:type" => "notEmpty"
+      })
+    end
+
+    it "properly builds values matcher" do
+      expect(Pact::V2::Matchers::V3::Values.new.as_basic).to eq({
+        "pact:matcher:type" => "values"
+      })
+    end
+
+    it "properly builds null matcher" do
+      expect(Pact::V2::Matchers::V3::Null.new.as_basic).to eq({
+        "pact:matcher:type" => "null"
+      })
+    end
+
+    it "properly builds status_code matcher" do
+      expect(test_class.match_status_code(200).as_basic).to eq({
+        "pact:matcher:type" => "statusCode",
+        "status" => 200
+      })
+      expect(test_class.match_status_code('nonError').as_basic).to eq({
+        "pact:matcher:type" => "statusCode",
+        "status" => 'nonError'
+      })
+    end
   end
 
   context "with plugin format serialization" do
@@ -408,6 +448,18 @@ RSpec.describe Pact::V2::Matchers do
           }
         }
       })
+    end
+
+    it "properly builds semver matcher" do
+      expect(test_class.match_semver("1.2.3").as_plugin).to eq("matching(semver, '1.2.3')")
+    end
+
+    it "properly builds content_type matcher" do
+      expect(test_class.match_content_type("application/xml", '<?xml?><test/>').as_plugin).to eq("matching(contentType, 'application/xml', '<?xml?><test/>')")
+    end
+
+    it "properly builds not_empty matcher" do
+      expect(test_class.match_not_empty("some value").as_plugin).to eq("notEmpty('some value')")
     end
   end
 

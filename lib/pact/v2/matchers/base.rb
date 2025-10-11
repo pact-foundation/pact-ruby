@@ -9,7 +9,7 @@ module Pact
 
         class MatcherInitializationError < Pact::V2::Error; end
 
-        def initialize(spec_version:, kind:, template:, opts: {})
+        def initialize(spec_version:, kind:, template: nil, opts: {})
           @spec_version = spec_version
           @kind = kind
           @template = template
@@ -17,15 +17,22 @@ module Pact
         end
 
         def as_basic
-          {
-            "pact:matcher:type" => serialize!(@kind.deep_dup, :basic),
-            "value" => serialize!(@template.deep_dup, :basic)
-          }.merge(serialize!(@opts.deep_dup, :basic))
+          result = {
+            "pact:matcher:type" => serialize!(@kind.deep_dup, :basic)
+          }
+          result["status"] = serialize!(@opts[:status].deep_dup, :basic) if @opts[:status]
+          result["value"] = serialize!(@template.deep_dup, :basic) unless @template.nil?
+          result.merge!(serialize!(@opts.deep_dup, :basic))
+          result
         end
 
         def as_plugin
           params = @opts.values.map { |v| format_primitive(v) }.join(",")
-          value = format_primitive(@template)
+          value = format_primitive(@template) unless @template.nil?
+
+          if @template.nil?
+            return "matching(#{@kind}#{params.present? ? ", #{params}" : ""})"
+          end
 
           return "matching(#{@kind}, #{params}, #{value})" if params.present?
 

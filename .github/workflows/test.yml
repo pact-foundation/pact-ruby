@@ -35,6 +35,8 @@ jobs:
         working-directory: example/animal-service
       - name: Test Pact-Ruby v2 Specs
         run: "bundle exec rake spec:v2"
+      - name: Test Pact-Ruby v2 pact:specs
+        run: "bundle exec rake pact:v2:spec"
       - name: Test Pact-Ruby v2 Zoo App Specs
         run: "bundle install && bundle exec rake spec:v2"
         if: matrix.ruby_version > '3.0'

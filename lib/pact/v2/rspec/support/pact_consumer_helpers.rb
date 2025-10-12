@@ -19,6 +19,18 @@ module PactV2ConsumerDsl
       _has_pact_between(:message, consumer, provider, opts: opts)
     end
 
+    def has_plugin_http_pact_between(consumer, provider, opts: {})
+      _has_pact_between(:plugin_http, consumer, provider, opts: opts)
+    end
+
+    def has_plugin_sync_message_pact_between(consumer, provider, opts: {})
+      _has_pact_between(:plugin_sync_message, consumer, provider, opts: opts)
+    end
+
+    def has_plugin_async_message_pact_between(consumer, provider, opts: {})
+      _has_pact_between(:plugin_async_message, consumer, provider, opts: opts)
+    end
+
     def _has_pact_between(transport_type, consumer, provider, opts: {})
       raise "has_#{transport_type}_pact_between is designed to be used with RSpec 3+" unless defined?(::RSpec)
       raise "has_#{transport_type}_pact_between has to be declared at the top level of a suite" unless top_level?

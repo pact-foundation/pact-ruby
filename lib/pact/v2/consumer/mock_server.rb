@@ -11,8 +11,6 @@ module Pact
         TRANSPORT_HTTP = "http"
         TRANSPORT_GRPC = "grpc"
 
-        TRANSPORTS = [TRANSPORT_HTTP, TRANSPORT_GRPC].freeze
-
         class MockServerCreateError < Pact::V2::FfiError; end
 
         class WritePactsError < Pact::V2::FfiError; end
@@ -41,8 +39,11 @@ module Pact
           new(pact: pact, transport: TRANSPORT_HTTP, host: host, port: port)
         end
 
+        def self.create_for_transport!(pact:, transport:, host: "127.0.0.1", port: 0)
+          new(pact: pact, transport: transport, host: host, port: port)
+        end
+
         def initialize(pact:, transport:, host:, port:)
-          raise "Transport #{transport} is not supported yet, available transports are: #{TRANSPORTS.join(",")}" unless TRANSPORTS.include?(transport)
 
           @pact = pact
           @transport = transport

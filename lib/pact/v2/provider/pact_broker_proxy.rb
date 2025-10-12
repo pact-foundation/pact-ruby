@@ -60,11 +60,6 @@ module Pact
           logger.error("cannot parse broker response: #{ex.message}")
         end
 
-
-        def set_description_prefix(interaction, prefix)
-          orig_description = interaction["description"]
-          interaction["description"] = "#{prefix} #{orig_description}" unless orig_description.start_with?(prefix)
-        end
       end
     end
   end

@@ -14,6 +14,12 @@ module Pact
             Grpc.new(consumer_name: consumer_name, provider_name: provider_name, opts: opts)
           when :message
             Message.new(consumer_name: consumer_name, provider_name: provider_name, opts: opts)
+          when :plugin_sync_message
+            PluginSyncMessage.new(consumer_name: consumer_name, provider_name: provider_name, opts: opts)
+          when :plugin_async_message
+            PluginAsyncMessage.new(consumer_name: consumer_name, provider_name: provider_name, opts: opts)
+          when :plugin_http
+            PluginHttp.new(consumer_name: consumer_name, provider_name: provider_name, opts: opts)
           else
             raise ArgumentError, "unknown transport_type: #{transport_type}"
           end

@@ -9,7 +9,6 @@ module Pact
   module V2
     module Consumer
       class HttpInteractionBuilder
-        DESCRIPTION_PREFIX = "http: "
 
         # https://docs.rs/pact_ffi/0.4.17/pact_ffi/plugins/fn.pactffi_interaction_contents.html
         CREATE_INTERACTION_ERRORS = {

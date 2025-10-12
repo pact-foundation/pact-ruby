@@ -2,6 +2,7 @@
 
 require "pact/v2/rspec"
 
+
 RSpec.describe "Pact::V2::Providers::Test::GrpcClient", :pact_v2 do
   has_grpc_pact_between "pact-ruby-v2-test-app", "pact-ruby-v2-test-app"
 

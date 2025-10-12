@@ -1,17 +1,13 @@
 # frozen_string_literal: true
 
-require "pact/ffi/sync_message_consumer"
+require "pact/ffi/http_consumer"
 require "pact/ffi/plugin_consumer"
 require "pact/ffi/logger"
 
 module Pact
   module V2
     module Consumer
-      class GrpcInteractionBuilder
-        CONTENT_TYPE = "application/protobuf"
-        GRPC_CONTENT_TYPE = "application/grpc"
-        PROTOBUF_PLUGIN_NAME = "protobuf"
-        PROTOBUF_PLUGIN_VERSION = "0.6.5"
+      class PluginHttpInteractionBuilder
 
         class PluginInitError < Pact::V2::FfiError; end
 
@@ -41,37 +37,16 @@ module Pact
         def initialize(pact_config, description: nil)
           @pact_config = pact_config
           @description = description || ""
-          @proto_path = nil
-          @proto_include_dirs = []
-          @service_name = nil
-          @method_name = nil
-          @request = nil
-          @response = nil
-          @response_meta = nil
+          @contents = nil
           @provider_state_meta = nil
         end
 
-        def with_service(proto_path, method, include_dirs = [])
-          raise InteractionBuilderError.new("invalid grpc method: cannot be blank") if method.blank?
+        def with_plugin(plugin_name, plugin_version)
+          raise InteractionBuilderError.new("plugin_name is required") if plugin_name.blank?
+          raise InteractionBuilderError.new("plugin_version is required") if plugin_version.blank?
 
-          service_name, method_name = method.split("/") || []
-          raise InteractionBuilderError.new("invalid grpc method: #{method}, should be like service/SomeMethod") if service_name.blank? || method_name.blank?
-
-          absolute_path = File.expand_path(proto_path)
-          raise InteractionBuilderError.new("proto file #{proto_path} does not exist") unless File.exist?(absolute_path)
-
-          @proto_path = absolute_path
-          @service_name = service_name
-          @method_name = method_name
-          @proto_include_dirs = include_dirs.map { |dir| File.expand_path(dir) }
-
-          self
-        end
-
-        def with_pact_protobuf_plugin_version(version)
-          raise InteractionBuilderError.new("version is required") if version.blank?
-
-          @proto_plugin_version = version
+          @plugin_name = plugin_name
+          @plugin_version = plugin_version
           self
         end
 
@@ -85,41 +60,54 @@ module Pact
           self
         end
 
-        def with_request(req_hash)
-          @request = InteractionContents.plugin(req_hash)
+        def with_request(method: nil, path: nil, query: {}, headers: {}, body: nil)
+          @request = {
+            method: method,
+            path: path,
+            query: query,
+            headers: headers,
+            body: body
+          }
           self
         end
 
-        def will_respond_with(resp_hash)
-          @response = InteractionContents.plugin(resp_hash)
+        def will_respond_with(status: nil, headers: {}, body: nil)
+          @response = {
+            status: status,
+            headers: headers,
+            body: body
+          }
+          self
+        end
+  
+        def with_content_type(content_type)
+          @content_type = content_type
           self
         end
 
-        def will_respond_with_meta(meta_hash)
-          @response_meta = InteractionContents.plugin(meta_hash)
+
+        def with_plugin_metadata(meta_hash)
+          @plugin_metadata = meta_hash
+          self
+        end
+
+        def with_transport(transport)
+          @transport = transport
           self
         end
 
         def interaction_json
           result = {
-            "pact:proto": @proto_path,
-            "pact:proto-service": "#{@service_name}/#{@method_name}",
-            "pact:content-type": CONTENT_TYPE,
-            request: @request
+            request: @request,
+            response: @response
           }
-
-          result["pact:protobuf-config"] = {additionalIncludes: @proto_include_dirs} if @proto_include_dirs.present?
-
-          result[:response] = @response if @response.is_a?(Hash)
-          result[:responseMetadata] = @response_meta if @response_meta.is_a?(Hash)
-
+          result.merge!(@plugin_metadata) if @plugin_metadata.is_a?(Hash)
           JSON.dump(result)
         end
 
         def validate!
-          raise InteractionBuilderError.new("uninitialized service params, use #with_service to configure") if @proto_path.blank? || @service_name.blank? || @method_name.blank?
           raise InteractionBuilderError.new("invalid request format, should be a hash") unless @request.is_a?(Hash)
-          raise InteractionBuilderError.new("invalid response format, should be a hash") unless @response.is_a?(Hash) || @response_meta.is_a?(Hash)
+          raise InteractionBuilderError.new("invalid response format, should be a hash") unless @response.is_a?(Hash)
         end
 
         def execute(&block)
@@ -130,25 +118,36 @@ module Pact
           pact_handle = init_pact
           init_plugin!(pact_handle)
 
-          message_pact = PactFfi::SyncMessageConsumer.new_interaction(pact_handle, @description)
+          interaction = PactFfi.new_interaction(pact_handle, @description)
           @provider_state_meta&.each_pair do |provider_state, meta|
             if meta.present?
-              meta.each_pair { |k, v| PactFfi.given_with_param(message_pact, provider_state, k.to_s, v.to_s) }
+                meta.each_pair do |k, v|
+                if v.nil? || (v.respond_to?(:empty?) && v.empty?)
+                  PactFfi.given(interaction, provider_state)
+                else
+                  puts "Given #{provider_state} with param #{k}: #{v}"
+                  PactFfi.given_with_param(interaction, provider_state, k.to_s, v.to_s)
+                end
+                end
             else
-              PactFfi.given(message_pact, provider_state)
+              PactFfi.given(interaction, provider_state)
             end
           end
+          PactFfi::HttpConsumer.with_request(interaction, @request[:method], @request[:path])
 
-          result = PactFfi::PluginConsumer.interaction_contents(message_pact, 0, GRPC_CONTENT_TYPE, interaction_json)
+          result = PactFfi::PluginConsumer.interaction_contents(interaction, 0, @request[:headers]["content-type"], format_value(@request[:body]))
           if CREATE_INTERACTION_ERRORS[result].present?
             error = CREATE_INTERACTION_ERRORS[result]
             raise CreateInteractionError.new("There was an error while trying to add interaction \"#{@description}\"", error[:reason], error[:status])
           end
-
-          mock_server = MockServer.create_for_grpc!(pact: pact_handle, host: @pact_config.mock_host, port: @pact_config.mock_port)
-
-          yield(message_pact, mock_server)
-
+          result = PactFfi::PluginConsumer.interaction_contents(interaction, 1, @response[:headers]["content-type"], format_value(@response[:body]))
+          if CREATE_INTERACTION_ERRORS[result].present?
+            error = CREATE_INTERACTION_ERRORS[result]
+            raise CreateInteractionError.new("There was an error while trying to add interaction \"#{@description}\"", error[:reason], error[:status])
+          end
+          mock_server = MockServer.create_for_transport!(pact: pact_handle, transport: @transport || 'http', host: @pact_config.mock_host, port: @pact_config.mock_port)
+          
+          yield(mock_server)
           if mock_server.matched?
             mock_server.write_pacts!(@pact_config.pact_dir)
           else
@@ -158,15 +157,15 @@ module Pact
         ensure
           @used = true
           mock_server&.cleanup
-          PactFfi::PluginConsumer.cleanup_plugins(pact_handle)
-          PactFfi.free_pact_handle(pact_handle)
+          PactFfi::PluginConsumer.cleanup_plugins(pact_handle) if pact_handle
+          PactFfi.free_pact_handle(pact_handle) if pact_handle
         end
 
         private
 
         def mismatches_error_msg(mock_server)
           rspec_example_desc = RSpec.current_example&.description
-          return "interaction for #{@service_name}/#{@method_name} has mismatches: #{mock_server.mismatches}" if rspec_example_desc.blank?
+          return "interaction for has mismatches: #{mock_server.mismatches}" if rspec_example_desc.blank?
 
           "#{rspec_example_desc} has mismatches: #{mock_server.mismatches}"
         end
@@ -182,11 +181,19 @@ module Pact
         end
 
         def init_plugin!(pact_handle)
-          result = PactFfi::PluginConsumer.using_plugin(pact_handle, PROTOBUF_PLUGIN_NAME, @proto_plugin_version || PROTOBUF_PLUGIN_VERSION)
+          result = PactFfi::PluginConsumer.using_plugin(pact_handle, @plugin_name, @plugin_version)
           return result if INIT_PLUGIN_ERRORS[result].blank?
 
           error = INIT_PLUGIN_ERRORS[result]
-          raise PluginInitError.new("There was an error while trying to initialize plugin #{PROTOBUF_PLUGIN_NAME}/#{@proto_plugin_version || PROTOBUF_PLUGIN_VERSION}", error[:reason], error[:status])
+          raise PluginInitError.new("There was an error while trying to initialize plugin #{@plugin_name}/#{@plugin_version}", error[:reason], error[:status])
+        end
+
+        def format_value(obj)
+          return obj if obj.is_a?(String)
+
+          return JSON.dump({value: obj}) if obj.is_a?(Array)
+
+          JSON.dump(obj)
         end
       end
     end

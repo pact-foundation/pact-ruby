@@ -86,6 +86,13 @@ module Pact
           self
         end
 
+        def with_pact_protobuf_plugin_version(version)
+          raise InteractionBuilderError.new("version is required") if version.blank?
+
+          @proto_plugin_version = version
+          self
+        end
+
         def with_proto_contents(contents_hash)
           @proto_contents = InteractionContents.plugin(contents_hash)
           self
@@ -257,11 +264,11 @@ module Pact
         end
 
         def init_plugin!(pact_handle)
-          result = PactFfi::PluginConsumer.using_plugin(pact_handle, PROTOBUF_PLUGIN_NAME, PROTOBUF_PLUGIN_VERSION)
+          result = PactFfi::PluginConsumer.using_plugin(pact_handle, PROTOBUF_PLUGIN_NAME, @proto_plugin_version || PROTOBUF_PLUGIN_VERSION)
           return result if INIT_PLUGIN_ERRORS[result].blank?
 
           error = INIT_PLUGIN_ERRORS[result]
-          raise PluginInitError.new("There was an error while trying to initialize plugin #{PROTOBUF_PLUGIN_NAME}/#{PROTOBUF_PLUGIN_VERSION}", error[:reason], error[:status])
+          raise PluginInitError.new("There was an error while trying to initialize plugin #{PROTOBUF_PLUGIN_NAME}/#{@proto_plugin_version || PROTOBUF_PLUGIN_VERSION}", error[:reason], error[:status])
         end
 
         def serialize_metadata(metadata_hash)

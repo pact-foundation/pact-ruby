@@ -24,9 +24,7 @@ jobs:
           ruby-version: ${{ matrix.ruby_version }}
           bundler-cache: true
       - uses: you54f/pact-cli@main
-        if: matrix.os != 'windows-latest'
       - run: pact-cli plugin install --yes https://github.com/mefellows/pact-matt-plugin/releases/tag/v0.1.1
-        if: matrix.os != 'windows-latest'
       - name: Test Pact-Ruby Specs
         run: "bundle exec rake"
       - name: Test Pact-Ruby Zoo App Specs
@@ -37,10 +35,12 @@ jobs:
         run: "bundle install && bundle exec rake pact:verify"
         if: matrix.os != 'windows-latest' && matrix.ruby_version > '3.0'
         working-directory: example/animal-service
-      - name: Test Pact-Ruby v2 Specs
+      - name: Test Pact-Ruby v2 spec:v2
         run: "bundle exec rake spec:v2"
-      - name: Test Pact-Ruby v2 pact:specs
+      - name: Test Pact-Ruby v2 pact:v2:spec
         run: "bundle exec rake pact:v2:spec"
+      - name: Test Pact-Ruby v2 pact:v2:verify
+        run: "bundle exec rake pact:v2:verify"
       - name: Test Pact-Ruby v2 Zoo App Specs
         run: "bundle install && bundle exec rake spec:v2"
         if: matrix.ruby_version > '3.0'
@@ -64,9 +64,7 @@ jobs:
           ruby-version: ${{ matrix.ruby_version }}
           bundler-cache: true
       - uses: you54f/pact-cli@main
-        if: matrix.os != 'windows-latest'
       - run: pact-cli plugin install --yes https://github.com/mefellows/pact-matt-plugin/releases/tag/v0.1.1
-        if: matrix.os != 'windows-latest'
       - run: "bundle exec appraisal install"
       - run: "bundle exec appraisal rack-2 rake"
       - run: "bundle exec appraisal rack-2 rake spec:v2"

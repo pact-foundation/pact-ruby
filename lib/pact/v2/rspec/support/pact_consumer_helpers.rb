@@ -5,6 +5,7 @@ require "json"
 
 module PactV2ConsumerDsl
   include Pact::V2::Matchers
+  include Pact::V2::Generators
 
   module ClassMethods
     def has_http_pact_between(consumer, provider, opts: {})
@@ -64,13 +65,13 @@ module PactV2ConsumerDsl
 
     yield(mock_server)
 
+  ensure
     if mock_server.matched?
       mock_server.write_pacts!(pact_config.pact_dir)
     else
       msg = mismatches_error_msg(mock_server)
       raise Pact::V2::Consumer::HttpInteractionBuilder::InteractionMismatchesError.new(msg)
     end
-  ensure
     @used = true
     mock_server&.cleanup
     reset_pact

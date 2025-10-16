@@ -249,14 +249,17 @@ module Pact
       class ProviderStateGenerator
         include Base
 
-        def initialize(expression:)
+        def initialize(expression:, example:)
           @expression = expression
+          @value = example
         end
 
         def as_basic
           {
+            'pact:matcher:type': 'type',
             "pact:generator:type" => "ProviderState",
-            "expression" => @expression
+            "expression" => @expression,
+            "value" => @value
           }
         end
       end

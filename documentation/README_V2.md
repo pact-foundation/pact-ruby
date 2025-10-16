@@ -172,7 +172,7 @@ For details of the implementation, see [matchers.rb](../lib/pact/v2/generators.r
 - `generate_time(format: nil)` - Generates a time string in the specified `format`.
 - `generate_datetime(format: nil)` - Generates a datetime string in the specified `format`.
 - `generate_random_boolean` - Generates a random boolean value (`true` or `false`).
-- `generate_from_provider_state(expression:)` - Generates a value from the provider state using the given `expression`.
+- `generate_from_provider_state(expression:, example:)` - Generates a value from the provider state using the given `expression` and `example` value. Allows templating of url and query paths with values only know at provider verification time.
 - `generate_mock_server_url(regex: nil, example: nil)` - Generates a mock server URL. Optionally, specify a `regex` matches and/or an `example` value.
 
 These generators can be used in your DSL definitions to provide dynamic values for requests, responses, or messages in your contract tests.
@@ -180,6 +180,15 @@ These generators can be used in your DSL definitions to provide dynamic values f
 #### Generator Examples
 
 ```rb
+  .with_request(
+    method: :get, 
+    path: generate_from_provider_state(
+      expression: '/alligators/${alligator_name}',
+      example: '/alligators/Mary'),
+    headers: headers)
+
+...
+
   body: {
     _links: {
       :'pf:publish-provider-contract' => {
@@ -433,30 +442,30 @@ The following projects were designed for pact-ruby-v1 and have been migrated to 
 
 - pact broker client
   - v1
-  - v2 https://github.com/YOU54F/pact_broker-client/pull/1
+  - v2 <https://github.com/YOU54F/pact_broker-client/pull/1>
 - pact broker
   - v1
-  - v2 https://github.com/YOU54F/pact_broker/pull/14
+  - v2 <https://github.com/YOU54F/pact_broker/pull/14>
 - animal service
   - v1
     - In repo: [example/animal-service](../example/animal-service/)
-    - Standalone: https://github.com/safdotdev/animal-service
+    - Standalone: <https://github.com/safdotdev/animal-service>
   - v2
     - In repo: [example/animal-service-v2](../example/animal-service-v2/)
-    - Standalone: https://github.com/safdotdev/animal-service/pull/1
+    - Standalone: <https://github.com/safdotdev/animal-service/pull/1>
 - zoo app
   - v1
     - In repo: [example/zoo-app](../example/zoo-app/)
-    - Standalone: https://github.com/safdotdev/zoo-app
+    - Standalone: <https://github.com/safdotdev/zoo-app>
   - v2
     - In repo: [example/zoo-app-v2](../example/zoo-app-v2/)
-    - Standalone: https://github.com/safdotdev/zoo-app/pull/1
+    - Standalone: <https://github.com/safdotdev/zoo-app/pull/1>
 - message consumer/provider
   - v1
-  - v2 https://github.com/safdotdev/pact-ruby-demo/compare/main...safdotdev:pact-ruby-demo:feat/pact-ruby-v2
+  - v2 <https://github.com/safdotdev/pact-ruby-demo/compare/main...safdotdev:pact-ruby-demo:feat/pact-ruby-v2>
 - e2e http consumer/provider
   - v1
-  - v2 https://github.com/safdotdev/pact-ruby-e2e-example/pull/1
+  - v2 <https://github.com/safdotdev/pact-ruby-e2e-example/pull/1>
 
 ### Demos
 

@@ -88,11 +88,11 @@ module Pact
 
           it 'returns the correct hash' do
             expect(subject.as_basic).to match({
-                                             'pact:matcher:type' => 'date',
-                                             'pact:generator:type' => 'Date',
-                                             'format' => 'yyyy-MM-dd',
-                                             "value" => match(/\d{4}-\d{2}-\d{2}/)
-                                           })
+                                                'pact:matcher:type' => 'date',
+                                                'pact:generator:type' => 'Date',
+                                                'format' => 'yyyy-MM-dd',
+                                                'value' => match(/\d{4}-\d{2}-\d{2}/)
+                                              })
           end
         end
 
@@ -101,11 +101,11 @@ module Pact
 
           it 'returns the correct hash' do
             match({
-              'format' => 'yyyy-MM-dd',
-              'pact:generator:type' => 'Date',
-              'pact:matcher:type' => 'date',
-              'value' => match(/\d{4}-\d{2}-\d{2}/)
-            })
+                    'format' => 'yyyy-MM-dd',
+                    'pact:generator:type' => 'Date',
+                    'pact:matcher:type' => 'date',
+                    'value' => match(/\d{4}-\d{2}-\d{2}/)
+                  })
           end
         end
       end
@@ -115,12 +115,12 @@ module Pact
           subject { described_class.new(format: 'HH:mm:ss') }
 
           it 'returns the correct hash' do
-             match({
-              'pact:generator:type' => 'Time',
-              'pact:matcher:type' => 'time',
-              'format' => 'HH:mm:ss',
-              'value' => match(/\d{2}:\d{2}:\d{2}/)
-             })
+            match({
+                    'pact:generator:type' => 'Time',
+                    'pact:matcher:type' => 'time',
+                    'format' => 'HH:mm:ss',
+                    'value' => match(/\d{2}:\d{2}:\d{2}/)
+                  })
           end
         end
 
@@ -128,12 +128,12 @@ module Pact
           subject { described_class.new }
 
           it 'returns the correct hash' do
-             match({
-              'format' => 'HH:mm',
-              'pact:generator:type' => 'Time',
-              'pact:matcher:type' => 'time',
-              'value' => match(/\d{2}:\d{2}/)
-             })
+            match({
+                    'format' => 'HH:mm',
+                    'pact:generator:type' => 'Time',
+                    'pact:matcher:type' => 'time',
+                    'value' => match(/\d{2}:\d{2}/)
+                  })
           end
         end
       end
@@ -143,12 +143,12 @@ module Pact
           subject { described_class.new(format: "yyyy-MM-dd'T'HH:mm:ssZ") }
 
           it 'returns the correct hash' do
-             match({
-              'pact:generator:type' => 'DateTime',
-              'pact:matcher:type' => 'datetime',
-              'format' => "yyyy-MM-dd'T'HH:mm:ssZ",
-              'value' => match(/\d{4}-\d{2}-\d{2}'T'\d{2}:\d{2}:\d{2}\+\d{4}/)
-             })
+            match({
+                    'pact:generator:type' => 'DateTime',
+                    'pact:matcher:type' => 'datetime',
+                    'format' => "yyyy-MM-dd'T'HH:mm:ssZ",
+                    'value' => match(/\d{4}-\d{2}-\d{2}'T'\d{2}:\d{2}:\d{2}\+\d{4}/)
+                  })
           end
         end
 
@@ -156,12 +156,12 @@ module Pact
           subject { described_class.new }
 
           it 'returns the correct hash' do
-             match({
-              'format' => 'yyyy-MM-dd HH:mm',
-              'pact:generator:type' => 'DateTime',
-              'pact:matcher:type' => 'datetime',
-              'value' => match(/\d{4}-\d{2}-\d{2} \d{2}:\d{2}/)
-             })
+            match({
+                    'format' => 'yyyy-MM-dd HH:mm',
+                    'pact:generator:type' => 'DateTime',
+                    'pact:matcher:type' => 'datetime',
+                    'value' => match(/\d{4}-\d{2}-\d{2} \d{2}:\d{2}/)
+                  })
           end
         end
       end
@@ -171,24 +171,26 @@ module Pact
 
         describe '#as_basic' do
           it 'returns the correct hash' do
-             eq({
-              'pact:generator:type' => 'RandomBoolean',
-              'pact:matcher:type' => 'boolean',
-              'value' => true
-             })
+            eq({
+                 'pact:generator:type' => 'RandomBoolean',
+                 'pact:matcher:type' => 'boolean',
+                 'value' => true
+               })
           end
         end
       end
 
       RSpec.describe ProviderStateGenerator do
-        subject { described_class.new(expression: 'providerStateVar') }
+        subject { described_class.new(expression: '/alligators/${alligator_name}', example: '/alligators/Mary') }
 
         describe '#as_basic' do
           it 'returns the correct hash' do
-            expect(subject.as_basic).to eq({
-                                             'pact:generator:type' => 'ProviderState',
-                                             'expression' => 'providerStateVar'
-                                           })
+            eq({
+                 'pact:generator:type' => 'ProviderState',
+                 'pact:matcher:type' => 'type',
+                 'expression' => '/alligators/${alligator_name}',
+                 'value' => '/alligators/Mary'
+               })
           end
         end
       end

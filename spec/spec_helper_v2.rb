@@ -6,6 +6,8 @@ require "bundler/setup"
 require "rspec"
 require "rspec_junit_formatter"
 
+is_windows = Gem.win_platform?
+
 RSpec.configure do |config|
   config.expect_with :rspec do |expectations|
     expectations.include_chain_clauses_in_custom_matcher_descriptions = true
@@ -15,6 +17,7 @@ RSpec.configure do |config|
   end
 
   config.filter_run_when_matching :focus
+  config.filter_run_excluding skip_windows: is_windows
   config.example_status_persistence_file_path = "tmp/rspec_examples.txt"
   config.run_all_when_everything_filtered = true
 

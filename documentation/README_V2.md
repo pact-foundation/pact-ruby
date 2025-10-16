@@ -157,6 +157,50 @@ For details of the implementation, see [matchers.rb](../lib/pact/v2/matchers.rb)
 
 See the different uses of the matchers in [matchers_spec.rb](../spec/pact/v2/matchers_spec.rb)
 
+### Generators
+
+Generators are helper methods that allow you to specify dynamic values in your contract tests. These values are generated at runtime, making your contracts more flexible and robust. Below are the available generator methods:
+
+For details of the implementation, see [matchers.rb](../lib/pact/v2/generators.rb)
+
+- `generate_random_int(min:, max:)`  - Generates a random integer between the specified `min` and `max`.
+- `generate_random_decimal(digits:)` - Generates a random decimal number with the specified number of `digits`.
+- `generate_random_hexadecimal(digits:)` - Generates a random hexadecimal string with the specified number of `digits`.
+- `generate_random_string(size:)` - Generates a random string of the specified `size`.
+- `generate_uuid(example: nil)` - Generates a random UUID. Optionally, provide an `example` value.
+- `generate_date(format: nil, example: nil)` - Generates a date string in the specified `format`. Optionally, provide an `example`.
+- `generate_time(format: nil)` - Generates a time string in the specified `format`.
+- `generate_datetime(format: nil)` - Generates a datetime string in the specified `format`.
+- `generate_random_boolean` - Generates a random boolean value (`true` or `false`).
+- `generate_from_provider_state(expression:)` - Generates a value from the provider state using the given `expression`.
+- `generate_mock_server_url(regex: nil, example: nil)` - Generates a mock server URL. Optionally, specify a `regex` matches and/or an `example` value.
+
+These generators can be used in your DSL definitions to provide dynamic values for requests, responses, or messages in your contract tests.
+
+#### Generator Examples
+
+```rb
+  body: {
+    _links: {
+      :'pf:publish-provider-contract' => {
+        href: generate_mock_server_url(
+          regex: ".*(\\/provider-contracts\\/provider\\/.*\\/publish)$",
+          example: "/provider-contracts/provider/{provider}/publish"
+        ),
+        boolean: generate_random_boolean,
+        integer: generate_random_int(min: 1, max: 100),
+        decimal: generate_random_decimal(digits: 2),
+        hexidecimal: generate_random_hexadecimal(digits: 8),
+        string: generate_random_string(size: 10),
+        uuid: generate_uuid,
+        date: generate_date(format: "yyyyy.MMMMM.dd GGG"),
+        time: generate_time(),
+        datetime: generate_datetime(format: "%Y-%m-%dT%H:%M:%S%z")
+      }
+    }
+  }
+```
+
 ## Provider verification
 
 Place your provider verification file under

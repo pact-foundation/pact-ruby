@@ -37,8 +37,8 @@ module Pact
         Pact::V2::Generators::RandomBooleanGenerator.new
       end
 
-      def generate_from_provider_state(expression:)
-        Pact::V2::Generators::ProviderStateGenerator.new(expression: expression)
+      def generate_from_provider_state(expression:, example:)
+        Pact::V2::Generators::ProviderStateGenerator.new(expression: expression, example: example).as_basic
       end
 
       def generate_mock_server_url(regex: nil, example: nil)

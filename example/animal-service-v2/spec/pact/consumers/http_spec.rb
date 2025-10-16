@@ -9,7 +9,7 @@ require 'rspec/mocks'
 include RSpec::Mocks::ExampleMethods
 
 RSpec.describe 'Verify consumers for Bar Provider', :pact_v2 do
-  http_pact_provider 'Animal Service', opts: { 
+  http_pact_provider 'Animal Service', opts: {
     pact_dir: File.expand_path('../../../../zoo-app-v2/spec/pacts', __dir__),
     http_port: 9292,
     app: AnimalService::Api
@@ -22,6 +22,12 @@ RSpec.describe 'Verify consumers for Bar Provider', :pact_v2 do
   provider_state 'there is an alligator named Mary' do
     set_up do
       AnimalService::DATABASE[:animals].insert(name: 'Mary')
+    end
+  end
+
+  provider_state 'there is an alligator named {alligator_name}' do
+    set_up do |params|
+      AnimalService::DATABASE[:animals].insert(name: params['alligator_name'])
     end
   end
 

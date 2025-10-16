@@ -5,70 +5,128 @@
   "interactions": [
     {
       "description": "a request for an alligator",
-      "providerState": "an error occurs retrieving an alligator",
+      "pending": false,
+      "providerStates": [
+        {
+          "name": "an error occurs retrieving an alligator"
+        }
+      ],
       "request": {
         "headers": {
-          "Accept": "application/json"
+          "Accept": [
+            "application/json"
+          ]
         },
         "method": "GET",
         "path": "/alligators/Mary"
       },
       "response": {
         "body": {
-          "error": "Argh!!!"
+          "content": {
+            "error": "Argh!!!"
+          },
+          "contentType": "application/json",
+          "encoded": false
         },
         "headers": {
-          "Content-Type": "application/json;charset=utf-8"
+          "Content-Type": [
+            "application/json;charset=utf-8"
+          ]
         },
         "status": 500
-      }
+      },
+      "transport": "http",
+      "type": "Synchronous/HTTP"
     },
     {
       "description": "a request for an alligator",
-      "providerState": "there is an alligator named Mary",
+      "pending": false,
+      "providerStates": [
+        {
+          "name": "there is an alligator named {alligator_name}",
+          "params": {
+            "alligator_name": "Mary"
+          }
+        }
+      ],
       "request": {
+        "generators": {
+          "path": {
+            "expression": "/alligators/${alligator_name}",
+            "type": "ProviderState"
+          }
+        },
         "headers": {
-          "Accept": "application/json"
+          "Accept": [
+            "application/json"
+          ]
+        },
+        "matchingRules": {
+          "path": {
+            "combine": "AND",
+            "matchers": [
+              {
+                "match": "type"
+              }
+            ]
+          }
         },
         "method": "GET",
         "path": "/alligators/Mary"
       },
       "response": {
         "body": {
-          "name": "Mary"
+          "content": {
+            "name": "Mary"
+          },
+          "contentType": "application/json",
+          "encoded": false
         },
         "headers": {
-          "Content-Type": "application/json;charset=utf-8"
+          "Content-Type": [
+            "application/json;charset=utf-8"
+          ]
         },
         "status": 200
-      }
+      },
+      "transport": "http",
+      "type": "Synchronous/HTTP"
     },
     {
       "description": "a request for an alligator",
-      "providerState": "there is not an alligator named Mary",
+      "pending": false,
+      "providerStates": [
+        {
+          "name": "there is not an alligator named Mary"
+        }
+      ],
       "request": {
         "headers": {
-          "Accept": "application/json"
+          "Accept": [
+            "application/json"
+          ]
         },
         "method": "GET",
         "path": "/alligators/Mary"
       },
       "response": {
         "status": 404
-      }
+      },
+      "transport": "http",
+      "type": "Synchronous/HTTP"
     }
   ],
   "metadata": {
+    "pact-ruby-v2": {
+      "pact-ffi": "0.4.28"
+    },
     "pactRust": {
       "ffi": "0.4.28",
       "mockserver": "1.2.16",
       "models": "1.3.5"
     },
     "pactSpecification": {
-      "version": "2.0.0"
-    },
-    "pact-ruby-v2": {
-      "pact-ffi": "0.4.28"
+      "version": "4.0"
     }
   },
   "provider": {

@@ -13,7 +13,7 @@ end
 
 RSpec::Core::RakeTask.new('spec:v2') do |task|
   task.pattern = 'spec/pact/providers/**/*_spec.rb'
-  task.rspec_opts = ['-t pact', '--require rails_helper']
+  task.rspec_opts = ['-t pact_v2', '--require rails_helper']
 end
 
 task :default => :spec

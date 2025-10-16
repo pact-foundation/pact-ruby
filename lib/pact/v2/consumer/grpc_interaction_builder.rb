@@ -149,13 +149,13 @@ module Pact
 
           yield(message_pact, mock_server)
 
+        ensure
           if mock_server.matched?
             mock_server.write_pacts!(@pact_config.pact_dir)
           else
             msg = mismatches_error_msg(mock_server)
             raise InteractionMismatchesError.new(msg)
           end
-        ensure
           @used = true
           mock_server&.cleanup
           PactFfi::PluginConsumer.cleanup_plugins(pact_handle)

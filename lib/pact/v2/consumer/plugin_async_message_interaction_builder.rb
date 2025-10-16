@@ -108,7 +108,6 @@ module Pact
                 if v.nil? || (v.respond_to?(:empty?) && v.empty?)
                   PactFfi.given(interaction, provider_state)
                 else
-                  puts "Given #{provider_state} with param #{k}: #{v}"
                   PactFfi.given_with_param(interaction, provider_state, k.to_s, v.to_s)
                 end
                 end
@@ -126,13 +125,14 @@ module Pact
           mock_server = MockServer.create_for_transport!(pact: pact_handle, transport: @transport, host: @pact_config.mock_host, port: @pact_config.mock_port)
 
           yield(pact_handle, mock_server)
+
+        ensure
           if mock_server.matched?
             mock_server.write_pacts!(@pact_config.pact_dir)
           else
             msg = mismatches_error_msg(mock_server)
             raise InteractionMismatchesError.new(msg)
           end
-        ensure
           @used = true
           mock_server&.cleanup
           PactFfi::PluginConsumer.cleanup_plugins(pact_handle) if pact_handle

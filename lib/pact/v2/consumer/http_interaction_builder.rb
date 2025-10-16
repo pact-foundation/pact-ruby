@@ -113,13 +113,13 @@ module Pact
 
           yield(mock_server)
 
+        ensure
           if mock_server.matched?
             mock_server.write_pacts!(pact_config.pact_dir)
           else
             msg = mismatches_error_msg(mock_server)
             raise InteractionMismatchesError.new(msg)
           end
-        ensure
           @used = true
           mock_server&.cleanup
           # Reset the pact handle to allow for a new interaction to be built

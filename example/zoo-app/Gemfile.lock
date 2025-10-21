@@ -1,7 +1,7 @@
 PATH
   remote: ../..
   specs:
-    pact (1.66.1)
+    pact (1.66.2)
       jsonpath (~> 1.0)
       pact-mock_service (~> 3.0, >= 3.3.1)
       pact-support (~> 1.21, >= 1.21.0)
@@ -78,15 +78,15 @@ GEM
       rspec-core (~> 3.13.0)
       rspec-expectations (~> 3.13.0)
       rspec-mocks (~> 3.13.0)
-    rspec-core (3.13.4)
+    rspec-core (3.13.6)
       rspec-support (~> 3.13.0)
     rspec-expectations (3.13.5)
       diff-lcs (>= 1.2.0, < 2.0)
       rspec-support (~> 3.13.0)
-    rspec-mocks (3.13.5)
+    rspec-mocks (3.13.6)
       diff-lcs (>= 1.2.0, < 2.0)
       rspec-support (~> 3.13.0)
-    rspec-support (3.13.4)
+    rspec-support (3.13.6)
     string_pattern (2.3.0)
       regexp_parser (~> 2.5, >= 2.5.0)
     sync (0.5.0)

@@ -24,7 +24,7 @@ jobs:
           ruby-version: ${{ matrix.ruby_version }}
           bundler-cache: true
       - uses: you54f/pact-cli@main
-      - run: pact-cli plugin install --yes https://github.com/mefellows/pact-matt-plugin/releases/tag/v0.1.1
+      - run: pact plugin install --yes https://github.com/mefellows/pact-matt-plugin/releases/tag/v0.1.1
       - name: Test Pact-Ruby Specs
         run: "bundle exec rake"
       - name: Test Pact-Ruby Zoo App Specs
@@ -64,7 +64,7 @@ jobs:
           ruby-version: ${{ matrix.ruby_version }}
           bundler-cache: true
       - uses: you54f/pact-cli@main
-      - run: pact-cli plugin install --yes https://github.com/mefellows/pact-matt-plugin/releases/tag/v0.1.1
+      - run: pact plugin install --yes https://github.com/mefellows/pact-matt-plugin/releases/tag/v0.1.1
       - run: "bundle exec appraisal install"
       - run: "bundle exec appraisal rack-2 rake"
       - run: "bundle exec appraisal rack-2 rake spec:v2"

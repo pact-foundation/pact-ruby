@@ -1,3 +1,11 @@
+<a name="v1.67.2"></a>
+### v1.67.2 (2025-10-22)
+
+#### Bug Fixes
+
+* **v2**
+  * allow configurable loggers in verifier	 ([9fad7fa](/../../commit/9fad7fa))
+
 <a name="v1.67.1"></a>
 ### v1.67.1 (2025-10-22)
 

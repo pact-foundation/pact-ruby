@@ -23,6 +23,8 @@ jobs:
         with:
           ruby-version: ${{ matrix.ruby_version }}
           bundler-cache: true
+        env:
+          BUNDLE_WITH: v2
       - uses: you54f/pact-cli@main
       - run: pact plugin install --yes https://github.com/mefellows/pact-matt-plugin/releases/tag/v0.1.1
       - name: Test Pact-Ruby Specs
@@ -37,18 +39,28 @@ jobs:
         working-directory: example/animal-service
       - name: Test Pact-Ruby v2 spec:v2
         run: "bundle exec rake spec:v2"
+        env:
+          BUNDLE_WITH: v2
       - name: Test Pact-Ruby v2 pact:v2:spec
         run: "bundle exec rake pact:v2:spec"
+        env:
+          BUNDLE_WITH: v2
       - name: Test Pact-Ruby v2 pact:v2:verify
         run: "bundle exec rake pact:v2:verify"
+        env:
+          BUNDLE_WITH: v2
       - name: Test Pact-Ruby v2 Zoo App Specs
         run: "bundle install && bundle exec rake spec:v2"
         if: matrix.ruby_version > '3.0'
         working-directory: example/zoo-app-v2
+        env:
+          BUNDLE_WITH: v2
       - name: Test Pact-Ruby v2 Animal Service Specs
         run: "bundle install && bundle exec rake pact:v2:verify"
         if: matrix.os != 'windows-latest' && matrix.ruby_version > '3.0'
         working-directory: example/animal-service-v2
+        env:
+          BUNDLE_WITH: v2
 
   test-with-rack-2:
     runs-on: ${{ matrix.os }}
@@ -63,16 +75,26 @@ jobs:
         with:
           ruby-version: ${{ matrix.ruby_version }}
           bundler-cache: true
+        env:
+          BUNDLE_WITH: v2
       - uses: you54f/pact-cli@main
       - run: pact plugin install --yes https://github.com/mefellows/pact-matt-plugin/releases/tag/v0.1.1
       - run: "bundle exec appraisal install"
+        env:
+          BUNDLE_WITH: v2
       - run: "bundle exec appraisal rack-2 rake"
       - run: "bundle exec appraisal rack-2 rake spec:v2"
+        env:
+          BUNDLE_WITH: v2
       - name: Test Mixed Pacts (Http/Kafaka/Grpc) - Pact-Ruby v2
         run: "bundle exec appraisal rack-2 rake pact:v2:spec"
+        env:
+          BUNDLE_WITH: v2
       - name: Verify Mixed Pacts (Http/Kafaka/Grpc) - Pact-Ruby v2
         run: "bundle exec appraisal rack-2 rake pact:v2:verify"
         if: matrix.os != 'windows-latest' && matrix.ruby_version > '3.0'
+        env:
+          BUNDLE_WITH: v2
 
   test-with-active-support:
     runs-on: ${{ matrix.os }}
@@ -90,6 +112,8 @@ jobs:
         with:
           ruby-version: ${{ matrix.ruby_version }}
           bundler-cache: true
+        env:
+          BUNDLE_WITH: v2
       - run: bundle install
       - run: "bundle exec appraisal install"
         name: "install active support - pact-ruby"
@@ -99,3 +123,4 @@ jobs:
         name: "test with active support - pact-ruby v2"
         env:
           LOAD_ACTIVE_SUPPORT: 'true'
+          BUNDLE_WITH: v2

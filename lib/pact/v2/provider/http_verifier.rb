@@ -13,7 +13,7 @@ module Pact
           super
 
           raise ArgumentError, "pact_config must be an instance of Pact::V2::Provider::PactConfig::Http" unless pact_config.is_a?(::Pact::V2::Provider::PactConfig::Http)
-          @http_server = HttpServer.new(host: "127.0.0.1", port: @pact_config.http_port, app: @pact_config.app)
+          @http_server = HttpServer.new(host: "127.0.0.1", port: @pact_config.http_port, app: @pact_config.app, logger: @pact_config.logger)
         end
 
         private

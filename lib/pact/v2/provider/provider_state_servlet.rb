@@ -8,10 +8,10 @@ module Pact
       class ProviderStateServlet < WEBrick::HTTPServlet::ProcHandler
         attr_reader :logger
 
-        def initialize(logger: Logger.new($stdout))
+        def initialize(logger: nil)
           super(build_proc)
 
-          @logger = logger
+          @logger = logger || Logger.new($stdout)
 
           @provider_setup_states = {}
           @provider_teardown_states = {}

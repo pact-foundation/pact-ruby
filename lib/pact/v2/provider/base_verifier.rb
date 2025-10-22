@@ -31,7 +31,7 @@ module Pact
           raise ArgumentError, "pact_config must be a subclass of Pact::V2::Provider::PactConfig::Base" unless pact_config.is_a?(::Pact::V2::Provider::PactConfig::Base)
           @pact_config = pact_config
           @mixed_config = mixed_config
-          @logger = Logger.new($stdout)
+          @logger = @pact_config.logger || Logger.new($stdout)
         end
 
         def verify!

@@ -34,7 +34,10 @@ module Pact
         def start
           raise "server already running, stop server before starting new one" if @thread
 
-          @server = WEBrick::HTTPServer.new({BindAddress: @host, Port: @port}, WEBrick::Config::HTTP)
+            @server = WEBrick::HTTPServer.new(
+            { BindAddress: @host, Port: @port, Logger: @logger, AccessLog: [] },
+            WEBrick::Config::HTTP
+            )
           @server.mount(SETUP_PROVIDER_STATE_PATH, @state_servlet)
           @server.mount(VERIFY_MESSAGE_PATH, @message_servlet)
 

@@ -12,12 +12,12 @@ module Pact
         CONTENT_TYPE_PROTO = "application/protobuf"
         METADATA_HEADER = "pact-message-metadata"
 
-        def initialize(logger: Logger.new($stdout))
+        def initialize(logger: nil)
           super(build_proc)
 
           @message_handlers = {}
 
-          @logger = logger
+          @logger = logger || Logger.new($stdout)
         end
 
         def add_message_handler(name, &block)

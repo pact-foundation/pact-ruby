@@ -22,7 +22,7 @@ The `pact-ruby-v1` is in maintenance mode, as there has been a transition to rus
 
 ## Installation
 
-The `pact/v2` namespace is available in `pact-ruby` v1.70.0.
+The `pact/v2` namespace is available in `pact-ruby` v1.67.0.
 
 It introduces a suite of new depedencies, including a reliance on the `pact-ffi` and `ffi` gems.
 
@@ -134,6 +134,26 @@ Specific DSL methods:
 
 More at [grpc_client_spec.rb](../spec/pact/providers/pact-ruby-v2-test-app/grpc_client_spec.rb)
 
+### Message consumers
+
+Specific DSL methods:
+
+- `with_headers(kv_hash)` - message-headers definition; you can use matchers
+- `with_metadata(kv_hash)` - message-metadata definition (special keys are `key` and `topic`, where, respectively, you can specify the matchers for the partitioning key and the topic
+
+Next, the specifics are one of two options for describing the format:
+
+**JSON** (to describe a message in a JSON representation):
+
+- `with_json_contents(kv_hash)` - message format definition
+
+**PROTO** (to describe the message in the protobuf view):
+
+- `with_proto_class(PROTO_PATH, PROTO_MESSAGE_NAME)` - specifies the contract used, PROTO_PATH is relative to the root, PROTO_MESSAGE_NAME is the name of the message used from the proto file
+- `with_proto_contents(kv_hash)` - message format definition
+
+More at [message_spec.rb](../spec/pact/providers/pact-ruby-v2-test-app/message.spec.rb)
+
 ### Kafka consumers
 
 Specific DSL methods:
@@ -153,6 +173,11 @@ Next, the specifics are one of two options for describing the format:
 - `with_proto_contents(kv_hash)` - message format definition
 
 More at [kafka_spec.rb](../spec/pact/providers/pact-ruby-v2-test-app/kafka_spec.rb)
+
+Requires the following gems, to use this wrapper
+
+- sbmt-kafka_consumer
+- sbmt-kafka_provider
 
 ### Matchers
 
@@ -464,46 +489,75 @@ bundle exec rake pact:v2:spec
 
 ### Migration
 
+1. add `gem "pact-ffi", "~> 0.4.28"` to Gemfile, or Gemspec
+2. pact ruby v2 uses activesupport classes, so you may need to add
+    1. `gem 'combustion'` to load active support during tests
+    1. add a pact helper to load it
+
+          ```rb
+          require "combustion"
+          begin
+            Combustion.initialize! :action_controller do
+              config.log_level = :fatal if ENV["LOG"].to_s.empty?
+            end
+          rescue => e
+            # Fail fast if application couldn't be loaded
+            warn "💥 Failed to load the app: #{e.message}\n#{e.backtrace.join("\n")}"
+            exit(1)
+          end
+          ```
+
+3. Add a new rake task
+
+    - require your helper file created above
+    - add a tag, we will use `pact_v2` to namespace away from our existing `pact` tagged tests
+
+    ```rb
+    RSpec::Core::RakeTask.new('spec:v2') do |task|
+      task.pattern = 'spec/pact/providers/**/*_spec.rb'
+      task.rspec_opts = ['-t pact_v2', '--require rails_helper']
+    end
+    ```
+
+4. File paths have moved for consumer tests, and provider verification tasks
+
+    - consumer test location
+        1. pact v1 `spec/service_providers`
+        2. pact v2 - `spec/pact/providers`
+    - provider verification location
+        1. pact v1 `spec/service_consumers`
+        2. pact v2 - `spec/pact/consumers`
+
 The following projects were designed for pact-ruby-v1 and have been migrated to pact-ruby-v2. They can serve as an example of the work required.
 
 - pact broker client
-  - v1
-  - v2 <https://github.com/YOU54F/pact_broker-client/pull/1>
+  - v2 <https://github.com/pact-foundation/pact_broker-client/pull/198>
 - pact broker
-  - v1
-  - v2 <https://github.com/YOU54F/pact_broker/pull/14>
+  - v2 <https://github.com/pact-foundation/pact_broker/pull/843>
 - animal service
-  - v1
-    - In repo: [example/animal-service](../example/animal-service/)
-    - Standalone: <https://github.com/safdotdev/animal-service>
-  - v2
-    - In repo: [example/animal-service-v2](../example/animal-service-v2/)
-    - Standalone: <https://github.com/safdotdev/animal-service/pull/1>
+  - v1 [example/animal-service](../example/animal-service/)
+  - v2 [example/animal-service-v2](../example/animal-service-v2/)
 - zoo app
-  - v1
-    - In repo: [example/zoo-app](../example/zoo-app/)
-    - Standalone: <https://github.com/safdotdev/zoo-app>
-  - v2
-    - In repo: [example/zoo-app-v2](../example/zoo-app-v2/)
-    - Standalone: <https://github.com/safdotdev/zoo-app/pull/1>
+  - v1 [example/zoo-app](../example/zoo-app/)
+  - v2 [example/zoo-app-v2](../example/zoo-app-v2/)
 - message consumer/provider
-  - v1
-  - v2 <https://github.com/safdotdev/pact-ruby-demo/compare/main...safdotdev:pact-ruby-demo:feat/pact-ruby-v2>
+  - v1 <https://github.com/AndrewJanuary/pact-ruby-demo>
+  - v2 <https://github.com/safdotdev/pact-ruby-demo>
 - e2e http consumer/provider
-  - v1
-  - v2 <https://github.com/safdotdev/pact-ruby-e2e-example/pull/1>
+  - <https://github.com/pact-foundation/pact-ruby-e2e-example>
+    - Plus http, message, grpc & mixed consumer & provider examples
 
 ### Demos
 
-- http consumer
-  - In repo: [http_client_spec.rb](../spec/pact/providers/pact-ruby-v2-test-app/http_client_spec.rb)
-  - Standalone:
-- kafka consumer
-  - In repo: [kafka_spec.rb](../spec/pact/providers/pact-ruby-v2-test-app/kafka_spec.rb)
-  - Standalone:
-- grpc consumer
-  - In repo: [grpc_client_spec.rb](../spec/pact/providers/pact-ruby-v2-test-app/grpc_client_spec.rb)
-  - Standalone:
-- mixed(http/kafka/grpc) provider
-  - In repo:  [multi_spec.rb](../spec/pact/consumers/multi_spec.rb)
-  - Standalone:
+The demos are stored in this codebase for regression test, but exist as standalone in https://github.com/pact-foundation/pact-ruby-e2e-example
+
+- http consumer [http_client_spec.rb](../spec/pact/providers/pact-ruby-v2-test-app/http_client_spec.rb)
+- kafka consumer with pact-ruby wrapper [kafka_spec.rb](../spec/pact/providers/pact-ruby-v2-test-app/kafka_spec.rb)
+- message consumer [message_spec.rb](../spec/pact/providers/pact-ruby-v2-test-app/message_spec.rb)
+- plugin consumer http [plugin_matt_http_spec.rb](../spec/pact/providers/pact-ruby-v2-test-app/plugin_matt_http_spec.rb)
+- plugin consumer http [plugin_matt_sync_message_spec.rb](../spec/pact/providers/pact-ruby-v2-test-app/plugin_matt_sync_message_spec.rb)
+- plugin consumer http [plugin_matt_async_message_spec.rb](../spec/pact/providers/pact-ruby-v2-test-app/plugin_matt_async_message_spec.rb)
+- plugin consumer http [plugin_matt_http_spec.rb](../spec/pact/providers/pact-ruby-v2-test-app/plugin_matt_http_spec.rb)
+- grpc consumer with pact-ruby wrapper [grpc_client_spec.rb](../spec/pact/providers/pact-ruby-v2-test-app/grpc_client_spec.rb)
+- grpc consumer using direct plugin interface [plugin_grpc_sync_message_spec.rb](../spec/pact/providers/pact-ruby-v2-test-app/plugin_grpc_sync_message_spec.rb)
+- mixed(http/kafka/grpc) provider [multi_spec.rb](../spec/pact/consumers/multi_spec.rb)

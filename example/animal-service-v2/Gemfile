@@ -3,6 +3,7 @@ source 'https://rubygems.org'
 group :development, :test do
   gem 'rspec'
   gem 'pact', path: '../../'
+  gem "pact-ffi", "~> 0.4.28" # added for pact-ruby-v2 FFI support
   gem 'pry'
   # required for pact-ruby-v2
   gem 'combustion'

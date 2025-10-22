@@ -20,6 +20,32 @@ The `pact-ruby-v1` is in maintenance mode, as there has been a transition to rus
 - Matchers - implementation of Pact matchers, which are convenient helpers used in consumer-DSL, encapsulating all the logic for serialization into Pact format
 - Mock servers - mock servers that allow for correct execution of provider tests
 
+## Installation
+
+The `pact/v2` namespace is available in `pact-ruby` v1.70.0.
+
+It introduces a suite of new depedencies, including a reliance on the `pact-ffi` and `ffi` gems.
+
+The native extensions are marked in an optional block, so they are opt in.
+
+```rb
+ gem "pact"
+ gem "pact-ffi", "~> 0.4.28" # add this line, to use the pact/v2 namespace
+```
+
+`pact-ffi` ships prebuilt binary gems, and does not support platforms outside of the released [pact_ffi](https://github.com/pact-foundation/pact-reference/tree/master/rust/pact_ffi) libraries
+
+| Version   | Platform             |
+|-----------|----------------------|
+| 0.4.28.0  | x86_64-darwin        |
+| 0.4.28.0  | arm64-darwin         |
+| 0.4.28.0  | x86_64-linux         |
+| 0.4.28.0  | aarch64-linux        |
+| 0.4.28.0  | x86_64-linux-musl    |
+| 0.4.28.0  | aarch64-linux-musl   |
+| 0.4.28.0  | x64-mingw32          |
+| 0.4.28.0  | x64-mingw-ucrt       |
+
 ## Usage
 
 For each type of interaction (due to their specific features), a separate version of DSL has been implemented. However, the general principles remain the same for each type of interaction.

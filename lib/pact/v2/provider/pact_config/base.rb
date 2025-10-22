@@ -8,13 +8,14 @@ module Pact
           attr_reader :provider_name, :provider_version, :log_level, :provider_setup_server, :provider_setup_port, :pact_proxy_port,
             :consumer_branch, :consumer_version, :consumer_name, :broker_url, :broker_username, :broker_password, :verify_only, :pact_dir,
             :pact_uri, :provider_version_branch, :provider_version_tags, :consumer_version_selectors, :enable_pending, :include_wip_pacts_since,
-            :fail_if_no_pacts_found, :provider_build_uri, :broker_token, :consumer_version_tags, :publish_verification_results
+            :fail_if_no_pacts_found, :provider_build_uri, :broker_token, :consumer_version_tags, :publish_verification_results, :logger
 
 
           def initialize(provider_name:, opts: {})
             @provider_name = provider_name
             @log_level = opts[:log_level] || :info
             @pact_dir = opts[:pact_dir] || nil
+            @logger = opts[:logger] || nil
             @provider_setup_port = opts[:provider_setup_port] || 9001
             @pact_proxy_port = opts[:provider_setup_port] || 9002
             @pact_uri = ENV.fetch("PACT_URL", nil) || opts.fetch(:pact_uri, nil)
@@ -37,14 +38,15 @@ module Pact
             @broker_token = ENV.fetch("PACT_BROKER_TOKEN", nil) || opts.fetch(:broker_token, nil)
             @verify_only = [ENV.fetch("PACT_CONSUMER_FULL_NAME", nil)].compact || opts.fetch(:verify_only, [])
 
-            @provider_setup_server = opts[:provider_setup_server] || ProviderServerRunner.new(port: @provider_setup_port)
+            @provider_setup_server = opts[:provider_setup_server] || ProviderServerRunner.new(port: @provider_setup_port, logger: @logger)
             if @broker_url.present?
               @pact_proxy_server = PactBrokerProxyRunner.new(
                 port: @pact_proxy_port,
                 pact_broker_host: @broker_url,
                 pact_broker_user: @broker_username,
                 pact_broker_password: @broker_password,
-                pact_broker_token: @broker_token
+                pact_broker_token: @broker_token,
+                logger: @logger
               )
             end
           end

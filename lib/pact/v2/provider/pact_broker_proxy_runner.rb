@@ -35,7 +35,10 @@ module Pact
             require 'rackup/handler/webrick'
             handler = Class.new(Rackup::Handler::WEBrick)
           end
-          @server = WEBrick::HTTPServer.new({BindAddress: @host, Port: @port}, WEBrick::Config::HTTP)
+          @server = WEBrick::HTTPServer.new(
+            { BindAddress: @host, Port: @port, Logger: @logger, AccessLog: [] },
+            WEBrick::Config::HTTP
+            )
           @server.mount("/", handler, PactBrokerProxy.new(
             nil,
             backend: @pact_broker_host,

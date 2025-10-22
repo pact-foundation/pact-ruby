@@ -13,7 +13,7 @@ module Pact
           super
 
           raise ArgumentError, "pact_config must be an instance of Pact::V2::Provider::PactConfig::Grpc" unless pact_config.is_a?(::Pact::V2::Provider::PactConfig::Grpc)
-          @grpc_server = GrufServer.new(host: "127.0.0.1:#{@pact_config.grpc_port}", services: @pact_config.grpc_services)
+          @grpc_server = GrufServer.new(host: "127.0.0.1:#{@pact_config.grpc_port}", services: @pact_config.grpc_services, logger: @pact_config.logger)
         end
 
         private

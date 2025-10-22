@@ -17,7 +17,7 @@ module Pact
 
         def self.log_to_stdout(log_level)
           raise "invalid log level for PactFfi::FfiLogLevelFilter" unless LOG_LEVELS.key?(log_level)
-          PactFfi::Logger.log_to_stdout(LOG_LEVELS[log_level])
+            PactFfi::Logger.log_to_stdout(LOG_LEVELS[log_level]) unless log_level == :off
         end
       end
     end

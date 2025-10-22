@@ -1,3 +1,20 @@
+<a name="v1.67.0"></a>
+### v1.67.0 (2025-10-16)
+
+#### Features
+
+* add support for generate_from_provider_state	 ([4ff7812](/../../commit/4ff7812))
+* add pact-ruby v2 generators	 ([4db935b](/../../commit/4db935b))
+* add pact plugin consumer interfaces for http/async/sync messages	 ([ca19f86](/../../commit/ca19f86))
+* add more matchers	 ([ccb82b9](/../../commit/ccb82b9))
+* load pact/v2 into namespace	 ([4ac42ec](/../../commit/4ac42ec))
+* add pact v2 interface	 ([4595015](/../../commit/4595015))
+
+#### Bug Fixes
+
+* ensure we always print mismatchs in consumer tests for better dx	 ([f9cb106](/../../commit/f9cb106))
+* json load diff regression downstream, relax restrictions	 ([481eab9](/../../commit/481eab9))
+
 <a name="v1.66.2"></a>
 ### v1.66.2 (2025-10-03)
 

@@ -1,3 +1,11 @@
+<a name="v1.67.1"></a>
+### v1.67.1 (2025-10-22)
+
+#### Bug Fixes
+
+* **deps**
+  * make pact-ffi optional in v1 releases for pact-ruby-standalone consumption	 ([e3cd0d6](/../../commit/e3cd0d6))
+
 <a name="v1.67.0"></a>
 ### v1.67.0 (2025-10-16)
 

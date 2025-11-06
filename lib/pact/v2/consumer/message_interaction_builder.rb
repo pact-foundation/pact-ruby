@@ -144,6 +144,7 @@ module Pact
         ensure
           @used = true
           PactFfi::MessageConsumer.free_handle(message_pact)
+          PactFfi::PluginConsumer.cleanup_plugins(pact_handle)
           PactFfi.free_pact_handle(pact_handle)
         end
 

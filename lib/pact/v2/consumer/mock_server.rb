@@ -84,6 +84,14 @@ module Pact
           PactFfi::MockServer.cleanup(@handle)
         end
 
+        def cleanup_plugins
+          PactFfi::PluginConsumer.cleanup_plugins(@handle)
+        end
+
+        def free_pact_handle
+          PactFfi.free_pact_handle(@handle)
+        end
+
         private
 
         def init_transport!

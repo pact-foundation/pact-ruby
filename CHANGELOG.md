@@ -1,3 +1,10 @@
+<a name="v1.67.3"></a>
+### v1.67.3 (2025-11-06)
+
+#### Bug Fixes
+
+* ensure message consumers with plugins cleanup processes	 ([8df23e6](/../../commit/8df23e6))
+
 <a name="v1.67.2"></a>
 ### v1.67.2 (2025-10-22)
 

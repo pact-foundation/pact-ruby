@@ -9,7 +9,7 @@ task :generate_changelog do
 end
 
 desc 'Tag for release'
-task :tag_for_release do | t, args |
+task :tag_for_release do |t, args|
   command = "git tag -a v#{Pact::VERSION} -m \"chore(release): version #{Pact::VERSION}\" && git push origin v#{Pact::VERSION}"
   puts command
   puts `#{command}`

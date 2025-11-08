@@ -1,8 +1,8 @@
-require 'pact/v2'
-require 'pact/v2/rspec'
+require 'pact'
+require 'pact/rspec'
 require_relative '../../../internal/app/consumers/test_message_consumer'
 
-describe TestMessageConsumer, :pact_v2 do
+describe TestMessageConsumer, :pact do
   has_message_pact_between 'Test Message Consumer', 'Test Message Provider'
 
   subject(:consumer) { TestMessageConsumer.new }

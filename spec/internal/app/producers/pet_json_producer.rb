@@ -31,6 +31,6 @@ class PetJsonProducer < Sbmt::KafkaProducer::BaseProducer
         }
 
     }
-    sync_publish(pet, headers: {"identity-key" => uuid})
+    sync_publish(pet, headers: { "identity-key" => uuid })
   end
 end

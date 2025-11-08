@@ -1,4 +1,0 @@
---color
---format progress
---require spec_helper_v2
---require rails_helper_v2

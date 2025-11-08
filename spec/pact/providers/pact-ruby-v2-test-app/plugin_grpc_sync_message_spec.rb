@@ -1,9 +1,9 @@
 # frozen_string_literal: true
 
-require 'pact/v2/rspec'
+require 'pact/rspec'
 
-RSpec.describe 'Test grpc sync message plugin loading', :pact_v2 do
-  has_plugin_sync_message_pact_between 'pact-ruby-v2-test-app', 'pact-ruby-v2-test-app', opts: { mock_port: 3009 }
+RSpec.describe 'Test grpc sync message plugin loading', :pact do
+  has_plugin_sync_message_pact_between 'pact-ruby-test-app', 'pact-ruby-test-app', opts: { mock_port: 3009 }
 
   let(:pet_id) { 123 }
 
@@ -23,7 +23,10 @@ RSpec.describe 'Test grpc sync message plugin loading', :pact_v2 do
           .with_content_type('application/grpc')
           .with_transport('grpc')
           .with_plugin_metadata({
-                                  'pact:proto' => File.expand_path('spec/internal/deps/services/pet_store/grpc/pet_store.proto'),
+                                  'pact:proto' =>
+                                      File.expand_path(
+                                        'spec/internal/deps/services/pet_store/grpc/pet_store.proto'
+                                      ),
                                   'pact:proto-service' => 'Pets/PetById',
                                   'pact:content-type' => 'application/protobuf'
                                 })

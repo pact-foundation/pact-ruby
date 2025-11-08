@@ -1,19 +1,17 @@
-RSpec::Core::RakeTask.new(:spec) do |t|
+RSpec::Core::RakeTask.new('spec') do |t|
   t.pattern = 'spec/**/*_spec.rb'
-  t.exclude_pattern = 'spec/pact/**/*_spec.rb,spec/v2/**/*_spec.rb'
-end
-# Need to run this in separate process because left over state from
-# testing the actual pact framework messes up the tests that actually
-# use pact.
-RSpec::Core::RakeTask.new('spec:provider') do |task|
-  task.pattern = 'spec/service_providers/**/*_test.rb'
+  t.rspec_opts = '--require spec_helper --require rails_helper'
 end
 
-task :set_active_support_on do
-  ENV['LOAD_ACTIVE_SUPPORT'] = 'true'
+RSpec::Core::RakeTask.new('pact:spec') do |task|
+  task.pattern = 'spec/pact/providers/**/*_spec.rb'
+  task.rspec_opts = ['-t pact', '--require spec_helper --require rails_helper']
 end
 
-desc 'This is to ensure that the gem still works even when active support JSON is loaded.'
-task spec_with_active_support: [:set_active_support_on] do
-  Rake::Task['spec'].execute
+RSpec::Core::RakeTask.new('pact:verify') do |task|
+  task.pattern = 'spec/pact/consumers/*_spec.rb'
+  task.rspec_opts = ['-t pact', '--require spec_helper --require rails_helper']
 end
+
+desc 'Run all spec tasks'
+task 'spec:all' => ['spec', 'pact:spec', 'pact:verify']

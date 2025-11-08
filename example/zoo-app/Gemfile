@@ -1,13 +1,18 @@
 source 'https://rubygems.org'
 
 group :development, :test do
-  gem 'rspec'
   gem 'pact', path: '../../'
   gem 'pact_broker-client'
+  gem 'pact-ffi', '~> 0.4.28' # added for pact-ruby FFI support
   gem 'pry'
+  gem 'rspec'
+  # required for pact-ruby
+  gem 'combustion'
 end
 
 gem 'rake'
 
-gem 'rack'
 gem 'httparty', '>= 0.21.0'
+gem 'rack'
+
+gem 'tzinfo-data', platforms: %i[mingw mswin x64_mingw]

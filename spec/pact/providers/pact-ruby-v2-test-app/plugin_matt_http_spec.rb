@@ -1,10 +1,10 @@
 # frozen_string_literal: true
 
-require 'pact/v2/rspec'
+require 'pact/rspec'
 require 'net/http'
 require 'json'
 require 'faraday'
-RSpec.describe 'HTTP transport', :pact_v2 do
+RSpec.describe 'HTTP transport', :pact do
   has_plugin_http_pact_between 'myconsumer', 'myprovider'
 
   let(:matt_request) { { 'request' => { 'body' => 'hello' } } }
@@ -15,8 +15,17 @@ RSpec.describe 'HTTP transport', :pact_v2 do
       .given('the Matt protocol is up')
       .upon_receiving('an HTTP request to /matt')
       .with_plugin('matt', '0.1.1')
-      .with_request(method: 'POST', path: '/matt', body: matt_request, headers: { 'content-type' => 'application/matt' })
-      .will_respond_with(status: 200, body: matt_response, headers: { 'content-type' => 'application/matt' })
+      .with_request(
+        method: 'POST',
+        path: '/matt',
+        body: matt_request,
+        headers: { 'content-type' => 'application/matt' }
+      )
+      .will_respond_with(
+        status: 200,
+        body: matt_response,
+        headers: { 'content-type' => 'application/matt' }
+      )
   end
 
   it 'returns a valid MATT message' do

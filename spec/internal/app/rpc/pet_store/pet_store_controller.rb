@@ -6,7 +6,7 @@ module PetStore
 
     def pet_by_id
       req = request.message
-      PetStore::Grpc::PetStore::V1::PetResponse.new(pet: {id: req.id, name: "Jack"}, metadata: request.metadata)
+      PetStore::Grpc::PetStore::V1::PetResponse.new(pet: { id: req.id, name: "Jack" }, metadata: request.metadata)
     end
   end
 end

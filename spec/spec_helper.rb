@@ -1,30 +1,33 @@
+# frozen_string_literal: true
+
+ENV['RAILS_ENV'] = 'test'
+
+require 'bundler/setup'
 require 'rspec'
-require 'rspec/its'
-require 'fakefs/spec_helpers'
-require 'pact'
-require 'webmock/rspec'
-require 'support/factories'
-require 'support/spec_support'
-require 'pact/provider/rspec'
+require 'rspec_junit_formatter'
 
-WebMock.disable_net_connect!(allow_localhost: true, allow: "https://www.google-analytics.com")
-
-require './spec/support/active_support_if_configured'
-require './spec/support/warning_silencer'
-
-is_jruby = defined?(RUBY_ENGINE) && RUBY_ENGINE == 'jruby'
 is_windows = Gem.win_platform?
 
-RSpec.configure do | config |
-  config.include(FakeFS::SpecHelpers, fakefs: true)
-
-  config.extend Pact::Provider::RSpec::ClassMethods
-  config.include Pact::Provider::RSpec::InstanceMethods
-  config.include Pact::Provider::TestMethods
-  config.include Pact::SpecSupport
-  if config.respond_to?(:example_status_persistence_file_path=)
-    config.example_status_persistence_file_path = "./spec/examples.txt"
+RSpec.configure do |config|
+  config.expect_with :rspec do |expectations|
+    expectations.include_chain_clauses_in_custom_matcher_descriptions = true
   end
-  config.filter_run_excluding skip_jruby: is_jruby
+  config.mock_with :rspec do |mocks|
+    mocks.verify_partial_doubles = true
+  end
+
+  config.filter_run_when_matching :focus
   config.filter_run_excluding skip_windows: is_windows
+  config.example_status_persistence_file_path = 'tmp/rspec_examples.txt'
+  config.run_all_when_everything_filtered = true
+
+  if config.files_to_run.one?
+    # Use the documentation formatter for detailed output,
+    # unless a formatter has already been configured
+    # (e.g. via a command-line flag).
+    config.default_formatter = 'doc'
+  end
+
+  config.order = :random
+  Kernel.srand config.seed
 end

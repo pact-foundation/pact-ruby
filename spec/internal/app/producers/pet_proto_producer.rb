@@ -25,6 +25,6 @@ class PetProtoProducer < Sbmt::KafkaProducer::BaseProducer
         )
       ]
     )
-    sync_publish(serializer.encode(message), headers: {"identity-key" => uuid})
+    sync_publish(serializer.encode(message), headers: { "identity-key" => uuid })
   end
 end

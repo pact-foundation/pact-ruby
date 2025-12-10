@@ -81,7 +81,6 @@ Gem::Specification.new do |gem|
   gem.add_runtime_dependency 'thor', '>= 0.20', '< 2.0'
   gem.add_runtime_dependency "rainbow", '~> 3.1'
   gem.add_runtime_dependency 'string_pattern', '~> 2.0'
-  gem.add_runtime_dependency 'jsonpath', '~> 1.0'
 
   gem.add_runtime_dependency "pact-support" , "~> 1.21", ">=1.21.2"
   gem.add_runtime_dependency 'pact-mock_service', '~> 3.0', '>= 3.3.1'

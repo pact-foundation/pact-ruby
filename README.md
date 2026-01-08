@@ -274,7 +274,11 @@ As in all things, there are good ways to implement Pacts, and there are not so g
 
 ## Current Pact specification version
 
-Currently, Ruby Pact supports writing Pacts in v2, and verifying Pacts in v3 format, HOWEVER it only supports the rules that were defined in v2 (`like` and `term`). If you are interested in helping add support for the v3 rules, please talk to @Beth in the `#pact-ruby` channel on our [Slack](http://slack.pact.io).
+The `pact-ruby-v1` is in maintenance mode, as there has been a transition to rust-core, which is intended to be used through FFI in non-Rust stacks.
+
+Pact Ruby V1 supports writing Pacts in v2, and verifying Pacts in v3 format, HOWEVER it only supports the rules that were defined in v2 (`like` and `term`).
+
+For Pact v3 specification features and above, please see [pact-ruby-v2](/documentation/README_v2.md) documentation.
 
 ## Docs
 

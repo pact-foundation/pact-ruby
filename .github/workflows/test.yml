@@ -25,7 +25,7 @@ jobs:
           bundler-cache: true
         env:
           BUNDLE_WITH: v2
-      - uses: you54f/pact-cli@main
+      - uses: pact-foundation/pact-cli@main
       - run: pact plugin install --yes https://github.com/mefellows/pact-matt-plugin/releases/tag/v0.1.1
       - name: Test Pact-Ruby Specs
         run: "bundle exec rake"
@@ -77,7 +77,7 @@ jobs:
           bundler-cache: true
         env:
           BUNDLE_WITH: v2
-      - uses: you54f/pact-cli@main
+      - uses: pact-foundation/pact-cli@main
       - run: pact plugin install --yes https://github.com/mefellows/pact-matt-plugin/releases/tag/v0.1.1
       - run: "bundle exec appraisal install"
         env:

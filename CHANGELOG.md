@@ -1,3 +1,11 @@
+<a name="v1.67.4"></a>
+### v1.67.4 (2026-02-09)
+
+#### Bug Fixes
+
+* suppress v2 load warning in v1 mode	 ([4f7bab2](/../../commit/4f7bab2))
+* pact-v2 verifier - pact_proxy_port was not honoured	 ([6a60bae](/../../commit/6a60bae))
+
 <a name="v1.67.3"></a>
 ### v1.67.3 (2025-11-06)
 

@@ -17,7 +17,7 @@ module Pact
             @pact_dir = opts[:pact_dir] || nil
             @logger = opts[:logger] || nil
             @provider_setup_port = opts[:provider_setup_port] || 9001
-            @pact_proxy_port = opts[:provider_setup_port] || 9002
+            @pact_proxy_port = opts[:pact_proxy_port] || 9002
             @pact_uri = ENV.fetch("PACT_URL", nil) || opts.fetch(:pact_uri, nil)
             @publish_verification_results = ENV.fetch("PACT_PUBLISH_VERIFICATION_RESULTS", nil) == "true" || opts.fetch(:publish_verification_results, false)
             @provider_version = ENV.fetch("PACT_PROVIDER_VERSION", nil) || opts.fetch(:provider_version, nil)

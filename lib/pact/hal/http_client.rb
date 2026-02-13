@@ -6,6 +6,18 @@ require 'openssl'
 
 module Pact
   module Hal
+    class RetriableHttpStatusError < StandardError
+      RETRIABLE_STATUS_CODES = [502, 503, 504].freeze
+
+      attr_reader :status_code, :response_body
+
+      def initialize status_code, response_body
+        @status_code = status_code
+        @response_body = response_body
+        super("HTTP #{status_code} error: #{response_body}")
+      end
+    end
+
     class HttpClient
       attr_accessor :username, :password, :verbose, :token
 
@@ -65,9 +77,15 @@ module Pact
             end
             http.verify_mode = OpenSSL::SSL::VERIFY_NONE
           end
-          http.start do |http|
+          result = http.start do |http|
             http.request request
           end
+
+          # Raise error on specific 5xx status codes to trigger retry
+          status_code = result.code.to_i
+          raise RetriableHttpStatusError.new(status_code, result.body) if RetriableHttpStatusError::RETRIABLE_STATUS_CODES.include?(status_code)
+
+          result
         end
         Response.new(response)
       end

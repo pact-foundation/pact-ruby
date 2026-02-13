@@ -82,6 +82,109 @@ module Pact
         it "returns a response" do
           expect(do_get.body).to eq({"some" => "json"})
         end
+
+        context "when server returns 502 Bad Gateway" do
+          before do
+            allow(Retry).to receive(:until_true).and_call_original
+            allow($stderr).to receive(:puts)
+          end
+
+          let!(:request) do
+            stub_request(:get, "http://example.org/").
+              to_return(status: 502, body: "<html>Bad Gateway</html>").then.
+              to_return(status: 200, body: response_body, headers: {'Content-Type' => 'application/json'})
+          end
+
+          it "retries and succeeds on second attempt" do
+            expect(do_get.body).to eq({"some" => "json"})
+            expect(request).to have_been_made.times(2)
+          end
+        end
+
+        context "when server returns 503 Service Unavailable" do
+          before do
+            allow(Retry).to receive(:until_true).and_call_original
+            allow($stderr).to receive(:puts)
+          end
+
+          let!(:request) do
+            stub_request(:get, "http://example.org/").
+              to_return(status: 503, body: "<html>Service Unavailable</html>").then.
+              to_return(status: 200, body: response_body, headers: {'Content-Type' => 'application/json'})
+          end
+
+          it "retries and succeeds on second attempt" do
+            expect(do_get.body).to eq({"some" => "json"})
+            expect(request).to have_been_made.times(2)
+          end
+        end
+
+        context "when server returns 504 Gateway Timeout" do
+          before do
+            allow(Retry).to receive(:until_true).and_call_original
+            allow($stderr).to receive(:puts)
+          end
+
+          let!(:request) do
+            stub_request(:get, "http://example.org/").
+              to_return(status: 504, body: "<html>Gateway Timeout</html>").then.
+              to_return(status: 200, body: response_body, headers: {'Content-Type' => 'application/json'})
+          end
+
+          it "retries and succeeds on second attempt" do
+            expect(do_get.body).to eq({"some" => "json"})
+            expect(request).to have_been_made.times(2)
+          end
+        end
+
+        context "when server returns 500 Internal Server Error" do
+          before do
+            allow(Retry).to receive(:until_true).and_call_original
+          end
+
+          let!(:request) do
+            stub_request(:get, "http://example.org/").
+              to_return(status: 500, body: '{"error": "internal server error"}', headers: {'Content-Type' => 'application/json'})
+          end
+
+          it "does not retry on 500 status code" do
+            expect(do_get.body).to eq({"error" => "internal server error"})
+            expect(request).to have_been_made.times(1)
+          end
+        end
+
+        context "when server returns 404 Not Found" do
+          before do
+            allow(Retry).to receive(:until_true).and_call_original
+          end
+
+          let!(:request) do
+            stub_request(:get, "http://example.org/").
+              to_return(status: 404, body: '{"error": "not found"}', headers: {'Content-Type' => 'application/json'})
+          end
+
+          it "does not retry on 4xx status codes" do
+            expect(do_get.body).to eq({"error" => "not found"})
+            expect(request).to have_been_made.times(1)
+          end
+        end
+
+        context "when server returns 502 three times" do
+          before do
+            allow(Retry).to receive(:until_true).and_call_original
+            allow($stderr).to receive(:puts)
+          end
+
+          let!(:request) do
+            stub_request(:get, "http://example.org/").
+              to_return(status: 502, body: "<html>Bad Gateway</html>")
+          end
+
+          it "raises RetriableHttpStatusError after max retries" do
+            expect { do_get }.to raise_error(Pact::Hal::RetriableHttpStatusError, /HTTP 502 error/)
+            expect(request).to have_been_made.times(3)
+          end
+        end
       end
 
       describe "post" do

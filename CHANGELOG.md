@@ -1,3 +1,10 @@
+<a name="v1.67.5"></a>
+### v1.67.5 (2026-02-13)
+
+#### Bug Fixes
+
+* retry HTTP requests on 5xx status codes (502, 503, 504)	 ([2174a31](/../../commit/2174a31))
+
 <a name="v1.67.4"></a>
 ### v1.67.4 (2026-02-09)
 

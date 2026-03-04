@@ -278,7 +278,7 @@ The `pact-ruby-v1` is in maintenance mode, as there has been a transition to rus
 
 Pact Ruby V1 supports writing Pacts in v2, and verifying Pacts in v3 format, HOWEVER it only supports the rules that were defined in v2 (`like` and `term`).
 
-For Pact v3 specification features and above, please see [pact-ruby-v2](/documentation/README_v2.md) documentation.
+For Pact v3 specification features and above, please see [pact-ruby-v2](/documentation/README_V2.md) documentation.
 
 ## Docs
 

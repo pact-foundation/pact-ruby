@@ -1,13 +1,19 @@
 source 'https://rubygems.org'
 
 group :development, :test do
-  gem 'rspec'
   gem 'pact', path: '../../'
+  gem 'pact-ffi', '~> 0.4.28' # added for pact-ruby FFI support
   gem 'pry'
+  gem 'rspec'
+  # required for pact-ruby
+  gem 'combustion'
+  gem 'webmock'
 end
 
-gem 'rake'
 gem 'rack'
-gem 'sqlite3'
+gem 'rake'
 gem 'sequel'
 gem 'sinatra'
+gem 'sqlite3'
+
+gem 'tzinfo-data', platforms: %i[mingw mswin x64_mingw]

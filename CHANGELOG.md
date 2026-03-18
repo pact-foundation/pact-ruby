@@ -1,3 +1,11 @@
+<a name="v2.0.0"></a>
+### v2.0.0 (2026-03-18)
+
+#### Features
+
+* **v2**
+  * move pact/v2 to pact namespace (#397)	 ([1cc97ec](/../../commit/1cc97ec))
+
 <a name="v1.67.5"></a>
 ### v1.67.5 (2026-02-13)
 

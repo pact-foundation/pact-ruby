@@ -12,7 +12,7 @@
 
 ## Architecture
 
-![Pact tests architecture](./pact-arch.png)
+![Pact tests architecture](./documentation/pact-arch.png)
 
 - DSL - implementation of RSpec-DSL for convenient writing of Pact tests
 - Matchers - implementation of Pact matchers, which are convenient helpers used in consumer-DSL, encapsulating all the logic for serialization into Pact format

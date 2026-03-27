@@ -105,7 +105,7 @@ RSpec.describe "SomePactConsumerTestForAnyTransport", :pact do
 Common DSL Methods:
 
 - `new_interaction` - initializes a new interaction
-- `given` - allows specifying a provider state with or without parameters, for more details see <https://docs.pact.io/getting_started/provider_states>
+- `given` - allows specifying a provider state with or without parameters, for more details see [provider_states](https://docs.pact.io/getting_started/provider_states)
 - `upon_receiving` - allows specifying the name of the interaction
 
 Multiple interactions can be declared within a single rspec example, in order to call the mock server
@@ -528,9 +528,9 @@ bundle exec rake pact:spec
 The following projects were designed for pact-ruby-v1 and have been migrated to pact-ruby. They can serve as an example of the work required.
 
 - pact broker client
-  - v2 <https://github.com/pact-foundation/pact_broker-client/pull/198>
+  - v2 [pact_broker-client#198](https://github.com/pact-foundation/pact_broker-client/pull/198)
 - pact broker
-  - v2 <https://github.com/pact-foundation/pact_broker/pull/843>
+  - v2 [pact_broker#843](https://github.com/pact-foundation/pact_broker/pull/843)
 - animal service
   - v1 [example/animal-service](../example/animal-service/)
   - v2 [example/animal-service-v2](../example/animal-service-v2/)
@@ -538,10 +538,10 @@ The following projects were designed for pact-ruby-v1 and have been migrated to 
   - v1 [example/zoo-app](../example/zoo-app/)
   - v2 [example/zoo-app-v2](../example/zoo-app-v2/)
 - message consumer/provider
-  - v1 <https://github.com/AndrewJanuary/pact-ruby-demo>
-  - v2 <https://github.com/safdotdev/pact-ruby-demo>
+  - v1 [pact-ruby-demo-v1](https://github.com/AndrewJanuary/pact-ruby-demo)
+  - v2 [pact-ruby-demo-v2](https://github.com/safdotdev/pact-ruby-demo)
 - e2e http consumer/provider
-  - <https://github.com/pact-foundation/pact-ruby-e2e-example>
+  - [pact-ruby-e2e-example](https://github.com/pact-foundation/pact-ruby-e2e-example)
     - Plus http, message, grpc & mixed consumer & provider examples
 
 ### Demos

@@ -446,6 +446,75 @@ end
 
 ```
 
+## Known Issues and Workarounds
+
+The following issues were present in pact 2.0.0 and can be worked around in a `pact_helper.rb` loaded before `pact/rspec`.
+
+### 1. Missing `activesupport` dependency
+
+pact 2.0.0 uses `present?` and `blank?` from ActiveSupport internally without declaring it as a gem dependency. This raises a `NoMethodError` when ActiveSupport is not loaded by the host application.
+
+**Workaround:** Require the ActiveSupport extension before pact:
+
+```ruby
+require 'active_support/core_ext/object/blank'
+```
+
+If your application does not already pull in `activesupport`, add it to your `Gemfile`:
+
+```ruby
+gem 'activesupport', '>= 6.0', require: false
+```
+
+### 2. `rack-proxy` calls `body_stream.rewind` on `Rackup::Handler::WEBrick::Input`
+
+`rack-proxy` 0.7.7 (a transitive dependency of pact) calls `body_stream.rewind` after assigning a `Rackup::Handler::WEBrick::Input`. Under rackup 2 / rack 3, that class does not implement `rewind`, raising a `NoMethodError` during provider verification setup.
+
+**Workaround:** Patch the class with a no-op `rewind` in your `pact_helper.rb`. The guard ensures it only applies when the method is absent:
+
+```ruby
+require 'rackup/handler/webrick'
+Rackup::Handler::WEBrick::Input.class_eval { def rewind; end unless method_defined?(:rewind) }
+```
+
+### 3. `WebmockHelpers.turned_off` missing `return` before early yield
+
+`WebmockHelpers.turned_off` in pact 2.0.0 is missing a `return` before the early `yield` that guards against WebMock not being defined. Without it the method falls through and calls `WebMock::Config`, raising a `NameError` when WebMock is absent.
+
+**Workaround:** Require `webmock` before pact so that `defined?(::WebMock)` is truthy and the correct code path runs:
+
+```ruby
+require 'webmock'
+```
+
+Add `webmock` to your `Gemfile` if not already present:
+
+```ruby
+gem 'webmock', require: false
+```
+
+### Combined `pact_helper.rb`
+
+If you encounter all three issues, here is a single `pact_helper.rb` that applies every workaround. Require this file before `pact/rspec` in your provider verification spec:
+
+```ruby
+# frozen_string_literal: true
+
+# pact 2.0.0 uses present?/blank? from ActiveSupport without declaring it as a dependency
+require 'active_support/core_ext/object/blank'
+
+# rack-proxy 0.7.7 calls body_stream.rewind after assigning a Rackup::Handler::WEBrick::Input,
+# but that class does not implement rewind (rackup 2 / rack 3). Add a no-op since the stream
+# has not been read yet at the point rewind is called.
+require 'rackup/handler/webrick'
+Rackup::Handler::WEBrick::Input.class_eval { def rewind; end unless method_defined?(:rewind) }
+
+# pact 2.0.0 WebmockHelpers.turned_off is missing a `return` before the early yield,
+# so it falls through and calls WebMock::Config even when WebMock is not defined.
+# Requiring webmock here ensures defined?(::WebMock) is truthy so the correct code path runs.
+require 'webmock'
+```
+
 ## Development & Test
 
 ### Setup

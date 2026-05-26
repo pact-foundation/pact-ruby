@@ -27,6 +27,12 @@ Gem::Specification.new do |gem|
     'documentation_uri' => 'https://github.com/pact-foundation/pact-ruby/blob/master/README.md'
   }
 
+  # Optional runtime dependencies (not required by pact itself):
+  #   active_support — if already loaded, its blank?/present? take precedence over
+  #                    pact's built-in polyfill (lib/pact/support/blank.rb).
+  #   webmock        — only needed for WebMock integration via WebmockHelpers.
+  #                    Require it yourself before using that helper.
+
   # Core dependencies (code loading)
   gem.add_dependency 'zeitwerk', '~> 2.3'
   # For Pact support via Pact Rust Core

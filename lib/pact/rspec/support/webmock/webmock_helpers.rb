@@ -2,7 +2,7 @@
 
 module WebmockHelpers
   def self.turned_off
-    yield unless defined?(::WebMock)
+    return yield unless defined?(::WebMock)
 
     allow_net_connect = WebMock::Config.instance.allow_net_connect
     allow_localhost = WebMock::Config.instance.allow_localhost

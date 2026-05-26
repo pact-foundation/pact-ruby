@@ -5,6 +5,10 @@ require 'pact/ffi'
 
 require 'pact/railtie' if defined?(Rails::Railtie)
 
+# Load blank?/present? polyfill before Zeitwerk eager-loads the rest of the gem.
+# Skipped if active_support (or anything else) has already defined these methods.
+require_relative 'pact/support/blank'
+
 module Pact
   class Error < StandardError; end
 
@@ -41,6 +45,7 @@ loader.tag = 'pact'
 loader.ignore("#{__dir__}/pact/version.rb")
 loader.ignore("#{__dir__}/pact/rspec.rb")
 loader.ignore("#{__dir__}/pact/rspec")
+loader.ignore("#{__dir__}/pact/support/blank.rb")
 loader.ignore("#{__dir__}/pact/railtie.rb") unless defined?(Rails::Railtie)
 
 loader.setup

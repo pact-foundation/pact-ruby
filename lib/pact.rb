@@ -5,8 +5,9 @@ require 'pact/ffi'
 
 require 'pact/railtie' if defined?(Rails::Railtie)
 
-# Load blank?/present? polyfill before Zeitwerk eager-loads the rest of the gem.
-# Skipped if active_support (or anything else) has already defined these methods.
+# Load core_ext polyfills (blank?/present?, deep_dup) before Zeitwerk eager-loads
+# the rest of the gem. Each polyfill is skipped if already defined by active_support
+# or any other library loaded by the host application.
 require 'pact/support/core_ext'
 
 module Pact

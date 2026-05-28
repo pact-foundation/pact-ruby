@@ -36,8 +36,8 @@ unless Object.method_defined?(:blank?)
   end
 
   class Object
-    def blank? = !self
-    def present? = !!self
+    def blank? = respond_to?(:empty?) ? !!empty? : !self
+    def present? = !blank?
   end
 end
 

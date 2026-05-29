@@ -12,7 +12,6 @@ RSpec.describe 'Verify consumers for Bar Provider', :pact do
   http_pact_provider 'Animal Service', opts: {
     pact_dir: File.expand_path('../../../../zoo-app/spec/pacts', __dir__),
     http_port: 9292,
-    provider_setup_port: 9100,
     app: AnimalService::Api
   }
 

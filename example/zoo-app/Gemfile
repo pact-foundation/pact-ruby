@@ -6,6 +6,8 @@ group :development, :test do
   gem 'pact-ffi', '~> 0.4.28' # added for pact-ruby FFI support
   gem 'pry'
   gem 'rspec'
+  # required for pact-ruby
+  gem 'combustion'
 end
 
 gem 'rake'

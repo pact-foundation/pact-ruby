@@ -5,6 +5,11 @@ require 'pact/ffi'
 
 require 'pact/railtie' if defined?(Rails::Railtie)
 
+# Load core_ext polyfills (blank?/present?, deep_dup) before Zeitwerk eager-loads
+# the rest of the gem. Each polyfill is skipped if already defined by active_support
+# or any other library loaded by the host application.
+require 'pact/support/core_ext'
+
 module Pact
   class Error < StandardError; end
 
@@ -41,6 +46,7 @@ loader.tag = 'pact'
 loader.ignore("#{__dir__}/pact/version.rb")
 loader.ignore("#{__dir__}/pact/rspec.rb")
 loader.ignore("#{__dir__}/pact/rspec")
+loader.ignore("#{__dir__}/pact/support/core_ext.rb")
 loader.ignore("#{__dir__}/pact/railtie.rb") unless defined?(Rails::Railtie)
 
 loader.setup

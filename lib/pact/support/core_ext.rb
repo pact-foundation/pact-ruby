@@ -21,22 +21,32 @@ unless Object.method_defined?(:blank?)
   end
 
   class String
-    def blank? = empty? || strip.empty?
+    BLANK_RE = /\A[[:space:]]*\z/
+
+    def blank?
+      empty? || BLANK_RE.match?(self)
+    end
+
+    def present? = !blank?
+  end
+
+  class Symbol
+    alias_method :blank?, :empty?
     def present? = !blank?
   end
 
   class Array
-    def blank? = empty?
+    alias_method :blank?, :empty?
     def present? = !empty?
   end
 
   class Hash
-    def blank? = empty?
+    alias_method :blank?, :empty?
     def present? = !empty?
   end
 
   class Object
-    def blank? = respond_to?(:empty?) ? !!empty? : !self
+    def blank? = respond_to?(:empty?) ? !!empty? : false
     def present? = !blank?
 
     def presence
@@ -62,7 +72,22 @@ unless Object.method_defined?(:deep_dup)
 
   class Hash
     def deep_dup
-      each_with_object({}) { |(k, v), h| h[k.deep_dup] = v.deep_dup }
+      hash = dup
+      each_pair do |key, value|
+        if ::String === key || ::Symbol === key
+          hash[key] = value.deep_dup
+        else
+          hash.delete(key)
+          hash[key.deep_dup] = value.deep_dup
+        end
+      end
+      hash
+    end
+  end
+
+  class Module
+    def deep_dup
+      name.nil? ? super : self
     end
   end
 end

@@ -17,36 +17,38 @@ module Pact
       end
 
       def initialize(contents_hash, format)
-        init_hash(contents_hash, format).each_pair { |k, v| self[k] = v }
+        serialized = init_hash(contents_hash, format)
+        # A scalar body (plain string, integer, etc.) serializes to a non-Hash
+        # value that cannot be merged pair by pair; expose it via #value instead.
+        if serialized.is_a?(Hash)
+          serialized.each_pair { |k, v| self[k] = v }
+        else
+          @value = serialized
+        end
         @format = format
+      end
+
+      def value
+        defined?(@value) ? @value : self
       end
 
       private
 
       def serialize(hash, format)
         # serialize recursively
-        return hash if hash.is_a?(String)
+        if hash.is_a?(Pact::Matchers::Base) || hash.is_a?(Pact::Generators::Base)
+          return hash.as_basic if format == :basic
+          return hash.as_plugin if format == :plugin
+        end
 
-        if hash.is_a?(Pact::Matchers::Base)
-          return hash.as_basic if format == :basic
-          return hash.as_plugin if format == :plugin
-        end
-        if hash.is_a?(Pact::Generators::Base)
-          return hash.as_basic if format == :basic
-          return hash.as_plugin if format == :plugin
-        end
+        return hash.map { |value| serialize(value, format) } if hash.is_a?(Array)
+
+        # A value that is not a collection or a matcher/generator has nothing to
+        # recurse into, so return it unchanged (string, integer, boolean, nil, ...).
+        return hash unless hash.is_a?(Hash)
+
         hash.each_pair do |key, value|
-          next serialize(value, format) if value.is_a?(Hash)
-          next hash[key] = value.map { |v| serialize(v, format) } if value.is_a?(Array)
-
-          if value.is_a?(Pact::Matchers::Base)
-            hash[key] = value.as_basic if format == :basic
-            hash[key] = value.as_plugin if format == :plugin
-          end
-          if value.is_a?(Pact::Generators::Base)
-            hash[key] = value.as_basic if format == :basic
-            hash[key] = value.as_plugin if format == :plugin
-          end
+          hash[key] = serialize(value, format)
         end
 
         hash

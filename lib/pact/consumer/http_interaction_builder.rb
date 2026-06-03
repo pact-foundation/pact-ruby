@@ -82,7 +82,7 @@ module Pact
         end
 
         if body
-          PactFfi.with_body(pact_interaction, interaction_part, "application/json", format_value(InteractionContents.basic(body)))
+          PactFfi.with_body(pact_interaction, interaction_part, "application/json", format_value(InteractionContents.basic(body).value))
         end
 
         self
@@ -97,7 +97,7 @@ module Pact
         end
 
         if body
-          PactFfi.with_body(pact_interaction, interaction_part, "application/json", format_value(InteractionContents.basic(body)))
+          PactFfi.with_body(pact_interaction, interaction_part, "application/json", format_value(InteractionContents.basic(body).value))
         end
 
         self

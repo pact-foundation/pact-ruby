@@ -1,7 +1,7 @@
 require 'rspec'
 require 'pact/matchers'
 require 'pact/provider/matchers/messages'
-require 'pact/rspec'
+require 'pact/support/rspec'
 require 'pact/shared/json_differ'
 
 module Pact
@@ -33,10 +33,10 @@ module Pact
           @actual = actual
           @difference = @differ.call(@expected, @actual)
           unless @difference.empty?
-            Pact::RSpec.with_rspec_3 do
+            Pact::Support::RSpec.with_rspec_3 do
               @example.metadata[:pact_diff] = @difference
             end
-            Pact::RSpec.with_rspec_2 do
+            Pact::Support::RSpec.with_rspec_2 do
               @example.example.metadata[:pact_diff] = @difference
             end
           end
@@ -44,7 +44,7 @@ module Pact
         end
 
         def failure_message
-          match_term_failure_message @difference, @actual, @diff_formatter, Pact::RSpec.color_enabled?
+          match_term_failure_message @difference, @actual, @diff_formatter, Pact::Support::RSpec.color_enabled?
         end
       end
 

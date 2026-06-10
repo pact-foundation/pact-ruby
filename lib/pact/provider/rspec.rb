@@ -102,7 +102,7 @@ module Pact
 
             before do | example |
               interaction_context.run_once :before do
-                Pact.configuration.logger.info "Running example '#{Pact::RSpec.full_description(example)}'"
+                Pact.configuration.logger.info "Running example '#{Pact::Support::RSpec.full_description(example)}'"
                 provider_states_result = set_up_provider_states interaction.provider_states, options[:consumer]
                 state_params = provider_states_result[interaction.provider_state];
                 replay_interaction interaction, options[:request_customizer], state_params

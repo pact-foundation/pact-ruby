@@ -9,7 +9,7 @@ module Pact
       class Formatter < ::RSpec::Core::Formatters::DocumentationFormatter
 
         class NilFormatter < ::RSpec::Core::Formatters::BaseFormatter
-          Pact::RSpec.with_rspec_3 do
+          Pact::Support::RSpec.with_rspec_3 do
             ::RSpec::Core::Formatters.register self, :start, :example_group_started, :close
           end
 
@@ -17,7 +17,7 @@ module Pact
           end
         end
 
-        Pact::RSpec.with_rspec_3 do
+        Pact::Support::RSpec.with_rspec_3 do
           ::RSpec::Core::Formatters.register self, :example_group_started, :example_group_finished,
                                     :example_passed, :example_pending, :example_failed
         end

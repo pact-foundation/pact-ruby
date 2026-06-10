@@ -4,7 +4,7 @@ require './spec/support/factories'
 require './spec/support/spec_support'
 require 'pact/tasks/task_helper'
 
-Pact::RSpec.with_rspec_3 do
+Pact::Support::RSpec.with_rspec_3 do
   module Pact
     module Provider
       module RSpec

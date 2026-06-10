@@ -64,11 +64,11 @@ module Pact
       end
 
       def set_metadata example, key, value
-        Pact::RSpec.with_rspec_3 do
+        Pact::Support::RSpec.with_rspec_3 do
           example.metadata[key] = value
         end
 
-        Pact::RSpec.with_rspec_2 do
+        Pact::Support::RSpec.with_rspec_2 do
           example.example.metadata[key] = value
         end
       end

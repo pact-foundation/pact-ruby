@@ -7,7 +7,7 @@ module Pact
   module Provider
     module RSpec
       class PactBrokerFormatter < ::RSpec::Core::Formatters::BaseFormatter
-        Pact::RSpec.with_rspec_3 do
+        Pact::Support::RSpec.with_rspec_3 do
           ::RSpec::Core::Formatters.register self, :stop, :close
         end
 

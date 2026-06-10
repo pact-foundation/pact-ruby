@@ -4,7 +4,7 @@ require 'rspec/core'
 require 'rspec/core/formatters/documentation_formatter'
 require 'pact/provider/pact_helper_locator'
 require 'pact/project_root'
-require 'pact/rspec'
+require 'pact/support/rspec'
 require 'pact/provider/pact_source'
 require 'pact/provider/help/write'
 require 'pact/provider/verification_results/publish_all'
@@ -88,7 +88,7 @@ module Pact
       end
 
       def run_specs
-        exit_code = if Pact::RSpec.runner_defined?
+        exit_code = if Pact::Support::RSpec.runner_defined?
           ::RSpec::Core::Runner.run(rspec_runner_options)
         else
           ::RSpec::Core::CommandLine.new(NoConfigurationOptions.new)
@@ -107,7 +107,7 @@ module Pact
       end
 
       def monkey_patch_backtrace_formatter
-        Pact::RSpec.with_rspec_3 do
+        Pact::Support::RSpec.with_rspec_3 do
           require 'pact/provider/rspec/backtrace_formatter'
         end
       end
@@ -138,7 +138,7 @@ module Pact
       end
 
       def configure_output
-        Pact::RSpec.with_rspec_3 do
+        Pact::Support::RSpec.with_rspec_3 do
           ::RSpec.configuration.add_formatter Pact::Provider::RSpec::PactBrokerFormatter, StringIO.new
         end
 
@@ -152,7 +152,7 @@ module Pact
           Pact.configuration.output_stream = Pact.configuration.error_stream if !options[:out]
         else
           # Sometimes the formatter set in the cli.rb get set with an output of StringIO.. don't know why
-          formatter_class = Pact::RSpec.formatter_class
+          formatter_class = Pact::Support::RSpec.formatter_class
           pact_formatter = ::RSpec.configuration.formatters.find {|f| f.class == formatter_class && f.output == ::RSpec.configuration.output_stream}
           ::RSpec.configuration.add_formatter(formatter_class, output) unless pact_formatter
         end

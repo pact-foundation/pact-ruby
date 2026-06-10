@@ -9,7 +9,7 @@ module Pact
     module RSpec
       describe Formatter2 do
 
-        Pact::RSpec.with_rspec_3 do
+        Pact::Support::RSpec.with_rspec_3 do
           # These methods don't exist in RSpec3
           class Formatter2
             def failure_color arg ; arg; end

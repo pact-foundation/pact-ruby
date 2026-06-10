@@ -81,7 +81,7 @@ Gem::Specification.new do |gem|
   gem.add_runtime_dependency 'thor', '>= 0.20', '< 2.0'
   gem.add_runtime_dependency "rainbow", '~> 3.1'
 
-  gem.add_runtime_dependency "pact-support" , "~> 1.21", ">=1.21.2"
+  gem.add_runtime_dependency "pact-support" , "~> 1.22"
   gem.add_runtime_dependency 'pact-mock_service', '~> 3.0', '>= 3.3.1'
   gem.add_development_dependency 'fakefs', '2.4'
   gem.add_development_dependency 'hashie', '~> 5.0'

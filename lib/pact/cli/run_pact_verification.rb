@@ -28,8 +28,8 @@ module Pact
         # we will get a ProgressFormatter too, and get little dots sprinkled throughout our output.
         # Load a NilFormatter here to prevent that.
         require 'rspec'
-        require 'pact/rspec'
-        ::RSpec.configuration.add_formatter Pact::RSpec.formatter_class.const_get('NilFormatter')
+        require 'pact/support/rspec'
+        ::RSpec.configuration.add_formatter Pact::Support::RSpec.formatter_class.const_get('NilFormatter')
       end
 
       def setup_load_path

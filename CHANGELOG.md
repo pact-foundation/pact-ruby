@@ -1,3 +1,17 @@
+<a name="v2.0.1"></a>
+### v2.0.1 (2026-05-29)
+
+#### Bug Fixes
+
+* **example**
+  * remove combustion dependency from examples	 ([281b284](/../../commit/281b284))
+
+* align core_ext polyfills more closely with active_support implementations	 ([f08b8ce](/../../commit/f08b8ce))
+* correct Object#blank? and Object#present? polyfill implementations	 ([53580b9](/../../commit/53580b9))
+* add deep_dup polyfill alongside blank?/present?	 ([b116e14](/../../commit/b116e14))
+* remove hard requirements on active_support and webmock	 ([e77cd34](/../../commit/e77cd34))
+* support scalar request and response bodies in InteractionContents	 ([5440ed1](/../../commit/5440ed1))
+
 <a name="v2.0.0"></a>
 ### v2.0.0 (2026-03-18)
 

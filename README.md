@@ -49,7 +49,7 @@ For each type of interaction (due to their specific features), a separate versio
 
 Place your consumer tests under
 
-`spec/pact/provider/**`
+`spec/pact/providers/**`
 
 **it's not an error: consumer tests contain `providers` subdirectory (because we're testing against different providers)**
 

@@ -548,7 +548,7 @@ bundle exec rake pact:spec
 ```shell
 bundle exec rspec -t pact spec/pact/consumers/*_spec.rb
 or 
-bundle exec rake pact:spec
+bundle exec rake pact:verify
 ```
 
 ## Examples

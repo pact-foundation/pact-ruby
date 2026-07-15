@@ -2,4 +2,5 @@
 
 Rails.application.routes.draw do
   resources :pets
+  post '/matt', to: 'matt#create'
 end

@@ -3,7 +3,8 @@
 require 'pact/rspec'
 
 RSpec.describe 'PactConsumers::Kafka', :pact, skip_windows: true do
-  message_pact_provider 'pact-test-app-kafka', opts: {
+  message_pact_provider 'pact-ruby-test-app-kafka', opts: {
+    provider_setup_port: 9009,
     pact_dir: File.expand_path('../../pacts', __dir__),
     message_handlers: {
       'pet message as json' => proc do |provider_state|

@@ -3,6 +3,7 @@
 require 'pact/ffi/verifier'
 require 'pact/native/logger'
 require 'pact/native/blocking_verifier'
+require 'json'
 
 module Pact
   module Provider
@@ -175,7 +176,7 @@ module Pact
         PactFfi::Verifier.set_provider_info(pact_handle, @pact_config.provider_name, '', '', 0, '')
       end
 
-      def add_provider_transport(pact_handle)
+      def add_provider_transport(_pact_handle)
         raise PactImplementationRequired, 'Implement #add_provider_transport in a subclass'
       end
 
@@ -200,6 +201,7 @@ module Pact
         if @pact_config.pact_broker_proxy_url.blank? && @pact_config.pact_uri.blank?
           path = @pact_config.pact_dir || (defined?(Rails) ? Rails.root.join('pacts').to_s : 'pacts')
           logger.info("[verifier] pact broker url or pact uri is not set, using directory #{path} as a verification source") # rubocop:disable Layout/LineLength
+          ensure_provider_has_matching_pacts!(path)
           return PactFfi::Verifier.add_directory_source(handle, path)
         end
 
@@ -253,6 +255,27 @@ module Pact
         return [DEFAULT_CONSUMER_SELECTORS.merge('consumer' => consumer_name)] if consumer_name.present?
 
         [DEFAULT_CONSUMER_SELECTORS]
+      end
+
+      def ensure_provider_has_matching_pacts!(path)
+        return unless @pact_config.fail_if_no_pacts_found
+
+        pact_paths = Dir.glob(File.join(path, '**', '*.json'))
+        raise VerifierError.new("No pact files found in #{path}") if pact_paths.empty?
+
+        return if pact_paths.any? { |p| pact_file_provider_name(p) == @pact_config.provider_name }
+
+        providers = pact_paths.map { |p| pact_file_provider_name(p) }.compact.uniq.sort
+        raise VerifierError.new(
+          "No pacts found for provider \"#{@pact_config.provider_name}\" in directory #{path}. " \
+          "Found providers: #{providers.join(', ')}"
+        )
+      end
+
+      def pact_file_provider_name(path)
+        JSON.parse(File.read(path)).dig('provider', 'name')
+      rescue StandardError
+        nil
       end
     end
   end

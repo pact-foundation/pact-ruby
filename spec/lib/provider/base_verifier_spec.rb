@@ -1,5 +1,8 @@
 # frozen_string_literal: true
 
+require 'tmpdir'
+require 'fileutils'
+
 describe Pact::Provider::BaseVerifier do
   subject { described_class.new(Pact::Provider::PactConfig::Base.new(provider_name: 'provider')) }
 
@@ -68,6 +71,65 @@ describe Pact::Provider::BaseVerifier do
       it 'builds proper selectors' do
         expect(build_selectors).to eq([{}])
       end
+    end
+  end
+
+  describe '#ensure_provider_has_matching_pacts!' do
+    let(:provider_name) { 'expected-provider' }
+    let(:opts) { { fail_if_no_pacts_found: fail_if_no_pacts_found } }
+    let(:fail_if_no_pacts_found) { true }
+    let(:config) { Pact::Provider::PactConfig::Base.new(provider_name: provider_name, opts: opts) }
+    subject(:verifier) { described_class.new(config) }
+
+    around do |example|
+      Dir.mktmpdir('pact-dir') do |dir|
+        @tmp_dir = dir
+        example.run
+      end
+    end
+
+    it 'raises when pact files exist but none match the configured provider' do
+      write_pact('consumer-one', 'other-provider')
+
+      expect do
+        verifier.send(:ensure_provider_has_matching_pacts!, @tmp_dir)
+      end.to raise_error(
+        Pact::Provider::BaseVerifier::VerifierError,
+        /No pacts found for provider "expected-provider"/
+      )
+    end
+
+    it 'does not raise when at least one pact matches the configured provider' do
+      write_pact('consumer-one', 'other-provider')
+      write_pact('consumer-two', provider_name)
+
+      expect do
+        verifier.send(:ensure_provider_has_matching_pacts!, @tmp_dir)
+      end.not_to raise_error
+    end
+
+    context 'when fail_if_no_pacts_found is false' do
+      let(:fail_if_no_pacts_found) { false }
+
+      it 'does not raise even when providers do not match' do
+        write_pact('consumer-one', 'other-provider')
+
+        expect do
+          verifier.send(:ensure_provider_has_matching_pacts!, @tmp_dir)
+        end.not_to raise_error
+      end
+    end
+
+    def write_pact(consumer, provider)
+      file_name = "#{consumer}-#{provider}.json"
+      pact = {
+        'consumer' => { 'name' => consumer },
+        'provider' => { 'name' => provider },
+        'interactions' => [],
+        'metadata' => { 'pactSpecification' => { 'version' => '4.0' } }
+      }
+
+      File.write(File.join(@tmp_dir, file_name), JSON.dump(pact))
     end
   end
 end

@@ -3,7 +3,7 @@ source 'https://rubygems.org'
 group :development, :test do
   gem 'pact', path: '../../'
   gem 'pact_broker-client'
-  gem 'pact-ffi', '~> 0.4.28' # added for pact-ruby FFI support
+  gem 'pact-ffi', '~> 0.5.4' # added for pact-ruby FFI support
   gem 'pry'
   gem 'rspec'
   # required for pact-ruby

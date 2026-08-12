@@ -215,15 +215,15 @@ module Pact
             PactFfi::Verifier.add_file_source(handle, @pact_config.pact_uri)
           end
         else
-          logger.info("[verifier] using pact broker url #{@pact_config.broker_url} with consumer selectors: #{JSON.dump(consumer_selectors)} as a verification source") # rubocop:disable Layout/LineLength
-          consumer_selectors = [] if consumer_selectors.nil?
-          filters = consumer_selectors.map do |selector|
+          selectors = consumer_selectors || []
+          logger.info("[verifier] using pact broker url #{@pact_config.broker_url} with consumer selectors: #{JSON.dump(selectors)} as a verification source") # rubocop:disable Layout/LineLength
+          filters = selectors.map do |selector|
             FFI::MemoryPointer.from_string(JSON.dump(selector).to_s)
           end
           filters_ptr = FFI::MemoryPointer.new(:pointer, filters.size + 1)
           filters_ptr.write_array_of_pointer(filters)
           PactFfi::Verifier.broker_source_with_selectors(handle, @pact_config.pact_broker_proxy_url,
-                                                         @pact_config.broker_username, @pact_config.broker_password, @pact_config.broker_token, bool_to_int(@pact_config.enable_pending), @pact_config.include_wip_pacts_since, c_provider_version_tags, c_provider_version_tags_size, @pact_config.provider_version_branch, filters_ptr, consumer_selectors.size, c_consumer_version_tags, c_consumer_version_tags_size) # rubocop:disable Layout/LineLength
+                                                         @pact_config.broker_username, @pact_config.broker_password, @pact_config.broker_token, bool_to_int(@pact_config.enable_pending), @pact_config.include_wip_pacts_since, c_provider_version_tags, c_provider_version_tags_size, @pact_config.provider_version_branch, filters_ptr, selectors.size, c_consumer_version_tags, c_consumer_version_tags_size) # rubocop:disable Layout/LineLength
         end
       end
 

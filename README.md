@@ -32,14 +32,14 @@ It introduces a suite of new depedencies, including a reliance on the `pact-ffi`
 
 | Version   | Platform             |
 |-----------|----------------------|
-| 0.4.28.0  | x86_64-darwin        |
-| 0.4.28.0  | arm64-darwin         |
-| 0.4.28.0  | x86_64-linux         |
-| 0.4.28.0  | aarch64-linux        |
-| 0.4.28.0  | x86_64-linux-musl    |
-| 0.4.28.0  | aarch64-linux-musl   |
-| 0.4.28.0  | x64-mingw32          |
-| 0.4.28.0  | x64-mingw-ucrt       |
+| 0.5.4.0  | x86_64-darwin        |
+| 0.5.4.0  | arm64-darwin         |
+| 0.5.4.0  | x86_64-linux         |
+| 0.5.4.0  | aarch64-linux        |
+| 0.5.4.0  | x86_64-linux-musl    |
+| 0.5.4.0  | aarch64-linux-musl   |
+| 0.5.4.0  | x64-mingw32          |
+| 0.5.4.0  | x64-mingw-ucrt       |
 
 If you require a pure ruby gem, you are advised to pin to v1.
 
@@ -555,7 +555,7 @@ bundle exec rake pact:verify
 
 ### Migration
 
-1. add `gem "pact-ffi", "~> 0.4.28"` to Gemfile, or Gemspec
+1. add `gem "pact-ffi", "~> 0.5.4"` to Gemfile, or Gemspec
 2. pact ruby v2 uses activesupport classes, so you may need to add
     1. `gem 'combustion'` to load active support during tests
     1. add a pact helper to load it

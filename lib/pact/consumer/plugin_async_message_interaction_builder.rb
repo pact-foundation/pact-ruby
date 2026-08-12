@@ -148,12 +148,10 @@ module Pact
       end
 
       def init_pact
+        PactFfi.init_with_log_level(Native::Logger::LOG_LEVELS[@pact_config.log_level])
         handle = PactFfi.new_pact(@pact_config.consumer_name, @pact_config.provider_name)
         PactFfi.with_specification(handle, PactFfi::FfiSpecificationVersion["SPECIFICATION_VERSION_V4"])
         PactFfi.with_pact_metadata(handle, "pact-ruby", "pact-ffi", PactFfi.version)
-
-        Pact::Native::Logger.log_to_stdout(@pact_config.log_level)
-
         handle
       end
 

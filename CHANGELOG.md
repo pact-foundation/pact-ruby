@@ -1,3 +1,12 @@
+<a name="v2.0.2"></a>
+### v2.0.2 (2026-08-12)
+
+#### Bug Fixes
+
+* ensure pactffi_init_with_log_level is called when instantiating pact	 ([efa5deb](/../../commit/efa5deb))
+* consumer_version_selectors are silently discarded	 ([a0a9cf4](/../../commit/a0a9cf4))
+* fail early if no pacts found for verification	 ([3546fdc](/../../commit/3546fdc))
+
 <a name="v2.0.1"></a>
 ### v2.0.1 (2026-05-29)
 

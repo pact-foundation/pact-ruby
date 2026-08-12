@@ -86,6 +86,9 @@ RSpec.describe "SomePactConsumerTestForAnyTransport", :pact do
           .will_respond_with(...)
           # further, there are differences for different types of transports,
           # for more information, see the relevant sections of the documentation
+          .reference(group: "GROUP NAME", name: "REFERENCE NAME", value: "REFERENCE VALUE")
+          # Allows recording of an interaction reference to support additional features
+          # such as Bi-Directional contract testing with asyncapi
       end
 
       it "executes the pact test without errors" do | mock_server |
@@ -107,6 +110,7 @@ Common DSL Methods:
 - `new_interaction` - initializes a new interaction
 - `given` - allows specifying a provider state with or without parameters, for more details see [provider_states](https://docs.pact.io/getting_started/provider_states)
 - `upon_receiving` - allows specifying the name of the interaction
+- `reference` - Allows recording of an interaction reference to support additional features such as Bi-Directional contract testing with asyncapi
 
 Multiple interactions can be declared within a single rspec example, in order to call the mock server
 

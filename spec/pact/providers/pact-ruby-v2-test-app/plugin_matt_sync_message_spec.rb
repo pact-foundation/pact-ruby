@@ -3,7 +3,7 @@
 require 'pact/rspec'
 
 RSpec.describe 'Test matt plugin sync message loading', :pact do
-  has_plugin_sync_message_pact_between 'myconsumer', 'myprovider'
+  has_plugin_sync_message_pact_between 'pact-ruby-test-app-plugin-sync-consumer', 'pact-ruby-test-app-plugin-sync-provider'
 
   let(:matt_message) do
     {

@@ -5,7 +5,7 @@ require 'net/http'
 require 'json'
 require 'faraday'
 RSpec.describe 'HTTP transport', :pact do
-  has_plugin_http_pact_between 'myconsumer', 'myprovider'
+  has_plugin_http_pact_between 'pact-ruby-test-app-plugin-http-consumer', 'pact-ruby-test-app-plugin-http-provider'
 
   let(:matt_request) { { 'request' => { 'body' => 'hello' } } }
   let(:matt_response) { { 'response' => { 'body' => 'world' } } }

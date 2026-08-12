@@ -5,7 +5,7 @@ require 'pact/rspec'
 require_relative '../../internal/app/producers/test_message_producer'
 
 RSpec.describe 'Test Message Provider', :pact do
-  message_pact_provider 'Test Message Provider', opts: {
+  message_pact_provider 'pact-ruby-test-app-async-message-provider', opts: {
     provider_setup_port: 9009,
     pact_dir: File.expand_path('../../pacts', __dir__)
   }

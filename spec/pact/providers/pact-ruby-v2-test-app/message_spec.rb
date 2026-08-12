@@ -3,7 +3,7 @@ require 'pact/rspec'
 require_relative '../../../internal/app/consumers/test_message_consumer'
 
 describe TestMessageConsumer, :pact do
-  has_message_pact_between 'Test Message Consumer', 'Test Message Provider'
+  has_message_pact_between 'pact-ruby-test-app-async-message-consumer', 'pact-ruby-test-app-async-message-provider'
 
   subject(:consumer) { TestMessageConsumer.new }
 

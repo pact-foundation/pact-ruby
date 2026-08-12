@@ -38,6 +38,7 @@ module Pact
         @description = description || ""
         @contents = nil
         @provider_state_meta = nil
+        @references = []
       end
 
       def with_plugin(plugin_name, plugin_version)
@@ -95,6 +96,14 @@ module Pact
         self
       end
 
+      def reference(group, name, value)
+        raise InteractionBuilderError.new("group is required") if group.blank?
+        raise InteractionBuilderError.new("name is required") if name.blank?
+        raise InteractionBuilderError.new("value is required") if value.blank?
+        @references << [group, name, value]
+        self
+      end
+
       def interaction_json
         result = {
           request: @request,
@@ -118,6 +127,11 @@ module Pact
         init_plugin!(pact_handle)
 
         interaction = PactFfi.new_interaction(pact_handle, @description)
+
+        @references.each do |group, name, value|
+          PactFfi.add_interaction_reference(pact_handle, group, name, value)
+        end
+
         @provider_state_meta&.each_pair do |provider_state, meta|
           if meta.present?
               meta.each_pair do |k, v|

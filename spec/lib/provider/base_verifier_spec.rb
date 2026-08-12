@@ -74,6 +74,35 @@ describe Pact::Provider::BaseVerifier do
     end
   end
 
+  describe '#configure_verification_source' do
+    let(:consumer_version_selectors) do
+      [
+        { 'branch' => 'main' },
+        { 'deployedOrReleased' => true }
+      ]
+    end
+    let(:config) do
+      Pact::Provider::PactConfig::Base.new(
+        provider_name: 'provider',
+        opts: {
+          broker_url: 'http://broker.example',
+          consumer_version_selectors: consumer_version_selectors
+        }
+      )
+    end
+    let(:handle) { Object.new }
+
+    subject(:verifier) { described_class.new(config) }
+
+    it 'passes configured consumer version selectors to the broker source' do
+      expect(PactFfi::Verifier).to receive(:broker_source_with_selectors) do |*_args|
+        expect(_args[11]).to eq(consumer_version_selectors.size)
+      end
+
+      verifier.send(:configure_verification_source, handle, nil, 0, nil, 0)
+    end
+  end
+
   describe '#ensure_provider_has_matching_pacts!' do
     let(:provider_name) { 'expected-provider' }
     let(:opts) { { fail_if_no_pacts_found: fail_if_no_pacts_found } }

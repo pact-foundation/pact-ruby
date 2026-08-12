@@ -3,7 +3,7 @@
 require 'pact/rspec'
 
 RSpec.describe 'PactProviders::Test::GrpcClient', :pact do
-  has_grpc_pact_between 'pact-ruby-test-app', 'pact-ruby-test-app'
+  has_grpc_pact_between 'pact-ruby-test-app-plugin-grpc-consumer', 'pact-ruby-test-app-provider'
 
   let(:pet_id) { 123 }
 

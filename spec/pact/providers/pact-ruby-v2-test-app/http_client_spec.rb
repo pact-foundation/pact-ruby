@@ -3,7 +3,7 @@
 require 'pact/rspec'
 
 RSpec.describe 'PactProviders::Test::HttpClient', :pact do
-  has_http_pact_between 'pact-ruby-test-app', 'pact-ruby-test-app', opts: {
+  has_http_pact_between 'pact-ruby-test-app-http-consumer', 'pact-ruby-test-app-provider', opts: {
     mock_port: 3000
   }
 

@@ -3,7 +3,7 @@
 require 'pact/rspec'
 
 RSpec.describe 'Test grpc sync message plugin loading', :pact do
-  has_plugin_sync_message_pact_between 'pact-ruby-test-app', 'pact-ruby-test-app', opts: { mock_port: 3009 }
+  has_plugin_sync_message_pact_between 'pact-ruby-test-app-plugin-grpc-consumer', 'pact-ruby-test-app-plugin-grpc-provider', opts: { mock_port: 3009 }
 
   let(:pet_id) { 123 }
 

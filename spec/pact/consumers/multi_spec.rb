@@ -3,7 +3,7 @@
 require 'pact/rspec'
 
 RSpec.describe 'PactConsumers::Http', :pact do
-  mixed_pact_provider 'pact-ruby-test-app', opts: {
+  mixed_pact_provider 'pact-ruby-test-app-provider', opts: {
     provider_setup_port: 9009,
     http: {
       http_port: 3000,

@@ -3,7 +3,7 @@
 require 'pact/rspec'
 
 RSpec.describe 'PactConsumers::MattPluginAsync', :pact do
-  message_pact_provider 'matttcpprovider', opts: {
+  message_pact_provider 'pact-ruby-test-app-plugin-async-provider', opts: {
     provider_setup_port: 9009,
     pact_dir: File.expand_path('../../pacts', __dir__)
   }

@@ -3,7 +3,7 @@
 require 'pact/rspec'
 
 RSpec.describe 'PactConsumers::MattPlugin', :pact do
-  mixed_pact_provider 'myprovider', opts: {
+  mixed_pact_provider 'pact-ruby-test-app-plugin-sync-provider', opts: {
     provider_setup_port: 9009,
     http: {
       http_port: 3000,

@@ -3,7 +3,7 @@
 require 'pact/rspec'
 
 RSpec.describe 'PactProviders::Test::Kafka', :pact, skip_windows: true do
-  has_message_pact_between 'pact-ruby-test-app', 'pact-ruby-test-app-kafka'
+  has_message_pact_between 'pact-ruby-test-app-kakfa-consumer', 'pact-ruby-test-app-kafka-provider'
 
   let(:karafka_message) { Struct.new(:payload, keyword_init: true) }
 

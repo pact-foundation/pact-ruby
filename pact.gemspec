@@ -36,7 +36,7 @@ Gem::Specification.new do |gem|
   # Core dependencies (code loading)
   gem.add_dependency 'zeitwerk', '~> 2.3'
   # For Pact support via Pact Rust Core
-  gem.add_dependency 'pact-ffi', '~> 0.4.28'
+  gem.add_dependency 'pact-ffi', '~> 0.5.4'
   # For Provider Side Verification
   gem.add_dependency 'rack'
   gem.add_dependency 'rack-proxy'

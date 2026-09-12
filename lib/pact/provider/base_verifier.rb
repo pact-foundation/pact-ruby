@@ -206,7 +206,7 @@ module Pact
         end
 
         if @pact_config.pact_uri.present?
-          if @pact_config.pact_uri.start_with?('http')
+          if @pact_config.pact_uri.start_with?('http', 'https')
             logger.info("[verifier] using pact uri #{@pact_config.pact_uri} as a verification source")
             PactFfi::Verifier.url_source(handle, @pact_config.pact_uri, @pact_config.broker_username,
                                          @pact_config.broker_password, @pact_config.broker_token)

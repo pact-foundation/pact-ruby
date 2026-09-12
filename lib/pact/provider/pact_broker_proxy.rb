@@ -2,6 +2,14 @@
 
 require 'rack-proxy'
 
+if Rack::Proxy.const_defined?(:RequestBodyStream, false)
+  Rack::Proxy.const_get(:RequestBodyStream).prepend(Module.new do
+    def read(length = nil, buffer = nil)
+      super(length || instance_variable_get(:@remaining), buffer)
+    end
+  end)
+end
+
 module Pact
   module Provider
     class PactBrokerProxy < Rack::Proxy
@@ -33,7 +41,7 @@ module Pact
       def rewrite_response(triplet)
         status, headers, body = triplet
 
-        if status == '200' && PACT_FILE_REQUEST_PATH_REGEX.match?(path)
+        if status.to_i == 200 && PACT_FILE_REQUEST_PATH_REGEX.match?(path)
           patched_body = patch_response(body.first)
 
           # we need to recalculate content length
@@ -50,12 +58,13 @@ module Pact
       def patch_response(raw_body)
         parsed_body = JSON.parse(raw_body)
 
-        return body if parsed_body['consumer'].blank? || parsed_body['provider'].blank?
-        return body if parsed_body['interactions'].blank?
+        return raw_body if parsed_body['consumer'].blank? || parsed_body['provider'].blank?
+        return raw_body if parsed_body['interactions'].blank?
 
         JSON.generate(parsed_body)
       rescue JSON::ParserError => e
         logger.error("cannot parse broker response: #{e.message}")
+        raw_body
       end
     end
   end

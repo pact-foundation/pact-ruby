@@ -1,5 +1,21 @@
 # frozen_string_literal: true
 
+# https://github.com/pact-foundation/pact-ruby/issues/417
+# workaround for bodyless put/patch/post.
+# fix should be in pact-reference core
+require "webrick"
+
+PACT_WEBRICK_EMPTY_BODY_PATCH = Module.new do
+  def read_body(socket, block)
+    if self["content-length"].nil? && self["transfer-encoding"].nil? &&
+       WEBrick::HTTPRequest::BODY_CONTAINABLE_METHODS.include?(@request_method)
+      return @body
+    end
+    super
+  end
+end
+WEBrick::HTTPRequest.prepend(PACT_WEBRICK_EMPTY_BODY_PATCH)
+
 module Pact
   module Provider
     # inspired by Gruf::Cli::Executor

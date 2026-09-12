@@ -1,3 +1,12 @@
+<a name="v2.0.3"></a>
+### v2.0.3 (2026-09-12)
+
+#### Bug Fixes
+
+* #417 patch webrick for bodyless put/patch/post	 ([6c7c3d7](/../../commit/6c7c3d7))
+* support rack-proxy 1+2	 ([1b80200](/../../commit/1b80200))
+* support https pact_uri	 ([88d884a](/../../commit/88d884a))
+
 <a name="v2.0.2"></a>
 ### v2.0.2 (2026-08-12)
 

@@ -1,3 +1,10 @@
+<a name="v2.1.0"></a>
+### v2.1.0 (2026-09-14)
+
+#### Features
+
+* add interaction reference (#416)	 ([7953bca](/../../commit/7953bca))
+
 <a name="v2.0.3"></a>
 ### v2.0.3 (2026-09-12)
 

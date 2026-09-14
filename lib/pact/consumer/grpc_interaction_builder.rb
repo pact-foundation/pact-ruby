@@ -48,6 +48,7 @@ module Pact
         @response = nil
         @response_meta = nil
         @provider_state_meta = nil
+        @references = []
       end
 
       def with_service(proto_path, method, include_dirs = [])
@@ -86,6 +87,14 @@ module Pact
 
       def with_request(req_hash)
         @request = InteractionContents.plugin(req_hash)
+        self
+      end
+
+      def reference(group, name, value)
+        raise InteractionBuilderError.new("group is required") if group.blank?
+        raise InteractionBuilderError.new("name is required") if name.blank?
+        raise InteractionBuilderError.new("value is required") if value.blank?
+        @references << [group, name, value]
         self
       end
 
@@ -136,6 +145,10 @@ module Pact
           else
             PactFfi.given(message_pact, provider_state)
           end
+        end
+
+        @references.each do |group, name, value|
+          PactFfi.add_interaction_reference(pact_handle, group, name, value)
         end
 
         result = PactFfi::PluginConsumer.interaction_contents(message_pact, 0, GRPC_CONTENT_TYPE, interaction_json)

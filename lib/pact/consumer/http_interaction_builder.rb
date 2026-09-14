@@ -34,6 +34,7 @@ module Pact
       def initialize(pact_config, description: nil)
         @pact_config = pact_config
         @description = description || ""
+        @references = []
 
         @pact_handle = pact_config.pact_handle ||= init_pact
         @pact_interaction = PactFfi.new_interaction(pact_handle, @description)
@@ -88,6 +89,14 @@ module Pact
         self
       end
 
+      def reference(group, name, value)
+        raise InteractionBuilderError.new("group is required") if group.blank?
+        raise InteractionBuilderError.new("name is required") if name.blank?
+        raise InteractionBuilderError.new("value is required") if value.blank?
+        @references << [group, name, value]
+        self
+      end
+
       def will_respond_with(status: nil, headers: {}, body: nil)
         interaction_part = PactFfi::FfiInteractionPart["INTERACTION_PART_RESPONSE"]
         PactFfi.response_status(pact_interaction, status)
@@ -105,6 +114,10 @@ module Pact
 
       def execute(&block)
         raise InteractionBuilderError.new("interaction is designed to be used one-time only") if defined?(@used)
+
+        @references.each do |group, name, value|
+          PactFfi.add_interaction_reference(pact_handle, group, name, value)
+        end
 
         mock_server = MockServer.create_for_http!(
           pact: pact_handle, host: pact_config.mock_host, port: pact_config.mock_port

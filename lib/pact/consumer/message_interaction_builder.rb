@@ -58,6 +58,7 @@ module Pact
         @meta = {}
         @headers = {}
         @provider_state_meta = nil
+        @references = []
       end
 
       def given(provider_state, metadata = {})
@@ -72,6 +73,14 @@ module Pact
 
       def with_json_contents(contents_hash)
         @json_contents = InteractionContents.basic(contents_hash)
+        self
+      end
+
+      def reference(group, name, value)
+        raise InteractionBuilderError.new("group is required") if group.blank?
+        raise InteractionBuilderError.new("name is required") if name.blank?
+        raise InteractionBuilderError.new("value is required") if value.blank?
+        @references << [group, name, value]
         self
       end
 
@@ -130,6 +139,10 @@ module Pact
         init_plugin!(pact_handle) if proto_interaction?
 
         message_pact = PactFfi::MessageConsumer.new_message_interaction(pact_handle, @description)
+
+        @references.each do |group, name, value|
+          PactFfi.add_interaction_reference(pact_handle, group, name, value)
+        end
 
         configure_interaction!(message_pact)
 

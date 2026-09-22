@@ -1,0 +1,10 @@
+{
+  "$schema": "https://docs.renovatebot.com/renovate-schema.json",
+  "extends": [
+    "config:best-practices"
+  ],
+  "prHourlyLimit": 0,
+  "prConcurrentLimit": 0,
+  "rebaseWhen": "conflicted",
+  "automerge": true
+}

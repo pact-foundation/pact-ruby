@@ -3,7 +3,99 @@
 RSpec.describe Pact::Matchers do
   subject(:test_class) { Class.new { extend Pact::Matchers } }
 
+  describe '#match_or' do
+    subject(:matcher) do
+      test_class.match_or(
+        boolean_matcher,
+        null_matcher,
+        sample: true
+      )
+    end
+
+    let(:boolean_matcher) { test_class.match_any_boolean(true) }
+    let(:null_matcher) { test_class.match_null }
+
+    it 'creates an OR combination of the provided matchers' do
+      expect(matcher).to have_attributes(
+        combine: :or,
+        template: true,
+        matchers: [boolean_matcher, null_matcher]
+      )
+    end
+
+    it 'requires at least two matchers' do
+      expect do
+        test_class.match_or(test_class.match_any_boolean(true), sample: true)
+      end.to raise_error(
+        ArgumentError,
+        'At least two matchers are required'
+      )
+    end
+
+    it 'only accepts Pact matchers' do
+      expect do
+        test_class.match_or(
+          test_class.match_any_boolean(true),
+          :invalid,
+          sample: true
+        )
+      end.to raise_error(
+        ArgumentError,
+        'All values must be Pact matchers'
+      )
+    end
+  end
+
+  describe '#match_and' do
+    subject(:matcher) do
+      test_class.match_and(
+        boolean_matcher,
+        null_matcher,
+        sample: true
+      )
+    end
+
+    let(:boolean_matcher) { test_class.match_any_boolean(true) }
+    let(:null_matcher) { test_class.match_null }
+
+    it 'creates an OR combination of the provided matchers' do
+      expect(matcher).to have_attributes(
+        combine: :and,
+        template: true,
+        matchers: [boolean_matcher, null_matcher]
+      )
+    end
+
+    it 'requires at least two matchers' do
+      expect do
+        test_class.match_and(test_class.match_any_boolean(true), sample: true)
+      end.to raise_error(
+        ArgumentError,
+        'At least two matchers are required'
+      )
+    end
+
+    it 'only accepts Pact matchers' do
+      expect do
+        test_class.match_and(
+          test_class.match_any_boolean(true),
+          :invalid,
+          sample: true
+        )
+      end.to raise_error(
+        ArgumentError,
+        'All values must be Pact matchers'
+      )
+    end
+  end
+
   context 'with basic format serialization' do
+    it 'properly builds matcher for null' do
+      expect(test_class.match_null.as_basic).to eq({
+                                                     'pact:matcher:type' => 'null'
+                                                   })
+    end
+
     it 'properly builds matcher for UUID' do
       expect(test_class.match_uuid.as_basic).to eq({
                                                      'pact:matcher:type' => 'regex',

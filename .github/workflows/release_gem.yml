@@ -10,14 +10,14 @@ jobs:
   test:
     runs-on: ubuntu-latest
     steps:
-    - uses: actions/checkout@v7
+    - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7
     - uses: ruby/setup-ruby@v1
       with:
         ruby-version: '4.0.7'
     - run: |
         gem install bundler -v 2.4
         bundle install
-    - uses: pact-foundation/pact-cli@main
+    - uses: pact-foundation/pact-cli@93fa20ef0404c7d8962795897547a721f1f8eec6 # main
     - run: pact plugin install --yes https://github.com/mefellows/pact-matt-plugin/releases/tag/v0.1.1
     - name: Test
       run: bundle exec rake
@@ -30,11 +30,11 @@ jobs:
       version: ${{ steps.release-gem.outputs.version }}
       increment: ${{ steps.release-gem.outputs.increment }}
     steps:
-    - uses: actions/checkout@v7
+    - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7
       with:
         fetch-depth: 0
     - id: release-gem
-      uses: pact-foundation/release-gem@v1
+      uses: pact-foundation/release-gem@b1b4ab9ad10605e41a34f13f1c2baae78d73bfa7 # v1
       env:
         GEM_HOST_API_KEY: '${{ secrets.RUBYGEMS_API_KEY }}'
         GITHUB_TOKEN: '${{ secrets.GITHUB_TOKEN }}'
@@ -48,7 +48,7 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - name: Notify ${{ matrix.repository }} of gem release
-        uses: peter-evans/repository-dispatch@v4
+        uses: peter-evans/repository-dispatch@28959ce8df70de7be546dd1250a005dd32156697 # v4
         with:
           token: ${{ secrets.GHTOKENFORPACTCLIRELEASE }}
           repository: ${{ matrix.repository }}

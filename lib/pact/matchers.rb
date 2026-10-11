@@ -25,48 +25,104 @@ module Pact
       V3::Include.new(arg)
     end
 
+    def match_null
+      V3::Null.new
+    end
+
+    def match_or(*matchers, sample:)
+      Combined.new(matchers, combine: :or, template: sample)
+    end
+    
+    def match_and(*matchers, sample:)
+      Combined.new(matchers, combine: :and, template: sample)
+    end
+
     def match_any_string(sample = "any")
       V2::Regex.new(ANY_STRING_REGEX, sample)
+    end
+
+    def match_any_string_or_nil(sample = 'any')
+      match_or(match_any_string(sample), match_null, sample: sample)
     end
 
     def match_any_integer(sample = 10)
       V3::Integer.new(sample)
     end
 
+    def match_any_integer_or_nil(sample = 10)
+      match_or(match_any_integer(sample), match_null, sample: sample)
+    end
+
     def match_any_decimal(sample = 10.0)
       V3::Decimal.new(sample)
+    end
+
+    def match_any_decimal_or_nil(sample = 10.0)
+      match_or(match_any_decimal(sample), match_null, sample: sample)
     end
 
     def match_any_number(sample = 10.0)
       V3::Number.new(sample)
     end
 
+    def match_any_number_or_nil(sample = 10.0)
+      match_or(match_any_number(sample), match_null, sample: sample)
+    end
+
     def match_any_boolean(sample = true)
       V3::Boolean.new(sample)
+    end
+
+    def match_any_boolean_or_nil(sample = true)
+      match_or(match_any_boolean(sample), match_null, sample: sample)
     end
 
     def match_uuid(sample = "e1d01e04-3a2b-4eed-a4fb-54f5cd257338")
       V2::Regex.new(UUID_REGEX, sample)
     end
 
+    def match_any_uuid_or_nil(sample = "e1d01e04-3a2b-4eed-a4fb-54f5cd257338")
+      match_or(match_uuid(sample), match_null, sample: sample)
+    end
+
     def match_regex(regex, sample)
       V2::Regex.new(regex, sample)
+    end
+
+    def match_regex_or_nil(regex, sample)
+      match_or(match_regex(regex, sample), match_null, sample: sample)
     end
 
     def match_datetime(format, sample)
       V3::DateTime.new(format, sample)
     end
 
+    def match_datetime_or_nil(format, sample)
+      match_or(match_datetime(format, sample), match_null, sample: sample)
+    end
+
     def match_iso8601(sample = "2024-08-12T12:25:00.243118+03:00")
       V2::Regex.new(ISO8601_REGEX, sample)
+    end
+
+    def match_iso8601_or_nil(sample = "2024-08-12T12:25:00.243118+03:00")
+      match_or(match_iso8601(sample), match_null, sample: sample)
     end
 
     def match_date(format, sample)
       V3::Date.new(format, sample)
     end
 
+    def match_date_or_nil(format, sample)
+      match_or(match_date(format, sample), match_null, sample: sample)
+    end
+
     def match_time(format, sample)
       V3::Time.new(format, sample)
+    end
+
+    def match_time_or_nil(format, sample)
+      match_or(match_time(format, sample), match_null, sample: sample)
     end
 
     def match_each(template, min = nil)

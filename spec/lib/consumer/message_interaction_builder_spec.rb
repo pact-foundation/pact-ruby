@@ -61,5 +61,22 @@ RSpec.describe Pact::Consumer::MessageInteractionBuilder do
         subject.reference('group', 'name', '')
       end.to raise_error(described_class::InteractionBuilderError, /value is required/)
     end
+
+    it 'writes the reference to the interaction in the pact file' do
+      Dir.mktmpdir do |dir|
+        config = Pact::Consumer::PactConfig::Message.new(
+          consumer_name: 'reference-consumer', provider_name: 'reference-provider', opts: {pact_dir: dir}
+        )
+        config.new_interaction('a referenced message')
+          .with_json_contents(id: 1)
+          .reference('AsyncAPI', 'operationId', 'publishThing')
+          .execute { |_payload, _meta| }
+
+        pact = JSON.parse(File.read(File.join(dir, 'reference-consumer-reference-provider.json')))
+        expect(pact['interactions'].first.dig('comments', 'references')).to eq(
+          'AsyncAPI' => {'operationId' => 'publishThing'}
+        )
+      end
+    end
   end
 end

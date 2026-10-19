@@ -128,7 +128,9 @@ module Pact
         message_pact = PactFfi::SyncMessageConsumer.new_interaction(pact_handle, @description)
 
         @references.each do |group, name, value|
-          PactFfi.add_interaction_reference(pact_handle, group, name, value)
+          next if PactFfi.add_interaction_reference(message_pact, group, name, value)
+
+          raise InteractionBuilderError.new("could not add reference #{group}/#{name}")
         end
 
         @provider_state_meta&.each_pair do |provider_state, meta|

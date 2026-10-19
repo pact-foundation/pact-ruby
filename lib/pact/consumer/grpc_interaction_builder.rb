@@ -148,7 +148,9 @@ module Pact
         end
 
         @references.each do |group, name, value|
-          PactFfi.add_interaction_reference(pact_handle, group, name, value)
+          next if PactFfi.add_interaction_reference(message_pact, group, name, value)
+
+          raise InteractionBuilderError.new("could not add reference #{group}/#{name}")
         end
 
         result = PactFfi::PluginConsumer.interaction_contents(message_pact, 0, GRPC_CONTENT_TYPE, interaction_json)

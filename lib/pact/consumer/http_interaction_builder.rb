@@ -116,7 +116,9 @@ module Pact
         raise InteractionBuilderError.new("interaction is designed to be used one-time only") if defined?(@used)
 
         @references.each do |group, name, value|
-          PactFfi.add_interaction_reference(pact_handle, group, name, value)
+          next if PactFfi.add_interaction_reference(pact_interaction, group, name, value)
+
+          raise InteractionBuilderError.new("could not add reference #{group}/#{name}")
         end
 
         mock_server = MockServer.create_for_http!(

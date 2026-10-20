@@ -48,12 +48,8 @@ Gem::Specification.new do |gem|
   # For Kafka support
   unless RUBY_PLATFORM =~ /win32|x64-mingw32|x64-mingw-ucrt/
     # windows does not support librdkafka
-    gem.add_development_dependency 'sbmt-kafka_consumer', '>= 2.0.1'
-    gem.add_development_dependency 'sbmt-kafka_producer', '>= 1.0'
-  end
-  if ENV['X_PACT_DEVELOPMENT_RDKAFKA'] == 'true'
-    # darwin-arm64 prebuilt gems available from 0.20.0
-    gem.add_development_dependency 'karafka-rdkafka', '>= 0.20.0'
+    gem.add_development_dependency 'sbmt-kafka_consumer', '>= 3.0.0'
+    gem.add_development_dependency 'sbmt-kafka_producer', '>= 3.0.0'
   end
   # For gRPC support
   gem.add_development_dependency 'gruf', '>= 2.18'

@@ -7,7 +7,7 @@ appraise "rack-2" do
 end
 
 appraise "activesupport" do
-  gem "activesupport", "~> 5.1"
+  gem "activesupport", "~> 6.1"
   if RUBY_VERSION >= "3.4"
     gem "csv"
     gem "mutex_m"

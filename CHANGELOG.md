@@ -1,3 +1,10 @@
+<a name="v2.1.1"></a>
+### v2.1.1 (2026-10-19)
+
+#### Bug Fixes
+
+* add interaction references to the interaction, not the pact	 ([c79cba5](/../../commit/c79cba5))
+
 <a name="v2.1.0"></a>
 ### v2.1.0 (2026-09-14)
 

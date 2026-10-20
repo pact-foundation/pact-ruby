@@ -23,6 +23,37 @@ RSpec.describe Pact::Consumer::MessageInteractionBuilder do
     end
   end
 
+  context 'when a plugin message is used' do
+    let(:builder) do
+      subject
+        .upon_receiving('message as avro')
+        .with_plugin('avro', '0.1.3')
+        .with_plugin_contents('avro/binary', 'pact:avro' => '/schemas/pet.avsc', 'pact:record-name' => 'Pet',
+                                             id: "notEmpty('1')")
+    end
+
+    it 'builds proper json' do
+      result = JSON.parse(builder.build_interaction_json)
+      expect(result).to eq(
+        'pact:content-type' => 'avro/binary',
+        'pact:avro' => '/schemas/pet.avsc',
+        'pact:record-name' => 'Pet',
+        'id' => "notEmpty('1')"
+      )
+    end
+
+    it 'raises when no plugin is set' do
+      builder.instance_variable_set(:@plugin_name, nil)
+      expect { builder.validate! }.to raise_error(described_class::InteractionBuilderError, /with_plugin/)
+    end
+
+    it 'raises when content_type is blank' do
+      expect do
+        subject.with_plugin_contents('', id: 1)
+      end.to raise_error(described_class::InteractionBuilderError, /content_type is required/)
+    end
+  end
+
   context 'when json message is used' do
     let(:proto_path) { 'spec/internal/deps/services/pet_store/grpc/pet_store.proto' }
     let(:builder) do

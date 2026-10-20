@@ -55,6 +55,10 @@ module Pact
         @proto_path = nil
         @proto_message_class = nil
         @proto_include_dirs = []
+        @plugin_name = nil
+        @plugin_version = nil
+        @plugin_content_type = nil
+        @plugin_contents = nil
         @meta = {}
         @headers = {}
         @provider_state_meta = nil
@@ -106,6 +110,25 @@ module Pact
         self
       end
 
+      # Any content plugin that needs no transport (e.g. avro), see #with_plugin_contents
+      def with_plugin(plugin_name, plugin_version)
+        raise InteractionBuilderError.new("plugin_name is required") if plugin_name.blank?
+        raise InteractionBuilderError.new("plugin_version is required") if plugin_version.blank?
+
+        @plugin_name = plugin_name
+        @plugin_version = plugin_version
+        self
+      end
+
+      # contents_hash is passed to the plugin as-is, e.g. {"pact:avro" => path, "pact:record-name" => "Order", ...}
+      def with_plugin_contents(content_type, contents_hash)
+        raise InteractionBuilderError.new("content_type is required") if content_type.blank?
+
+        @plugin_content_type = content_type
+        @plugin_contents = InteractionContents.plugin(contents_hash)
+        self
+      end
+
       def with_metadata(meta_hash)
         @meta = InteractionContents.basic(meta_hash)
         self
@@ -122,7 +145,10 @@ module Pact
       end
 
       def validate!
-        if proto_interaction?
+        if custom_plugin_interaction?
+          raise InteractionBuilderError.new("plugin is not defined, please set one with #with_plugin") if @plugin_name.blank? || @plugin_version.blank?
+          raise InteractionBuilderError.new("invalid request format, should be a hash") unless @plugin_contents.is_a?(Hash)
+        elsif proto_interaction?
           raise InteractionBuilderError.new("proto_path / proto_message are not defined, please set ones with #with_proto_message") if @proto_contents.blank? || @proto_message_class.blank?
           raise InteractionBuilderError.new("invalid request format, should be a hash") unless @proto_contents.is_a?(Hash)
         else
@@ -136,7 +162,7 @@ module Pact
 
         validate!
         pact_handle = init_pact
-        init_plugin!(pact_handle) if proto_interaction?
+        init_plugin!(pact_handle) if plugin_interaction?
 
         message_pact = PactFfi::MessageConsumer.new_message_interaction(pact_handle, @description)
 
@@ -163,6 +189,7 @@ module Pact
       end
 
       def build_interaction_json
+        return JSON.dump({"pact:content-type" => @plugin_content_type}.merge(@plugin_contents.transform_keys(&:to_s))) if custom_plugin_interaction?
         return JSON.dump(@json_contents) unless proto_interaction?
 
         contents = {
@@ -240,7 +267,7 @@ module Pact
       end
 
       def fetch_reified_message_body(message_handle)
-        if proto_interaction?
+        if plugin_interaction?
           len = PactFfi::MessageConsumer.get_contents_length(message_handle)
           ptr = PactFfi::MessageConsumer.get_contents_bin(message_handle)
           return nil if ptr.blank? || len == 0
@@ -257,8 +284,8 @@ module Pact
       def configure_interaction!(message_pact)
         interaction_json = build_interaction_json
 
-        if proto_interaction?
-          result = PactFfi::PluginConsumer.interaction_contents(message_pact, 0, PROTO_CONTENT_TYPE, interaction_json)
+        if plugin_interaction?
+          result = PactFfi::PluginConsumer.interaction_contents(message_pact, 0, plugin_content_type, interaction_json)
           if CREATE_INTERACTION_ERRORS[result].present?
             error = CREATE_INTERACTION_ERRORS[result]
             raise CreateInteractionError.new("There was an error while trying to add interaction \"#{@description}\"", error[:reason], error[:status])
@@ -277,11 +304,12 @@ module Pact
       end
 
       def init_plugin!(pact_handle)
-        result = PactFfi::PluginConsumer.using_plugin(pact_handle, PROTOBUF_PLUGIN_NAME, @proto_plugin_version || PROTOBUF_PLUGIN_VERSION)
+        name, version = custom_plugin_interaction? ? [@plugin_name, @plugin_version] : [PROTOBUF_PLUGIN_NAME, @proto_plugin_version || PROTOBUF_PLUGIN_VERSION]
+        result = PactFfi::PluginConsumer.using_plugin(pact_handle, name, version)
         return result if INIT_PLUGIN_ERRORS[result].blank?
 
         error = INIT_PLUGIN_ERRORS[result]
-        raise PluginInitError.new("There was an error while trying to initialize plugin #{PROTOBUF_PLUGIN_NAME}/#{@proto_plugin_version || PROTOBUF_PLUGIN_VERSION}", error[:reason], error[:status])
+        raise PluginInitError.new("There was an error while trying to initialize plugin #{name}/#{version}", error[:reason], error[:status])
       end
 
       def serialize_metadata(metadata_hash)
@@ -293,6 +321,18 @@ module Pact
 
       def proto_interaction?
         @proto_contents.present?
+      end
+
+      def custom_plugin_interaction?
+        @plugin_contents.present?
+      end
+
+      def plugin_interaction?
+        proto_interaction? || custom_plugin_interaction?
+      end
+
+      def plugin_content_type
+        custom_plugin_interaction? ? @plugin_content_type : PROTO_CONTENT_TYPE
       end
     end
   end

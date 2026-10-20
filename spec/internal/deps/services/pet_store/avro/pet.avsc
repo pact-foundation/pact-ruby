@@ -1,0 +1,9 @@
+{
+  "namespace": "pet_store.v1",
+  "type": "record",
+  "name": "Pet",
+  "fields": [
+    {"name": "id", "type": "long"},
+    {"name": "name", "type": "string"}
+  ]
+}

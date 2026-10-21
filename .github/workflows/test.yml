@@ -25,6 +25,7 @@ jobs:
           bundler-cache: true
       - uses: pact-foundation/pact-cli@27100e9dab5bf4612f4caddc6f67d83cf1150cff # main
       - run: pact plugin install --yes https://github.com/mefellows/pact-matt-plugin/releases/tag/v0.1.1
+      - run: pact plugin install --yes avro --version 0.1.3
       - name: Test Pact-Ruby Specs
         run: "bundle exec rake"
       - name: Test Pact-Ruby Consumer Tests

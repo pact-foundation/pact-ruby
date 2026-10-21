@@ -23,7 +23,7 @@ jobs:
         with:
           ruby-version: ${{ matrix.ruby_version }}
           bundler-cache: true
-      - uses: pact-foundation/pact-cli@d3f8b44ef26ef775f32934b339b4a463850d87ca # main
+      - uses: pact-foundation/pact-cli@27100e9dab5bf4612f4caddc6f67d83cf1150cff # main
       - run: pact plugin install --yes https://github.com/mefellows/pact-matt-plugin/releases/tag/v0.1.1
       - name: Test Pact-Ruby Specs
         run: "bundle exec rake"
@@ -52,7 +52,7 @@ jobs:
         with:
           ruby-version: ${{ matrix.ruby_version }}
           bundler-cache: true
-      - uses: pact-foundation/pact-cli@d3f8b44ef26ef775f32934b339b4a463850d87ca # main
+      - uses: pact-foundation/pact-cli@27100e9dab5bf4612f4caddc6f67d83cf1150cff # main
       - run: pact plugin install --yes https://github.com/mefellows/pact-matt-plugin/releases/tag/v0.1.1
       - run: "bundle exec appraisal install"
       - run: "bundle exec appraisal rack-2 rake"

@@ -1,3 +1,11 @@
+<a name="v2.1.2"></a>
+### v2.1.2 (2026-10-21)
+
+#### Bug Fixes
+
+* support plugin message contents without a transport	 ([c3e4844](/../../commit/c3e4844))
+* remove pact bin for cli no longer packaged in v2	 ([fc5b182](/../../commit/fc5b182))
+
 <a name="v2.1.1"></a>
 ### v2.1.1 (2026-10-19)
 

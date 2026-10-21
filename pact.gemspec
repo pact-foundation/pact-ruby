@@ -14,8 +14,7 @@ Gem::Specification.new do |gem|
 
   gem.required_ruby_version = '>= 2.0'
 
-  gem.files         = `git ls-files bin lib pact.gemspec CHANGELOG.md LICENSE.txt`.split($/)
-  gem.executables   = gem.files.grep(%r{^bin/}).map { |f| File.basename(f) }
+  gem.files         = `git ls-files lib pact.gemspec CHANGELOG.md LICENSE.txt`.split($/)
   gem.test_files    = gem.files.grep(%r{^(test|spec|features)/})
   gem.require_paths = ['lib']
   gem.license       = 'MIT'

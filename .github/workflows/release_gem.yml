@@ -13,7 +13,7 @@ jobs:
     - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7
     - uses: ruby/setup-ruby@v1
       with:
-        ruby-version: '4.0.7'
+        ruby-version: '4.0.8'
     - run: |
         gem install bundler -v 2.4
         bundle install

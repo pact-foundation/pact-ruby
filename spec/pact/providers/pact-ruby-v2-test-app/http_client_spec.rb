@@ -31,8 +31,8 @@ RSpec.describe 'PactProviders::Test::HttpClient', :pact do
           .will_respond_with(status: 200, body: {
                                pet: {
                                  id: match_any_integer(pet_id),
-                                 bark: match_any_boolean(true),
-                                 breed: match_any_string('Husky')
+                                 bark: match_any_boolean_or_nil(true),
+                                 breed: match_any_string_or_nil('Husky')
                                }
                              })
       end

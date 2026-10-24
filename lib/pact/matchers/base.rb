@@ -38,6 +38,12 @@ module Pact
         "matching(#{@kind}, #{value})"
       end
 
+      def as_matching_rule
+        {
+          "match" => serialize!(@kind.deep_dup, :basic)
+        }.merge(serialize!(@opts.deep_dup, :basic))
+      end
+
       private
 
       def serialize!(data, format)

@@ -6,7 +6,7 @@ module Pact
       BASIC_FORMAT = :basic
       PLUGIN_FORMAT = :plugin
 
-      attr_reader :format
+      attr_reader :format, :matching_rules
 
       def self.basic(contents_hash)
         new(contents_hash, BASIC_FORMAT)
@@ -17,14 +17,15 @@ module Pact
       end
 
       def initialize(contents_hash, format)
-        serialized = init_hash(contents_hash, format)
-        # A scalar body (plain string, integer, etc.) serializes to a non-Hash
-        # value that cannot be merged pair by pair; expose it via #value instead.
+        @matching_rules = {}
+        serialized = serialize(contents_hash.deep_dup, format, '$')
+
         if serialized.is_a?(Hash)
           serialized.each_pair { |k, v| self[k] = v }
         else
           @value = serialized
         end
+
         @format = format
       end
 
@@ -34,28 +35,29 @@ module Pact
 
       private
 
-      def serialize(hash, format)
-        # serialize recursively
-        if hash.is_a?(Pact::Matchers::Base) || hash.is_a?(Pact::Generators::Base)
-          return hash.as_basic if format == :basic
-          return hash.as_plugin if format == :plugin
+      def serialize(value, format, path)
+        if value.is_a?(Pact::Matchers::Combined)
+          @matching_rules[path] = value.as_matching_rule
+          return value.template
         end
 
-        return hash.map { |value| serialize(value, format) } if hash.is_a?(Array)
-
-        # A value that is not a collection or a matcher/generator has nothing to
-        # recurse into, so return it unchanged (string, integer, boolean, nil, ...).
-        return hash unless hash.is_a?(Hash)
-
-        hash.each_pair do |key, value|
-          hash[key] = serialize(value, format)
+        if value.is_a?(Pact::Matchers::Base) ||
+           value.is_a?(Pact::Generators::Base)
+          return value.as_basic if format == :basic
+          return value.as_plugin if format == :plugin
         end
 
-        hash
-      end
+        if value.is_a?(Array)
+          return value.each_with_index.map do |item, index|
+            serialize(item, format, "#{path}[#{index}]")
+          end
+        end
 
-      def init_hash(hash, format)
-        serialize(hash.deep_dup, format)
+        return value unless value.is_a?(Hash)
+
+        value.each_with_object({}) do |(key, child), result|
+          result[key] = serialize(child, format, "#{path}.#{key}")
+        end
       end
     end
   end

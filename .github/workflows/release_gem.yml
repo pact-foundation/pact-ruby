@@ -17,7 +17,7 @@ jobs:
     - run: |
         gem install bundler -v 2.4
         bundle install
-    - uses: pact-foundation/pact-cli@575a793b515ad65718cfb81198b3a4634dc8f72d # main
+    - uses: pact-foundation/pact-cli@33e1d898f607e2ea0050f4f36ed23a44edc98a7d # main
     - run: pact plugin install --yes https://github.com/mefellows/pact-matt-plugin/releases/tag/v0.1.1
     - name: Test
       run: bundle exec rake
